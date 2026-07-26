@@ -4,7 +4,7 @@ The shared React component library for building clear, consistent, and accessibl
 
 `@conscia-code/design-system` brings Conscia’s visual foundation, reusable interface primitives, and common product patterns together in one package. It is designed for operational applications where information density, predictable interaction, and accessibility matter.
 
-> **Release status:** the first public npm release is currently being prepared. The package will be published as [`@conscia-code/design-system`](https://www.npmjs.com/package/@conscia-code/design-system).
+> **Package:** available publicly as [`@conscia-code/design-system`](https://www.npmjs.com/package/@conscia-code/design-system).
 
 ## Why this package exists
 
@@ -437,7 +437,7 @@ git tag v0.1.1
 git push origin main --follow-tags
 ```
 
-Pushing the tag starts the protected `npm-production` release workflow. The
+Pushing the tag starts the `npm-production` release workflow. The
 workflow verifies the tag, runs the package tests, builds the publishable
 artifacts, and publishes without a long-lived npm token.
 
