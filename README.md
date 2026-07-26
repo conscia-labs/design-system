@@ -422,6 +422,25 @@ manifest, and imports the package through its public export map. The npm
 
 Reusable foundation, primitive, and pattern code belongs in `src`. Fixtures and visual documentation belong in `playground`.
 
+## Releasing
+
+Releases are published from GitHub Actions through npm trusted publishing. The
+release tag must exactly match the version in `package.json`.
+
+For example, to publish the next patch:
+
+```bash
+pnpm version patch --no-git-tag-version
+git add package.json
+git commit -m "Release v0.1.1"
+git tag v0.1.1
+git push origin main --follow-tags
+```
+
+Pushing the tag starts the protected `npm-production` release workflow. The
+workflow verifies the tag, runs the package tests, builds the publishable
+artifacts, and publishes without a long-lived npm token.
+
 ## Design-system boundaries
 
 Add something to this package when it:
