@@ -37,8 +37,13 @@ jobs:
       - name: Verify release version
         run: node scripts/verify-release-version.mjs
 
-      - name: Test package
-        run: pnpm test
+      - name: Validate release
+        run: |
+          pnpm lint
+          pnpm lint:playground
+          pnpm typecheck
+          pnpm typecheck:playground
+          pnpm test
 
       - name: Publish to npm
         run: npm publish
