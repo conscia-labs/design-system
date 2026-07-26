@@ -1,0 +1,156 @@
+"use client";
+
+import * as React from "react";
+
+import {
+  appearanceOptions,
+  applyConsciaPreferences,
+  densityOptions,
+  type ConsciaAppearance,
+  type ConsciaDensity,
+} from "../foundation/preferences";
+import { cn } from "../primitives/utils";
+
+const APPEARANCE_KEY = "conscia-appearance";
+const DENSITY_KEY = "conscia-density";
+const PREFERENCE_EVENT = "conscia-preferences";
+
+function readPreference<T extends string>(key: string, fallback: T): T {
+  if (typeof window === "undefined") {
+    return fallback;
+  }
+
+  return (window.localStorage.getItem(key) as T | null) ?? fallback;
+}
+
+function writePreference(key: string, value: string) {
+  window.localStorage.setItem(key, value);
+  window.dispatchEvent(new Event(PREFERENCE_EVENT));
+}
+
+function useStoredPreference<T extends string>(key: string, fallback: T): T {
+  return React.useSyncExternalStore(
+    (onStoreChange) => {
+      window.addEventListener("storage", onStoreChange);
+      window.addEventListener(PREFERENCE_EVENT, onStoreChange);
+      return () => {
+        window.removeEventListener("storage", onStoreChange);
+        window.removeEventListener(PREFERENCE_EVENT, onStoreChange);
+      };
+    },
+    () => readPreference(key, fallback),
+    () => fallback,
+  );
+}
+
+function useConsciaPreferences() {
+  const appearance = useStoredPreference<ConsciaAppearance>(
+    APPEARANCE_KEY,
+    "system",
+  );
+  const density = useStoredPreference<ConsciaDensity>(DENSITY_KEY, "comfortable");
+
+  return { appearance, density };
+}
+
+function DesignSystemPreferenceSync() {
+  const { appearance, density } = useConsciaPreferences();
+
+  React.useEffect(() => {
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const sync = () =>
+      applyConsciaPreferences(
+        document.documentElement,
+        appearance,
+        density,
+        media.matches,
+      );
+
+    sync();
+    media.addEventListener("change", sync);
+    return () => media.removeEventListener("change", sync);
+  }, [appearance, density]);
+
+  return null;
+}
+
+function AppearanceControl({ className }: { className?: string }) {
+  const { appearance } = useConsciaPreferences();
+
+  return (
+    <SegmentedControl
+      className={className}
+      label="Appearance"
+      value={appearance}
+      values={appearanceOptions}
+      onChange={(value) => writePreference(APPEARANCE_KEY, value)}
+    />
+  );
+}
+
+function DensityControl({ className }: { className?: string }) {
+  const { density } = useConsciaPreferences();
+
+  return (
+    <SegmentedControl
+      className={className}
+      label="Density"
+      value={density}
+      values={densityOptions}
+      onChange={(value) => writePreference(DENSITY_KEY, value)}
+    />
+  );
+}
+
+function DesignPreferenceControls({ className }: { className?: string }) {
+  return (
+    <div className={cn("flex flex-col gap-3 text-sm", className)}>
+      <AppearanceControl />
+      <DensityControl />
+    </div>
+  );
+}
+
+function SegmentedControl({
+  className,
+  label,
+  value,
+  values,
+  onChange,
+}: {
+  className?: string;
+  label: string;
+  value: string;
+  values: string[];
+  onChange: (value: string) => void;
+}) {
+  return (
+    <fieldset className={cn("flex flex-col gap-2", className)}>
+      <legend className="text-[var(--ds-metadata)] font-medium text-muted-foreground">
+        {label}
+      </legend>
+      <div className="inline-flex rounded-[var(--ds-radius-control)] bg-muted p-1">
+        {values.map((item) => (
+          <button
+            key={item}
+            type="button"
+            aria-pressed={value === item}
+            suppressHydrationWarning
+            onClick={() => onChange(item)}
+            className="h-7 rounded-[calc(var(--ds-radius-control)-2px)] px-2.5 text-[var(--ds-metadata)] font-medium capitalize text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-pressed:bg-background aria-pressed:text-foreground aria-pressed:shadow-xs"
+          >
+            {item}
+          </button>
+        ))}
+      </div>
+    </fieldset>
+  );
+}
+
+export {
+  AppearanceControl,
+  DensityControl,
+  DesignPreferenceControls,
+  DesignSystemPreferenceSync,
+  useConsciaPreferences,
+};
