@@ -97,7 +97,7 @@ function SidebarNavigation({
   storageKey,
   className,
 }: SidebarNavigationProps) {
-  const { isMobile, sidebarState } = useAppShell();
+  const { isMobile, sidebarSide, sidebarState } = useAppShell();
   const [openSections, setOpenSections] = React.useState<
     Record<string, boolean>
   >({});
@@ -186,7 +186,7 @@ function SidebarNavigation({
                 </DropdownMenuTrigger>
               </NavigationGroup>
               <DropdownMenuContent
-                side="right"
+                side={sidebarSide === "left" ? "right" : "left"}
                 align="start"
                 sideOffset={8}
                 className="min-w-56 rounded-[var(--ds-radius-surface)] p-1.5"

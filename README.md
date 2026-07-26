@@ -97,24 +97,21 @@ Using npm:
 npm install @conscia-code/design-system
 ```
 
-The package currently targets React 19 and Tailwind CSS 4.
+The package targets React 19 and ships as modern ESM with TypeScript
+declarations. Component styles are precompiled, so consuming applications do
+not need Tailwind CSS.
 
-### 2. Load Tailwind and the design-system styles
+### 2. Load the design-system styles
 
 Import the styles once in your application’s global stylesheet:
 
 ```css
-@import "tailwindcss";
 @import "@conscia-code/design-system/styles.css";
-
-/*
- * Include the package source while the library is distributed as
- * Tailwind-authored components.
- */
-@source "../node_modules/@conscia-code/design-system/src";
 ```
 
-The relative path in `@source` is resolved from the stylesheet containing the directive. Adjust it if your stylesheet lives in a nested directory or your workspace uses a different dependency layout.
+The stylesheet includes the semantic tokens and every utility required by the
+published components. Import it after your reset or application base styles if
+you want the design system’s defaults to take precedence.
 
 ### 3. Set the root appearance and density
 
@@ -307,7 +304,8 @@ Use `Select` for short, familiar option lists.
 
 Use `SearchableSelect` when users need to find an item in a longer list by label, description, or keywords.
 
-Use `FormSelect` when a Radix select must contribute a named value to a native HTML form.
+Both `FormSelect` and `SearchableSelect` contribute a named value to a native
+HTML form when their `name` prop is provided.
 
 ## Semantic color
 
@@ -359,27 +357,36 @@ Applications are still responsible for meaningful labels, heading order, form er
 
 ### Next.js
 
-Import the global stylesheet from the root layout and use client components from client boundaries where required.
+Import the global stylesheet from the root layout:
 
-While consuming this repository directly from source, configure Next.js to transpile the package:
-
-```ts
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  transpilePackages: ["@conscia-code/design-system"],
-};
-
-export default nextConfig;
+```tsx
+import "@conscia-code/design-system/styles.css";
 ```
 
-Published builds are expected to expose compiled JavaScript and TypeScript declarations, removing the need for source transpilation.
+The published package preserves its React client boundaries and does not need
+`transpilePackages`. You can import components into either server or client
+modules; Next.js will establish a client boundary for interactive exports.
 
 ### Other React applications
 
-The primitives are router-independent and can be used with Vite or other React build systems. Route-backed patterns accept application-supplied links rather than depending on Next.js navigation.
+The primitives are router-independent and can be used with Vite or other
+ESM-capable React build systems. Route-backed patterns accept
+application-supplied links rather than depending on Next.js navigation.
 
-The host build must support Tailwind CSS 4 while the package distributes Tailwind-authored component styles.
+### Focused imports
+
+The root package is the simplest import path. Public subpath exports are also
+available when an application wants a more explicit dependency boundary:
+
+```tsx
+import { Button } from "@conscia-code/design-system/primitives";
+import { DataTable } from "@conscia-code/design-system/patterns";
+import {
+  applyConsciaPreferences,
+} from "@conscia-code/design-system/foundation";
+```
+
+All public entry points are ESM-only.
 
 ## Local development
 
@@ -404,8 +411,14 @@ pnpm lint
 pnpm lint:playground
 pnpm typecheck
 pnpm typecheck:playground
+pnpm test
+pnpm test:package
 pnpm build:playground
 ```
+
+`pnpm test:package` creates the production artifacts, validates the package
+manifest, and imports the package through its public export map. The npm
+`prepack` hook runs the same gate before a tarball can be produced.
 
 Reusable foundation, primitive, and pattern code belongs in `src`. Fixtures and visual documentation belong in `playground`.
 
@@ -426,3 +439,7 @@ Keep something in the product application when it:
 - Represents a one-off business workflow.
 
 This boundary keeps the design system reusable without turning it into a second application framework.
+
+## License
+
+Released under the [MIT License](./LICENSE).

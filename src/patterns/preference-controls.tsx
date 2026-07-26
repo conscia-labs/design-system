@@ -11,24 +11,53 @@ import {
 } from "../foundation/preferences";
 import { cn } from "../primitives/utils";
 
-const APPEARANCE_KEY = "conscia-appearance";
-const DENSITY_KEY = "conscia-density";
+const APPEARANCE_KEY = "conscia-appearance:v1";
+const DENSITY_KEY = "conscia-density:v1";
 const PREFERENCE_EVENT = "conscia-preferences";
+const volatilePreferences = new Map<string, string>();
 
-function readPreference<T extends string>(key: string, fallback: T): T {
+function readPreference<T extends string>(
+  key: string,
+  fallback: T,
+  allowedValues: readonly T[],
+): T {
   if (typeof window === "undefined") {
     return fallback;
   }
 
-  return (window.localStorage.getItem(key) as T | null) ?? fallback;
+  try {
+    const value =
+      window.localStorage.getItem(key) ?? volatilePreferences.get(key);
+
+    return value && allowedValues.includes(value as T)
+      ? (value as T)
+      : fallback;
+  } catch {
+    const value = volatilePreferences.get(key);
+
+    return value && allowedValues.includes(value as T)
+      ? (value as T)
+      : fallback;
+  }
 }
 
 function writePreference(key: string, value: string) {
-  window.localStorage.setItem(key, value);
+  volatilePreferences.set(key, value);
+
+  try {
+    window.localStorage.setItem(key, value);
+  } catch {
+    // Preferences still apply for this session when storage is unavailable.
+  }
+
   window.dispatchEvent(new Event(PREFERENCE_EVENT));
 }
 
-function useStoredPreference<T extends string>(key: string, fallback: T): T {
+function useStoredPreference<T extends string>(
+  key: string,
+  fallback: T,
+  allowedValues: readonly T[],
+): T {
   return React.useSyncExternalStore(
     (onStoreChange) => {
       window.addEventListener("storage", onStoreChange);
@@ -38,7 +67,7 @@ function useStoredPreference<T extends string>(key: string, fallback: T): T {
         window.removeEventListener(PREFERENCE_EVENT, onStoreChange);
       };
     },
-    () => readPreference(key, fallback),
+    () => readPreference(key, fallback, allowedValues),
     () => fallback,
   );
 }
@@ -47,8 +76,13 @@ function useConsciaPreferences() {
   const appearance = useStoredPreference<ConsciaAppearance>(
     APPEARANCE_KEY,
     "system",
+    appearanceOptions,
   );
-  const density = useStoredPreference<ConsciaDensity>(DENSITY_KEY, "comfortable");
+  const density = useStoredPreference<ConsciaDensity>(
+    DENSITY_KEY,
+    "comfortable",
+    densityOptions,
+  );
 
   return { appearance, density };
 }

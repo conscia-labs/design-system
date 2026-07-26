@@ -49,13 +49,13 @@ function PaginationControls({
         ) : null}
       </div>
       <div className="flex items-center gap-1">
-        <Button variant="outline" size="icon" className="size-8" aria-label="Previous page" onClick={onPrevious ?? (() => onPageChange?.(currentPage - 1))} disabled={currentPage <= 1}><ChevronLeft /></Button>
+        <Button type="button" variant="outline" size="icon" className="size-8" aria-label="Previous page" onClick={onPrevious ?? (() => onPageChange?.(currentPage - 1))} disabled={currentPage <= 1}><ChevronLeft /></Button>
         {onPageChange ? pageItems(currentPage, pageCount).map((item, index) => item === "ellipsis" ? (
           <span key={`ellipsis-${index}`} className="flex size-8 items-center justify-center text-muted-foreground" aria-hidden="true">…</span>
         ) : (
-          <Button key={item} variant={item === currentPage ? "secondary" : "ghost"} size="icon" className="size-8" aria-label={`Page ${item}`} aria-current={item === currentPage ? "page" : undefined} onClick={() => onPageChange(item)}>{item}</Button>
+          <Button type="button" key={item} variant={item === currentPage ? "secondary" : "ghost"} size="icon" className="size-8" aria-label={`Page ${item}`} aria-current={item === currentPage ? "page" : undefined} onClick={() => onPageChange(item)}>{item}</Button>
         )) : <span className="px-2 text-[var(--ds-metadata)]">Page {currentPage} of {pageCount}</span>}
-        <Button variant="outline" size="icon" className="size-8" aria-label="Next page" onClick={onNext ?? (() => onPageChange?.(currentPage + 1))} disabled={currentPage >= pageCount}><ChevronRight /></Button>
+        <Button type="button" variant="outline" size="icon" className="size-8" aria-label="Next page" onClick={onNext ?? (() => onPageChange?.(currentPage + 1))} disabled={currentPage >= pageCount}><ChevronRight /></Button>
       </div>
     </div>
   );

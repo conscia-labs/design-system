@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 
 import { Button } from "../primitives/button";
@@ -13,14 +15,29 @@ type ConfirmationDialogProps = {
   confirmVariant?: React.ComponentProps<typeof Button>["variant"];
   pending?: boolean;
   onConfirm: () => unknown | Promise<unknown>;
+  onError?: (error: unknown) => void;
 };
 
-function ConfirmationDialog({ trigger, title, description, children, confirmLabel = "Confirm", cancelLabel = "Cancel", confirmVariant = "destructive", pending = false, onConfirm }: ConfirmationDialogProps) {
+function ConfirmationDialog({ trigger, title, description, children, confirmLabel = "Confirm", cancelLabel = "Cancel", confirmVariant = "destructive", pending = false, onConfirm, onError }: ConfirmationDialogProps) {
   const [open, setOpen] = React.useState(false);
+  const [confirming, setConfirming] = React.useState(false);
+  const isPending = pending || confirming;
 
   async function confirm() {
-    await onConfirm();
-    setOpen(false);
+    if (isPending) {
+      return;
+    }
+
+    setConfirming(true);
+
+    try {
+      await onConfirm();
+      setOpen(false);
+    } catch (error) {
+      onError?.(error);
+    } finally {
+      setConfirming(false);
+    }
   }
 
   return (
@@ -34,10 +51,10 @@ function ConfirmationDialog({ trigger, title, description, children, confirmLabe
         <DialogBody>{children}</DialogBody>
         <DialogFooter>
           <DialogClose asChild>
-            <Button type="button" variant="outline" disabled={pending}>{cancelLabel}</Button>
+            <Button type="button" variant="outline" disabled={isPending}>{cancelLabel}</Button>
           </DialogClose>
-          <Button type="button" variant={confirmVariant} disabled={pending} onClick={confirm}>
-            {pending ? "Working..." : confirmLabel}
+          <Button type="button" variant={confirmVariant} disabled={isPending} onClick={confirm}>
+            {isPending ? "Working..." : confirmLabel}
           </Button>
         </DialogFooter>
       </DialogContent>

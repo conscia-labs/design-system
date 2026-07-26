@@ -122,7 +122,14 @@ function DataTable<TData>({
         id: "actions",
         enableSorting: false,
         header: "Actions",
-        cell: ({ row }) => rowActions(row.original),
+        cell: ({ row }) => (
+          <div
+            onClick={(event) => event.stopPropagation()}
+            onKeyDown={(event) => event.stopPropagation()}
+          >
+            {rowActions(row.original)}
+          </div>
+        ),
         meta: { className: "w-12 text-right" },
       });
     }
@@ -176,9 +183,22 @@ function DataTable<TData>({
                   const canSort = header.column.getCanSort();
                   const sorted = header.column.getIsSorted();
                   return (
-                    <TableHead key={header.id} className={meta?.className}>
+                    <TableHead
+                      key={header.id}
+                      className={meta?.className}
+                      aria-sort={
+                        canSort
+                          ? sorted === "asc"
+                            ? "ascending"
+                            : sorted === "desc"
+                              ? "descending"
+                              : "none"
+                          : undefined
+                      }
+                    >
                       {header.isPlaceholder ? null : canSort ? (
                         <Button
+                          type="button"
                           variant="ghost"
                           size="sm"
                           className="-ml-2 h-8 gap-1.5 px-2 text-[var(--ds-metadata)] font-semibold uppercase text-muted-foreground hover:text-foreground"

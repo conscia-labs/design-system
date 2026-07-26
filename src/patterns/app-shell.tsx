@@ -24,7 +24,7 @@ import { cn } from "../primitives/utils";
 const SIDEBAR_COOKIE_NAME = "conscia_sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 30;
 const SIDEBAR_KEYBOARD_SHORTCUT = "b";
-const SIDEBAR_STORAGE_KEY = "conscia-sidebar-open";
+const SIDEBAR_STORAGE_KEY = "conscia-sidebar-open:v1";
 const SIDEBAR_STATE_CHANGE_EVENT = "conscia-sidebar-state-change";
 
 function parseSidebarOpen(value: string | null) {
@@ -89,6 +89,8 @@ function subscribeToSidebarOpen(onStoreChange: () => void) {
 
 type AppShellContextValue = {
   sidebarState: "expanded" | "collapsed";
+  sidebarSide: "left" | "right";
+  setSidebarSide: (side: "left" | "right") => void;
   sidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
   mobileOpen: boolean;
@@ -135,6 +137,7 @@ function AppShell({
 }) {
   const isMobile = useMediaQuery("(max-width: 1023px)");
   const [sidebarOpen, setSidebarOpenState] = React.useState(defaultSidebarOpen);
+  const [sidebarSide, setSidebarSide] = React.useState<"left" | "right">("left");
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   React.useEffect(() => {
@@ -179,6 +182,8 @@ function AppShell({
   const contextValue = React.useMemo<AppShellContextValue>(
     () => ({
       sidebarState: sidebarOpen ? "expanded" : "collapsed",
+      sidebarSide,
+      setSidebarSide,
       sidebarOpen,
       setSidebarOpen,
       mobileOpen,
@@ -186,7 +191,14 @@ function AppShell({
       isMobile,
       toggleSidebar,
     }),
-    [isMobile, mobileOpen, setSidebarOpen, sidebarOpen, toggleSidebar],
+    [
+      isMobile,
+      mobileOpen,
+      setSidebarOpen,
+      sidebarOpen,
+      sidebarSide,
+      toggleSidebar,
+    ],
   );
 
   return (
@@ -195,6 +207,7 @@ function AppShell({
         <div
           data-slot="app-shell"
           data-sidebar-state={sidebarOpen ? "expanded" : "collapsed"}
+          data-sidebar-side={sidebarSide}
           suppressHydrationWarning
           className={cn(
             "group/shell min-h-svh bg-canvas text-foreground",
@@ -223,7 +236,11 @@ function AppSidebar({
   title?: string;
   description?: string;
 }) {
-  const { mobileOpen, setMobileOpen } = useAppShell();
+  const { mobileOpen, setMobileOpen, setSidebarSide } = useAppShell();
+
+  React.useEffect(() => {
+    setSidebarSide(side);
+  }, [setSidebarSide, side]);
 
   return (
     <>
@@ -242,8 +259,10 @@ function AppSidebar({
 
       <aside
         data-slot="app-sidebar"
+        data-side={side}
         className={cn(
-          "fixed inset-y-0 left-0 z-20 hidden w-[var(--ds-app-sidebar-width)] shrink-0 flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground transition-[width] duration-200 ease-linear lg:flex",
+          "fixed inset-y-0 z-20 hidden w-[var(--ds-app-sidebar-width)] shrink-0 flex-col border-sidebar-border bg-sidebar text-sidebar-foreground transition-[width] duration-200 ease-linear lg:flex",
+          side === "left" ? "left-0 border-r" : "right-0 border-l",
           "group-data-[sidebar-state=collapsed]/shell:w-[var(--ds-app-sidebar-width)]",
           className,
         )}
@@ -392,6 +411,7 @@ function NavigationItem({
   asChild = false,
   active = false,
   tooltip,
+  type,
   className,
   children,
   ...props
@@ -401,11 +421,12 @@ function NavigationItem({
   tooltip?: string;
 }) {
   const Comp = asChild ? Slot : "button";
-  const { sidebarState, isMobile } = useAppShell();
+  const { sidebarState, sidebarSide, isMobile } = useAppShell();
   const item = (
     <Comp
       data-slot="navigation-item"
       data-active={active ? "true" : undefined}
+      type={asChild ? undefined : (type ?? "button")}
       className={cn(navigationItemClasses(active), className)}
       {...props}
     >
@@ -421,7 +442,7 @@ function NavigationItem({
     <Tooltip>
       <TooltipTrigger asChild>{item}</TooltipTrigger>
       <TooltipContent
-        side="right"
+        side={sidebarSide === "left" ? "right" : "left"}
         align="center"
         hidden={sidebarState !== "collapsed" || isMobile}
       >
@@ -509,7 +530,8 @@ function MainRegion({
     <div
       data-slot="main-region"
       className={cn(
-        "flex min-h-svh min-w-0 w-full flex-1 flex-col transition-[padding] duration-200 ease-linear lg:pl-[var(--ds-app-sidebar-width)]",
+        "flex min-h-svh min-w-0 w-full flex-1 flex-col transition-[padding] duration-200 ease-linear",
+        "group-data-[sidebar-side=left]/shell:lg:pl-[var(--ds-app-sidebar-width)] group-data-[sidebar-side=right]/shell:lg:pr-[var(--ds-app-sidebar-width)]",
         className,
       )}
       {...props}

@@ -60,7 +60,8 @@ test("appearance preference supports light, dark, system, persistence, and syste
   assert.match(sharedPreferences, /appearanceOptions: ConsciaAppearance\[\] = \["light", "dark", "system"\]/);
   assert.match(sharedControls, /values=\{appearanceOptions\}/);
 
-  assert.match(sharedControls, /APPEARANCE_KEY = "conscia-appearance"/);
+  assert.match(sharedControls, /APPEARANCE_KEY = "conscia-appearance:v1"/);
+  assert.match(sharedControls, /allowedValues\.includes/);
   assert.match(sharedControls, /localStorage\.getItem\(key\)/);
   assert.match(sharedControls, /localStorage\.setItem\(key, value\)/);
   assert.match(sharedControls, /matchMedia\("\(prefers-color-scheme: dark\)"\)/);
@@ -322,7 +323,7 @@ test("shared sidebar navigation supports collapsed flyouts without owning routes
 
   assert.match(navigation, /sidebarState === "collapsed" && !isMobile/);
   assert.match(navigation, /<DropdownMenu/);
-  assert.match(navigation, /side="right"/);
+  assert.match(navigation, /side=\{sidebarSide === "left" \? "right" : "left"\}/);
   assert.match(navigation, /sideOffset=\{8\}/);
   assert.match(navigation, /<Collapsible/);
   assert.match(navigation, /localStorage\.setItem/);

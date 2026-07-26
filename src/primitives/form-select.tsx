@@ -80,8 +80,8 @@ function FormSelect({
 
   return (
     <div className={cn("min-w-0", className)} onClick={onClick}>
-      {name ? <input type="hidden" name={name} value={currentValue} /> : null}
       <Select
+        name={name}
         value={toSelectValue(currentValue)}
         required={required}
         disabled={disabled}
