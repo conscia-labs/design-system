@@ -2,10 +2,11 @@ import { defineConfig } from "tsup";
 
 export default defineConfig({
   entry: {
-    index: "src/index.ts",
+    index: "src/client.ts",
     "foundation/index": "src/foundation/index.ts",
-    "patterns/index": "src/patterns/index.ts",
-    "primitives/index": "src/primitives/index.ts",
+    "patterns/index": "src/patterns/client.ts",
+    "primitives/index": "src/primitives/client.ts",
+    "utils/index": "src/primitives/utils.ts",
   },
   format: ["esm"],
   target: "es2020",
@@ -15,8 +16,5 @@ export default defineConfig({
   splitting: true,
   clean: true,
   minify: false,
-  banner: {
-    js: '"use client";',
-  },
   external: ["react", "react-dom"],
 });

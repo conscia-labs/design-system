@@ -44,5 +44,8 @@ jobs:
       - name: Verify package
         run: pnpm test:package
 
+      - name: Test packaged Tailwind consumer
+        run: pnpm test:consumer
+
       - name: Build playground
         run: pnpm build:playground

@@ -22,7 +22,7 @@ import {
   type SidebarNavigationEntry,
   type SidebarNavigationItem,
   type SidebarNavigationLinkProps,
-} from "@conscia-code/design-system";
+} from "@conscia-labs/design-system";
 
 const navEntries = [
   { id: "/", label: "Overview", icon: <BookOpen /> },

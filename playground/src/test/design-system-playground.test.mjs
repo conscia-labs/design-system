@@ -95,9 +95,9 @@ test("playground consumes shared design-system exports", () => {
   const primitives = read("../app/primitives/page.tsx");
   const shell = read("../components/app-shell.tsx");
 
-  assert.match(pattern, /from "@conscia-code\/design-system"/);
-  assert.match(primitives, /from "@conscia-code\/design-system"/);
-  assert.match(shell, /from "@conscia-code\/design-system"/);
+  assert.match(pattern, /from "@conscia-labs\/design-system"/);
+  assert.match(primitives, /from "@conscia-labs\/design-system"/);
+  assert.match(shell, /from "@conscia-labs\/design-system"/);
   assert.doesNotMatch(primitives, /function Button/);
 });
 

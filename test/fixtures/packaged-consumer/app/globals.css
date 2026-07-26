@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@import "@conscia-labs/design-system/tailwind.css";
+
+body {
+  margin: 0;
+}

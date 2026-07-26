@@ -24,7 +24,7 @@ import {
   SelectValue,
   StateView,
   type EntityTableColumn
-} from "@conscia-code/design-system";
+} from "@conscia-labs/design-system";
 
 import { aiModelFixtures, type AiModelFixture } from "@/fixtures/ai-models";
 

@@ -2,9 +2,9 @@
 
 The shared React component library for building clear, consistent, and accessible Conscia product experiences.
 
-`@conscia-code/design-system` brings Conscia’s visual foundation, reusable interface primitives, and common product patterns together in one package. It is designed for operational applications where information density, predictable interaction, and accessibility matter.
+`@conscia-labs/design-system` brings Conscia’s visual foundation, reusable interface primitives, and common product patterns together in one package. It is designed for operational applications where information density, predictable interaction, and accessibility matter.
 
-> **Package:** available publicly as [`@conscia-code/design-system`](https://www.npmjs.com/package/@conscia-code/design-system).
+> **Package:** available publicly as [`@conscia-labs/design-system`](https://www.npmjs.com/package/@conscia-labs/design-system).
 
 ## Why this package exists
 
@@ -88,30 +88,49 @@ Higher-level compositions for recurring product workflows:
 Using pnpm:
 
 ```bash
-pnpm add @conscia-code/design-system
+pnpm add @conscia-labs/design-system
 ```
 
 Using npm:
 
 ```bash
-npm install @conscia-code/design-system
+npm install @conscia-labs/design-system
 ```
 
 The package targets React 19 and ships as modern ESM with TypeScript
-declarations. Component styles are precompiled, so consuming applications do
-not need Tailwind CSS.
+declarations. The supported application integration requires Tailwind CSS v4.
+The package declares Tailwind v4 as an optional peer so non-Tailwind consumers
+can use the separate standalone stylesheet without installing Tailwind.
 
-### 2. Load the design-system styles
+### 2. Load Tailwind and the design-system integration
 
-Import the styles once in your application’s global stylesheet:
+Import both once in your application’s global stylesheet:
 
 ```css
-@import "@conscia-code/design-system/styles.css";
+@import "tailwindcss";
+@import "@conscia-labs/design-system/tailwind.css";
 ```
 
-The stylesheet includes the semantic tokens and every utility required by the
-published components. Import it after your reset or application base styles if
-you want the design system’s defaults to take precedence.
+`tailwind.css` imports the design tokens, theme registration, variants,
+keyframes, base rules, and bespoke component CSS. It also contains a
+package-relative `@source` for the published JavaScript, so the application’s
+Tailwind compiler generates the utilities used by both the application and the
+design system in one cascade. Do not add a separate `node_modules` source path.
+
+The deprecated `styles.css` export remains as a foundation-only compatibility
+alias. It does not contain preflight or generated utilities.
+
+### Non-Tailwind applications
+
+Applications that do not run Tailwind can opt into the complete precompiled
+bundle:
+
+```css
+@import "@conscia-labs/design-system/standalone.css";
+```
+
+Tailwind applications must not import `standalone.css`, because its preflight
+and generic utilities would compete with the application’s generated CSS.
 
 ### 3. Set the root appearance and density
 
@@ -159,7 +178,7 @@ import {
   FieldDescription,
   FieldLabel,
   Input,
-} from "@conscia-code/design-system";
+} from "@conscia-labs/design-system";
 
 export function CreateConnectionCard() {
   return (
@@ -210,7 +229,7 @@ import {
   ProductIdentity,
   SidebarTrigger,
   TopBar,
-} from "@conscia-code/design-system";
+} from "@conscia-labs/design-system";
 
 export function ProductShell({
   navigation,
@@ -330,7 +349,8 @@ Do not use success styling merely because something is enabled or active. Succes
 Override semantic variables after importing the package stylesheet:
 
 ```css
-@import "@conscia-code/design-system/styles.css";
+@import "tailwindcss";
+@import "@conscia-labs/design-system/tailwind.css";
 
 :root {
   --ds-space-page: 3rem;
@@ -357,15 +377,17 @@ Applications are still responsible for meaningful labels, heading order, form er
 
 ### Next.js
 
-Import the global stylesheet from the root layout:
+Import the application global stylesheet from the root layout:
 
 ```tsx
-import "@conscia-code/design-system/styles.css";
+import "./globals.css";
 ```
 
-The published package preserves its React client boundaries and does not need
-`transpilePackages`. You can import components into either server or client
-modules; Next.js will establish a client boundary for interactive exports.
+The component entries are explicit client-only boundaries, while server-safe
+code is published separately. For example, React Server Components should
+import `cn` from `@conscia-labs/design-system/utils`. The package does not need
+`transpilePackages`; Next.js will establish a client boundary for component
+exports.
 
 ### Other React applications
 
@@ -379,11 +401,12 @@ The root package is the simplest import path. Public subpath exports are also
 available when an application wants a more explicit dependency boundary:
 
 ```tsx
-import { Button } from "@conscia-code/design-system/primitives";
-import { DataTable } from "@conscia-code/design-system/patterns";
+import { Button } from "@conscia-labs/design-system/primitives";
+import { DataTable } from "@conscia-labs/design-system/patterns";
 import {
   applyConsciaPreferences,
-} from "@conscia-code/design-system/foundation";
+} from "@conscia-labs/design-system/foundation";
+import { cn } from "@conscia-labs/design-system/utils";
 ```
 
 All public entry points are ESM-only.
@@ -432,9 +455,10 @@ For example, to publish the next patch:
 ```bash
 pnpm version patch --no-git-tag-version
 git add package.json
-git commit -m "Release v0.1.1"
-git tag v0.1.1
-git push origin main --follow-tags
+git commit -m "Release v0.2.1"
+git tag -a v0.2.1 -m "Release v0.2.1"
+git push origin main
+git push origin v0.2.1
 ```
 
 Pushing the tag starts the `npm-production` release workflow. The

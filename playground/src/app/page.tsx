@@ -1,4 +1,4 @@
-import { Badge, Button } from "@conscia-code/design-system";
+import { Badge, Button } from "@conscia-labs/design-system";
 
 import { DesignPreferences } from "@/components/design-preferences";
 import { ExampleSection, PlaygroundPage } from "@/components/page";

@@ -1,6 +1,6 @@
 {
-  "name": "@conscia-code/design-system",
-  "version": "0.1.2",
+  "name": "@conscia-labs/design-system",
+  "version": "0.2.0",
   "description": "The shared React component library for building clear, consistent, and accessible Conscia product experiences.",
   "license": "MIT",
   "type": "module",
@@ -12,7 +12,10 @@
     "README.md"
   ],
   "sideEffects": [
-    "./dist/styles.css"
+    "./dist/foundation.css",
+    "./dist/standalone.css",
+    "./dist/styles.css",
+    "./dist/tailwind.css"
   ],
   "exports": {
     ".": {
@@ -35,6 +38,14 @@
       "import": "./dist/primitives/index.js",
       "default": "./dist/primitives/index.js"
     },
+    "./utils": {
+      "types": "./dist/utils/index.d.ts",
+      "import": "./dist/utils/index.js",
+      "default": "./dist/utils/index.js"
+    },
+    "./foundation.css": "./dist/foundation.css",
+    "./tailwind.css": "./dist/tailwind.css",
+    "./standalone.css": "./dist/standalone.css",
     "./styles.css": "./dist/styles.css",
     "./package.json": "./package.json"
   },
@@ -42,27 +53,28 @@
     "dev:playground": "next dev playground --webpack -p 3020",
     "build": "pnpm build:js && pnpm build:css",
     "build:js": "tsup",
-    "build:css": "tailwindcss -i src/foundation/package.css -o dist/styles.css --minify",
+    "build:css": "node scripts/build-css.mjs",
     "build:playground": "next build playground",
     "start:playground": "next start playground -p 3020",
     "test": "pnpm test:contracts && pnpm test:unit",
     "test:contracts": "node --test playground/src/test/*.test.mjs",
     "test:unit": "vitest run",
     "test:package": "pnpm build && pnpm lint:package && node scripts/verify-package.mjs",
+    "test:consumer": "node scripts/test-packaged-consumer.mjs",
     "lint": "eslint src --max-warnings=0",
     "lint:playground": "eslint playground --max-warnings=0 --config playground/eslint.config.mjs",
     "typecheck": "tsc --noEmit",
     "typecheck:playground": "tsc --noEmit -p playground/tsconfig.json",
     "lint:package": "publint",
-    "prepack": "pnpm test:package"
+    "prepack": "pnpm build && node scripts/verify-package.mjs"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/conscia-code/design-system.git"
+    "url": "git+https://github.com/conscia-labs/design-system.git"
   },
-  "homepage": "https://github.com/conscia-code/design-system#readme",
+  "homepage": "https://github.com/conscia-labs/design-system#readme",
   "bugs": {
-    "url": "https://github.com/conscia-code/design-system/issues"
+    "url": "https://github.com/conscia-labs/design-system/issues"
   },
   "keywords": [
     "conscia",
@@ -106,7 +118,13 @@
   },
   "peerDependencies": {
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "tailwindcss": "^4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "tailwindcss": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4",

@@ -1,0 +1,8 @@
+@import "./foundation.css";
+
+/*
+ * Sources are resolved relative to this published stylesheet. This lets a
+ * consuming Tailwind v4 build discover every class used by the compiled
+ * component modules without a node_modules-relative path in application CSS.
+ */
+@source "./**/*.js";

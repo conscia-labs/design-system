@@ -32,7 +32,7 @@ import { cn } from "./utils";
 
 /**
  * Temporary Admin UI migration aliases. New product code should import the
- * clean primitive names from @conscia-code/design-system.
+ * clean primitive names from @conscia-labs/design-system.
  */
 const ConsciaButton = Button;
 

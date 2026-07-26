@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "@conscia-code/design-system/styles.css";
+@import "@conscia-labs/design-system/tailwind.css";
 
 @source "../../../src";
 

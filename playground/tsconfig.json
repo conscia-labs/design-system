@@ -26,10 +26,10 @@
       "@/*": [
         "./src/*"
       ],
-      "@conscia-code/design-system": [
+      "@conscia-labs/design-system": [
         "../src/index.ts"
       ],
-      "@conscia-code/design-system/*": [
+      "@conscia-labs/design-system/*": [
         "../src/*/index.ts"
       ]
     }

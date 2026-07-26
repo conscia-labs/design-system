@@ -1,1 +1,1 @@
-export { DesignPreferenceControls as DesignPreferences } from "@conscia-code/design-system";
+export { DesignPreferenceControls as DesignPreferences } from "@conscia-labs/design-system";
