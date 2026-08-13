@@ -2,9 +2,10 @@
 
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
-import { PanelLeftIcon } from "lucide-react";
+import { PanelLeftIcon, Search, X } from "lucide-react";
 
 import { Button } from "../primitives/button";
+import { Input } from "../primitives/input";
 import { Separator } from "../primitives/separator";
 import {
   Sheet,
@@ -211,7 +212,7 @@ function AppShell({
           suppressHydrationWarning
           className={cn(
             "group/shell min-h-svh bg-canvas text-foreground",
-            "[--ds-app-sidebar-width:16rem] [--ds-app-sidebar-width-mobile:18rem] data-[sidebar-state=collapsed]:[--ds-app-sidebar-width:3.5rem]",
+            "[--ds-app-sidebar-width:var(--ds-sidebar-width)] [--ds-app-sidebar-width-mobile:var(--ds-sidebar-width-mobile)] data-[sidebar-state=collapsed]:[--ds-app-sidebar-width:3.5rem]",
             className,
           )}
           style={style}
@@ -226,6 +227,7 @@ function AppShell({
 
 function AppSidebar({
   side = "left",
+  variant = "dark",
   className,
   children,
   title = "Application navigation",
@@ -233,6 +235,8 @@ function AppSidebar({
   ...props
 }: React.ComponentProps<"aside"> & {
   side?: "left" | "right";
+  /** Preserve the historical dark sidebar by default; auto follows appearance. */
+  variant?: "light" | "dark" | "auto";
   title?: string;
   description?: string;
 }) {
@@ -247,7 +251,8 @@ function AppSidebar({
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
         <SheetContent
           side={side}
-          className="w-72 border-sidebar-border bg-sidebar p-0 text-sidebar-foreground [&>[data-slot=sheet-close]]:right-3 [&>[data-slot=sheet-close]]:top-3 [&>[data-slot=sheet-close]]:text-sidebar-foreground/64 [&>[data-slot=sheet-close]]:hover:text-sidebar-foreground"
+          data-sidebar-variant={variant}
+          className="w-[var(--ds-sidebar-width-mobile)] border-sidebar-border bg-sidebar-canvas p-0 text-sidebar-primary-text [&>[data-slot=sheet-close]]:right-3 [&>[data-slot=sheet-close]]:top-3 [&>[data-slot=sheet-close]]:text-sidebar-secondary-text [&>[data-slot=sheet-close]]:hover:text-sidebar-primary-text"
         >
           <SheetHeader className="sr-only">
             <SheetTitle>{title}</SheetTitle>
@@ -260,8 +265,9 @@ function AppSidebar({
       <aside
         data-slot="app-sidebar"
         data-side={side}
+        data-sidebar-variant={variant}
         className={cn(
-          "fixed inset-y-0 z-20 hidden w-[var(--ds-app-sidebar-width)] shrink-0 flex-col border-sidebar-border bg-sidebar text-sidebar-foreground transition-[width] duration-200 ease-linear lg:flex",
+          "fixed inset-y-0 z-20 hidden w-[var(--ds-app-sidebar-width)] shrink-0 flex-col border-sidebar-border bg-sidebar-canvas text-sidebar-primary-text transition-[width] duration-200 ease-linear lg:flex",
           side === "left" ? "left-0 border-r" : "right-0 border-l",
           "group-data-[sidebar-state=collapsed]/shell:w-[var(--ds-app-sidebar-width)]",
           className,
@@ -282,7 +288,7 @@ function AppSidebarHeader({
     <div
       data-slot="app-sidebar-header"
       className={cn(
-        "flex min-h-14 shrink-0 items-center border-b border-sidebar-border px-3",
+        "flex min-h-[var(--ds-sidebar-header-height)] min-w-0 shrink-0 items-center overflow-hidden border-b border-sidebar-border bg-sidebar-header px-3",
         className,
       )}
       {...props}
@@ -298,7 +304,7 @@ function AppSidebarContent({
     <div
       data-slot="app-sidebar-content"
       className={cn(
-        "flex min-h-0 flex-1 flex-col gap-[var(--ds-space-control)] overflow-y-auto px-2.5 py-3",
+        "flex min-h-0 min-w-0 flex-1 flex-col gap-[var(--ds-sidebar-group-gap)] overflow-x-hidden overflow-y-auto bg-sidebar-content px-[var(--ds-sidebar-content-padding-x)] py-[var(--ds-sidebar-content-padding-y)]",
         className,
       )}
       {...props}
@@ -314,7 +320,7 @@ function AppSidebarFooter({
     <div
       data-slot="app-sidebar-footer"
       className={cn(
-        "mt-auto flex shrink-0 flex-col gap-2 border-t border-sidebar-border p-2.5",
+        "mt-auto flex min-w-0 shrink-0 flex-col gap-2 overflow-hidden border-t border-sidebar-border bg-sidebar-footer p-[var(--ds-sidebar-footer-padding)]",
         className,
       )}
       {...props}
@@ -339,16 +345,16 @@ function ProductIdentity({
       className={cn("flex min-w-0 items-center gap-2", className)}
     >
       {icon ? (
-        <div className="flex size-7 shrink-0 items-center justify-center rounded-[var(--ds-radius-control)] bg-sidebar-accent text-sidebar-foreground">
+        <div className="flex size-7 shrink-0 items-center justify-center rounded-[var(--ds-radius-control)] bg-sidebar-hover text-sidebar-icon">
           {icon}
         </div>
       ) : null}
       <div className="min-w-0 group-data-[sidebar-state=collapsed]/shell:hidden">
-        <div className="truncate text-sm font-semibold leading-5 text-sidebar-foreground">
+        <div className="truncate text-sm font-semibold leading-5 text-sidebar-primary-text">
           {label}
         </div>
         {description ? (
-          <div className="truncate text-[var(--ds-metadata)] leading-4 text-sidebar-foreground/62">
+          <div className="truncate text-[var(--ds-metadata)] leading-4 text-sidebar-metadata-text">
             {description}
           </div>
         ) : null}
@@ -372,10 +378,12 @@ function SidebarSeparator({
 
 function NavigationGroup({
   label,
+  count,
   children,
   className,
 }: {
   label?: React.ReactNode;
+  count?: React.ReactNode;
   children: React.ReactNode;
   className?: string;
 }) {
@@ -385,8 +393,16 @@ function NavigationGroup({
       className={cn("flex min-w-0 flex-col gap-1", className)}
     >
       {label ? (
-        <div className="px-2 pb-1 pt-2 text-[0.6875rem] font-medium uppercase tracking-normal text-sidebar-foreground/52 group-data-[sidebar-state=collapsed]/shell:hidden">
+        <div
+          data-slot="navigation-group-label"
+          className="flex min-h-6 items-center gap-2 px-2 pb-1 pt-2 text-[length:var(--ds-sidebar-group-label-size)] font-semibold uppercase leading-5 tracking-[0.08em] text-sidebar-group-label group-data-[sidebar-state=collapsed]/shell:hidden"
+        >
           {label}
+          {count !== undefined ? (
+            <span className="ml-auto shrink-0 text-[length:var(--ds-metadata)] font-medium normal-case tracking-normal text-sidebar-group-count">
+              {count}
+            </span>
+          ) : null}
         </div>
       ) : null}
       <div className="flex min-w-0 flex-col gap-1">{children}</div>
@@ -396,14 +412,14 @@ function NavigationGroup({
 
 function navigationItemClasses(active?: boolean) {
   return cn(
-    "flex h-11 min-w-0 items-center gap-2 rounded-[var(--ds-radius-control)] px-2 text-sm font-medium text-sidebar-foreground/78 outline-none transition-colors duration-150 lg:h-[var(--ds-sidebar-item-height)]",
-    "hover:bg-sidebar-accent hover:text-sidebar-foreground",
-    "focus-visible:ring-[3px] focus-visible:ring-ring/35",
-    "disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50",
+    "flex min-h-[var(--ds-sidebar-item-height-touch)] min-w-0 cursor-pointer items-center gap-2 rounded-[var(--ds-radius-control)] px-2 text-sm font-medium text-sidebar-secondary-text outline-none transition-colors duration-150 lg:h-[var(--ds-sidebar-item-height)] lg:min-h-0",
+    "hover:bg-sidebar-hover hover:text-sidebar-primary-text",
+    "focus-visible:ring-[3px] focus-visible:ring-sidebar-focus-ring",
+    "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:cursor-not-allowed aria-disabled:opacity-50",
     "group-data-[sidebar-state=collapsed]/shell:justify-center group-data-[sidebar-state=collapsed]/shell:px-0",
-    "[&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:stroke-[1.75]",
+    "[&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:stroke-[1.75] [&>svg]:text-sidebar-icon",
     active &&
-      "bg-sidebar-active text-sidebar-active-foreground shadow-[inset_2px_0_0_var(--sidebar-active-indicator)] hover:bg-sidebar-active hover:text-sidebar-active-foreground",
+      "bg-sidebar-active text-sidebar-active-foreground shadow-[inset_3px_0_0_var(--sidebar-active-indicator)] hover:bg-sidebar-active hover:text-sidebar-active-foreground [&>svg]:text-sidebar-active-foreground",
   );
 }
 
@@ -468,11 +484,11 @@ function NavigationSubItem({
       data-slot="navigation-sub-item"
       data-active={active ? "true" : undefined}
       className={cn(
-        "flex h-11 min-w-0 items-center gap-2 rounded-[var(--ds-radius-control)] px-2 text-sm text-sidebar-foreground/72 outline-none transition-colors duration-150 lg:h-[calc(var(--ds-sidebar-item-height)-0.25rem)]",
-        "hover:bg-sidebar-accent hover:text-sidebar-foreground focus-visible:ring-[3px] focus-visible:ring-ring/35",
-        "group-data-[sidebar-state=collapsed]/shell:hidden [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:stroke-[1.75]",
+        "flex min-h-[var(--ds-sidebar-item-height-touch)] min-w-0 cursor-pointer items-center gap-2 rounded-[var(--ds-radius-control)] px-2 text-sm text-sidebar-secondary-text outline-none transition-colors duration-150 lg:h-[calc(var(--ds-sidebar-item-height)-0.25rem)] lg:min-h-0",
+        "hover:bg-sidebar-hover hover:text-sidebar-primary-text focus-visible:ring-[3px] focus-visible:ring-sidebar-focus-ring",
+        "group-data-[sidebar-state=collapsed]/shell:hidden [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:stroke-[1.75] [&>svg]:text-sidebar-icon",
         active &&
-          "bg-sidebar-active text-sidebar-active-foreground shadow-[inset_2px_0_0_var(--sidebar-active-indicator)] hover:bg-sidebar-active hover:text-sidebar-active-foreground",
+          "bg-sidebar-active text-sidebar-active-foreground shadow-[inset_3px_0_0_var(--sidebar-active-indicator)] hover:bg-sidebar-active hover:text-sidebar-active-foreground [&>svg]:text-sidebar-active-foreground",
         className,
       )}
       {...props}
@@ -501,7 +517,7 @@ function SidebarTrigger({
   onClick,
   ...props
 }: React.ComponentProps<typeof Button>) {
-  const { toggleSidebar } = useAppShell();
+  const { isMobile, mobileOpen, sidebarOpen, toggleSidebar } = useAppShell();
 
   return (
     <Button
@@ -509,7 +525,11 @@ function SidebarTrigger({
       type="button"
       variant="ghost"
       size="icon"
-      className={cn("shrink-0", className)}
+      className={cn(
+        "shrink-0 cursor-pointer text-sidebar-secondary-text hover:bg-sidebar-hover hover:text-sidebar-primary-text focus-visible:ring-sidebar-focus-ring",
+        className,
+      )}
+      aria-expanded={isMobile ? mobileOpen : sidebarOpen}
       onClick={(event) => {
         onClick?.(event);
         toggleSidebar();
@@ -519,6 +539,120 @@ function SidebarTrigger({
       <PanelLeftIcon />
       <span className="sr-only">Toggle navigation</span>
     </Button>
+  );
+}
+
+type SidebarSearchProps = Omit<React.ComponentProps<typeof Input>, "type"> & {
+  expanded?: boolean;
+  defaultExpanded?: boolean;
+  onExpandedChange?: (expanded: boolean) => void;
+  triggerLabel?: string;
+  shortcut?: string;
+};
+
+/**
+ * Shared search affordance for sidebars. Applications own query state and
+ * filtering; this component owns the compact trigger, focus handoff, and
+ * keyboard-accessible expanded field.
+ */
+function SidebarSearch({
+  expanded: expandedProp,
+  defaultExpanded = false,
+  onExpandedChange,
+  triggerLabel = "Search navigation",
+  shortcut,
+  className,
+  onKeyDown,
+  ...props
+}: SidebarSearchProps) {
+  const [expandedState, setExpandedState] = React.useState(defaultExpanded);
+  const expanded = expandedProp ?? expandedState;
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const triggerRef = React.useRef<HTMLButtonElement>(null);
+  const mountedRef = React.useRef(false);
+
+  const setExpanded = React.useCallback(
+    (nextExpanded: boolean) => {
+      if (expandedProp === undefined) {
+        setExpandedState(nextExpanded);
+      }
+      onExpandedChange?.(nextExpanded);
+    },
+    [expandedProp, onExpandedChange],
+  );
+
+  React.useEffect(() => {
+    if (expanded) {
+      queueMicrotask(() => inputRef.current?.focus());
+    } else if (mountedRef.current) {
+      queueMicrotask(() => triggerRef.current?.focus());
+    }
+
+    mountedRef.current = true;
+  }, [expanded]);
+
+  if (!expanded) {
+    return (
+      <button
+        ref={triggerRef}
+        type="button"
+        data-slot="sidebar-search-trigger"
+        className={cn(
+          "flex min-h-[var(--ds-sidebar-item-height-touch)] w-full cursor-pointer items-center gap-2 rounded-[var(--ds-radius-control)] px-2 text-left text-sm font-medium text-sidebar-secondary-text outline-none transition-colors hover:bg-sidebar-hover hover:text-sidebar-primary-text focus-visible:ring-[3px] focus-visible:ring-sidebar-focus-ring lg:min-h-[var(--ds-sidebar-item-height)]",
+          "group-data-[sidebar-state=collapsed]/shell:justify-center group-data-[sidebar-state=collapsed]/shell:px-0",
+          className,
+        )}
+        onClick={() => setExpanded(true)}
+        aria-label={triggerLabel}
+      >
+        <Search className="size-4 shrink-0 text-sidebar-icon" />
+        <span className="truncate group-data-[sidebar-state=collapsed]/shell:hidden">
+          {triggerLabel}
+        </span>
+        {shortcut ? (
+          <kbd className="ml-auto rounded border border-sidebar-border px-1.5 py-0.5 text-[length:var(--ds-metadata)] font-medium text-sidebar-metadata-text group-data-[sidebar-state=collapsed]/shell:hidden">
+            {shortcut}
+          </kbd>
+        ) : null}
+      </button>
+    );
+  }
+
+  return (
+    <div
+      data-slot="sidebar-search"
+      data-expanded="true"
+      className={cn(
+        "flex min-h-[var(--ds-sidebar-item-height-touch)] items-center gap-2 rounded-[var(--ds-radius-control)] border border-sidebar-border bg-sidebar-search px-2 text-sidebar-primary-text shadow-[var(--ds-shadow-raised)] lg:min-h-[var(--ds-sidebar-item-height)]",
+        className,
+      )}
+    >
+      <Search className="size-4 shrink-0 text-sidebar-icon" />
+      <Input
+        ref={inputRef}
+        type="search"
+        className="h-auto min-w-0 flex-1 border-0 bg-transparent px-0 py-1 text-sm shadow-none focus-visible:border-0 focus-visible:ring-0"
+        onKeyDown={(event) => {
+          if (event.key === "Escape") {
+            event.preventDefault();
+            setExpanded(false);
+          }
+          onKeyDown?.(event);
+        }}
+        {...props}
+      />
+      <button
+        type="button"
+        data-slot="sidebar-search-close"
+        className="grid size-7 shrink-0 cursor-pointer place-items-center rounded-[var(--ds-radius-control)] text-sidebar-secondary-text outline-none transition-colors hover:bg-sidebar-hover hover:text-sidebar-primary-text focus-visible:ring-2 focus-visible:ring-sidebar-focus-ring"
+        onClick={() => {
+          setExpanded(false);
+        }}
+        aria-label="Close search"
+      >
+        <X className="size-4" />
+      </button>
+    </div>
   );
 }
 
@@ -641,6 +775,7 @@ export {
   PageFrame,
   ProductIdentity,
   SidebarSeparator,
+  SidebarSearch,
   SidebarTrigger,
   TopBar,
   useAppShell,

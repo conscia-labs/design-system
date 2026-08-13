@@ -26,6 +26,18 @@ Object.defineProperty(HTMLElement.prototype, "scrollIntoView", {
   value: () => undefined,
 });
 
+class ResizeObserverStub {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
+Object.defineProperty(window, "ResizeObserver", {
+  configurable: true,
+  writable: true,
+  value: ResizeObserverStub,
+});
+
 Object.defineProperty(HTMLElement.prototype, "hasPointerCapture", {
   configurable: true,
   value: () => false,

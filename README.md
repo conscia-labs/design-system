@@ -270,6 +270,54 @@ export function ProductShell({
 }
 ```
 
+### Sidebar variants and semantic surfaces
+
+`AppSidebar` keeps the historical dark treatment by default. Consumers that
+want the sidebar to follow the application appearance can opt into the
+refreshed hierarchy with `variant="auto"`; `variant="light"` is available for
+an explicitly light sidebar.
+
+```tsx
+<AppShell>
+  <AppSidebar variant="auto">
+    <AppSidebarHeader>
+      <ProductIdentity label="Conscia" description="Administration" />
+    </AppSidebarHeader>
+    <AppSidebarContent>{navigation}</AppSidebarContent>
+    <AppSidebarFooter>{accountMenu}</AppSidebarFooter>
+  </AppSidebar>
+</AppShell>
+```
+
+The default is intentionally backwards compatible. The sidebar scope exposes
+reusable semantic aliases for its canvas, header, content, hover, active,
+search, footer, text, icon, group label, count, border, and focus-ring roles.
+Use the generated utilities such as `bg-sidebar-canvas`,
+`bg-sidebar-hover`, `text-sidebar-primary-text`, and
+`text-sidebar-metadata-text` in shared or application-owned compositions.
+Legacy aliases including `bg-sidebar`, `bg-sidebar-accent`, and
+`text-sidebar-foreground` remain supported.
+
+`SidebarSearch` owns only the trigger, expanded field, Escape handling, and
+focus handoff. Applications provide the query value and filtering behavior.
+`NavigationGroup` accepts an optional `count`; application-owned group labels
+can still be supplied as arbitrary React nodes. Routing, conversation rows,
+row actions, account menus, permissions, and appearance controls remain
+application-owned.
+
+For migration, replace a consuming application's light-only `--sidebar-*`
+root override with `variant="auto"` on its shared `AppSidebar`. Remove
+descendant opacity and background overrides as each shell adopts the semantic
+aliases. Keep product-specific selectors only where they encode behavior or
+content rather than shared sidebar presentation.
+
+The ownership boundary is:
+
+| Shared design system | Application-owned |
+| --- | --- |
+| Sidebar variant tokens, surface hierarchy, geometry, responsive drawer, focus states, active/hover/disabled styling, tooltips, and search affordance behavior | Routes, permissions, navigation data, query/filter state, conversation or inventory data, row actions, account/profile menus, sign-out, and product-specific persistence keys |
+| `NavigationGroup` keyboard expansion and `SidebarNavigation` collapsed flyouts | Group labels/content, link destinations, active-route calculation, and business-specific empty states |
+
 ## Choosing the right component
 
 ### Table or DataTable?

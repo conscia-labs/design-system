@@ -22,6 +22,7 @@ test("appearance and density are controlled through root attributes", () => {
   assert.match(styles, /:root\[data-appearance="dark"\]/);
   assert.match(styles, /--ds-control-height/);
   assert.match(styles, /--ds-row-height/);
+  assert.match(styles, /--ds-sidebar-width-mobile: 18rem;/);
 });
 
 test("page titles use comfortable defaults with an explicit compact option", () => {
@@ -302,9 +303,9 @@ test("shared shell patterns expose structure without gateway-specific behavior",
   assert.match(shell, /localStorage\.setItem/);
   assert.match(shell, /subscribeToSidebarOpen/);
   assert.match(shell, /data-\[sidebar-state=collapsed\]:\[--ds-app-sidebar-width:3\.5rem\]/);
-  assert.match(shell, /className="w-72/);
+  assert.match(shell, /--ds-app-sidebar-width-mobile/);
   assert.doesNotMatch(shell, /\[&>button\]:hidden/);
-  assert.match(shell, /h-11/);
+  assert.match(shell, /--ds-sidebar-item-height-touch/);
   assert.match(shell, /bg-sidebar-active/);
   assert.match(shell, /text-sidebar-active-foreground/);
   assert.match(shell, /--sidebar-active-indicator/);
@@ -315,6 +316,38 @@ test("shared shell patterns expose structure without gateway-specific behavior",
   assert.match(styles, /prefers-reduced-motion: reduce/);
   assert.doesNotMatch(shell, /organizationSlug/);
   assert.doesNotMatch(shell, /usePathname/);
+});
+
+test("sidebar semantics resolve through light and dark scopes without a new palette", () => {
+  const styles = read("../../../src/foundation/styles.css");
+  const shell = read("../../../src/patterns/app-shell.tsx");
+
+  for (const token of [
+    "--sidebar-canvas",
+    "--sidebar-header",
+    "--sidebar-content",
+    "--sidebar-hover",
+    "--sidebar-primary-text",
+    "--sidebar-secondary-text",
+    "--sidebar-metadata-text",
+    "--sidebar-icon",
+    "--sidebar-search",
+    "--sidebar-footer",
+    "--sidebar-group-label",
+    "--sidebar-group-count",
+    "--sidebar-focus-ring",
+  ]) {
+    assert.match(styles, new RegExp(`${token}:`));
+    assert.match(styles, new RegExp(`--color-${token.slice(2)}:`));
+  }
+
+  assert.match(styles, /\[data-sidebar-variant="light"\]/);
+  assert.match(styles, /data-sidebar-variant="auto"/);
+  assert.match(styles, /--sidebar-active: var\(--accent-background\)/);
+  assert.match(styles, /--sidebar-active-indicator: var\(--selection-indicator\)/);
+  assert.match(shell, /variant\?: "light" \| "dark" \| "auto"/);
+  assert.match(shell, /data-sidebar-variant=\{variant\}/);
+  assert.match(shell, /function SidebarSearch/);
 });
 
 test("shared sidebar navigation supports collapsed flyouts without owning routes", () => {
@@ -331,7 +364,9 @@ test("shared sidebar navigation supports collapsed flyouts without owning routes
   assert.doesNotMatch(navigation, /next\/link/);
   assert.doesNotMatch(navigation, /usePathname/);
   assert.match(playgroundShell, /<SidebarNavigation/);
+  assert.match(playgroundShell, /<SidebarSearch shortcut="⌘K" \/>/);
   assert.match(playgroundShell, /label: "Library"/);
+  assert.match(playgroundShell, /<AppSidebar variant="auto">/);
 });
 
 test("shared package keeps canonical primitives clean and quarantines compatibility aliases", () => {

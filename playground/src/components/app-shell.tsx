@@ -16,6 +16,7 @@ import {
   MainRegion,
   PageFrame,
   ProductIdentity,
+  SidebarSearch,
   SidebarNavigation,
   SidebarTrigger,
   TopBar,
@@ -74,7 +75,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <DesignAppShell>
       <DesignSystemPreferenceSync />
-      <AppSidebar>
+      <AppSidebar variant="auto">
         <AppSidebarHeader>
           <ProductIdentity
             label="Conscia Design System"
@@ -82,6 +83,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           />
         </AppSidebarHeader>
         <AppSidebarContent>
+          <SidebarSearch shortcut="⌘K" />
           <SidebarNavigation
             entries={entries}
             renderLink={renderNavigationLink}
