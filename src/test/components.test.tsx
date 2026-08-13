@@ -16,6 +16,7 @@ import {
   NavigationItem,
   SidebarSearch,
   SidebarTrigger,
+  TopBar,
 } from "../patterns/app-shell";
 import { SidebarNavigation } from "../patterns/sidebar-navigation";
 import { DataTable, type SortingState } from "../patterns/data-table";
@@ -325,6 +326,38 @@ describe("shared sidebar", () => {
 
     await user.click(screen.getByRole("button", { name: "Close" }));
     expect(screen.queryByRole("dialog")).toBeNull();
+  });
+
+  it("keeps the sidebar trigger in the topbar so it remains available when collapsed", () => {
+    const { container } = render(
+      <AppShell>
+        <AppSidebar>
+          <AppSidebarHeader>Brand</AppSidebarHeader>
+          <AppSidebarContent>Navigation</AppSidebarContent>
+        </AppSidebar>
+        <div>
+          <TopBar>
+            <SidebarTrigger />
+          </TopBar>
+        </div>
+      </AppShell>,
+    );
+
+    const topbar = container.querySelector('[data-slot="top-bar"]');
+    const sidebar = container.querySelector('[data-slot="app-sidebar"]');
+    const trigger = screen.getByRole("button", { name: "Toggle navigation" });
+
+    expect(topbar?.querySelector('[data-slot="sidebar-trigger"]')).toBe(trigger);
+    expect(sidebar?.querySelector('[data-slot="sidebar-trigger"]')).toBeNull();
+    expect(topbar?.className).toContain("min-h-[var(--ds-topbar-height)]");
+    expect(trigger.className).toContain("text-muted-foreground");
+    expect(trigger.className).toContain("hover:bg-surface-muted");
+    expect(trigger.className).toContain("focus-visible:ring-ring");
+    expect(
+      container
+        .querySelector('[data-slot="app-sidebar-header"]')
+        ?.className,
+    ).toContain("min-h-[var(--ds-topbar-height)]");
   });
 });
 

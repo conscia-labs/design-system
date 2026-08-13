@@ -11,6 +11,8 @@ test("appearance and density are controlled through root attributes", () => {
   const themeScript = read("../components/theme-script.tsx");
   const styles = read("../../../src/foundation/styles.css");
 
+  assert.match(styles, /@import "@fontsource-variable\/inter\/index\.css";/);
+  assert.match(styles, /--font-sans: "Inter Variable"/);
   assert.match(preferences, /DesignPreferenceControls/);
   assert.match(sharedControls, /document\.documentElement/);
   assert.match(sharedPreferences, /dataset/);
@@ -23,6 +25,9 @@ test("appearance and density are controlled through root attributes", () => {
   assert.match(styles, /--ds-control-height/);
   assert.match(styles, /--ds-row-height/);
   assert.match(styles, /--ds-sidebar-width-mobile: 18rem;/);
+  assert.match(styles, /--ds-topbar-height: 3\.5rem;/);
+  assert.match(styles, /--ds-sidebar-header-height: var\(--ds-topbar-height\);/);
+  assert.match(styles, /--ds-sidebar-group-label-size: var\(--ds-field-label-size\);/);
 });
 
 test("page titles use comfortable defaults with an explicit compact option", () => {
@@ -348,6 +353,12 @@ test("sidebar semantics resolve through light and dark scopes without a new pale
   assert.match(shell, /variant\?: "light" \| "dark" \| "auto"/);
   assert.match(shell, /data-sidebar-variant=\{variant\}/);
   assert.match(shell, /function SidebarSearch/);
+  assert.match(shell, /min-h-\[var\(--ds-topbar-height\)\]/);
+  assert.match(shell, /Place this control inside TopBar/);
+  assert.match(
+    shell,
+    /text-\[length:var\(--ds-sidebar-group-label-size\)\]/,
+  );
 });
 
 test("shared sidebar navigation supports collapsed flyouts without owning routes", () => {

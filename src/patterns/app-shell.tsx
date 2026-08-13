@@ -288,7 +288,7 @@ function AppSidebarHeader({
     <div
       data-slot="app-sidebar-header"
       className={cn(
-        "flex min-h-[var(--ds-sidebar-header-height)] min-w-0 shrink-0 items-center overflow-hidden border-b border-sidebar-border bg-sidebar-header px-3",
+        "flex min-h-[var(--ds-topbar-height)] min-w-0 shrink-0 items-center overflow-hidden border-b border-sidebar-border bg-sidebar-header px-3",
         className,
       )}
       {...props}
@@ -512,6 +512,10 @@ function NavigationSubList({
   );
 }
 
+/**
+ * Place this control inside TopBar, not AppSidebar, so it remains available
+ * after the sidebar collapses and in the mobile drawer layout.
+ */
 function SidebarTrigger({
   className,
   onClick,
@@ -526,7 +530,7 @@ function SidebarTrigger({
       variant="ghost"
       size="icon"
       className={cn(
-        "shrink-0 cursor-pointer text-sidebar-secondary-text hover:bg-sidebar-hover hover:text-sidebar-primary-text focus-visible:ring-sidebar-focus-ring",
+        "shrink-0 cursor-pointer text-muted-foreground hover:bg-surface-muted hover:text-foreground focus-visible:ring-ring",
         className,
       )}
       aria-expanded={isMobile ? mobileOpen : sidebarOpen}
@@ -681,7 +685,7 @@ function TopBar({
     <header
       data-slot="top-bar"
       className={cn(
-        "sticky top-0 z-10 flex min-h-14 shrink-0 items-center justify-between gap-3 border-b border-border-subtle bg-background/96 px-3 backdrop-blur md:px-4",
+        "sticky top-0 z-10 flex min-h-[var(--ds-topbar-height)] shrink-0 items-center justify-between gap-3 border-b border-border-subtle bg-background/96 px-3 backdrop-blur md:px-4",
         "supports-[backdrop-filter]:bg-background/88",
         className,
       )}

@@ -252,6 +252,7 @@ export function ProductShell({
 
       <MainRegion>
         <TopBar>
+          {/* Keep the toggle in the topbar; it must remain visible when the sidebar collapses. */}
           <SidebarTrigger />
         </TopBar>
 
@@ -269,6 +270,16 @@ export function ProductShell({
   );
 }
 ```
+
+### Typography and font loading
+
+The design system declares the open-source Inter variable font as a runtime
+dependency and loads it through its CSS entry points. Inter is distributed
+under the SIL Open Font License 1.1 and supports the system's fractional
+weight values. Consumers should import the published `tailwind.css` or
+`styles.css` entry and should not add a separate Saans or Inter download.
+Applications may override `--font-sans` only when a deliberate product-specific
+type decision has been made.
 
 ### Sidebar variants and semantic surfaces
 
@@ -304,6 +315,12 @@ focus handoff. Applications provide the query value and filtering behavior.
 can still be supplied as arbitrary React nodes. Routing, conversation rows,
 row actions, account menus, permissions, and appearance controls remain
 application-owned.
+
+The shell uses `--ds-topbar-height` as the shared chrome-height contract. The
+sidebar header aliases the historical `--ds-sidebar-header-height` token to the
+same value, so the two rails stay aligned. `SidebarTrigger` should be rendered
+as a child of `TopBar`, never inside `AppSidebar`; the topbar remains mounted
+when the sidebar enters collapsed or mobile states.
 
 For migration, replace a consuming application's light-only `--sidebar-*`
 root override with `variant="auto"` on its shared `AppSidebar`. Remove
