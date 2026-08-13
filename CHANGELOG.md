@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.3.2 - 2026-08-13
+
+- Add the theme-aware `surface-control` and `surface-control-hover` semantic
+  surfaces for form controls and outline buttons. Light mode uses the existing
+  muted and raised surfaces; dark mode uses the existing raised and muted
+  surfaces to improve control separation and interaction feedback.
+- Update `Input`, `Textarea`, `SelectTrigger`, and `Button variant="outline"`
+  to use the shared control-surface hierarchy instead of blending into the
+  surrounding card or canvas surface.
+- Audit both light and dark themes to preserve the existing palette while
+  improving visual contrast, focus visibility, and control affordance clarity.
+- Document the new semantic control surfaces and add regression coverage for
+  theme resolution, primitive mappings, packaged CSS, and the production
+  consumer build.
+
 ## 0.3.1 - 2026-08-13
 
 - Replace the unloaded proprietary `Saans` reference with the open-source

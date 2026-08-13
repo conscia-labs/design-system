@@ -81,6 +81,8 @@
   --surface-raised: #ffffff;
   --surface-floating: #ffffff;
   --surface-overlay: #ffffff;
+  --surface-control: var(--surface-muted);
+  --surface-control-hover: var(--surface-raised);
   --text-primary: var(--foreground);
   --text-secondary: #373b4a;
   --text-supporting: #5f6270;
@@ -253,6 +255,8 @@
   --surface-raised: #1d1f24;
   --surface-floating: #22242a;
   --surface-overlay: #282a31;
+  --surface-control: var(--surface-raised);
+  --surface-control-hover: var(--surface-muted);
   --text-primary: var(--foreground);
   --text-secondary: #e7e8eb;
   --text-supporting: #c5c7cf;
@@ -400,6 +404,8 @@
   --color-surface-raised: var(--surface-raised);
   --color-surface-floating: var(--surface-floating);
   --color-surface-overlay: var(--surface-overlay);
+  --color-surface-control: var(--surface-control);
+  --color-surface-control-hover: var(--surface-control-hover);
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
   --color-text-supporting: var(--text-supporting);

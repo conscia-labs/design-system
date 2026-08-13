@@ -125,6 +125,8 @@ test("button variants and sizes preserve ShadCN-style variant architecture", () 
     assert.match(button, new RegExp(`${size}:`));
   }
   assert.match(button, /@radix-ui\/react-slot/);
+  assert.match(button, /outline:[\s\S]*bg-surface-control/);
+  assert.match(button, /hover:bg-surface-control-hover/);
 });
 
 test("field pattern owns help, error, disabled-compatible rhythm", () => {
@@ -140,10 +142,29 @@ test("field pattern owns help, error, disabled-compatible rhythm", () => {
   assert.match(field, /--ds-field-gap/);
   assert.match(foundation, /--ds-field-control-height: 2\.75rem/);
   assert.match(input, /--ds-field-control-height/);
+  assert.match(input, /bg-surface-control/);
   assert.match(select, /--ds-field-control-height/);
+  assert.match(select, /bg-surface-control/);
   assert.match(textarea, /--ds-field-control-radius/);
+  assert.match(textarea, /bg-surface-control/);
   assert.match(primitives, /aria-invalid/);
   assert.match(primitives, /disabled defaultValue/);
+});
+
+test("control surfaces preserve separation across light and dark themes", () => {
+  const styles = read("../../../src/foundation/styles.css");
+
+  assert.match(styles, /--surface-control: var\(--surface-muted\);/);
+  assert.match(styles, /--surface-control-hover: var\(--surface-raised\);/);
+  assert.match(
+    styles,
+    /:root\.dark,[\s\S]*--surface-control: var\(--surface-raised\);[\s\S]*--surface-control-hover: var\(--surface-muted\);/,
+  );
+  assert.match(styles, /--color-surface-control: var\(--surface-control\);/);
+  assert.match(
+    styles,
+    /--color-surface-control-hover: var\(--surface-control-hover\);/,
+  );
 });
 
 test("tabs separate routed navigation from layered content and mode switching", () => {

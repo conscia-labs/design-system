@@ -309,6 +309,12 @@ Use the generated utilities such as `bg-sidebar-canvas`,
 Legacy aliases including `bg-sidebar`, `bg-sidebar-accent`, and
 `text-sidebar-foreground` remain supported.
 
+Form controls and outline buttons use `bg-surface-control`, with
+`bg-surface-control-hover` for the outline hover state. These semantic surfaces
+are intentionally theme-aware: the base uses the muted surface in light mode
+and the raised surface in dark mode; hover reverses that relationship so the
+control remains visibly interactive without introducing a new color palette.
+
 `SidebarSearch` owns only the trigger, expanded field, Escape handling, and
 focus handoff. Applications provide the query value and filtering behavior.
 `NavigationGroup` accepts an optional `count`; application-owned group labels
