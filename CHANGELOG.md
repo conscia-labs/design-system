@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.3.3 - 2026-08-14
+
+- Add shared display typography, TopBar padding, and sidebar rhythm tokens while
+  preserving the existing font family, color roles, and component APIs.
+- Refine sidebar section labels to use a restrained shared size, line-height,
+  weight, tracking, and group/list spacing.
+- Normalize normal input and textarea text/placeholder typography and document
+  the intended shared hierarchy for display, page, section, body, metadata, and
+  menu labels.
+- Expand tests and playground coverage for topbar actions, sidebar states,
+  primary button foregrounds, input typography, focus visibility, and the
+  light/dark responsive shell.
+
 ## 0.3.2 - 2026-08-13
 
 - Add the theme-aware `surface-control` and `surface-control-hover` semantic

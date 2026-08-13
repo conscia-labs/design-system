@@ -281,6 +281,24 @@ weight values. Consumers should import the published `tailwind.css` or
 Applications may override `--font-sans` only when a deliberate product-specific
 type decision has been made.
 
+### Typography hierarchy
+
+Use the shared type scale by role:
+
+- `--ds-display-title` is the responsive display or welcome scale for
+  high-level entry points.
+- `--ds-page-title` is for page-level headings and `PageHeader` titles.
+- `--ds-section-title` is for sections within a page or resource detail.
+- `--ds-body` is the default application body size.
+- `--ds-metadata` is for supporting context such as descriptions, timestamps,
+  counts, and secondary organization text.
+- `--ds-menu-label-size` is intentionally compact and is reserved for menu
+  labels and compact option descriptions, not normal body copy.
+
+Prefer these tokens over local `clamp()`, pixel, or one-off font-size values.
+Product-specific layout styles may still control wrapping, maximum width, or
+composition when the content requires it.
+
 ### Sidebar variants and semantic surfaces
 
 `AppSidebar` keeps the historical dark treatment by default. Consumers that
@@ -324,9 +342,21 @@ application-owned.
 
 The shell uses `--ds-topbar-height` as the shared chrome-height contract. The
 sidebar header aliases the historical `--ds-sidebar-header-height` token to the
-same value, so the two rails stay aligned. `SidebarTrigger` should be rendered
-as a child of `TopBar`, never inside `AppSidebar`; the topbar remains mounted
-when the sidebar enters collapsed or mobile states.
+same value, so the two rails stay aligned. `TopBar` also owns shared horizontal
+padding through its responsive `--ds-topbar-padding-x` tokens; applications
+should not add a normal-use hardcoded height or padding override. Keep leading
+and trailing actions inside the topbar so icons and labels share the same
+vertical rhythm and visible focus treatment. `SidebarTrigger` should be
+rendered as a child of `TopBar`, never inside `AppSidebar`; the topbar remains
+mounted when the sidebar enters collapsed or mobile states.
+
+Sidebar section labels use the field-label size with a restrained medium weight
+and tracking. Navigation rows retain the shared comfortable/touch heights,
+while `--ds-sidebar-item-gap`, `--ds-sidebar-label-gap`, and
+`--ds-sidebar-group-gap` control list, label, and group rhythm. Use the shared
+sidebar semantic utilities for surfaces, text, icons, borders, and focus rings;
+keep conversation data, organization names, and product-specific row actions
+application-owned.
 
 For migration, replace a consuming application's light-only `--sidebar-*`
 root override with `variant="auto"` on its shared `AppSidebar`. Remove

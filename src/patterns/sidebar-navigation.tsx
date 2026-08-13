@@ -139,14 +139,21 @@ function SidebarNavigation({
     <nav
       data-slot="sidebar-navigation"
       aria-label="Primary navigation"
-      className={cn("flex flex-col gap-1", className)}
+      className={cn(
+        "flex flex-col gap-[var(--ds-sidebar-group-gap)]",
+        className,
+      )}
     >
       {entries.map((entry) => {
         if (!isSection(entry)) {
           return (
             <NavigationGroup
               key={entry.id}
-              className={entry.startsSection ? "mt-2" : undefined}
+              className={
+                entry.startsSection
+                  ? "mt-[var(--ds-sidebar-group-gap)]"
+                  : undefined
+              }
             >
               <NavigationItem asChild active={entry.active} tooltip={entry.label}>
                 {renderLink(entry, {
@@ -173,7 +180,11 @@ function SidebarNavigation({
           return (
             <DropdownMenu key={entry.id}>
               <NavigationGroup
-                className={entry.startsSection ? "mt-2" : undefined}
+                className={
+                  entry.startsSection
+                    ? "mt-[var(--ds-sidebar-group-gap)]"
+                    : undefined
+                }
               >
                 <DropdownMenuTrigger asChild>
                   <NavigationItem

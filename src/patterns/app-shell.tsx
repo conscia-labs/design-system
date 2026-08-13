@@ -390,12 +390,15 @@ function NavigationGroup({
   return (
     <section
       data-slot="navigation-group"
-      className={cn("flex min-w-0 flex-col gap-1", className)}
+      className={cn(
+        "flex min-w-0 flex-col gap-[var(--ds-sidebar-label-gap)]",
+        className,
+      )}
     >
       {label ? (
         <div
           data-slot="navigation-group-label"
-          className="flex min-h-6 items-center gap-2 px-2 pb-1 pt-2 text-[length:var(--ds-sidebar-group-label-size)] font-semibold uppercase leading-5 tracking-[0.08em] text-sidebar-group-label group-data-[sidebar-state=collapsed]/shell:hidden"
+          className="flex min-h-6 items-center gap-2 px-2 pb-0 pt-2 text-[length:var(--ds-sidebar-group-label-size)] font-medium uppercase leading-[var(--ds-sidebar-group-label-line-height)] tracking-[0.06em] text-sidebar-group-label group-data-[sidebar-state=collapsed]/shell:hidden"
         >
           {label}
           {count !== undefined ? (
@@ -405,14 +408,16 @@ function NavigationGroup({
           ) : null}
         </div>
       ) : null}
-      <div className="flex min-w-0 flex-col gap-1">{children}</div>
+      <div className="flex min-w-0 flex-col gap-[var(--ds-sidebar-item-gap)]">
+        {children}
+      </div>
     </section>
   );
 }
 
 function navigationItemClasses(active?: boolean) {
   return cn(
-    "flex min-h-[var(--ds-sidebar-item-height-touch)] min-w-0 cursor-pointer items-center gap-2 rounded-[var(--ds-radius-control)] px-2 text-sm font-medium text-sidebar-secondary-text outline-none transition-colors duration-150 lg:h-[var(--ds-sidebar-item-height)] lg:min-h-0",
+    "flex min-h-[var(--ds-sidebar-item-height-touch)] min-w-0 cursor-pointer items-center gap-2 rounded-[var(--ds-radius-control)] px-2 text-sm font-medium leading-5 text-sidebar-secondary-text outline-none transition-colors duration-150 lg:h-[var(--ds-sidebar-item-height)] lg:min-h-0",
     "hover:bg-sidebar-hover hover:text-sidebar-primary-text",
     "focus-visible:ring-[3px] focus-visible:ring-sidebar-focus-ring",
     "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:cursor-not-allowed aria-disabled:opacity-50",
@@ -484,7 +489,7 @@ function NavigationSubItem({
       data-slot="navigation-sub-item"
       data-active={active ? "true" : undefined}
       className={cn(
-        "flex min-h-[var(--ds-sidebar-item-height-touch)] min-w-0 cursor-pointer items-center gap-2 rounded-[var(--ds-radius-control)] px-2 text-sm text-sidebar-secondary-text outline-none transition-colors duration-150 lg:h-[calc(var(--ds-sidebar-item-height)-0.25rem)] lg:min-h-0",
+        "flex min-h-[var(--ds-sidebar-item-height-touch)] min-w-0 cursor-pointer items-center gap-2 rounded-[var(--ds-radius-control)] px-2 text-sm leading-5 text-sidebar-secondary-text outline-none transition-colors duration-150 lg:h-[calc(var(--ds-sidebar-item-height)-0.25rem)] lg:min-h-0",
         "hover:bg-sidebar-hover hover:text-sidebar-primary-text focus-visible:ring-[3px] focus-visible:ring-sidebar-focus-ring",
         "group-data-[sidebar-state=collapsed]/shell:hidden [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:stroke-[1.75] [&>svg]:text-sidebar-icon",
         active &&
@@ -504,7 +509,7 @@ function NavigationSubList({
     <div
       data-slot="navigation-sub-list"
       className={cn(
-        "ml-4 flex min-w-0 flex-col gap-1 border-l border-sidebar-border pl-2 group-data-[sidebar-state=collapsed]/shell:hidden",
+        "ml-4 flex min-w-0 flex-col gap-[var(--ds-sidebar-item-gap)] border-l border-sidebar-border pl-2 group-data-[sidebar-state=collapsed]/shell:hidden",
         className,
       )}
       {...props}
@@ -602,7 +607,7 @@ function SidebarSearch({
         type="button"
         data-slot="sidebar-search-trigger"
         className={cn(
-          "flex min-h-[var(--ds-sidebar-item-height-touch)] w-full cursor-pointer items-center gap-2 rounded-[var(--ds-radius-control)] px-2 text-left text-sm font-medium text-sidebar-secondary-text outline-none transition-colors hover:bg-sidebar-hover hover:text-sidebar-primary-text focus-visible:ring-[3px] focus-visible:ring-sidebar-focus-ring lg:min-h-[var(--ds-sidebar-item-height)]",
+          "flex min-h-[var(--ds-sidebar-item-height-touch)] w-full cursor-pointer items-center gap-2 rounded-[var(--ds-radius-control)] px-2 text-left text-sm font-medium leading-5 text-sidebar-secondary-text outline-none transition-colors hover:bg-sidebar-hover hover:text-sidebar-primary-text focus-visible:ring-[3px] focus-visible:ring-sidebar-focus-ring lg:min-h-[var(--ds-sidebar-item-height)]",
           "group-data-[sidebar-state=collapsed]/shell:justify-center group-data-[sidebar-state=collapsed]/shell:px-0",
           className,
         )}
@@ -685,7 +690,7 @@ function TopBar({
     <header
       data-slot="top-bar"
       className={cn(
-        "sticky top-0 z-10 flex min-h-[var(--ds-topbar-height)] shrink-0 items-center justify-between gap-3 border-b border-border-subtle bg-background/96 px-3 backdrop-blur md:px-4",
+        "sticky top-0 z-10 flex h-[var(--ds-topbar-height)] min-h-[var(--ds-topbar-height)] shrink-0 items-center justify-between gap-3 border-b border-border-subtle bg-background/96 px-[var(--ds-topbar-padding-x)] backdrop-blur md:px-[var(--ds-topbar-padding-x-wide)]",
         "supports-[backdrop-filter]:bg-background/88",
         className,
       )}

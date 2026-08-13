@@ -26,8 +26,21 @@ test("appearance and density are controlled through root attributes", () => {
   assert.match(styles, /--ds-row-height/);
   assert.match(styles, /--ds-sidebar-width-mobile: 18rem;/);
   assert.match(styles, /--ds-topbar-height: 3\.5rem;/);
+  assert.match(styles, /--ds-topbar-padding-x: 0\.75rem;/);
+  assert.match(styles, /--ds-topbar-padding-x-wide: 1rem;/);
   assert.match(styles, /--ds-sidebar-header-height: var\(--ds-topbar-height\);/);
   assert.match(styles, /--ds-sidebar-group-label-size: var\(--ds-field-label-size\);/);
+  assert.match(styles, /--ds-sidebar-group-label-line-height: 1\.125rem;/);
+  assert.match(styles, /--ds-display-title: clamp\(2rem, 4vw, 3\.5rem\);/);
+});
+
+test("playground footer controls do not clip in the collapsed desktop rail", () => {
+  const shell = read("../components/app-shell.tsx");
+
+  assert.match(
+    shell,
+    /DesignPreferenceControls className="group-data-\[sidebar-state=collapsed\]\/shell:hidden"/,
+  );
 });
 
 test("page titles use comfortable defaults with an explicit compact option", () => {
@@ -125,6 +138,7 @@ test("button variants and sizes preserve ShadCN-style variant architecture", () 
     assert.match(button, new RegExp(`${size}:`));
   }
   assert.match(button, /@radix-ui\/react-slot/);
+  assert.match(button, /default:[\s\S]*text-primary-foreground/);
   assert.match(button, /outline:[\s\S]*bg-surface-control/);
   assert.match(button, /hover:bg-surface-control-hover/);
 });
@@ -143,10 +157,14 @@ test("field pattern owns help, error, disabled-compatible rhythm", () => {
   assert.match(foundation, /--ds-field-control-height: 2\.75rem/);
   assert.match(input, /--ds-field-control-height/);
   assert.match(input, /bg-surface-control/);
+  assert.match(input, /text-sm leading-5/);
+  assert.match(input, /placeholder:text-sm placeholder:leading-5/);
   assert.match(select, /--ds-field-control-height/);
   assert.match(select, /bg-surface-control/);
+  assert.match(select, /text-sm leading-5/);
   assert.match(textarea, /--ds-field-control-radius/);
   assert.match(textarea, /bg-surface-control/);
+  assert.match(textarea, /text-sm leading-5/);
   assert.match(primitives, /aria-invalid/);
   assert.match(primitives, /disabled defaultValue/);
 });
@@ -347,6 +365,7 @@ test("shared shell patterns expose structure without gateway-specific behavior",
 test("sidebar semantics resolve through light and dark scopes without a new palette", () => {
   const styles = read("../../../src/foundation/styles.css");
   const shell = read("../../../src/patterns/app-shell.tsx");
+  const navigation = read("../../../src/patterns/sidebar-navigation.tsx");
 
   for (const token of [
     "--sidebar-canvas",
@@ -375,6 +394,12 @@ test("sidebar semantics resolve through light and dark scopes without a new pale
   assert.match(shell, /data-sidebar-variant=\{variant\}/);
   assert.match(shell, /function SidebarSearch/);
   assert.match(shell, /min-h-\[var\(--ds-topbar-height\)\]/);
+  assert.match(shell, /h-\[var\(--ds-topbar-height\)\]/);
+  assert.match(shell, /px-\[var\(--ds-topbar-padding-x\)\]/);
+  assert.match(shell, /gap-\[var\(--ds-sidebar-item-gap\)\]/);
+  assert.match(shell, /leading-\[var\(--ds-sidebar-group-label-line-height\)\]/);
+  assert.match(shell, /font-medium uppercase leading-\[var\(--ds-sidebar-group-label-line-height\)\] tracking-\[0\.06em\]/);
+  assert.match(navigation, /gap-\[var\(--ds-sidebar-group-gap\)\]/);
   assert.match(shell, /Place this control inside TopBar/);
   assert.match(
     shell,

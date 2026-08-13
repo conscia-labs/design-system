@@ -5,7 +5,9 @@ import axe from "axe-core";
 import { describe, expect, it, vi } from "vitest";
 
 import { Button } from "../primitives/button";
+import { Input } from "../primitives/input";
 import { SearchableSelect } from "../primitives/searchable-select";
+import { Textarea } from "../primitives/textarea";
 import {
   AppShell,
   AppSidebar,
@@ -43,6 +45,42 @@ describe("Button", () => {
 
     await user.click(screen.getByRole("button", { name: "Submit" }));
     expect(onSubmit).toHaveBeenCalledOnce();
+  });
+
+  it("keeps primary content on the semantic primary foreground", () => {
+    render(
+      <Button>
+        <span data-testid="button-icon" aria-hidden="true" />
+        Create connection
+      </Button>,
+    );
+
+    const button = screen.getByRole("button", { name: "Create connection" });
+    expect(button.className).toContain("bg-primary");
+    expect(button.className).toContain("text-primary-foreground");
+    expect(button.className).toContain("focus-visible:ring");
+  });
+});
+
+describe("form control typography", () => {
+  it("keeps normal input and textarea text aligned with placeholders", () => {
+    render(
+      <>
+        <Input placeholder="Search connections" />
+        <Textarea placeholder="Add a note" />
+      </>,
+    );
+
+    const input = screen.getByPlaceholderText("Search connections");
+    const textarea = screen.getByPlaceholderText("Add a note");
+
+    for (const control of [input, textarea]) {
+      expect(control.className).toContain("text-sm");
+      expect(control.className).toContain("leading-5");
+      expect(control.className).toContain("placeholder:text-sm");
+      expect(control.className).toContain("placeholder:leading-5");
+      expect(control.className).toContain("bg-surface-control");
+    }
   });
 });
 
@@ -203,6 +241,12 @@ describe("shared sidebar", () => {
     });
 
     expect(groupLabel.closest('[data-slot="navigation-group-label"]')).toBeTruthy();
+    expect(groupLabel.closest('[data-slot="navigation-group-label"]')?.className).toContain(
+      "font-medium",
+    );
+    expect(groupLabel.closest('[data-slot="navigation-group-label"]')?.className).toContain(
+      "tracking-[0.06em]",
+    );
     expect(screen.getByText("3")).toBeTruthy();
     expect(activeItem.getAttribute("data-active")).toBe("true");
     expect(activeItem.className).toContain("bg-sidebar-active");
@@ -349,7 +393,9 @@ describe("shared sidebar", () => {
 
     expect(topbar?.querySelector('[data-slot="sidebar-trigger"]')).toBe(trigger);
     expect(sidebar?.querySelector('[data-slot="sidebar-trigger"]')).toBeNull();
+    expect(topbar?.className).toContain("h-[var(--ds-topbar-height)]");
     expect(topbar?.className).toContain("min-h-[var(--ds-topbar-height)]");
+    expect(topbar?.className).toContain("px-[var(--ds-topbar-padding-x)]");
     expect(trigger.className).toContain("text-muted-foreground");
     expect(trigger.className).toContain("hover:bg-surface-muted");
     expect(trigger.className).toContain("focus-visible:ring-ring");

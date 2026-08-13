@@ -3,7 +3,7 @@
 import { useCallback, useMemo, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, Layers, PanelLeft, Shapes } from "lucide-react";
+import { Bell, BookOpen, Layers, PanelLeft, Shapes } from "lucide-react";
 
 import {
   AppShell as DesignAppShell,
@@ -11,6 +11,7 @@ import {
   AppSidebarContent,
   AppSidebarFooter,
   AppSidebarHeader,
+  Button,
   DesignPreferenceControls,
   DesignSystemPreferenceSync,
   MainRegion,
@@ -91,7 +92,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           />
         </AppSidebarContent>
         <AppSidebarFooter>
-          <DesignPreferenceControls />
+          <DesignPreferenceControls className="group-data-[sidebar-state=collapsed]/shell:hidden" />
         </AppSidebarFooter>
       </AppSidebar>
       <MainRegion>
@@ -102,6 +103,9 @@ export function AppShell({ children }: { children: ReactNode }) {
               Conscia Design System
             </div>
           </div>
+          <Button variant="ghost" size="icon" aria-label="Notifications">
+            <Bell />
+          </Button>
         </TopBar>
         <PageFrame width="full" className="p-0">
           {children}

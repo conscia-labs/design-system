@@ -60,6 +60,7 @@ export default function FoundationPage() {
 
         <ExampleSection title="Typography hierarchy">
           <div className="rounded-[var(--ds-radius-surface)] border bg-surface p-4">
+            <div className="text-[length:var(--ds-display-title)] font-semibold leading-tight">Welcome / display</div>
             <div className="text-[var(--ds-page-title)] font-semibold">Page title</div>
             <div className="mt-3 text-[var(--ds-section-title)] font-semibold">Section title</div>
             <p className="mt-2 text-sm leading-6 text-text-secondary">Body text describes the operational implication of the current state without decorative emphasis.</p>
