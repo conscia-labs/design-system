@@ -486,4 +486,36 @@ describe("sidebar contrast contract", () => {
     expect(contrastRatio(darkMetadata, darkCanvas)).toBeGreaterThanOrEqual(4.5);
     expect(contrastRatio(darkPrimary, darkActive)).toBeGreaterThanOrEqual(4.5);
   });
+
+  it("keeps the dark foundation calm, layered, and readable", () => {
+    const darkCanvas = [23, 25, 28] as [number, number, number];
+    const darkSurface = [29, 32, 36] as [number, number, number];
+    const darkRaised = [36, 39, 44] as [number, number, number];
+    const darkMuted = [40, 43, 49] as [number, number, number];
+    const darkFloating = [44, 47, 54] as [number, number, number];
+    const darkOverlay = [49, 52, 58] as [number, number, number];
+    const darkPrimary = [239, 241, 244] as [number, number, number];
+    const darkSecondary = [212, 216, 223] as [number, number, number];
+    const darkSupporting = [179, 186, 197] as [number, number, number];
+    const darkMetadata = [146, 154, 167] as [number, number, number];
+    const surfaces = [
+      darkCanvas,
+      darkSurface,
+      darkRaised,
+      darkMuted,
+      darkFloating,
+      darkOverlay,
+    ];
+
+    expect(darkCanvas).not.toEqual([0, 0, 0]);
+    expect(new Set(surfaces.map((surface) => surface.join(","))).size).toBe(surfaces.length);
+    for (let index = 1; index < surfaces.length; index += 1) {
+      expect(relativeLuminance(surfaces[index]) - relativeLuminance(surfaces[index - 1])).toBeGreaterThanOrEqual(0.0035);
+    }
+
+    expect(contrastRatio(darkPrimary, darkCanvas)).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(darkSecondary, darkCanvas)).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(darkSupporting, darkCanvas)).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(darkMetadata, darkCanvas)).toBeGreaterThanOrEqual(4.5);
+  });
 });

@@ -28,6 +28,23 @@ export default function FoundationPage() {
           </div>
         </ExampleSection>
 
+        <ExampleSection title="Long-form reading surfaces">
+          <div className="rounded-[var(--ds-radius-surface)] border bg-surface p-4">
+            <article className="rounded-[var(--ds-radius-control)] border bg-surface-raised p-4 shadow-[var(--ds-shadow-raised)]">
+              <div className="flex items-center justify-between gap-3">
+                <div className="text-sm font-semibold text-text-primary">Conversation response</div>
+                <div className="text-[var(--ds-metadata)] text-text-supporting">Just now</div>
+              </div>
+              <p className="mt-2 max-w-prose text-sm leading-6 text-text-secondary">
+                A calm reading surface keeps the primary response clear while supporting context stays visible without competing with it.
+              </p>
+              <div className="mt-3 rounded-[var(--ds-radius-control)] bg-surface-muted px-3 py-2 text-[var(--ds-metadata)] text-text-supporting">
+                Supporting context · shared semantic surfaces
+              </div>
+            </article>
+          </div>
+        </ExampleSection>
+
         <ExampleSection title="Border, radius, and elevation">
           <div className="grid gap-3 md:grid-cols-3">
             <div className="rounded-[var(--ds-radius-control)] border bg-surface p-4 text-sm">Control radius</div>

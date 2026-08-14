@@ -197,6 +197,45 @@ test("control surfaces preserve separation across light and dark themes", () => 
   );
 });
 
+test("dark foundation uses a calm, distinguishable surface and text hierarchy", () => {
+  const styles = read("../../../src/foundation/styles.css");
+  const darkTheme = styles.match(/:root\.dark,[\s\S]*?(?=\/\*\n \* Light sidebars)/)?.[0];
+
+  assert.ok(darkTheme, "dark theme token block should be present");
+  assert.match(darkTheme, /--background: #17191c;/);
+  assert.match(darkTheme, /--card: #1d2024;/);
+  assert.match(darkTheme, /--surface-raised: #24272c;/);
+  assert.match(darkTheme, /--surface-muted: #282b31;/);
+  assert.match(darkTheme, /--surface-floating: #2c2f36;/);
+  assert.match(darkTheme, /--surface-overlay: #31343a;/);
+  assert.match(darkTheme, /--foreground: #eff1f4;/);
+  assert.match(darkTheme, /--text-secondary: #d4d8df;/);
+  assert.match(darkTheme, /--text-supporting: #b3bac5;/);
+  assert.match(darkTheme, /--text-muted: #929aa7;/);
+  assert.match(darkTheme, /--border-subtle: rgb\(255 255 255 \/ 7%\);/);
+  assert.match(darkTheme, /--ds-shadow-floating: 0 16px 32px rgb\(0 0 0 \/ 30%\);/);
+  assert.doesNotMatch(darkTheme, /--background: #000000;/);
+
+  for (const lightValue of [
+    "--background: #f9f9fa;",
+    "--card: #ffffff;",
+    "--surface-muted: #f3f4f5;",
+    "--surface-raised: #ffffff;",
+  ]) {
+    assert.match(styles, new RegExp(`:root,[\\s\\S]*${lightValue}`));
+  }
+});
+
+test("dark reading fixture consumes semantic text and surface utilities", () => {
+  const foundation = read("../app/foundation/page.tsx");
+
+  assert.match(foundation, /Long-form reading surfaces/);
+  assert.match(foundation, /bg-surface-raised/);
+  assert.match(foundation, /bg-surface-muted/);
+  assert.match(foundation, /text-text-secondary/);
+  assert.match(foundation, /text-text-supporting/);
+});
+
 test("tabs separate routed navigation from layered content and mode switching", () => {
   const tabs = read("../../../src/primitives/tabs.tsx");
   const foundation = read("../../../src/foundation/styles.css");

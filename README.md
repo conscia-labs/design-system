@@ -358,6 +358,26 @@ and foreground pair in dark mode because the bright danger role is not suitable
 for white text there. Consumer classes remain the final override when a
 product-specific treatment is intentional.
 
+Dark mode uses a calm charcoal surface ladder rather than a pure-black canvas:
+
+| Role | Token | Dark value |
+| --- | --- | --- |
+| Application canvas | `--background` / `--canvas` | `#17191c` |
+| Standard surface | `--card` / `--surface` | `#1d2024` |
+| Raised surface and control | `--surface-raised` / `--surface-control` | `#24272c` |
+| Muted and control-hover surface | `--surface-muted` / `--surface-control-hover` | `#282b31` |
+| Floating surface | `--surface-floating` / `--popover` | `#2c2f36` |
+| Overlay surface | `--surface-overlay` | `#31343a` |
+
+The adjacent steps are intentionally close enough for a calm reading
+environment while remaining distinguishable through luminance, borders, and
+elevation. `--foreground` is a soft high-priority text role (`#eff1f4`), while
+`--text-secondary`, `--text-supporting`, and `--text-muted` step down to
+`#d4d8df`, `#b3bac5`, and `#929aa7`. Use the semantic `bg-surface-*` and
+`text-*` utilities instead of copying these values into an application. The
+dark sidebar remains its established Conscia identity surface; inputs use the
+shared control surface and popovers/drawers use the floating or overlay roles.
+
 `SidebarSearch` owns only the trigger, expanded field, Escape handling, and
 focus handoff. Applications provide the query value and filtering behavior.
 `NavigationGroup` accepts an optional `count`; application-owned group labels

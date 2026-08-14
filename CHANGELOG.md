@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.3.5 - 2026-08-14
+
+- Soften the dark canvas and rebalance shared text roles for more comfortable
+  long-form reading without changing the light theme or Conscia brand colors.
+- Clarify the dark surface ladder across cards, raised controls, floating
+  surfaces, and overlays, including calmer borders, shadows, and selection
+  treatment.
+- Preserve the existing sidebar identity while allowing inputs and shared
+  controls to inherit the revised dark surface hierarchy.
+- Add dark foundation contrast and hierarchy assertions plus a playground
+  reading-surface fixture.
+
 ## 0.3.4 - 2026-08-14
 
 - Replace the shared Inter variable font with Source Sans 3 and normalize the
