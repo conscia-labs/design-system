@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.3.4 - 2026-08-14
+
+- Replace the shared Inter variable font with Source Sans 3 and normalize the
+  global type weight ladder to 400 / 500 / 600.
+- Refine sidebar section labels to be smaller, more weighted, and less tracked
+  while preserving existing sidebar APIs and semantic colors.
+- Audit button variant foregrounds across themes and use the existing dark
+  danger surface/foreground pair for destructive actions.
+- Add the theme-aware `BrandIcon` primitive using the supplied Conscia symbol
+  mark, with accessible naming support and a published-package-safe inline SVG.
+
 ## 0.3.3 - 2026-08-14
 
 - Add shared display typography, TopBar padding, and sidebar rhythm tokens while

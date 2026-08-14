@@ -11,8 +11,8 @@ test("appearance and density are controlled through root attributes", () => {
   const themeScript = read("../components/theme-script.tsx");
   const styles = read("../../../src/foundation/styles.css");
 
-  assert.match(styles, /@import "@fontsource-variable\/inter\/index\.css";/);
-  assert.match(styles, /--font-sans: "Inter Variable"/);
+  assert.match(styles, /@import "@fontsource-variable\/source-sans-3\/index\.css";/);
+  assert.match(styles, /--font-sans: "Source Sans 3 Variable"/);
   assert.match(preferences, /DesignPreferenceControls/);
   assert.match(sharedControls, /document\.documentElement/);
   assert.match(sharedPreferences, /dataset/);
@@ -29,8 +29,8 @@ test("appearance and density are controlled through root attributes", () => {
   assert.match(styles, /--ds-topbar-padding-x: 0\.75rem;/);
   assert.match(styles, /--ds-topbar-padding-x-wide: 1rem;/);
   assert.match(styles, /--ds-sidebar-header-height: var\(--ds-topbar-height\);/);
-  assert.match(styles, /--ds-sidebar-group-label-size: var\(--ds-field-label-size\);/);
-  assert.match(styles, /--ds-sidebar-group-label-line-height: 1\.125rem;/);
+  assert.match(styles, /--ds-sidebar-group-label-size: 0\.75rem;/);
+  assert.match(styles, /--ds-sidebar-group-label-line-height: 1rem;/);
   assert.match(styles, /--ds-display-title: clamp\(2rem, 4vw, 3\.5rem\);/);
 });
 
@@ -141,6 +141,18 @@ test("button variants and sizes preserve ShadCN-style variant architecture", () 
   assert.match(button, /default:[\s\S]*text-primary-foreground/);
   assert.match(button, /outline:[\s\S]*bg-surface-control/);
   assert.match(button, /hover:bg-surface-control-hover/);
+});
+
+test("brand icon uses the published Conscia symbol and shared exports", () => {
+  const brandIcon = read("../../../src/primitives/brand-icon.tsx");
+  const primitives = read("../../../src/primitives/index.ts");
+  const foundationPage = read("../app/foundation/page.tsx");
+
+  assert.match(primitives, /\.\/brand-icon/);
+  assert.match(brandIcon, /viewBox="0 0 240 240"/);
+  assert.match(brandIcon, /fill=\"currentColor\"/);
+  assert.match(brandIcon, /dark:text-white/);
+  assert.match(foundationPage, /BrandIcon/);
 });
 
 test("field pattern owns help, error, disabled-compatible rhythm", () => {
@@ -398,7 +410,7 @@ test("sidebar semantics resolve through light and dark scopes without a new pale
   assert.match(shell, /px-\[var\(--ds-topbar-padding-x\)\]/);
   assert.match(shell, /gap-\[var\(--ds-sidebar-item-gap\)\]/);
   assert.match(shell, /leading-\[var\(--ds-sidebar-group-label-line-height\)\]/);
-  assert.match(shell, /font-medium uppercase leading-\[var\(--ds-sidebar-group-label-line-height\)\] tracking-\[0\.06em\]/);
+  assert.match(shell, /font-semibold uppercase leading-\[var\(--ds-sidebar-group-label-line-height\)\] tracking-\[0\.04em\]/);
   assert.match(navigation, /gap-\[var\(--ds-sidebar-group-gap\)\]/);
   assert.match(shell, /Place this control inside TopBar/);
   assert.match(

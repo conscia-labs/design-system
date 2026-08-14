@@ -44,7 +44,7 @@ assert.doesNotMatch(
 );
 
 const packageExports = await import("@conscia-labs/design-system");
-for (const exportName of ["Button", "DataTable", "SearchableSelect"]) {
+for (const exportName of ["BrandIcon", "Button", "DataTable", "SearchableSelect"]) {
   assert.equal(
     typeof packageExports[exportName],
     "function",

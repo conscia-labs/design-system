@@ -4,7 +4,8 @@ import userEvent from "@testing-library/user-event";
 import axe from "axe-core";
 import { describe, expect, it, vi } from "vitest";
 
-import { Button } from "../primitives/button";
+import { Button, buttonVariants } from "../primitives/button";
+import { BrandIcon } from "../primitives/brand-icon";
 import { Input } from "../primitives/input";
 import { SearchableSelect } from "../primitives/searchable-select";
 import { Textarea } from "../primitives/textarea";
@@ -59,6 +60,38 @@ describe("Button", () => {
     expect(button.className).toContain("bg-primary");
     expect(button.className).toContain("text-primary-foreground");
     expect(button.className).toContain("focus-visible:ring");
+  });
+
+  it("keeps every variant on an explicit semantic foreground", () => {
+    expect(buttonVariants({ variant: "default" })).toContain("text-primary-foreground");
+    expect(buttonVariants({ variant: "destructive" })).toContain("text-white");
+    expect(buttonVariants({ variant: "destructive" })).toContain("dark:text-danger-foreground");
+    expect(buttonVariants({ variant: "outline" })).toContain("text-foreground");
+    expect(buttonVariants({ variant: "secondary" })).toContain("text-secondary-foreground");
+    expect(buttonVariants({ variant: "ghost" })).toContain("text-foreground");
+    expect(buttonVariants({ variant: "link" })).toContain("text-text-link");
+  });
+});
+
+describe("BrandIcon", () => {
+  it("renders the Conscia symbol with semantic light and dark fills", () => {
+    const { container } = render(<BrandIcon aria-label="Conscia" />);
+    const icon = screen.getByRole("img", { name: "Conscia" });
+
+    expect(icon.getAttribute("data-slot")).toBe("brand-icon");
+    expect(icon.getAttribute("viewBox")).toBe("0 0 240 240");
+    expect(icon.getAttribute("class")).toContain("text-foreground");
+    expect(icon.getAttribute("class")).toContain("dark:text-white");
+    expect(icon.querySelector("path")?.getAttribute("fill")).toBe("currentColor");
+    expect(container.querySelector('[aria-hidden="true"]')).toBeNull();
+  });
+
+  it("is decorative by default", () => {
+    const { container } = render(<BrandIcon />);
+
+    expect(container.querySelector('[data-slot="brand-icon"]')?.getAttribute("aria-hidden")).toBe(
+      "true",
+    );
   });
 });
 
@@ -242,10 +275,10 @@ describe("shared sidebar", () => {
 
     expect(groupLabel.closest('[data-slot="navigation-group-label"]')).toBeTruthy();
     expect(groupLabel.closest('[data-slot="navigation-group-label"]')?.className).toContain(
-      "font-medium",
+      "font-semibold",
     );
     expect(groupLabel.closest('[data-slot="navigation-group-label"]')?.className).toContain(
-      "tracking-[0.06em]",
+      "tracking-[0.04em]",
     );
     expect(screen.getByText("3")).toBeTruthy();
     expect(activeItem.getAttribute("data-active")).toBe("true");

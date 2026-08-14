@@ -398,7 +398,7 @@ function NavigationGroup({
       {label ? (
         <div
           data-slot="navigation-group-label"
-          className="flex min-h-6 items-center gap-2 px-2 pb-0 pt-2 text-[length:var(--ds-sidebar-group-label-size)] font-medium uppercase leading-[var(--ds-sidebar-group-label-line-height)] tracking-[0.06em] text-sidebar-group-label group-data-[sidebar-state=collapsed]/shell:hidden"
+          className="flex min-h-6 items-center gap-2 px-2 pb-0 pt-2 text-[length:var(--ds-sidebar-group-label-size)] font-semibold uppercase leading-[var(--ds-sidebar-group-label-line-height)] tracking-[0.04em] text-sidebar-group-label group-data-[sidebar-state=collapsed]/shell:hidden"
         >
           {label}
           {count !== undefined ? (

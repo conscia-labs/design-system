@@ -273,11 +273,12 @@ export function ProductShell({
 
 ### Typography and font loading
 
-The design system declares the open-source Inter variable font as a runtime
-dependency and loads it through its CSS entry points. Inter is distributed
-under the SIL Open Font License 1.1 and supports the system's fractional
-weight values. Consumers should import the published `tailwind.css` or
-`styles.css` entry and should not add a separate Saans or Inter download.
+The design system declares the open-source Source Sans 3 variable font as a
+runtime dependency and loads it through its CSS entry points. Consumers should
+import the published `tailwind.css` or `styles.css` entry and should not add a
+separate font download. The shared hierarchy uses a deliberate `400 / 500 /
+600` weight ladder; applications should avoid replacing it with arbitrary
+fractional weights.
 Applications may override `--font-sans` only when a deliberate product-specific
 type decision has been made.
 
@@ -298,6 +299,23 @@ Use the shared type scale by role:
 Prefer these tokens over local `clamp()`, pixel, or one-off font-size values.
 Product-specific layout styles may still control wrapping, maximum width, or
 composition when the content requires it.
+
+Sidebar section labels are intentionally smaller than navigation rows and
+slightly more weighted: comfortable density uses a `12px / 600 / 16px`
+contract with restrained tracking, while compact density reduces the size
+without changing the role. Keep navigation labels at the shared row size and
+weight them only when active.
+
+### BrandIcon
+
+`BrandIcon` is the shared symbol-only Conscia mark. It embeds the supplied
+240×240 symbol geometry so published consumers do not need to manage an asset
+path. The default treatment uses the existing foreground role in light mode
+and the existing white brand treatment in dark mode. Use it for symbol-only
+lockups, collapsed navigation identity, and other shared brand placements.
+
+The icon is decorative by default. Add an `aria-label` when the mark conveys
+meaning without adjacent text, and use `className` to control its size.
 
 ### Sidebar variants and semantic surfaces
 
@@ -332,6 +350,13 @@ Form controls and outline buttons use `bg-surface-control`, with
 are intentionally theme-aware: the base uses the muted surface in light mode
 and the raised surface in dark mode; hover reverses that relationship so the
 control remains visibly interactive without introducing a new color palette.
+
+Button variants provide their foreground role explicitly: primary, secondary,
+destructive, outline, ghost, and link content do not depend on an ancestor's
+text color. The destructive variant uses the existing dark danger background
+and foreground pair in dark mode because the bright danger role is not suitable
+for white text there. Consumer classes remain the final override when a
+product-specific treatment is intentional.
 
 `SidebarSearch` owns only the trigger, expanded field, Escape handling, and
 focus handoff. Applications provide the query value and filtering behavior.
