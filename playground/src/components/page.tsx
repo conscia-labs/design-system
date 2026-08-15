@@ -14,8 +14,8 @@ export function PlaygroundPage({
       <div className="border-b px-6 py-5">
         <div className="flex min-w-0 flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
           <div className="min-w-0">
-            <h1 className="text-[var(--ds-page-title)] font-semibold leading-tight">{title}</h1>
-            <p className="mt-1 max-w-3xl text-sm text-muted-foreground">{description}</p>
+            <h1 className="ds-type-page-title">{title}</h1>
+            <p className="ds-type-ui mt-1 max-w-3xl text-muted-foreground">{description}</p>
           </div>
           {actions}
         </div>
@@ -37,8 +37,8 @@ export function ExampleSection({
   return (
     <section className="flex min-w-0 flex-col gap-3">
       <div>
-        <h2 className="text-[var(--ds-section-title)] font-semibold">{title}</h2>
-        {description ? <p className="mt-1 text-sm text-muted-foreground">{description}</p> : null}
+        <h2 className="ds-type-section-title">{title}</h2>
+        {description ? <p className="ds-type-ui mt-1 text-muted-foreground">{description}</p> : null}
       </div>
       {children}
     </section>

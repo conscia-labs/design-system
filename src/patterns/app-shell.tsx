@@ -350,11 +350,11 @@ function ProductIdentity({
         </div>
       ) : null}
       <div className="min-w-0 group-data-[sidebar-state=collapsed]/shell:hidden">
-        <div className="truncate text-sm font-semibold leading-5 text-sidebar-primary-text">
+        <div className="ds-type-navigation truncate font-semibold text-sidebar-primary-text">
           {label}
         </div>
         {description ? (
-          <div className="truncate text-[var(--ds-metadata)] leading-4 text-sidebar-metadata-text">
+          <div className="ds-type-metadata truncate text-sidebar-metadata-text">
             {description}
           </div>
         ) : null}
@@ -402,7 +402,7 @@ function NavigationGroup({
         >
           {label}
           {count !== undefined ? (
-            <span className="ml-auto shrink-0 text-[length:var(--ds-metadata)] font-medium normal-case tracking-normal text-sidebar-group-count">
+            <span className="ds-type-metadata ml-auto shrink-0 font-medium normal-case tracking-normal text-sidebar-group-count">
               {count}
             </span>
           ) : null}
@@ -417,7 +417,7 @@ function NavigationGroup({
 
 function navigationItemClasses(active?: boolean) {
   return cn(
-    "flex min-h-[var(--ds-sidebar-item-height-touch)] min-w-0 cursor-pointer items-center gap-2 rounded-[var(--ds-radius-control)] px-2 text-sm font-medium leading-5 text-sidebar-secondary-text outline-none transition-colors duration-150 lg:h-[var(--ds-sidebar-item-height)] lg:min-h-0",
+    "ds-type-navigation flex min-h-[var(--ds-sidebar-item-height-touch)] min-w-0 cursor-pointer items-center gap-2 rounded-[var(--ds-radius-control)] px-2 font-medium text-sidebar-secondary-text outline-none transition-colors duration-150 lg:h-[var(--ds-sidebar-item-height)] lg:min-h-0",
     "hover:bg-sidebar-hover hover:text-sidebar-primary-text",
     "focus-visible:ring-[3px] focus-visible:ring-sidebar-focus-ring",
     "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:cursor-not-allowed aria-disabled:opacity-50",
@@ -489,7 +489,7 @@ function NavigationSubItem({
       data-slot="navigation-sub-item"
       data-active={active ? "true" : undefined}
       className={cn(
-        "flex min-h-[var(--ds-sidebar-item-height-touch)] min-w-0 cursor-pointer items-center gap-2 rounded-[var(--ds-radius-control)] px-2 text-sm leading-5 text-sidebar-secondary-text outline-none transition-colors duration-150 lg:h-[calc(var(--ds-sidebar-item-height)-0.25rem)] lg:min-h-0",
+        "ds-type-navigation flex min-h-[var(--ds-sidebar-item-height-touch)] min-w-0 cursor-pointer items-center gap-2 rounded-[var(--ds-radius-control)] px-2 text-sidebar-secondary-text outline-none transition-colors duration-150 lg:h-[calc(var(--ds-sidebar-item-height)-0.25rem)] lg:min-h-0",
         "hover:bg-sidebar-hover hover:text-sidebar-primary-text focus-visible:ring-[3px] focus-visible:ring-sidebar-focus-ring",
         "group-data-[sidebar-state=collapsed]/shell:hidden [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:stroke-[1.75] [&>svg]:text-sidebar-icon",
         active &&
@@ -607,7 +607,7 @@ function SidebarSearch({
         type="button"
         data-slot="sidebar-search-trigger"
         className={cn(
-          "flex min-h-[var(--ds-sidebar-item-height-touch)] w-full cursor-pointer items-center gap-2 rounded-[var(--ds-radius-control)] px-2 text-left text-sm font-medium leading-5 text-sidebar-secondary-text outline-none transition-colors hover:bg-sidebar-hover hover:text-sidebar-primary-text focus-visible:ring-[3px] focus-visible:ring-sidebar-focus-ring lg:min-h-[var(--ds-sidebar-item-height)]",
+          "ds-type-navigation flex min-h-[var(--ds-sidebar-item-height-touch)] w-full cursor-pointer items-center gap-2 rounded-[var(--ds-radius-control)] px-2 text-left font-medium text-sidebar-secondary-text outline-none transition-colors hover:bg-sidebar-hover hover:text-sidebar-primary-text focus-visible:ring-[3px] focus-visible:ring-sidebar-focus-ring lg:min-h-[var(--ds-sidebar-item-height)]",
           "group-data-[sidebar-state=collapsed]/shell:justify-center group-data-[sidebar-state=collapsed]/shell:px-0",
           className,
         )}
@@ -619,7 +619,7 @@ function SidebarSearch({
           {triggerLabel}
         </span>
         {shortcut ? (
-          <kbd className="ml-auto rounded border border-sidebar-border px-1.5 py-0.5 text-[length:var(--ds-metadata)] font-medium text-sidebar-metadata-text group-data-[sidebar-state=collapsed]/shell:hidden">
+          <kbd className="ds-type-metadata ml-auto rounded border border-sidebar-border px-1.5 py-0.5 font-medium text-sidebar-metadata-text group-data-[sidebar-state=collapsed]/shell:hidden">
             {shortcut}
           </kbd>
         ) : null}
@@ -640,7 +640,7 @@ function SidebarSearch({
       <Input
         ref={inputRef}
         type="search"
-        className="h-auto min-w-0 flex-1 border-0 bg-transparent px-0 py-1 text-sm shadow-none focus-visible:border-0 focus-visible:ring-0"
+        className="ds-type-control h-auto min-w-0 flex-1 border-0 bg-transparent px-0 py-1 shadow-none focus-visible:border-0 focus-visible:ring-0"
         onKeyDown={(event) => {
           if (event.key === "Escape") {
             event.preventDefault();

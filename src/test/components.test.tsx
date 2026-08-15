@@ -24,6 +24,20 @@ import {
 import { SidebarNavigation } from "../patterns/sidebar-navigation";
 import { DataTable, type SortingState } from "../patterns/data-table";
 import { ValueMeter } from "../patterns/value-meter";
+import {
+  IdentityRow,
+  ResourceRow,
+  ResourceRowContent,
+  ResourceRowIcon,
+  ResourceRowMeta,
+  ResourceRowTitle,
+  WorkbenchInspectorSection,
+  WorkbenchMain,
+  WorkbenchRail,
+  WorkbenchSection,
+  WorkbenchSectionHeader,
+  WorkbenchShell,
+} from "../patterns/workbench";
 
 describe("Button", () => {
   it("does not submit a form unless explicitly requested", async () => {
@@ -108,10 +122,8 @@ describe("form control typography", () => {
     const textarea = screen.getByPlaceholderText("Add a note");
 
     for (const control of [input, textarea]) {
-      expect(control.className).toContain("text-sm");
-      expect(control.className).toContain("leading-5");
-      expect(control.className).toContain("placeholder:text-sm");
-      expect(control.className).toContain("placeholder:leading-5");
+      expect(control.className).toContain("ds-type-control");
+      expect(control.className).not.toContain("placeholder:text-sm");
       expect(control.className).toContain("bg-surface-control");
     }
   });
@@ -176,6 +188,53 @@ describe("DataTable", () => {
     await user.click(screen.getByRole("button", { name: "Sort by Name" }));
     expect(columnHeader.getAttribute("aria-sort")).toBe("ascending");
     expect(onSubmit).not.toHaveBeenCalled();
+  });
+});
+
+describe("Workbench patterns", () => {
+  it("provides a reusable shell, resource row, and inspector structure", () => {
+    const { container } = render(
+      <WorkbenchShell data-density="operational">
+        <WorkbenchRail variant="global" aria-label="Global navigation" />
+        <WorkbenchRail variant="secondary" aria-label="Workspace navigation">
+          <IdentityRow initials="AK" name="Alex Kim" detail="Owner" compact />
+        </WorkbenchRail>
+        <WorkbenchMain>
+          <WorkbenchSection>
+            <WorkbenchSectionHeader title="Recent conversations" metadata="3" />
+            <ResourceRow as="a" href="/chat/1" selected>
+              <ResourceRowIcon aria-hidden="true" />
+              <ResourceRowContent>
+                <ResourceRowTitle>Project brief</ResourceRowTitle>
+                <ResourceRowMeta>Updated just now</ResourceRowMeta>
+              </ResourceRowContent>
+            </ResourceRow>
+          </WorkbenchSection>
+        </WorkbenchMain>
+        <aside>
+          <WorkbenchInspectorSection label="Details" action={<button type="button">Edit</button>}>
+            <p>Workspace metadata</p>
+          </WorkbenchInspectorSection>
+        </aside>
+      </WorkbenchShell>,
+    );
+
+    expect(container.querySelector('[data-slot="workbench-shell"]')?.getAttribute("data-density")).toBe(
+      "operational",
+    );
+    expect(container.querySelectorAll('[data-slot="workbench-rail"]')).toHaveLength(2);
+    expect(container.querySelector('[data-slot="workbench-section-header"] h2')?.textContent).toBe(
+      "Recent conversations",
+    );
+    expect(container.querySelector('[data-slot="resource-row"]')?.getAttribute("data-selected")).toBe(
+      "true",
+    );
+    expect(container.querySelector('[data-slot="identity-row"]')?.getAttribute("data-compact")).toBe(
+      "true",
+    );
+    expect(container.querySelector('[data-slot="workbench-inspector-section"] h3')?.textContent).toBe(
+      "Details",
+    );
   });
 });
 

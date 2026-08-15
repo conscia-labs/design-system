@@ -1,8 +1,8 @@
 export type ConsciaAppearance = "light" | "dark" | "system";
-export type ConsciaDensity = "compact" | "comfortable";
+export type ConsciaDensity = "compact" | "comfortable" | "operational";
 
 export const appearanceOptions: ConsciaAppearance[] = ["light", "dark", "system"];
-export const densityOptions: ConsciaDensity[] = ["comfortable", "compact"];
+export const densityOptions: ConsciaDensity[] = ["comfortable", "compact", "operational"];
 
 export function applyConsciaPreferences(
   root: HTMLElement,

@@ -218,18 +218,18 @@ function SearchableSelect({
               tabIndex={-1}
               ref={index === resolvedActiveIndex ? activeOptionRef : undefined}
               data-active={index === resolvedActiveIndex}
-              className="flex w-full items-center gap-3 rounded-sm px-3 py-2 text-left text-[length:var(--ds-menu-item-size)] outline-none hover:bg-surface-muted focus-visible:bg-surface-muted data-[active=true]:bg-surface-muted disabled:pointer-events-none disabled:opacity-50"
+              className="ds-type-menu-item flex w-full items-center gap-3 rounded-sm px-3 py-2 text-left outline-none hover:bg-surface-muted focus-visible:bg-surface-muted data-[active=true]:bg-surface-muted disabled:pointer-events-none disabled:opacity-50"
               onMouseDown={(event) => event.preventDefault()}
               onMouseEnter={() => setActiveIndex(index)}
               onClick={() => select(option)}
             >
               <span className="grid min-w-0 flex-1 gap-0.5">
                 <span className="truncate font-medium">{option.label}</span>
-                {option.description ? <span className="truncate text-[length:var(--ds-menu-label-size)] text-muted-foreground">{option.description}</span> : null}
+                {option.description ? <span className="ds-type-menu-label truncate text-muted-foreground">{option.description}</span> : null}
               </span>
               {option.value === value ? <Check className="size-4 shrink-0 text-success-foreground" aria-hidden="true" /> : null}
             </button>
-          )) : <p className="px-3 py-6 text-center text-[length:var(--ds-menu-item-size)] text-muted-foreground">{emptyMessage}</p>}
+          )) : <p className="ds-type-menu-item px-3 py-6 text-center text-muted-foreground">{emptyMessage}</p>}
         </div>
       ) : null}
     </div>

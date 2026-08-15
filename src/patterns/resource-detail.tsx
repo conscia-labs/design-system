@@ -39,7 +39,7 @@ function ResourceSummary({
           {title || status ? (
             <div className="flex min-w-0 flex-wrap items-center gap-2">
               {title ? (
-                <h2 className="truncate text-[var(--ds-section-title)] font-semibold">
+                <h2 className="ds-type-section-title truncate">
                   {title}
                 </h2>
               ) : null}
@@ -47,12 +47,12 @@ function ResourceSummary({
             </div>
           ) : null}
           {description ? (
-            <p className="mt-1 max-w-3xl text-sm text-muted-foreground">
+            <p className="ds-type-ui mt-1 max-w-3xl text-muted-foreground">
               {description}
             </p>
           ) : null}
           {metadata ? (
-            <div className="mt-2 text-[var(--ds-metadata)] text-muted-foreground">
+            <div className="ds-type-metadata mt-2 text-muted-foreground">
               {metadata}
             </div>
           ) : null}
@@ -110,11 +110,11 @@ function DetailSection({
     >
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
-          <h2 className="text-[var(--ds-section-title)] font-semibold">
+          <h2 className="ds-type-section-title">
             {title}
           </h2>
           {description ? (
-            <p className="mt-1 max-w-3xl text-sm text-muted-foreground">
+            <p className="ds-type-ui mt-1 max-w-3xl text-muted-foreground">
               {description}
             </p>
           ) : null}
@@ -135,7 +135,7 @@ function KeyValueList({
   return (
     <dl
       data-slot="key-value-list"
-      className={cn("grid gap-3 text-sm", className)}
+      className={cn("ds-type-ui grid gap-3", className)}
       {...props}
     />
   );

@@ -185,8 +185,36 @@
   --ds-section-title: 1.0625rem;
   --ds-body: 0.9375rem;
   --ds-metadata: 0.8125rem;
+  --ds-body-line-height: 1.5;
+  --ds-title-weight: 600;
+  --ds-title-tracking: 0;
+  --ds-title-line-height: 1.25;
+  --ds-section-title-weight: 600;
+  --ds-section-title-line-height: 1.25;
+  --ds-ui-text-size: 0.875rem;
+  --ds-ui-line-height: 1.25rem;
+  --ds-navigation-label-size: 0.875rem;
+  --ds-navigation-label-line-height: 1.25rem;
+  --ds-control-text-size: 0.875rem;
+  --ds-control-text-line-height: 1.25rem;
+  --ds-button-text-size: 0.875rem;
+  --ds-button-text-line-height: 1.25rem;
+  --ds-button-text-weight: 500;
   --ds-menu-item-size: 0.75rem;
   --ds-menu-label-size: 0.6875rem;
+  --ds-menu-item-line-height: 1.25rem;
+  --ds-menu-label-line-height: 1rem;
+  --ds-eyebrow-size: 0.6875rem;
+  --ds-eyebrow-line-height: 1rem;
+  --ds-eyebrow-weight: 600;
+  --ds-eyebrow-tracking: 0.04em;
+  --ds-card-title-size: 0.875rem;
+  --ds-card-title-line-height: 1.25rem;
+  --ds-card-title-weight: 600;
+  --ds-table-head-size: 0.8125rem;
+  --ds-table-head-line-height: 1rem;
+  --ds-table-head-weight: 600;
+  --ds-table-head-tracking: 0;
   --ds-radius-control: 0.375rem;
   --ds-radius-surface: 0.5rem;
   --ds-shadow-raised: 0 1px 2px rgb(20 12 21 / 6%);
@@ -194,7 +222,7 @@
   --ds-focus-ring: 0 0 0 3px color-mix(in oklab, var(--ring) 26%, transparent);
 }
 
-:root[data-density="compact"] {
+[data-density="compact"] {
   --ds-space-inline: 0.375rem;
   --ds-space-control: 0.5rem;
   --ds-space-field: 1rem;
@@ -226,6 +254,65 @@
   --ds-section-title: 0.9375rem;
   --ds-body: 0.875rem;
   --ds-metadata: 0.75rem;
+}
+
+/*
+ * Operational density is an explicit opt-in preset for information-dense
+ * admin, catalog, connector, chat, and workspace-like interfaces. It keeps
+ * comfortable density as the default and leaves the existing compact preset
+ * available for consumers that already depend on it.
+ */
+[data-density="operational"] {
+  --ds-space-control: 0.5rem;
+  --ds-space-group: 1rem;
+  --ds-space-section: 1.5rem;
+  --ds-space-page: 2rem;
+  --ds-control-height: 2.25rem;
+  --ds-control-height-sm: 1.875rem;
+  --ds-control-height-lg: 2.5rem;
+  --ds-control-padding-x: 0.875rem;
+  --ds-sidebar-item-height: 2rem;
+  --ds-sidebar-group-gap: 0.375rem;
+  --ds-sidebar-label-gap: 0.25rem;
+  --ds-sidebar-group-label-size: 0.6875rem;
+  --ds-sidebar-group-label-line-height: 0.9375rem;
+  --ds-surface-padding: 1rem;
+  --ds-table-header-height: 2rem;
+  --ds-row-height: 2.5rem;
+  --ds-field-gap: 1rem;
+  --ds-field-label-gap: 0.375rem;
+  --ds-page-title: clamp(1.5625rem, 3vw, 2.125rem);
+  --ds-display-title: clamp(1.875rem, 3.5vw, 2.75rem);
+  --ds-section-title: 1rem;
+  --ds-body: 0.8125rem;
+  --ds-metadata: 0.75rem;
+  --ds-body-line-height: 1.45;
+  --ds-title-weight: 650;
+  --ds-title-tracking: -0.04em;
+  --ds-title-line-height: 1.08;
+  --ds-section-title-weight: 650;
+  --ds-section-title-line-height: 1.12;
+  --ds-ui-text-size: 0.8125rem;
+  --ds-ui-line-height: 1.125rem;
+  --ds-navigation-label-size: 0.8125rem;
+  --ds-navigation-label-line-height: 1.125rem;
+  --ds-control-text-size: 0.8125rem;
+  --ds-control-text-line-height: 1.125rem;
+  --ds-button-text-size: 0.8125rem;
+  --ds-button-text-line-height: 1.125rem;
+  --ds-button-text-weight: 600;
+  --ds-menu-item-line-height: 1.0625rem;
+  --ds-menu-label-line-height: 0.9375rem;
+  --ds-eyebrow-line-height: 0.9375rem;
+  --ds-eyebrow-weight: 650;
+  --ds-eyebrow-tracking: 0.06em;
+  --ds-card-title-size: 0.8125rem;
+  --ds-card-title-line-height: 1.125rem;
+  --ds-card-title-weight: 650;
+  --ds-table-head-size: 0.6875rem;
+  --ds-table-head-line-height: 0.9375rem;
+  --ds-table-head-weight: 650;
+  --ds-table-head-tracking: 0.06em;
 }
 
 :root.dark,
@@ -452,6 +539,94 @@
   --font-sans: var(--font-sans);
 }
 
+@utility ds-type-body {
+  font-size: var(--ds-body);
+  line-height: var(--ds-body-line-height);
+}
+
+@utility ds-type-ui {
+  font-size: var(--ds-ui-text-size);
+  line-height: var(--ds-ui-line-height);
+}
+
+@utility ds-type-control {
+  font-size: var(--ds-control-text-size);
+  line-height: var(--ds-control-text-line-height);
+}
+
+@utility ds-type-button {
+  font-size: var(--ds-button-text-size);
+  font-weight: var(--ds-button-text-weight);
+  line-height: var(--ds-button-text-line-height);
+}
+
+@utility ds-type-navigation {
+  font-size: var(--ds-navigation-label-size);
+  line-height: var(--ds-navigation-label-line-height);
+}
+
+@utility ds-type-display-title {
+  font-size: var(--ds-display-title);
+  font-weight: var(--ds-title-weight);
+  letter-spacing: var(--ds-title-tracking);
+  line-height: var(--ds-title-line-height);
+}
+
+@utility ds-type-page-title {
+  font-size: var(--ds-page-title);
+  font-weight: var(--ds-title-weight);
+  letter-spacing: var(--ds-title-tracking);
+  line-height: var(--ds-title-line-height);
+}
+
+@utility ds-type-section-title {
+  font-size: var(--ds-section-title);
+  font-weight: var(--ds-section-title-weight);
+  letter-spacing: var(--ds-title-tracking);
+  line-height: var(--ds-section-title-line-height);
+}
+
+@utility ds-type-metadata {
+  font-size: var(--ds-metadata);
+  line-height: var(--ds-menu-label-line-height);
+}
+
+@utility ds-type-menu-item {
+  font-size: var(--ds-menu-item-size);
+  line-height: var(--ds-menu-item-line-height);
+}
+
+@utility ds-type-menu-label {
+  font-size: var(--ds-menu-label-size);
+  line-height: var(--ds-menu-label-line-height);
+}
+
+@utility ds-type-eyebrow {
+  font-size: var(--ds-eyebrow-size);
+  font-weight: var(--ds-eyebrow-weight);
+  letter-spacing: var(--ds-eyebrow-tracking);
+  line-height: var(--ds-eyebrow-line-height);
+}
+
+@utility ds-type-label {
+  font-size: var(--ds-field-label-size);
+  font-weight: 500;
+  line-height: var(--ds-field-label-line-height);
+}
+
+@utility ds-type-card-title {
+  font-size: var(--ds-card-title-size);
+  font-weight: var(--ds-card-title-weight);
+  line-height: var(--ds-card-title-line-height);
+}
+
+@utility ds-type-table-head {
+  font-size: var(--ds-table-head-size);
+  font-weight: var(--ds-table-head-weight);
+  letter-spacing: var(--ds-table-head-tracking);
+  line-height: var(--ds-table-head-line-height);
+}
+
 @layer base {
   * {
     border-color: var(--border);
@@ -469,7 +644,7 @@
     font-family: var(--font-sans);
     font-size: var(--ds-body);
     font-weight: 400;
-    line-height: 1.5;
+    line-height: var(--ds-body-line-height);
     text-rendering: optimizeLegibility;
   }
 
@@ -478,8 +653,8 @@
   h3,
   h4 {
     color: var(--foreground);
-    font-weight: 600;
-    letter-spacing: 0;
+    font-weight: var(--ds-title-weight);
+    letter-spacing: var(--ds-title-tracking);
   }
 
   button,

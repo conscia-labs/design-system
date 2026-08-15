@@ -160,9 +160,30 @@ Supported values:
 | Preference | Values |
 | --- | --- |
 | `data-appearance` | `light`, `dark`, `system` |
-| `data-density` | `comfortable`, `compact` |
+| `data-density` | `comfortable`, `compact`, `operational` |
 
 Comfortable density is the default for general product interfaces. Compact density is intended for high-volume operational workflows such as inventories and data-heavy administration.
+
+Operational density is an explicit opt-in preset for interfaces that prioritize
+information throughput and deliberate hierarchy: admin pages, chat shells,
+connectors, catalogs, and Workspace-like surfaces. It tightens the shared type
+scale to approximately 13px body/UI text, 12px metadata, 15–16px section titles,
+and a 26px page title with a 650 weight, `-0.04em` tracking, and `1.08` line
+height. It also tightens reusable spacing and control rhythm while preserving
+the existing touch-target, focus-ring, color, radius, and shadow contracts.
+
+```tsx
+<html data-appearance="system" data-density="operational">
+  {/* admin, chat, catalog, connector, or workspace-like application */}
+</html>
+```
+
+Use comfortable density for general product reading and mixed-purpose pages.
+Use compact density when an existing consumer already depends on its smaller
+layout preset. Use operational density when the interface needs Workspace-like
+hierarchy across shared components. Do not make 13px the global default: that
+would make narrative, setup, and accessibility-critical product surfaces feel
+compressed.
 
 ### 4. Use a component
 
@@ -271,6 +292,64 @@ export function ProductShell({
 }
 ```
 
+## Building a workbench surface
+
+Workbench patterns provide a reusable composition for applications that need
+global navigation, a contextual rail, a primary work area, and an inspector.
+They own the shell geometry, responsive rail behavior, resource-row rhythm,
+and inspector hierarchy; the host application supplies its routes, data, and
+actions.
+
+```tsx
+import {
+  ResourceRow,
+  ResourceRowContent,
+  ResourceRowIcon,
+  ResourceRowMeta,
+  ResourceRowTitle,
+  WorkbenchInspector,
+  WorkbenchInspectorSection,
+  WorkbenchMain,
+  WorkbenchRail,
+  WorkbenchSection,
+  WorkbenchSectionHeader,
+  WorkbenchShell,
+} from "@conscia-labs/design-system";
+
+export function WorkspaceSurface({ children }: { children: React.ReactNode }) {
+  return (
+    <WorkbenchShell data-density="operational">
+      <WorkbenchRail variant="global">Global navigation</WorkbenchRail>
+      <WorkbenchRail variant="secondary">Contextual navigation</WorkbenchRail>
+      <WorkbenchMain>
+        <WorkbenchSection>
+          <WorkbenchSectionHeader title="Recent conversations" metadata="12" />
+          <ResourceRow as="a" href="/conversations/1">
+            <ResourceRowIcon aria-hidden="true" />
+            <ResourceRowContent>
+              <ResourceRowTitle>Project brief</ResourceRowTitle>
+              <ResourceRowMeta>Updated just now</ResourceRowMeta>
+            </ResourceRowContent>
+          </ResourceRow>
+        </WorkbenchSection>
+        {children}
+      </WorkbenchMain>
+      <WorkbenchInspector>
+        <WorkbenchInspectorSection label="Details">
+          {/* Product-owned metadata and actions */}
+        </WorkbenchInspectorSection>
+      </WorkbenchInspector>
+    </WorkbenchShell>
+  );
+}
+```
+
+Use `WorkbenchMobileToolbar` and `WorkbenchBackdrop` when a contextual rail
+needs an explicit mobile drawer trigger. Keep product-specific content styles
+local, but use the shared workbench tokens and row primitives instead of
+recreating shell widths, inspector padding, focus states, or resource-list
+typography.
+
 ### Typography and font loading
 
 The design system declares the open-source Source Sans 3 variable font as a
@@ -299,6 +378,23 @@ Use the shared type scale by role:
 Prefer these tokens over local `clamp()`, pixel, or one-off font-size values.
 Product-specific layout styles may still control wrapping, maximum width, or
 composition when the content requires it.
+
+Operational consumers can use the token-backed `ds-type-*` utilities without
+creating a parallel styling system:
+
+| Role | Utility | Comfortable baseline | Operational intent |
+| --- | --- | --- | --- |
+| Page/display title | `ds-type-page-title`, `ds-type-display-title` | 28px / 56px | 26px / responsive display, 650 weight, tight tracking |
+| Section title | `ds-type-section-title` | 17px | 16px, 650 weight, tighter line-height |
+| Body/UI | `ds-type-body`, `ds-type-ui` | 15px / 14px | 13px with a 1.4–1.5 rhythm |
+| Metadata | `ds-type-metadata` | 13px | 12px supporting context |
+| Menu/eyebrow | `ds-type-menu-item`, `ds-type-menu-label`, `ds-type-eyebrow` | existing compact roles | compact labels with deliberate tracking |
+| Controls | `ds-type-control`, `ds-type-button` | 14px | 13px, with stronger button weight |
+
+The utilities resolve through CSS custom properties, so light and dark themes
+retain the same semantic colors and focus behavior. Applications should use
+the preset and shared utilities for type/rhythm, while keeping product-specific
+composition, data, and layout ownership local.
 
 Sidebar section labels are intentionally smaller than navigation rows and
 slightly more weighted: comfortable density uses a `12px / 600 / 16px`

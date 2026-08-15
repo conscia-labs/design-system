@@ -16,9 +16,11 @@ test("appearance and density are controlled through root attributes", () => {
   assert.match(preferences, /DesignPreferenceControls/);
   assert.match(sharedControls, /document\.documentElement/);
   assert.match(sharedPreferences, /dataset/);
+  assert.match(sharedPreferences, /operational/);
   assert.match(themeScript, /dataset\.appearance/);
   assert.match(themeScript, /dataset\.density/);
-  assert.match(styles, /:root\[data-density="compact"\]/);
+  assert.match(styles, /\[data-density="compact"\]/);
+  assert.match(styles, /\[data-density="operational"\]/);
   assert.match(sharedControls, /DENSITY_KEY,\s*"comfortable"/);
   assert.match(themeScript, /\|\| "comfortable"/);
   assert.match(styles, /:root\[data-appearance="dark"\]/);
@@ -50,9 +52,34 @@ test("page titles use comfortable defaults with an explicit compact option", () 
   assert.match(styles, /--ds-page-title: 1\.75rem;/);
   assert.match(
     styles,
-    /:root\[data-density="compact"\][\s\S]*--ds-page-title: 1\.5rem;/,
+    /\[data-density="compact"\][\s\S]*--ds-page-title: 1\.5rem;/,
   );
-  assert.match(pageHeader, /text-\[length:var\(--ds-page-title\)\]/);
+  assert.match(pageHeader, /ds-type-page-title/);
+});
+
+test("operational density exposes a token-backed Workspace-like type scale", () => {
+  const styles = read("../../../src/foundation/styles.css");
+  const preferences = read("../../../src/foundation/preferences.ts");
+  const foundation = read("../app/foundation/page.tsx");
+
+  assert.match(preferences, /ConsciaDensity = "compact" \| "comfortable" \| "operational"/);
+  assert.match(styles, /--ds-body: 0\.9375rem;/);
+  assert.match(styles, /--ds-title-weight: 600;/);
+  assert.match(styles, /--ds-title-tracking: 0;/);
+  assert.match(styles, /--ds-button-text-size: 0\.875rem;/);
+  assert.match(styles, /--ds-body: 0\.8125rem;/);
+  assert.match(styles, /--ds-title-weight: 650;/);
+  assert.match(styles, /--ds-title-tracking: -0\.04em;/);
+  assert.match(styles, /--ds-title-line-height: 1\.08;/);
+  assert.match(styles, /--ds-section-title: 1rem;/);
+  assert.match(styles, /--ds-button-text-size: 0\.8125rem;/);
+  assert.match(styles, /@utility ds-type-page-title/);
+  assert.match(styles, /@utility ds-type-section-title/);
+  assert.match(styles, /@utility ds-type-control/);
+  assert.match(styles, /@utility ds-type-eyebrow/);
+  assert.match(foundation, /data-density="operational"/);
+  assert.match(foundation, /ds-type-page-title/);
+  assert.match(foundation, /ds-type-eyebrow/);
 });
 
 test("Conscia green separates secondary brand expression from operational success", () => {
@@ -169,14 +196,14 @@ test("field pattern owns help, error, disabled-compatible rhythm", () => {
   assert.match(foundation, /--ds-field-control-height: 2\.75rem/);
   assert.match(input, /--ds-field-control-height/);
   assert.match(input, /bg-surface-control/);
-  assert.match(input, /text-sm leading-5/);
-  assert.match(input, /placeholder:text-sm placeholder:leading-5/);
+  assert.match(input, /ds-type-control/);
+  assert.doesNotMatch(input, /placeholder:text-sm/);
   assert.match(select, /--ds-field-control-height/);
   assert.match(select, /bg-surface-control/);
-  assert.match(select, /text-sm leading-5/);
+  assert.match(select, /ds-type-control/);
   assert.match(textarea, /--ds-field-control-radius/);
   assert.match(textarea, /bg-surface-control/);
-  assert.match(textarea, /text-sm leading-5/);
+  assert.match(textarea, /ds-type-control/);
   assert.match(primitives, /aria-invalid/);
   assert.match(primitives, /disabled defaultValue/);
 });
@@ -337,11 +364,11 @@ test("select and menu typography use compact shared defaults", () => {
   assert.match(styles, /--ds-menu-label-size: 0\.6875rem;/);
 
   for (const primitive of [select, dropdown, searchableSelect]) {
-    assert.match(primitive, /text-\[length:var\(--ds-menu-item-size\)\]/);
+    assert.match(primitive, /ds-type-menu-item/);
   }
 
   for (const primitive of [select, dropdown, searchableSelect]) {
-    assert.match(primitive, /text-\[length:var\(--ds-menu-label-size\)\]/);
+    assert.match(primitive, /ds-type-menu-label/);
   }
 });
 

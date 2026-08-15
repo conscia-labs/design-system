@@ -81,11 +81,32 @@ export default function FoundationPage() {
 
         <ExampleSection title="Typography hierarchy">
           <div className="rounded-[var(--ds-radius-surface)] border bg-surface p-4">
-            <div className="text-[length:var(--ds-display-title)] font-semibold leading-tight">Welcome / display</div>
-            <div className="text-[var(--ds-page-title)] font-semibold">Page title</div>
-            <div className="mt-3 text-[var(--ds-section-title)] font-semibold">Section title</div>
-            <p className="mt-2 text-sm leading-6 text-text-secondary">Body text describes the operational implication of the current state without decorative emphasis.</p>
-            <div className="mt-2 text-[var(--ds-metadata)] text-muted-foreground">Metadata: updated 2 minutes ago</div>
+            <div className="ds-type-display-title">Welcome / display</div>
+            <div className="ds-type-page-title">Page title</div>
+            <div className="ds-type-section-title mt-3">Section title</div>
+            <p className="ds-type-ui mt-2 text-text-secondary">Body text describes the operational implication of the current state without decorative emphasis.</p>
+            <div className="ds-type-metadata mt-2 text-muted-foreground">Metadata: updated 2 minutes ago</div>
+          </div>
+        </ExampleSection>
+
+        <ExampleSection
+          title="Operational typography"
+          description="An opt-in scale for dense admin, catalog, connector, chat, and workspace-like surfaces."
+        >
+          <div data-density="operational" className="rounded-[var(--ds-radius-surface)] border bg-surface p-4">
+            <div className="ds-type-eyebrow text-text-supporting">Workspace / operational</div>
+            <h3 className="ds-type-page-title mt-1">Inventory overview</h3>
+            <p className="ds-type-ui mt-2 max-w-2xl text-text-secondary">
+              The operational preset tightens type rhythm and control text without changing the shared palette, surfaces, or accessibility behavior.
+            </p>
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <Button size="sm">Primary action</Button>
+              <span className="ds-type-metadata text-text-supporting">Updated 2 minutes ago</span>
+            </div>
+            <div className="mt-4 rounded-[var(--ds-radius-control)] bg-surface-muted p-3">
+              <div className="ds-type-section-title">Connected resources</div>
+              <div className="ds-type-eyebrow mt-2 text-text-supporting">Sources</div>
+            </div>
           </div>
         </ExampleSection>
 

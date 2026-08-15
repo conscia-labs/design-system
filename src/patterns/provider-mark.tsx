@@ -22,8 +22,8 @@ function ProviderMark({ name, shortName, description, size = "default", classNam
         {shortName}
       </div>
       <div className="min-w-0">
-        <div className="truncate text-sm font-medium text-foreground">{name}</div>
-        {description ? <div className="mt-0.5 truncate text-[var(--ds-metadata)] text-muted-foreground">{description}</div> : null}
+        <div className="ds-type-ui truncate font-medium text-foreground">{name}</div>
+        {description ? <div className="ds-type-metadata mt-0.5 truncate text-muted-foreground">{description}</div> : null}
       </div>
     </div>
   );

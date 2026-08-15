@@ -35,7 +35,7 @@ function FieldLabel({
   return (
     <label
       data-slot="field-label"
-      className={cn("text-[length:var(--ds-field-label-size)] font-medium leading-[var(--ds-field-label-line-height)] text-foreground", className)}
+      className={cn("ds-type-label text-foreground", className)}
       {...props}
     />
   );
@@ -48,7 +48,7 @@ function FieldDescription({
   return (
     <p
       data-slot="field-description"
-      className={cn("mt-[var(--ds-field-message-gap)] text-[var(--ds-metadata)] text-muted-foreground", className)}
+      className={cn("ds-type-metadata mt-[var(--ds-field-message-gap)] text-muted-foreground", className)}
       {...props}
     />
   );
@@ -61,7 +61,7 @@ function FieldError({
   return (
     <p
       data-slot="field-error"
-      className={cn("mt-[var(--ds-field-message-gap)] text-[var(--ds-metadata)] font-medium text-danger-foreground", className)}
+      className={cn("ds-type-metadata mt-[var(--ds-field-message-gap)] font-medium text-danger-foreground", className)}
       {...props}
     />
   );
