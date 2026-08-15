@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.4.0 - 2026-08-15
+
+- Add an opt-in `operational` density preset for admin, chat, catalog,
+  connector, and workspace-like interfaces, with compact typography and
+  spacing tokens that leave the comfortable default unchanged.
+- Expose token-backed `ds-type-*` typography utilities for display, page,
+  section, body, metadata, navigation, controls, labels, cards, and tables.
+- Align shared buttons, inputs, menus, fields, cards, tables, page headers,
+  navigation, and resource patterns with the operational hierarchy while
+  preserving existing component APIs and semantic color roles.
+- Add reusable Workbench shell, rail, section, resource-row, and inspector
+  primitives for multi-surface operational layouts, including responsive
+  mobile behavior and shared surface/focus semantics.
+- Expand documentation, playground fixtures, tests, and packaged CSS coverage
+  for the new typography and Workbench patterns.
+
 ## 0.3.5 - 2026-08-14
 
 - Soften the dark canvas and rebalance shared text roles for more comfortable
