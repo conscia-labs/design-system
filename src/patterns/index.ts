@@ -16,3 +16,4 @@ export * from "./resource-detail";
 export * from "./sidebar-navigation";
 export * from "./state-views";
 export * from "./value-meter";
+export * from "./workbench";
