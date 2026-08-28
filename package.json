@@ -50,7 +50,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "dev:playground": "next dev playground --webpack -p 3020",
+    "dev:playground": "next dev playground --webpack -p 3020 --hostname 127.0.0.1",
     "build": "pnpm build:js && pnpm build:css",
     "build:js": "tsup",
     "build:css": "node scripts/build-css.mjs",
@@ -59,6 +59,8 @@
     "test": "pnpm test:contracts && pnpm test:unit",
     "test:contracts": "node --test playground/src/test/*.test.mjs",
     "test:unit": "vitest run",
+    "test:visual": "playwright test",
+    "test:visual:update": "playwright test --update-snapshots",
     "test:package": "pnpm build && pnpm lint:package && node scripts/verify-package.mjs",
     "test:consumer": "node scripts/test-packaged-consumer.mjs",
     "lint": "eslint src --max-warnings=0",
@@ -128,6 +130,7 @@
     }
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/cli": "^4",
     "@tailwindcss/postcss": "^4",
     "@testing-library/react": "^16.3.2",

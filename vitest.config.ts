@@ -6,5 +6,7 @@ export default defineConfig({
     setupFiles: ["./src/test/setup.ts"],
     include: ["src/**/*.test.{ts,tsx}"],
     restoreMocks: true,
+    pool: "vmThreads",
+    maxWorkers: 1,
   },
 });

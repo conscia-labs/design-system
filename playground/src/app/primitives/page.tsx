@@ -50,6 +50,7 @@ import {
 } from "@conscia-labs/design-system";
 
 import { ExampleSection, PlaygroundPage } from "@/components/page";
+import { PrimitiveCoverage } from "@/components/primitive-coverage";
 
 export default function PrimitivesPage() {
   return (
@@ -268,6 +269,8 @@ export default function PrimitivesPage() {
               </Tooltip>
             </div>
           </ExampleSection>
+
+          <PrimitiveCoverage />
         </div>
       </PlaygroundPage>
     </TooltipProvider>
