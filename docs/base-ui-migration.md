@@ -358,7 +358,7 @@ unavailable npm registry DNS in the environment.
 | --- | --- | --- | --- | --- |
 | Phase 0 | Complete | `064aad7` | `53aea84` | Charter, inventory, health checks, and runner stabilization recorded |
 | Phase 1 | Complete | `53aea84` | `53aea84` | 36 visual snapshots, 4 interaction suites, two clean 40-test runs |
-| Phase 2 | Complete | `d7c1a6f` | Pending | Base UI 1.7.0, proof harness, portal convention, and bundle guard recorded; full validation passed |
+| Phase 2 | Complete | `d7c1a6f` | `657e8a6` | Base UI 1.7.0, proof harness, portal convention, and bundle guard recorded; full validation passed |
 | Phase 3 | Pending | Pending | Pending | |
 | Phase 4 | Pending | Pending | Pending | |
 | Phase 5 | Pending | Pending | Pending | |
