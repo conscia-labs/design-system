@@ -14,7 +14,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en" data-appearance="system" data-density="comfortable" suppressHydrationWarning>
       <body>
         <ThemeScript />
-        <AppShell>{children}</AppShell>
+        <div className="ds-app-root">
+          <AppShell>{children}</AppShell>
+        </div>
       </body>
     </html>
   );

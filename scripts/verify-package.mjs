@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { access, readFile } from "node:fs/promises";
+import { access, readFile, readdir } from "node:fs/promises";
 
 const expectedFiles = [
   "dist/index.js",
@@ -21,6 +21,27 @@ assert.match(
   entrySource,
   /^"use client";/,
   "The component root must be an intentional client-only entry.",
+);
+
+async function findJavaScriptFiles(directory) {
+  const files = [];
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    const path = `${directory}/${entry.name}`;
+    if (entry.isDirectory()) files.push(...(await findJavaScriptFiles(path)));
+    else if (/\.m?js$/.test(entry.name)) files.push(path);
+  }
+  return files;
+}
+
+const bundledJavaScript = (
+  await Promise.all(
+    (await findJavaScriptFiles("dist")).map((file) => readFile(file, "utf8")),
+  )
+).join("\n");
+assert.doesNotMatch(
+  bundledJavaScript,
+  /(?:from|import\()\s*["']@base-ui\/react(?:\/[^"']*)?["']/,
+  "The distribution must bundle Base UI instead of leaving consumer imports.",
 );
 
 const foundationCss = await readFile("dist/foundation.css", "utf8");
@@ -51,5 +72,15 @@ for (const exportName of ["BrandIcon", "Button", "DataTable", "SearchableSelect"
     `Expected the package to export ${exportName}.`,
   );
 }
+assert.equal(
+  packageExports.useRender,
+  undefined,
+  "Base UI composition utilities must remain internal.",
+);
+assert.equal(
+  packageExports.mergeProps,
+  undefined,
+  "Base UI prop utilities must remain internal.",
+);
 
 console.log("Package artifacts and public imports verified.");

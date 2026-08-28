@@ -7,6 +7,10 @@ body {
   margin: 0;
 }
 
+.ds-app-root {
+  isolation: isolate;
+}
+
 @layer base {
   a {
     color: inherit;

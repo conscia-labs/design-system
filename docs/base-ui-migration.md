@@ -50,7 +50,7 @@ Kumo is used as architectural inspiration: custom styled components layered over
 
 - [x] Phase 0 — Contract, branch alignment, inventory, and health baseline.
 - [x] Phase 1 — Playground visual and interaction baseline.
-- [ ] Phase 2 — Base UI dependency, packaging, and implementation conventions.
+- [x] Phase 2 — Base UI dependency, packaging, and implementation conventions.
 - [ ] Phase 3 — Rewrite simple custom primitives.
 - [ ] Phase 4 — Rewrite behavior-heavy primitives with Base UI.
 - [ ] Phase 5 — Rewrite composed patterns and application shells.
@@ -319,13 +319,46 @@ Snapshot names must include route, viewport, appearance, and density.
 8. Harden package metadata, documentation, migration notes, and release checks.
 9. Release v1 only after no Radix imports, no shadcn-derived component source, and complete validation evidence.
 
+## Phase 2 — Base UI dependency, packaging, and conventions
+
+Phase 2 establishes Base UI as an internal implementation dependency. Existing
+Radix-backed components and their public APIs remain unchanged until the later
+rewrite phases.
+
+### Locked conventions
+
+- `@base-ui/react` is pinned exactly to `1.7.0` as a runtime dependency.
+- React and React DOM remain peer dependencies; Base UI is not a peer dependency.
+- Base UI is imported by component path and no raw Base UI namespace is exported.
+- `tsup` externalizes only React and React DOM, so Base UI is bundled into the distribution when production wrappers begin importing it.
+- `render` and `useRender` replace new `asChild`/Slot patterns only where composition is required.
+- `data-slot` remains internal anatomy; Base UI state attributes are styling inputs, not public contracts.
+- The playground application root uses `isolation: isolate` for predictable portaled layering.
+- No production primitive or pattern is rewritten in this phase.
+
+### Proof harness and package evidence
+
+- [x] Base UI component-path imports resolve for the planned behavior families.
+- [x] `render` composition merges props and refs on a custom host.
+- [x] Dialog dismissal, checkbox/switch state, and collapsible state work in the test environment.
+- [x] A closed Base UI root renders through React server rendering.
+- [x] Package verification rejects unresolved Base UI imports in `dist`.
+- [x] The package root continues to expose Conscia components only.
+- [x] Existing visual snapshots remain the reference after portal-root setup.
+
+Phase 2 evidence: the proof harness passes 4/4; `pnpm test`, typechecks, lint,
+package verification, and the production playground build pass; and two
+consecutive `pnpm test:visual` runs pass 40/40. `pnpm test:consumer` completes
+package build and pack verification but its fixture install remains blocked by
+unavailable npm registry DNS in the environment.
+
 ## Progress ledger
 
 | Phase | Status | Start commit | Completion commit | Evidence |
 | --- | --- | --- | --- | --- |
 | Phase 0 | Complete | `064aad7` | `53aea84` | Charter, inventory, health checks, and runner stabilization recorded |
 | Phase 1 | Complete | `53aea84` | `53aea84` | 36 visual snapshots, 4 interaction suites, two clean 40-test runs |
-| Phase 2 | Pending | Pending | Pending | |
+| Phase 2 | Complete | `d7c1a6f` | Pending | Base UI 1.7.0, proof harness, portal convention, and bundle guard recorded; full validation passed |
 | Phase 3 | Pending | Pending | Pending | |
 | Phase 4 | Pending | Pending | Pending | |
 | Phase 5 | Pending | Pending | Pending | |
@@ -342,6 +375,8 @@ Snapshot names must include route, viewport, appearance, and density.
 | 2026-08-28 | Use Kumo as architectural inspiration only. | Adopts the useful custom-wrapper model without coupling the project to Kumo source or tooling. |
 | 2026-08-28 | Use Vitest VM threads with one worker for the default unit runner. | The existing fork pool timed out before collection in this Node/sandbox environment; the alternate pool passes all 18 unit tests. |
 | 2026-08-28 | Remove the Next.js development portal from Playwright captures. | The dev indicator was nondeterministic and is not part of the design-system visual contract. |
+| 2026-08-28 | Pin `@base-ui/react` to `1.7.0` and keep it internal. | Reproducible behavior and a clean Conscia-owned public API are required before wrapper rewrites. |
+| 2026-08-28 | Add a direct Base UI proof harness before production wrappers. | Validates module resolution, composition, state, portals, and SSR without mixing Phase 2 with component migration. |
 
 ## Blockers and notes
 
