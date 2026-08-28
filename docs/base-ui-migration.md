@@ -68,7 +68,7 @@ Each phase requires its exit criteria and evidence to be recorded here before th
 - [x] Check out the existing local `feature/base-ui-migration` branch.
 - [x] Fast-forward the feature branch to `main` using `--ff-only`.
 - [x] Preserve existing feature-branch history; no reset or force push.
-- [ ] Record the first implementation commit after Phase 0 is complete.
+- [x] Record the first migration implementation commit after Phase 0 is complete: `53aea84`.
 
 The feature branch was at `46aeb79` (`v0.3.4`) and was a clean ancestor of `main` at `064aad7` (`v0.4.0`). It was fast-forwarded without a merge commit.
 
@@ -323,8 +323,8 @@ Snapshot names must include route, viewport, appearance, and density.
 
 | Phase | Status | Start commit | Completion commit | Evidence |
 | --- | --- | --- | --- | --- |
-| Phase 0 | Complete | `064aad7` | Pending | Charter, inventory, health checks, and runner stabilization recorded |
-| Phase 1 | Complete | Pending | Pending | 36 visual snapshots, 4 interaction suites, two clean 40-test runs |
+| Phase 0 | Complete | `064aad7` | `53aea84` | Charter, inventory, health checks, and runner stabilization recorded |
+| Phase 1 | Complete | `53aea84` | `53aea84` | 36 visual snapshots, 4 interaction suites, two clean 40-test runs |
 | Phase 2 | Pending | Pending | Pending | |
 | Phase 3 | Pending | Pending | Pending | |
 | Phase 4 | Pending | Pending | Pending | |
