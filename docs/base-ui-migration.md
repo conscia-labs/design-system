@@ -1,6 +1,6 @@
 # Base UI v1 Migration
 
-Status: **Phase 1 complete**
+Status: **Phase 3 complete**
 
 Branch: `feature/base-ui-migration`
 
@@ -51,7 +51,7 @@ Kumo is used as architectural inspiration: custom styled components layered over
 - [x] Phase 0 — Contract, branch alignment, inventory, and health baseline.
 - [x] Phase 1 — Playground visual and interaction baseline.
 - [x] Phase 2 — Base UI dependency, packaging, and implementation conventions.
-- [ ] Phase 3 — Rewrite simple custom primitives.
+- [x] Phase 3 — Rewrite simple custom primitives.
 - [ ] Phase 4 — Rewrite behavior-heavy primitives with Base UI.
 - [ ] Phase 5 — Rewrite composed patterns and application shells.
 - [ ] Phase 6 — Remove Radix-specific styling and normalize tokens.
@@ -352,6 +352,61 @@ consecutive `pnpm test:visual` runs pass 40/40. `pnpm test:consumer` completes
 package build and pack verification but its fixture install remains blocked by
 unavailable npm registry DNS in the environment.
 
+## Phase 3 — Conscia-owned simple primitives
+
+Phase 3 rewrites the simple visual primitives without copying shadcn source or
+using Radix Slot. Behavior-heavy primitives remain on their existing Radix
+implementations for Phase 4.
+
+### Implemented contract
+
+- `Button` is a native/custom-host Conscia component with the existing variants,
+  sizes, default `type="button"`, `buttonVariants`, and narrowly scoped Base UI
+  `render` composition. `asChild` is not supported.
+- `IconButton` is the canonical accessible icon-only action. It requires an
+  `aria-label` or `aria-labelledby`, supports `sm`, `default`, and `lg`, and
+  keeps `Button size="icon"` as a migration-compatible API.
+- `Avatar`, `Label`, `Separator`, `Input`, `Textarea`, and `Skeleton` are
+  native/custom React implementations with explicit loading, semantic,
+  invalid-state, and decorative behavior.
+- `Alert`, `Badge`, and `BrandIcon` remain Conscia-owned visual primitives with
+  semantic variants and existing token/dark-mode behavior.
+- `Alert` uses a non-live `group` relationship by default, automatically wiring
+  composed title and description IDs while preserving explicit consumer IDs.
+- `Card` now supports `default`, `muted`, and `elevated` variants, header
+  actions, and `CardFooter` without introducing an interactive-card primitive.
+- `Table` retains low-level semantic anatomy and adds `TableCaption` and
+  `TableFooter`; `DataTable` remains the operational pattern.
+
+### Phase 3 evidence
+
+- [x] Six bounded primitive groups compile and pass focused behavior tests.
+- [x] `src/test/simple-primitives.test.tsx` covers native semantics, image
+  fallback, state styling, composition, anatomy, and representative axe checks.
+- [x] `@radix-ui/react-avatar`, `@radix-ui/react-label`, and
+  `@radix-ui/react-separator` were removed. Radix Slot and behavior-family
+  packages remain intentionally deferred.
+- [x] Package verification covers `IconButton`, `CardFooter`, `TableCaption`,
+  and `TableFooter`, and confirms Base UI is bundled rather than imported by
+  consumers.
+- [x] Playground coverage includes IconButton, Card variants/actions/footer,
+  and Table caption/footer. Intentional Phase 3 changes refreshed 15 visual
+  snapshots: primitive additions changed the `/primitives` route, and row
+  state anatomy changes affected the mobile reference-pattern captures.
+- [x] `pnpm test`, typechecks, lint, package verification, and the playground
+  build pass. The refreshed visual suite passes 40/40 on two consecutive clean
+  runs; existing development hydration warnings remain documented for the
+  behavior-family migration.
+- [x] Avatar source replacement resets before paint, preventing a stale loaded
+  image from appearing while the replacement source resolves.
+
+### Deferred by design
+
+The behavior-heavy Dialog, Sheet, menus, Select, SearchableSelect, Tabs,
+Tooltip, Checkbox, Switch, and Collapsible families are not rewritten here.
+No specialized CompactTable, InteractiveTable, or InteractiveCard components
+were added.
+
 ## Progress ledger
 
 | Phase | Status | Start commit | Completion commit | Evidence |
@@ -359,7 +414,7 @@ unavailable npm registry DNS in the environment.
 | Phase 0 | Complete | `064aad7` | `53aea84` | Charter, inventory, health checks, and runner stabilization recorded |
 | Phase 1 | Complete | `53aea84` | `53aea84` | 36 visual snapshots, 4 interaction suites, two clean 40-test runs |
 | Phase 2 | Complete | `d7c1a6f` | `657e8a6` | Base UI 1.7.0, proof harness, portal convention, and bundle guard recorded; full validation passed |
-| Phase 3 | Pending | Pending | Pending | |
+| Phase 3 | Complete | Working tree | Working tree | Conscia-owned simple primitives, IconButton, Card/Table anatomy, focused behavior tests, package verification, and refreshed visual baselines |
 | Phase 4 | Pending | Pending | Pending | |
 | Phase 5 | Pending | Pending | Pending | |
 | Phase 6 | Pending | Pending | Pending | |
@@ -377,6 +432,11 @@ unavailable npm registry DNS in the environment.
 | 2026-08-28 | Remove the Next.js development portal from Playwright captures. | The dev indicator was nondeterministic and is not part of the design-system visual contract. |
 | 2026-08-28 | Pin `@base-ui/react` to `1.7.0` and keep it internal. | Reproducible behavior and a clean Conscia-owned public API are required before wrapper rewrites. |
 | 2026-08-28 | Add a direct Base UI proof harness before production wrappers. | Validates module resolution, composition, state, portals, and SSR without mixing Phase 2 with component migration. |
+| 2026-08-28 | Keep simple primitives custom and use Base UI only for Button composition in Phase 3. | Native HTML is the smallest reliable implementation for visual primitives; behavior-heavy families need a separate migration boundary. |
+| 2026-08-28 | Make IconButton canonical while retaining `Button size="icon"`. | Improves accessible API discoverability without forcing an early compatibility cleanup across existing consumers. |
+| 2026-08-28 | Keep Card and Table extensible through focused anatomy and variants. | Avoids multiplying primitive types while supporting the recurring product patterns identified in the audit. |
+| 2026-08-28 | Make Alert title/description relationships automatic but non-live by default. | Provides a meaningful accessible group without turning every informational alert into an announcement. |
+| 2026-08-28 | Treat `ConsciaIconButton` as a strict compatibility alias. | The alias now follows the canonical accessible IconButton contract; consumers must provide an accessible name, while `Button size="icon"` remains available during migration. |
 
 ## Blockers and notes
 

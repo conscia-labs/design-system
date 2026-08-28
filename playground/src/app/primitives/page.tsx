@@ -23,6 +23,7 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
+  IconButton,
   Input,
   NavigationTab,
   NavigationTabs,
@@ -35,7 +36,9 @@ import {
   SelectValue,
   Table,
   TableBody,
+  TableCaption,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -69,6 +72,10 @@ export default function PrimitivesPage() {
               <Button variant="link">Link</Button>
               <Button variant="destructive">Destructive</Button>
               <Button disabled>Disabled</Button>
+              <IconButton size="sm" aria-label="Small settings">S</IconButton>
+              <IconButton aria-label="Default settings">D</IconButton>
+              <IconButton size="lg" variant="outline" aria-label="Large settings">L</IconButton>
+              <Button render={<a href="#button-composition">Link composition</a>} variant="outline">Link composition</Button>
             </div>
           </ExampleSection>
 
@@ -169,6 +176,7 @@ export default function PrimitivesPage() {
           <ExampleSection title="Table">
             <div className="rounded-[var(--ds-radius-surface)] border bg-surface">
               <Table>
+                <TableCaption>Current model availability</TableCaption>
                 <TableHeader>
                   <TableRow>
                     <TableHead>AI Model</TableHead>
@@ -191,6 +199,11 @@ export default function PrimitivesPage() {
                     <TableCell colSpan={3} className="text-center text-muted-foreground">Empty state appears in the table content region when no rows match.</TableCell>
                   </TableRow>
                 </TableBody>
+                <TableFooter>
+                  <TableRow>
+                    <TableCell colSpan={3}>2 models shown</TableCell>
+                  </TableRow>
+                </TableFooter>
               </Table>
             </div>
           </ExampleSection>

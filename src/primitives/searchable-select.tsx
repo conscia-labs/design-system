@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Check, ChevronsUpDown, Search, X } from "lucide-react";
 
-import { Button } from "./button";
+import { IconButton } from "./button";
 import { Input } from "./input";
 import { cn } from "./utils";
 
@@ -180,10 +180,10 @@ function SearchableSelect({
           onKeyDown={onKeyDown}
         />
         {clearable && value ? (
-          <Button
+          <IconButton
             type="button"
             variant="ghost"
-            size="icon"
+            size="sm"
             disabled={disabled}
             className="absolute right-8 top-1/2 -translate-y-1/2"
             aria-label={clearLabel}
@@ -194,7 +194,7 @@ function SearchableSelect({
             }}
           >
             <X />
-          </Button>
+          </IconButton>
         ) : null}
         <ChevronsUpDown className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
       </div>

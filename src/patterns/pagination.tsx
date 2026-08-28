@@ -1,7 +1,7 @@
 import * as React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-import { Button } from "../primitives/button";
+import { IconButton } from "../primitives/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../primitives/select";
 import { cn } from "../primitives/utils";
 
@@ -49,13 +49,13 @@ function PaginationControls({
         ) : null}
       </div>
       <div className="flex items-center gap-1">
-        <Button type="button" variant="outline" size="icon" className="size-8" aria-label="Previous page" onClick={onPrevious ?? (() => onPageChange?.(currentPage - 1))} disabled={currentPage <= 1}><ChevronLeft /></Button>
+        <IconButton type="button" variant="outline" size="sm" className="size-8" aria-label="Previous page" onClick={onPrevious ?? (() => onPageChange?.(currentPage - 1))} disabled={currentPage <= 1}><ChevronLeft /></IconButton>
         {onPageChange ? pageItems(currentPage, pageCount).map((item, index) => item === "ellipsis" ? (
           <span key={`ellipsis-${index}`} className="flex size-8 items-center justify-center text-muted-foreground" aria-hidden="true">…</span>
         ) : (
-          <Button type="button" key={item} variant={item === currentPage ? "secondary" : "ghost"} size="icon" className="size-8" aria-label={`Page ${item}`} aria-current={item === currentPage ? "page" : undefined} onClick={() => onPageChange(item)}>{item}</Button>
+          <IconButton type="button" key={item} variant={item === currentPage ? "secondary" : "ghost"} size="sm" className="size-8" aria-label={`Page ${item}`} aria-current={item === currentPage ? "page" : undefined} onClick={() => onPageChange(item)}>{item}</IconButton>
         )) : <span className="px-2 text-[var(--ds-metadata)]">Page {currentPage} of {pageCount}</span>}
-        <Button type="button" variant="outline" size="icon" className="size-8" aria-label="Next page" onClick={onNext ?? (() => onPageChange?.(currentPage + 1))} disabled={currentPage >= pageCount}><ChevronRight /></Button>
+        <IconButton type="button" variant="outline" size="sm" className="size-8" aria-label="Next page" onClick={onNext ?? (() => onPageChange?.(currentPage + 1))} disabled={currentPage >= pageCount}><ChevronRight /></IconButton>
       </div>
     </div>
   );

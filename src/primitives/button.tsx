@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
+import { mergeProps } from "@base-ui/react/merge-props";
+import { useRender } from "@base-ui/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "./utils";
@@ -33,27 +34,65 @@ const buttonVariants = cva(
   },
 );
 
+type ButtonProps = React.ComponentProps<"button">
+  & VariantProps<typeof buttonVariants>
+  & {
+    render?: useRender.ComponentProps<"button">["render"];
+  };
+
 function Button({
   className,
   variant,
   size,
-  asChild = false,
+  render,
   type,
   ...props
-}: React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean;
-  }) {
-  const Comp = asChild ? Slot : "button";
+}: ButtonProps) {
+  const classNames = buttonVariants({ variant, size, className });
+  const defaultProps = {
+    "data-slot": "button",
+    className: classNames,
+    ...(render ? {} : { type: type ?? "button" }),
+    ...props,
+  } as React.ComponentProps<"button">;
 
+  return useRender({
+    defaultTagName: "button",
+    render,
+    props: mergeProps<"button">(defaultProps, {}),
+  });
+}
+
+type IconButtonNameProps =
+  | { "aria-label": string; "aria-labelledby"?: string }
+  | { "aria-label"?: string; "aria-labelledby": string };
+
+type IconButtonProps = Omit<ButtonProps, "children" | "size" | "aria-label" | "aria-labelledby">
+  & IconButtonNameProps
+  & {
+    children: React.ReactNode;
+    size?: "sm" | "default" | "lg";
+  };
+
+const iconButtonSizes = {
+  sm: "size-[var(--ds-control-height-sm)]",
+  default: "size-[var(--ds-control-height)]",
+  lg: "size-[var(--ds-control-height-lg)]",
+} as const;
+
+function IconButton({
+  className,
+  size = "default",
+  ...props
+}: IconButtonProps) {
   return (
-    <Comp
-      data-slot="button"
-      type={asChild ? undefined : (type ?? "button")}
-      className={cn(buttonVariants({ variant, size, className }))}
+    <Button
+      size="icon"
+      className={cn(iconButtonSizes[size], className)}
       {...props}
     />
   );
 }
 
-export { Button, buttonVariants };
+export { Button, IconButton, buttonVariants };
+export type { ButtonProps, IconButtonProps };

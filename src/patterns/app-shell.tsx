@@ -4,7 +4,7 @@ import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { PanelLeftIcon, Search, X } from "lucide-react";
 
-import { Button } from "../primitives/button";
+import { Button, IconButton, type IconButtonProps } from "../primitives/button";
 import { Input } from "../primitives/input";
 import { Separator } from "../primitives/separator";
 import {
@@ -523,31 +523,33 @@ function NavigationSubList({
  */
 function SidebarTrigger({
   className,
+  "aria-label": ariaLabel,
   onClick,
   ...props
-}: React.ComponentProps<typeof Button>) {
+}: Omit<React.ComponentProps<typeof Button>, "aria-labelledby">) {
   const { isMobile, mobileOpen, sidebarOpen, toggleSidebar } = useAppShell();
+  const triggerProps = {
+    ...props,
+    "data-slot": "sidebar-trigger",
+    type: "button" as const,
+    variant: "ghost" as const,
+    className: cn(
+      "shrink-0 cursor-pointer text-muted-foreground hover:bg-surface-muted hover:text-foreground focus-visible:ring-ring",
+      className,
+    ),
+    "aria-label": ariaLabel ?? "Toggle navigation",
+    "aria-expanded": isMobile ? mobileOpen : sidebarOpen,
+    onClick: (event: React.MouseEvent<HTMLButtonElement>) => {
+      onClick?.(event);
+      toggleSidebar();
+    },
+  } as IconButtonProps;
 
   return (
-    <Button
-      data-slot="sidebar-trigger"
-      type="button"
-      variant="ghost"
-      size="icon"
-      className={cn(
-        "shrink-0 cursor-pointer text-muted-foreground hover:bg-surface-muted hover:text-foreground focus-visible:ring-ring",
-        className,
-      )}
-      aria-expanded={isMobile ? mobileOpen : sidebarOpen}
-      onClick={(event) => {
-        onClick?.(event);
-        toggleSidebar();
-      }}
-      {...props}
-    >
+    <IconButton {...triggerProps}>
       <PanelLeftIcon />
       <span className="sr-only">Toggle navigation</span>
-    </Button>
+    </IconButton>
   );
 }
 

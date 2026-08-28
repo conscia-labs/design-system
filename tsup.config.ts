@@ -17,4 +17,5 @@ export default defineConfig({
   clean: true,
   minify: false,
   external: ["react", "react-dom"],
+  noExternal: ["@base-ui/react"],
 });

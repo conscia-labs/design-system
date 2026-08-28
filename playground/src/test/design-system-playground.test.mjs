@@ -155,7 +155,7 @@ test("semantic badge variants are available", () => {
   }
 });
 
-test("button variants and sizes preserve ShadCN-style variant architecture", () => {
+test("button variants and sizes preserve the Conscia variant architecture", () => {
   const button = read("../../../src/primitives/button.tsx");
 
   for (const variant of ["default", "secondary", "outline", "ghost", "destructive", "link"]) {
@@ -164,7 +164,8 @@ test("button variants and sizes preserve ShadCN-style variant architecture", () 
   for (const size of ["sm", "default", "lg", "icon"]) {
     assert.match(button, new RegExp(`${size}:`));
   }
-  assert.match(button, /@radix-ui\/react-slot/);
+  assert.match(button, /function IconButton/);
+  assert.doesNotMatch(button, /asChild/);
   assert.match(button, /default:[\s\S]*text-primary-foreground/);
   assert.match(button, /outline:[\s\S]*bg-surface-control/);
   assert.match(button, /hover:bg-surface-control-hover/);

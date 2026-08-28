@@ -11,6 +11,7 @@ import {
   Button,
   Card,
   CardContent,
+  CardFooter,
   CardDescription,
   CardHeader,
   CardTitle,
@@ -25,6 +26,7 @@ import {
   FieldLabel,
   FormSelect,
   Input,
+  IconButton,
   Label,
   SearchableSelect,
   Separator,
@@ -63,7 +65,7 @@ function PrimitiveCoverage() {
             <AlertDescription>Shared primitives keep supporting context readable without competing with the primary task.</AlertDescription>
           </Alert>
           <Card>
-            <CardHeader>
+            <CardHeader action={<IconButton variant="ghost" size="sm" aria-label="More model connection actions">…</IconButton>}>
               <CardTitle>Model connection</CardTitle>
               <CardDescription>A compact surface with a clear title and supporting description.</CardDescription>
             </CardHeader>
@@ -77,7 +79,13 @@ function PrimitiveCoverage() {
               </div>
               <Badge variant="success" className="ml-auto">Ready</Badge>
             </CardContent>
+            <CardFooter className="text-sm text-muted-foreground">Last checked a few moments ago.</CardFooter>
           </Card>
+          <div className="grid gap-3 sm:grid-cols-3">
+            <Card variant="default"><CardContent className="p-4 text-sm">Default surface</CardContent></Card>
+            <Card variant="muted"><CardContent className="p-4 text-sm">Muted surface</CardContent></Card>
+            <Card variant="elevated"><CardContent className="p-4 text-sm">Elevated surface</CardContent></Card>
+          </div>
           <Separator />
           <div className="grid gap-2">
             <Label htmlFor="coverage-notes">Notes</Label>

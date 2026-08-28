@@ -5,6 +5,7 @@ import { MoreHorizontalIcon, PlusIcon, SearchIcon } from "lucide-react";
 import {
   Badge,
   Button,
+  IconButton,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -253,9 +254,9 @@ export function AiModelsResourceList() {
             rowActions={(model) => (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" aria-label={`Actions for ${model.name}`}>
+                  <IconButton variant="ghost" aria-label={`Actions for ${model.name}`}>
                     <MoreHorizontalIcon />
-                  </Button>
+                  </IconButton>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem>View details</DropdownMenuItem>

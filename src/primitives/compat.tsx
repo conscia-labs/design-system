@@ -1,10 +1,11 @@
 import * as React from "react";
 
-import { Button } from "./button";
+import { Button, IconButton } from "./button";
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "./card";
@@ -36,12 +37,7 @@ import { cn } from "./utils";
  */
 const ConsciaButton = Button;
 
-function ConsciaIconButton({
-  size = "icon",
-  ...props
-}: React.ComponentProps<typeof Button>) {
-  return <Button size={size} {...props} />;
-}
+const ConsciaIconButton = IconButton;
 
 const ConsciaCard = Card;
 const ConsciaCardContent = CardContent;
@@ -78,6 +74,7 @@ function ConsciaCardHeader({
 }
 
 const ConsciaCardTitle = CardTitle;
+const ConsciaCardFooter = CardFooter;
 const ConsciaCheckbox = Checkbox;
 const ConsciaInput = Input;
 const ConsciaSwitch = Switch;
@@ -100,6 +97,7 @@ export {
   ConsciaCard,
   ConsciaCardContent,
   ConsciaCardDescription,
+  ConsciaCardFooter,
   ConsciaCardHeader,
   ConsciaCardTitle,
   ConsciaCheckbox,

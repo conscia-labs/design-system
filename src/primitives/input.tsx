@@ -5,7 +5,7 @@ import { cn } from "./utils";
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   return (
     <input
-      type={type}
+      type={type ?? "text"}
       data-slot="input"
       className={cn(
         "ds-type-control border-input bg-surface-control flex h-[var(--ds-field-control-height)] w-full min-w-0 rounded-[var(--ds-field-control-radius)] border px-[var(--ds-field-control-padding-x)] py-2 shadow-none transition-colors outline-none selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",

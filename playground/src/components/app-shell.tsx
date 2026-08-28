@@ -11,7 +11,7 @@ import {
   AppSidebarContent,
   AppSidebarFooter,
   AppSidebarHeader,
-  Button,
+  IconButton,
   DesignPreferenceControls,
   DesignSystemPreferenceSync,
   MainRegion,
@@ -103,9 +103,9 @@ export function AppShell({ children }: { children: ReactNode }) {
               Conscia Design System
             </div>
           </div>
-          <Button variant="ghost" size="icon" aria-label="Notifications">
+          <IconButton variant="ghost" aria-label="Notifications">
             <Bell />
-          </Button>
+          </IconButton>
         </TopBar>
         <PageFrame width="full" className="p-0">
           {children}
