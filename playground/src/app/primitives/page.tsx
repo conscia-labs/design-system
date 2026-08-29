@@ -211,9 +211,7 @@ export default function PrimitivesPage() {
           <ExampleSection title="Dialog, Dropdown, Tooltip">
             <div className="flex flex-wrap gap-2 rounded-[var(--ds-radius-surface)] border bg-surface p-4">
               <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="outline">Open dialog</Button>
-                </DialogTrigger>
+                <DialogTrigger render={<Button variant="outline" />}>Open dialog</DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
                     <DialogTitle>Rotate API key</DialogTitle>
@@ -248,9 +246,7 @@ export default function PrimitivesPage() {
                 </DialogContent>
               </Dialog>
               <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="destructive">Destructive dialog</Button>
-                </DialogTrigger>
+                <DialogTrigger render={<Button variant="destructive" />}>Destructive dialog</DialogTrigger>
                 <DialogContent size="small">
                   <DialogHeader>
                     <DialogTitle>Disable model access</DialogTitle>
@@ -263,9 +259,7 @@ export default function PrimitivesPage() {
                 </DialogContent>
               </Dialog>
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline">Open menu</Button>
-                </DropdownMenuTrigger>
+                <DropdownMenuTrigger render={<Button variant="outline" />}>Open menu</DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuLabel>Model actions</DropdownMenuLabel>
                   <DropdownMenuItem>View details</DropdownMenuItem>
@@ -275,9 +269,7 @@ export default function PrimitivesPage() {
                 </DropdownMenuContent>
               </DropdownMenu>
               <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant="ghost">Tooltip</Button>
-                </TooltipTrigger>
+                <TooltipTrigger render={<Button variant="ghost" />}>Tooltip</TooltipTrigger>
                 <TooltipContent>Tooltips name compact controls.</TooltipContent>
               </Tooltip>
             </div>

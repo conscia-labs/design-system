@@ -1,8 +1,7 @@
 "use client";
 
 import * as React from "react";
-import * as TabsPrimitive from "@radix-ui/react-tabs";
-import { Slot } from "@radix-ui/react-slot";
+import { Tabs as BaseTabs } from "@base-ui/react/tabs";
 
 import { cn } from "./utils";
 
@@ -86,13 +85,13 @@ function Tabs({
   variant = "underline",
   size = "default",
   ...props
-}: React.ComponentProps<typeof TabsPrimitive.Root> & {
+}: React.ComponentProps<typeof BaseTabs.Root> & {
   variant?: TabsVariant;
   size?: TabsSize;
 }) {
   return (
     <TabsRootVisualContext.Provider value={{ variant, size }}>
-      <TabsPrimitive.Root
+      <BaseTabs.Root
         data-slot="tabs"
         data-variant={variant}
         data-size={size}
@@ -111,7 +110,7 @@ function TabsList({
   ref: externalRef,
   onScroll,
   ...props
-}: React.ComponentProps<typeof TabsPrimitive.List> & {
+}: React.ComponentProps<typeof BaseTabs.List> & {
   variant?: TabsVariant;
   size?: TabsSize;
 }) {
@@ -122,7 +121,7 @@ function TabsList({
     useHorizontalScrollRail<HTMLDivElement>(externalRef);
 
   return (
-    <TabsPrimitive.List
+    <BaseTabs.List
       data-slot="tabs-list"
       data-variant={resolvedVariant}
       data-size={resolvedSize}
@@ -152,7 +151,7 @@ function TabsList({
       >
         {children}
       </TabsListVisualContext.Provider>
-    </TabsPrimitive.List>
+    </BaseTabs.List>
   );
 }
 
@@ -161,7 +160,7 @@ function TabsTrigger({
   variant,
   size,
   ...props
-}: React.ComponentProps<typeof TabsPrimitive.Trigger> & {
+}: React.ComponentProps<typeof BaseTabs.Tab> & {
   variant?: TabsVariant;
   size?: TabsSize;
 }) {
@@ -170,7 +169,7 @@ function TabsTrigger({
   const resolvedSize = size ?? listVisuals.size;
 
   return (
-    <TabsPrimitive.Trigger
+    <BaseTabs.Tab
       data-slot="tabs-trigger"
       data-variant={resolvedVariant}
       data-size={resolvedSize}
@@ -179,10 +178,10 @@ function TabsTrigger({
         resolvedVariant === "underline" &&
           cn(
             navigationTabClasses,
-            "data-[state=active]:bg-selection-background data-[state=active]:font-semibold data-[state=active]:text-selection-foreground data-[state=active]:after:bg-selection-indicator",
+            "data-active:bg-selection-background data-active:font-semibold data-active:text-selection-foreground data-active:after:bg-selection-indicator",
           ),
         resolvedVariant === "segmented" &&
-          "inline-flex h-full items-center justify-center gap-2 whitespace-nowrap rounded-[calc(var(--ds-radius-control)-2px)] px-3 text-sm font-medium text-muted-foreground outline-none transition-[background-color,color,box-shadow] hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/60 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-xs",
+          "inline-flex h-full items-center justify-center gap-2 whitespace-nowrap rounded-[calc(var(--ds-radius-control)-2px)] px-3 text-sm font-medium text-muted-foreground outline-none transition-[background-color,color,box-shadow] hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/60 data-active:bg-background data-active:text-foreground data-active:shadow-xs",
         className,
       )}
       {...props}
@@ -193,9 +192,9 @@ function TabsTrigger({
 function TabsContent({
   className,
   ...props
-}: React.ComponentProps<typeof TabsPrimitive.Content>) {
+}: React.ComponentProps<typeof BaseTabs.Panel>) {
   return (
-    <TabsPrimitive.Content
+    <BaseTabs.Panel
       data-slot="tabs-content"
       className={cn(
         "outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
@@ -250,14 +249,12 @@ function NavigationTabsList({
 function NavigationTab({
   className,
   active = false,
-  asChild = false,
   ref: externalRef,
   ...props
 }: React.ComponentProps<"a"> & {
   active?: boolean;
-  asChild?: boolean;
 }) {
-  const Comp = asChild ? Slot : "a";
+  const Comp = "a";
   const internalRef = React.useRef<HTMLAnchorElement | null>(null);
   const ref = React.useCallback(
     (node: HTMLAnchorElement | null) => {

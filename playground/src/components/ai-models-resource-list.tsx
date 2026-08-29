@@ -253,11 +253,7 @@ export function AiModelsResourceList() {
             onSelectionChange={setSelectedIds}
             rowActions={(model) => (
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <IconButton variant="ghost" aria-label={`Actions for ${model.name}`}>
-                    <MoreHorizontalIcon />
-                  </IconButton>
-                </DropdownMenuTrigger>
+                <DropdownMenuTrigger render={<IconButton variant="ghost" aria-label={`Actions for ${model.name}`} aria-labelledby={`actions-${model.id}`}><MoreHorizontalIcon /></IconButton>} />
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem>View details</DropdownMenuItem>
                   <DropdownMenuItem>Review policy access</DropdownMenuItem>

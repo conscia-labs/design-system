@@ -1,41 +1,9 @@
 "use client";
-
 import * as React from "react";
-import * as TooltipPrimitive from "@radix-ui/react-tooltip";
-
+import { Tooltip as BaseTooltip } from "@base-ui/react/tooltip";
 import { cn } from "./utils";
-
-function TooltipProvider({ delayDuration = 150, ...props }: React.ComponentProps<typeof TooltipPrimitive.Provider>) {
-  return <TooltipPrimitive.Provider data-slot="tooltip-provider" delayDuration={delayDuration} {...props} />;
-}
-
-function Tooltip({ ...props }: React.ComponentProps<typeof TooltipPrimitive.Root>) {
-  return <TooltipPrimitive.Root data-slot="tooltip" {...props} />;
-}
-
-function TooltipTrigger({ ...props }: React.ComponentProps<typeof TooltipPrimitive.Trigger>) {
-  return <TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />;
-}
-
-function TooltipContent({
-  className,
-  sideOffset = 6,
-  children,
-  ...props
-}: React.ComponentProps<typeof TooltipPrimitive.Content>) {
-  return (
-    <TooltipPrimitive.Portal>
-      <TooltipPrimitive.Content
-        data-slot="tooltip-content"
-        sideOffset={sideOffset}
-        className={cn("z-50 w-fit rounded-md bg-foreground px-3 py-1.5 text-balance text-xs text-background shadow-[var(--ds-shadow-floating)]", className)}
-        {...props}
-      >
-        {children}
-        <TooltipPrimitive.Arrow className="z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px] bg-foreground fill-foreground" />
-      </TooltipPrimitive.Content>
-    </TooltipPrimitive.Portal>
-  );
-}
-
+function TooltipProvider({ delayDuration = 150, ...props }: React.ComponentProps<typeof BaseTooltip.Provider> & { delayDuration?: number }) { return <BaseTooltip.Provider delay={delayDuration} {...props} />; }
+function Tooltip({ ...props }: React.ComponentProps<typeof BaseTooltip.Root>) { return <BaseTooltip.Root data-slot="tooltip" {...props} />; }
+function TooltipTrigger({ ...props }: React.ComponentProps<typeof BaseTooltip.Trigger>) { return <BaseTooltip.Trigger data-slot="tooltip-trigger" {...props} />; }
+function TooltipContent({ className, sideOffset = 6, side, align, children, ...props }: React.ComponentProps<typeof BaseTooltip.Popup> & { sideOffset?: number; side?: React.ComponentProps<typeof BaseTooltip.Positioner>["side"]; align?: React.ComponentProps<typeof BaseTooltip.Positioner>["align"] }) { return <BaseTooltip.Portal><BaseTooltip.Positioner sideOffset={sideOffset} side={side} align={align}><BaseTooltip.Popup role="tooltip" data-slot="tooltip-content" className={cn("z-50 w-fit rounded-md bg-foreground px-3 py-1.5 text-balance text-xs text-background shadow-[var(--ds-shadow-floating)]", className)} {...props}>{children}<BaseTooltip.Arrow className="z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px] bg-foreground fill-foreground" /></BaseTooltip.Popup></BaseTooltip.Positioner></BaseTooltip.Portal>; }
 export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger };

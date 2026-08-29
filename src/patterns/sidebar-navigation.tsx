@@ -186,15 +186,7 @@ function SidebarNavigation({
                     : undefined
                 }
               >
-                <DropdownMenuTrigger asChild>
-                  <NavigationItem
-                    active={entry.active}
-                    aria-label={`${entry.label} menu`}
-                  >
-                    {entry.icon}
-                    <span className="sr-only">{entry.label}</span>
-                  </NavigationItem>
-                </DropdownMenuTrigger>
+                <DropdownMenuTrigger render={<NavigationItem active={entry.active} aria-label={`${entry.label} menu`}>{entry.icon}<span className="sr-only">{entry.label}</span></NavigationItem>} />
               </NavigationGroup>
               <DropdownMenuContent
                 side={sidebarSide === "left" ? "right" : "left"}
@@ -209,25 +201,20 @@ function SidebarNavigation({
                   {entry.items.map((item) => (
                     <DropdownMenuItem
                       key={item.id}
-                      asChild
+                      render={renderLink(item, {
+                        "aria-current": item.active ? "page" : undefined,
+                        "aria-label": item.label,
+                        onClick: handleNavigate,
+                        children: (
+                          <>{item.icon}<span>{item.label}</span></>
+                        ),
+                      })}
                       className={cn(
                         "min-h-9 cursor-pointer rounded-[var(--ds-radius-control)] [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:stroke-[1.75]",
                         item.active &&
                           "bg-selection-background text-selection-foreground shadow-[inset_2px_0_0_var(--selection-indicator)] focus:bg-selection-background focus:text-selection-foreground",
                       )}
-                    >
-                      {renderLink(item, {
-                        "aria-current": item.active ? "page" : undefined,
-                        "aria-label": item.label,
-                        onClick: handleNavigate,
-                        children: (
-                          <>
-                            {item.icon}
-                            <span className="truncate">{item.label}</span>
-                          </>
-                        ),
-                      })}
-                    </DropdownMenuItem>
+                    />
                   ))}
                 </DropdownMenuGroup>
               </DropdownMenuContent>
@@ -251,20 +238,7 @@ function SidebarNavigation({
             )}
           >
             <NavigationGroup>
-              <CollapsibleTrigger asChild>
-                <NavigationItem
-                  active={entry.active}
-                  tooltip={entry.label}
-                  aria-label={entry.label}
-                  aria-expanded={sectionOpen}
-                >
-                  {entry.icon}
-                  <span className="truncate group-data-[sidebar-state=collapsed]/shell:hidden">
-                    {entry.label}
-                  </span>
-                  <ChevronRight className="ml-auto transition-transform duration-150 ease-out group-data-[sidebar-state=collapsed]/shell:hidden group-data-[state=open]/collapsible:rotate-90" />
-                </NavigationItem>
-              </CollapsibleTrigger>
+              <CollapsibleTrigger render={<NavigationItem data-state={sectionOpen ? "open" : "closed"} active={entry.active} tooltip={entry.label} aria-label={entry.label} aria-expanded={sectionOpen}>{entry.icon}<span className="truncate group-data-[sidebar-state=collapsed]/shell:hidden">{entry.label}</span><ChevronRight className="ml-auto transition-transform duration-150 ease-out group-data-[sidebar-state=collapsed]/shell:hidden group-data-[state=open]/collapsible:rotate-90" /></NavigationItem>} />
               <CollapsibleContent
                 data-slot="sidebar-collapsible-content"
                 className="overflow-hidden"

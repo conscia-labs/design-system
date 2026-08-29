@@ -153,9 +153,7 @@ function PrimitiveCoverage() {
             </CollapsibleContent>
           </Collapsible>
           <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="outline">Open sheet</Button>
-            </SheetTrigger>
+            <SheetTrigger render={<Button variant="outline" />}>Open sheet</SheetTrigger>
             <SheetContent>
               <SheetHeader>
                 <SheetTitle>Provider details</SheetTitle>
@@ -167,9 +165,7 @@ function PrimitiveCoverage() {
                 </div>
               </SheetBody>
               <SheetFooter>
-                <SheetClose asChild>
-                  <Button variant="outline">Close sheet</Button>
-                </SheetClose>
+                <SheetClose render={<Button variant="outline" />}>Close sheet</SheetClose>
                 <Button>Save changes</Button>
               </SheetFooter>
             </SheetContent>

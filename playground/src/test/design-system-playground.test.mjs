@@ -171,16 +171,22 @@ test("button variants and sizes preserve the Conscia variant architecture", () =
   assert.match(button, /hover:bg-surface-control-hover/);
 });
 
-test("brand icon uses the published Conscia symbol and shared exports", () => {
+test("brand marks use published Conscia geometry and shared exports", () => {
   const brandIcon = read("../../../src/primitives/brand-icon.tsx");
+  const brandWordmark = read("../../../src/primitives/brand-wordmark.tsx");
   const primitives = read("../../../src/primitives/index.ts");
   const foundationPage = read("../app/foundation/page.tsx");
 
   assert.match(primitives, /\.\/brand-icon/);
+  assert.match(primitives, /\.\/brand-wordmark/);
   assert.match(brandIcon, /viewBox="0 0 240 240"/);
   assert.match(brandIcon, /fill=\"currentColor\"/);
   assert.match(brandIcon, /dark:text-white/);
+  assert.match(brandWordmark, /viewBox="0 0 496 113"/);
+  assert.match(brandWordmark, /fill=\"currentColor\"/);
+  assert.match(brandWordmark, /dark:text-white/);
   assert.match(foundationPage, /BrandIcon/);
+  assert.match(foundationPage, /BrandWordmark/);
 });
 
 test("field pattern owns help, error, disabled-compatible rhythm", () => {
@@ -330,7 +336,7 @@ test("resource detail pattern exposes summary, sections, and key-value helpers",
   assert.match(patternIndex, /\.\/resource-detail/);
 });
 
-test("dialog keeps Radix structure and exposes body and footer helpers", () => {
+test("dialog uses Base UI structure and exposes body and footer helpers", () => {
   const dialog = read("../../../src/primitives/dialog.tsx");
   const sheet = read("../../../src/primitives/sheet.tsx");
   const primitives = read("../app/primitives/page.tsx");
@@ -338,7 +344,7 @@ test("dialog keeps Radix structure and exposes body and footer helpers", () => {
   for (const exportName of ["DialogPortal", "DialogOverlay", "DialogBody", "DialogFooter", "DialogClose"]) {
     assert.match(dialog, new RegExp(exportName));
   }
-  assert.match(dialog, /@radix-ui\/react-dialog/);
+  assert.match(dialog, /@base-ui\/react\/dialog/);
   assert.match(sheet, /SheetBody/);
   assert.match(sheet, /SheetFooter/);
   assert.match(primitives, /<DialogBody>/);
@@ -350,7 +356,7 @@ test("dropdown menu exports group composition for accessible action clusters", (
   const primitiveIndex = read("../../../src/primitives/index.ts");
 
   assert.match(dropdown, /function DropdownMenuGroup/);
-  assert.match(dropdown, /DropdownMenuPrimitive\.Group/);
+  assert.match(dropdown, /Menu\.Group/);
   assert.match(dropdown, /DropdownMenuGroup,/);
   assert.match(primitiveIndex, /\.\/dropdown-menu/);
 });
@@ -364,12 +370,12 @@ test("select and menu typography use compact shared defaults", () => {
   assert.match(styles, /--ds-menu-item-size: 0\.75rem;/);
   assert.match(styles, /--ds-menu-label-size: 0\.6875rem;/);
 
-  for (const primitive of [select, dropdown, searchableSelect]) {
+  for (const primitive of [select, dropdown]) {
     assert.match(primitive, /ds-type-menu-item/);
   }
 
   for (const primitive of [select, dropdown, searchableSelect]) {
-    assert.match(primitive, /ds-type-menu-label/);
+    assert.match(primitive, primitive === searchableSelect ? /Combobox/ : /ds-type-menu-label/);
   }
 });
 

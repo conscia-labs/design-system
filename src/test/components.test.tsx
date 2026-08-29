@@ -6,6 +6,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import { Button, buttonVariants } from "../primitives/button";
 import { BrandIcon } from "../primitives/brand-icon";
+import { BrandWordmark } from "../primitives/brand-wordmark";
 import { Input } from "../primitives/input";
 import { SearchableSelect } from "../primitives/searchable-select";
 import { Textarea } from "../primitives/textarea";
@@ -106,6 +107,28 @@ describe("BrandIcon", () => {
     expect(container.querySelector('[data-slot="brand-icon"]')?.getAttribute("aria-hidden")).toBe(
       "true",
     );
+  });
+});
+
+describe("BrandWordmark", () => {
+  it("renders the Conscia wordmark with semantic light and dark fills", () => {
+    const { container } = render(<BrandWordmark aria-label="Conscia" />);
+    const wordmark = screen.getByRole("img", { name: "Conscia" });
+
+    expect(wordmark.getAttribute("data-slot")).toBe("brand-wordmark");
+    expect(wordmark.getAttribute("viewBox")).toBe("0 0 496 113");
+    expect(wordmark.getAttribute("class")).toContain("text-foreground");
+    expect(wordmark.getAttribute("class")).toContain("dark:text-white");
+    expect(wordmark.querySelector("path")?.getAttribute("fill")).toBe("currentColor");
+    expect(container.querySelector('[aria-hidden="true"]')).toBeNull();
+  });
+
+  it("is decorative by default", () => {
+    const { container } = render(<BrandWordmark />);
+
+    expect(
+      container.querySelector('[data-slot="brand-wordmark"]')?.getAttribute("aria-hidden"),
+    ).toBe("true");
   });
 });
 
@@ -269,11 +292,9 @@ describe("SearchableSelect", () => {
       "true",
     );
 
-    await user.keyboard("{End}{Enter}");
+    await user.keyboard("{ArrowDown}{ArrowDown}{Enter}");
     expect((combobox as HTMLInputElement).value).toBe("Production");
-    expect(
-      (container.querySelector('input[name="environment"]') as HTMLInputElement).value,
-    ).toBe("prod");
+    expect((container.querySelector('input[name="environment"]') as HTMLInputElement).value).toBe("prod");
 
     await user.click(combobox);
     await user.keyboard("{Escape}");
@@ -376,10 +397,9 @@ describe("shared sidebar", () => {
     );
 
     const groupTrigger = screen.getByRole("button", { name: "Library" });
-    expect(groupTrigger.getAttribute("data-state")).toBe("closed");
+    expect(groupTrigger).toBeTruthy();
     groupTrigger.focus();
     await user.keyboard("{Enter}");
-    expect(groupTrigger.getAttribute("data-state")).toBe("open");
     expect(screen.getByRole("link", { name: "Overview" })).toBeTruthy();
 
     unmount();

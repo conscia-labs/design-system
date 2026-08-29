@@ -8,11 +8,9 @@ const source = readFileSync(
 );
 
 test("searchable select exposes an accessible keyboard-operated listbox", () => {
-  assert.match(source, /role="combobox"/);
-  assert.match(source, /aria-autocomplete="list"/);
-  assert.match(source, /role="listbox"/);
-  assert.match(source, /role="option"/);
-  assert.match(source, /ArrowDown/);
-  assert.match(source, /ArrowUp/);
-  assert.match(source, /Escape/);
+  assert.match(source, /@base-ui\/react\/combobox/);
+  assert.match(source, /Combobox\.Input/);
+  assert.match(source, /Combobox\.List/);
+  assert.match(source, /Combobox\.Item/);
+  assert.match(source, /autoHighlight/);
 });

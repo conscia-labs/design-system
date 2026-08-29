@@ -1,7 +1,9 @@
 export * from "./alert";
+export * from "./alert-dialog";
 export * from "./avatar";
 export * from "./badge";
 export * from "./brand-icon";
+export * from "./brand-wordmark";
 export * from "./button";
 export * from "./card";
 export * from "./checkbox";
@@ -13,6 +15,7 @@ export * from "./field";
 export * from "./form-select";
 export * from "./input";
 export * from "./label";
+export * from "./popover";
 export * from "./select";
 export * from "./searchable-select";
 export * from "./separator";

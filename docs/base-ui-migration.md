@@ -407,6 +407,49 @@ Tooltip, Checkbox, Switch, and Collapsible families are not rewritten here.
 No specialized CompactTable, InteractiveTable, or InteractiveCard components
 were added.
 
+## Phase 4 — Base UI behavior primitives
+
+Phase 4 replaces the behavior-heavy Radix wrappers with Conscia-owned Base UI
+wrappers. Dialog, Drawer-backed Sheet, AlertDialog, Menu, Select, Combobox,
+Tabs, Tooltip, Checkbox, Switch, and Collapsible now use Base UI anatomy and
+state attributes while retaining the established Conscia names and visual
+tokens. Popover and AlertDialog are new public primitives; Toast, NumberField,
+and Base UI Field remain deferred.
+
+The SearchableSelect public API remains string-based. ConfirmationDialog now
+uses AlertDialog semantics. Existing `data-slot` markers remain internal;
+Radix-specific state variables were removed from migrated families. The
+remaining Radix Slot dependency is intentionally retained for app-shell and
+sidebar compatibility call sites scheduled for the later pattern/cleanup
+phases.
+
+### Phase 4 evidence
+
+- [x] Base UI wrappers compile, package verification passes, and Base UI is
+  bundled in the distribution.
+- [x] Radix behavior-family dependencies and imports were removed; only the
+  deferred Slot compatibility dependency remains.
+- [x] Dialog, Drawer Sheet, AlertDialog, Menu, Select, Combobox, Tabs,
+  Tooltip, Checkbox, Switch, and Collapsible wrappers are exported through the
+  Conscia primitives entrypoint.
+- [x] ConfirmationDialog and playground trigger consumers were migrated from
+  `asChild` to Base UI `render` composition.
+- [x] Contract tests pass 30/30, unit tests pass 32/32, typechecks and lint
+  pass, and
+  package artifacts pass verification.
+- [x] The complete visual and interaction browser matrix passes 40/40 on two
+  consecutive runs against the local playground.
+- [x] The playground production build passes. Consumer verification packages
+  the artifact but remains blocked only by unavailable npm registry DNS.
+
+### Phase 4 validation notes
+
+The intentional Phase 4 visual refresh updated the remaining reference-pattern
+captures after Base UI state/structure changes. Two subsequent complete runs
+passed 40/40. The first production playground build exposed a client-boundary
+issue in the source package entry; adding the existing client boundary to
+`src/index.ts` resolved it, and the build now passes.
+
 ## Progress ledger
 
 | Phase | Status | Start commit | Completion commit | Evidence |
@@ -415,7 +458,7 @@ were added.
 | Phase 1 | Complete | `53aea84` | `53aea84` | 36 visual snapshots, 4 interaction suites, two clean 40-test runs |
 | Phase 2 | Complete | `d7c1a6f` | `657e8a6` | Base UI 1.7.0, proof harness, portal convention, and bundle guard recorded; full validation passed |
 | Phase 3 | Complete | Working tree | Working tree | Conscia-owned simple primitives, IconButton, Card/Table anatomy, focused behavior tests, package verification, and refreshed visual baselines |
-| Phase 4 | Pending | Pending | Pending | |
+| Phase 4 | Complete | `1dc8aa6` | Working tree | Base UI behavior wrappers, AlertDialog/Popover, dependency cleanup, package/playground gates, and two consecutive 40/40 browser runs |
 | Phase 5 | Pending | Pending | Pending | |
 | Phase 6 | Pending | Pending | Pending | |
 | Phase 7 | Pending | Pending | Pending | |
@@ -437,7 +480,8 @@ were added.
 | 2026-08-28 | Keep Card and Table extensible through focused anatomy and variants. | Avoids multiplying primitive types while supporting the recurring product patterns identified in the audit. |
 | 2026-08-28 | Make Alert title/description relationships automatic but non-live by default. | Provides a meaningful accessible group without turning every informational alert into an announcement. |
 | 2026-08-28 | Treat `ConsciaIconButton` as a strict compatibility alias. | The alias now follows the canonical accessible IconButton contract; consumers must provide an accessible name, while `Button size="icon"` remains available during migration. |
+| 2026-08-29 | Add the client directive to the source package root entry. | Next.js consumers resolving the workspace source need the same client boundary as the built package entry when Base UI client modules are present. |
 
 ## Blockers and notes
 
-Known environment notes: the package consumer fixture cannot resolve npm registry dependencies because registry DNS is unavailable in this environment. The current Radix checkbox implementation also emits existing development hydration mismatch warnings; those are intentionally logged for the later Base UI rewrite and do not affect the committed baseline captures.
+Known environment notes: the package consumer fixture cannot resolve npm registry dependencies because registry DNS is unavailable in this environment. Development runs may still log Base UI Combobox hydration warnings while the client-side caret styling is initialized; they do not affect the production build or the passing browser matrix.

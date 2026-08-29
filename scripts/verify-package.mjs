@@ -74,6 +74,8 @@ for (const exportName of [
   "TableFooter",
   "DataTable",
   "SearchableSelect",
+  "AlertDialog",
+  "Popover",
 ]) {
   assert.equal(
     typeof packageExports[exportName],

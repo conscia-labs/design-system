@@ -433,6 +433,7 @@ function NavigationItem({
   active = false,
   tooltip,
   type,
+  "aria-expanded": ariaExpanded,
   className,
   children,
   ...props
@@ -447,6 +448,8 @@ function NavigationItem({
     <Comp
       data-slot="navigation-item"
       data-active={active ? "true" : undefined}
+      data-state={ariaExpanded === undefined ? undefined : ariaExpanded ? "open" : "closed"}
+      aria-expanded={ariaExpanded}
       type={asChild ? undefined : (type ?? "button")}
       className={cn(navigationItemClasses(active), className)}
       {...props}
@@ -461,7 +464,7 @@ function NavigationItem({
 
   return (
     <Tooltip>
-      <TooltipTrigger asChild>{item}</TooltipTrigger>
+      <TooltipTrigger render={item} />
       <TooltipContent
         side={sidebarSide === "left" ? "right" : "left"}
         align="center"

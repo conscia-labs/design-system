@@ -3,7 +3,7 @@
 import * as React from "react";
 
 import { Button } from "../primitives/button";
-import { Dialog, DialogBody, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../primitives/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogBody, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../primitives/alert-dialog";
 
 type ConfirmationDialogProps = {
   trigger: React.ReactNode;
@@ -41,24 +41,22 @@ function ConfirmationDialog({ trigger, title, description, children, confirmLabe
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent size="small">
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{description}</DialogDescription>
-        </DialogHeader>
-        <DialogBody>{children}</DialogBody>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button type="button" variant="outline" disabled={isPending}>{cancelLabel}</Button>
-          </DialogClose>
-          <Button type="button" variant={confirmVariant} disabled={isPending} onClick={confirm}>
+    <AlertDialog open={open} onOpenChange={setOpen}>
+      <AlertDialogTrigger render={trigger as React.ReactElement}>{trigger}</AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogDescription>{description}</AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogBody>{children}</AlertDialogBody>
+        <AlertDialogFooter>
+          <AlertDialogCancel render={<Button type="button" variant="outline" disabled={isPending} />}>{cancelLabel}</AlertDialogCancel>
+          <AlertDialogAction render={<Button type="button" variant={confirmVariant} disabled={isPending} onClick={confirm} />}>
             {isPending ? "Working..." : confirmLabel}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
 

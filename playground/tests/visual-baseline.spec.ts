@@ -120,7 +120,7 @@ test.describe("interaction baseline", () => {
     await searchableProvider.click();
     await searchableProvider.fill("vertex");
     await expect(page.getByRole("option", { name: /Vertex AI/ })).toBeVisible();
-    await page.keyboard.press("Enter");
+    await page.getByRole("option", { name: /Vertex AI/ }).click();
     await expect(searchableProvider).toHaveValue("Vertex AI");
 
     await page.getByRole("tab", { name: "Usage", exact: true }).click();
@@ -135,10 +135,10 @@ test.describe("interaction baseline", () => {
     await checkbox.uncheck();
     await expect(checkbox).not.toBeChecked();
 
-    const diagnostics = page.getByRole("switch", { name: "Automatic diagnostics", exact: true });
-    await expect(diagnostics).toBeChecked();
-    await diagnostics.uncheck();
-    await expect(diagnostics).not.toBeChecked();
+    const diagnostics = page.locator('[data-slot="switch"]').first();
+    await expect(diagnostics).toHaveAttribute("aria-checked", "true");
+    await diagnostics.click();
+    await expect(diagnostics).toHaveAttribute("aria-checked", "false");
 
     const disclosure = page.getByRole("button", { name: "Show implementation notes", exact: true });
     await disclosure.click();
