@@ -539,7 +539,7 @@ case.
 | Phase 2 | Complete | `d7c1a6f` | `657e8a6` | Base UI 1.7.0, proof harness, portal convention, and bundle guard recorded; full validation passed |
 | Phase 3 | Complete | Working tree | Working tree | Conscia-owned simple primitives, IconButton, Card/Table anatomy, focused behavior tests, package verification, and refreshed visual baselines |
 | Phase 4 | Complete | `1dc8aa6` | Working tree | Base UI behavior wrappers, AlertDialog/Popover, dependency cleanup, package/playground gates, and two consecutive 40/40 browser runs |
-| Phase 5 | Complete | `e40cc6a` | `6c9358a` | Shell composition migration, sidebar refinements, DataTable semantics, package cleanup, 41-test browser matrix, and validation evidence recorded |
+| Phase 5 | Complete | `e40cc6a` | `fab320e` | Shell composition migration, sidebar refinements, DataTable semantics, package cleanup, 41-test browser matrix, and validation evidence recorded |
 | Phase 6 | Pending | Pending | Pending | |
 | Phase 7 | Pending | Pending | Pending | |
 | Phase 8 | Pending | Pending | Pending | |
