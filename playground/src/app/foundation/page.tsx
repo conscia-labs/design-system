@@ -1,4 +1,10 @@
-import { Badge, BrandIcon, Button, Input } from "@conscia-labs/design-system";
+import {
+  Badge,
+  BrandIcon,
+  BrandWordmark,
+  Button,
+  Input,
+} from "@conscia-labs/design-system";
 
 import { ExampleSection, PlaygroundPage } from "@/components/page";
 
@@ -69,6 +75,9 @@ export default function FoundationPage() {
             <div className="flex items-center gap-3 rounded-[var(--ds-radius-control)] bg-surface-muted p-4">
               <BrandIcon aria-label="Conscia" className="size-10" />
               <div className="text-sm font-medium text-text-primary">Symbol mark · theme-aware</div>
+            </div>
+            <div className="flex items-center rounded-[var(--ds-radius-control)] bg-surface-muted p-4">
+              <BrandWordmark aria-label="Conscia" className="w-36 max-w-full" />
             </div>
             <div className="rounded-[var(--ds-radius-control)] bg-brand p-4 text-sm font-medium text-brand-foreground">
               Primary brand · identity and signature moments

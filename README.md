@@ -413,6 +413,20 @@ lockups, collapsed navigation identity, and other shared brand placements.
 The icon is decorative by default. Add an `aria-label` when the mark conveys
 meaning without adjacent text, and use `className` to control its size.
 
+### BrandWordmark
+
+`BrandWordmark` is the shared no-tagline Conscia lockup. It embeds the supplied
+496×113 vector geometry and uses `currentColor`, so applications do not need
+separate black and white assets or runtime asset paths. The default treatment
+matches `BrandIcon`: foreground in light mode and white in dark mode.
+
+The wordmark is decorative by default. Add an `aria-label` when it is the only
+accessible naming content, and use `className` to control its width.
+
+```tsx
+<BrandWordmark aria-label="Conscia" className="w-36" />
+```
+
 ### Sidebar variants and semantic surfaces
 
 `AppSidebar` keeps the historical dark treatment by default. Consumers that

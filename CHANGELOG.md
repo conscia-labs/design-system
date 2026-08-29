@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Add the path-free, theme-aware `BrandWordmark` primitive using the canonical
+  no-tagline Conscia vector geometry, with shared exports, documentation,
+  playground coverage, and accessible naming behavior.
+
 ## 0.4.0 - 2026-08-15
 
 - Add an opt-in `operational` density preset for admin, chat, catalog,
