@@ -166,7 +166,7 @@ test("button variants and sizes preserve the Conscia variant architecture", () =
   }
   assert.match(button, /function IconButton/);
   assert.doesNotMatch(button, /asChild/);
-  assert.match(button, /default:[\s\S]*text-primary-foreground/);
+  assert.match(button, /default:[\s\S]*text-action-foreground/);
   assert.match(button, /outline:[\s\S]*bg-surface-control/);
   assert.match(button, /hover:bg-surface-control-hover/);
 });
@@ -231,28 +231,68 @@ test("control surfaces preserve separation across light and dark themes", () => 
   );
 });
 
+test("phase 6 exposes canonical action, control, and focus tokens only", () => {
+  const styles = read("../../../src/foundation/styles.css");
+
+  for (const token of [
+    "--action",
+    "--action-foreground",
+    "--action-hover",
+    "--action-active",
+    "--action-background",
+    "--surface-inverse",
+    "--control-border",
+    "--focus",
+  ]) {
+    assert.match(styles, new RegExp(`${token}:`));
+    assert.match(styles, new RegExp(`--color-${token.slice(2)}:`));
+  }
+
+  for (const legacyToken of [
+    "--background",
+    "--foreground",
+    "--card",
+    "--popover",
+    "--primary",
+    "--secondary",
+    "--muted",
+    "--accent",
+    "--destructive",
+    "--border",
+    "--input",
+    "--ring",
+    "--sidebar",
+  ]) {
+    assert.doesNotMatch(styles, new RegExp(`${legacyToken}(?=\\s*:)`));
+    assert.doesNotMatch(styles, new RegExp(`--color-${legacyToken.slice(2)}(?=\\s*:)`));
+  }
+});
+
 test("dark foundation uses a calm, distinguishable surface and text hierarchy", () => {
   const styles = read("../../../src/foundation/styles.css");
   const darkTheme = styles.match(/:root\.dark,[\s\S]*?(?=\/\*\n \* Light sidebars)/)?.[0];
 
   assert.ok(darkTheme, "dark theme token block should be present");
-  assert.match(darkTheme, /--background: #17191c;/);
-  assert.match(darkTheme, /--card: #1d2024;/);
+  assert.match(darkTheme, /--canvas: #17191c;/);
+  assert.match(darkTheme, /--surface: #1d2024;/);
   assert.match(darkTheme, /--surface-raised: #24272c;/);
   assert.match(darkTheme, /--surface-muted: #282b31;/);
   assert.match(darkTheme, /--surface-floating: #2c2f36;/);
   assert.match(darkTheme, /--surface-overlay: #31343a;/);
-  assert.match(darkTheme, /--foreground: #eff1f4;/);
+  assert.match(darkTheme, /--text-primary: #eff1f4;/);
   assert.match(darkTheme, /--text-secondary: #d4d8df;/);
   assert.match(darkTheme, /--text-supporting: #b3bac5;/);
   assert.match(darkTheme, /--text-muted: #929aa7;/);
   assert.match(darkTheme, /--border-subtle: rgb\(255 255 255 \/ 7%\);/);
   assert.match(darkTheme, /--ds-shadow-floating: 0 16px 32px rgb\(0 0 0 \/ 30%\);/);
-  assert.doesNotMatch(darkTheme, /--background: #000000;/);
+  assert.doesNotMatch(darkTheme, /--canvas: #000000;/);
+  for (const legacyToken of ["--background:", "--card:", "--foreground:", "--primary:", "--secondary:", "--muted:", "--accent:", "--input:", "--ring:"]) {
+    assert.doesNotMatch(styles, new RegExp(legacyToken));
+  }
 
   for (const lightValue of [
-    "--background: #f9f9fa;",
-    "--card: #ffffff;",
+    "--canvas: #f9f9fa;",
+    "--surface: #ffffff;",
     "--surface-muted: #f3f4f5;",
     "--surface-raised: #ffffff;",
   ]) {
@@ -299,7 +339,7 @@ test("table states are stable for selected and hover rows", () => {
   const primitives = read("../app/primitives/page.tsx");
 
   assert.match(table, /hover:bg-surface-muted/);
-  assert.match(table, /data-\[state=selected\]:bg-accent-background/);
+  assert.match(table, /data-\[selected=true\]:bg-selection-background/);
   assert.match(dataTable, /Checkbox/);
   assert.match(dataTable, /aria-label/);
   assert.match(dataTable, /indeterminate=/);
@@ -307,7 +347,17 @@ test("table states are stable for selected and hover rows", () => {
   assert.match(entityTable, /caption\?: React\.ReactNode/);
   assert.match(entityTable, /DataTable/);
   assert.match(entityTable, /onRowClick/);
-  assert.match(primitives, /data-state="selected"/);
+  assert.match(primitives, /data-selected="true"/);
+});
+
+test("Base UI state markers replace compatibility state markers", () => {
+  const collapsible = read("../../../src/primitives/collapsible.tsx");
+  const styles = read("../../../src/foundation/styles.css");
+
+  assert.doesNotMatch(collapsible, /data-state/);
+  assert.match(collapsible, /BaseCollapsible\.Trigger data-slot="collapsible-trigger"/);
+  assert.match(styles, /\[data-slot="sidebar-collapsible-content"\]\[data-open\]/);
+  assert.match(styles, /var\(--collapsible-panel-height\)/);
 });
 
 test("page toolbar reserves a stable shared footprint for bulk actions", () => {
@@ -438,12 +488,14 @@ test("shared shell patterns expose structure without gateway-specific behavior",
   assert.match(shell, /--ds-app-sidebar-width-mobile/);
   assert.doesNotMatch(shell, /\[&>button\]:hidden/);
   assert.match(shell, /--ds-sidebar-item-height-touch/);
-  assert.match(shell, /bg-sidebar-active/);
+  assert.match(shell, /bg-sidebar-active-background/);
   assert.match(shell, /text-sidebar-active-foreground/);
   assert.match(shell, /--sidebar-active-indicator/);
-  assert.doesNotMatch(shell, /bg-accent-background text-sidebar-foreground/);
-  assert.match(styles, /--sidebar-active:/);
-  assert.match(styles, /--color-sidebar-active:/);
+  assert.doesNotMatch(shell, /bg-action-background text-sidebar-primary-text/);
+  assert.match(styles, /--sidebar-active-background:/);
+  assert.match(styles, /--color-sidebar-active-background:/);
+  assert.doesNotMatch(styles, /--sidebar:/);
+  assert.doesNotMatch(styles, /--color-sidebar:/);
   assert.match(styles, /ds-sidebar-expand/);
   assert.match(styles, /prefers-reduced-motion: reduce/);
   assert.doesNotMatch(shell, /organizationSlug/);
@@ -476,7 +528,7 @@ test("sidebar semantics resolve through light and dark scopes without a new pale
 
   assert.match(styles, /\[data-sidebar-variant="light"\]/);
   assert.match(styles, /data-sidebar-variant="auto"/);
-  assert.match(styles, /--sidebar-active: var\(--accent-background\)/);
+  assert.match(styles, /--sidebar-active-background: var\(--action-background\)/);
   assert.match(styles, /--sidebar-active-indicator: var\(--selection-indicator\)/);
   assert.match(shell, /variant\?: "light" \| "dark" \| "auto"/);
   assert.match(shell, /data-sidebar-variant=\{variant\}/);

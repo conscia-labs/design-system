@@ -79,8 +79,8 @@ export function AiModelsResourceList() {
       header: "AI Model",
       cell: (model) => (
         <div className="min-w-72">
-          <div className="font-medium text-foreground">{model.name}</div>
-          <div className="mt-0.5 max-w-md truncate text-[var(--ds-metadata)] text-muted-foreground">{model.description}</div>
+          <div className="font-medium text-text-primary">{model.name}</div>
+          <div className="mt-0.5 max-w-md truncate text-[var(--ds-metadata)] text-text-supporting">{model.description}</div>
         </div>
       )
     },
@@ -92,7 +92,7 @@ export function AiModelsResourceList() {
     {
       key: "availableThrough",
       header: "Available Through",
-      cell: (model) => <span className="text-sm text-muted-foreground">{model.availableThrough}</span>
+      cell: (model) => <span className="text-sm text-text-supporting">{model.availableThrough}</span>
     },
     {
       key: "preferredProvider",
@@ -118,7 +118,7 @@ export function AiModelsResourceList() {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-canvas">
       <PageHeader
         title="AI Models"
         description="Manage canonical AI models available to organization applications and developers."
@@ -134,7 +134,7 @@ export function AiModelsResourceList() {
       <PageToolbar
         search={
           <div className="relative">
-            <SearchIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            <SearchIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-text-supporting" />
             <Input
               aria-label="Search AI Models"
               value={query}
@@ -185,7 +185,7 @@ export function AiModelsResourceList() {
           >
             {selectedIds.size > 0 ? (
               <>
-                <span className="text-[var(--ds-metadata)] text-muted-foreground">
+                <span className="text-[var(--ds-metadata)] text-text-supporting">
                   {selectedIds.size} selected
                 </span>
                 <Button variant="outline" size="sm">
@@ -201,7 +201,7 @@ export function AiModelsResourceList() {
               </>
             ) : (
               <>
-                <span className="text-[var(--ds-metadata)] text-muted-foreground">
+                <span className="text-[var(--ds-metadata)] text-text-supporting">
                   0 selected
                 </span>
                 <Button variant="outline" size="sm" tabIndex={-1}>

@@ -5,6 +5,8 @@ The shared React component library for building clear, consistent, and accessibl
 `@conscia-labs/design-system` brings Conscia’s visual foundation, reusable interface primitives, and common product patterns together in one package. It is designed for operational applications where information density, predictable interaction, and accessibility matter.
 
 > **Package:** available publicly as [`@conscia-labs/design-system`](https://www.npmjs.com/package/@conscia-labs/design-system).
+>
+> **Migration:** upgrading an application to v1? Follow the [Design System v1 Migration Guide](https://github.com/conscia-labs/design-system/blob/main/docs/design-system-v1-migration.md).
 
 ## Why this package exists
 
@@ -503,14 +505,12 @@ an explicitly light sidebar.
 </AppShell>
 ```
 
-The default is intentionally backwards compatible. The sidebar scope exposes
-reusable semantic aliases for its canvas, header, content, hover, active,
-search, footer, text, icon, group label, count, border, and focus-ring roles.
+The sidebar scope exposes reusable semantic roles for its canvas, header,
+content, hover, active, search, footer, text, icon, group label, count,
+border, and focus-ring roles.
 Use the generated utilities such as `bg-sidebar-canvas`,
 `bg-sidebar-hover`, `text-sidebar-primary-text`, and
 `text-sidebar-metadata-text` in shared or application-owned compositions.
-Legacy aliases including `bg-sidebar`, `bg-sidebar-accent`, and
-`text-sidebar-foreground` remain supported.
 
 Form controls and outline buttons use `bg-surface-control`, with
 `bg-surface-control-hover` for the outline hover state. These semantic surfaces
@@ -529,16 +529,16 @@ Dark mode uses a calm charcoal surface ladder rather than a pure-black canvas:
 
 | Role | Token | Dark value |
 | --- | --- | --- |
-| Application canvas | `--background` / `--canvas` | `#17191c` |
-| Standard surface | `--card` / `--surface` | `#1d2024` |
+| Application canvas | `--canvas` | `#17191c` |
+| Standard surface | `--surface` | `#1d2024` |
 | Raised surface and control | `--surface-raised` / `--surface-control` | `#24272c` |
 | Muted and control-hover surface | `--surface-muted` / `--surface-control-hover` | `#282b31` |
-| Floating surface | `--surface-floating` / `--popover` | `#2c2f36` |
+| Floating surface | `--surface-floating` | `#2c2f36` |
 | Overlay surface | `--surface-overlay` | `#31343a` |
 
 The adjacent steps are intentionally close enough for a calm reading
 environment while remaining distinguishable through luminance, borders, and
-elevation. `--foreground` is a soft high-priority text role (`#eff1f4`), while
+elevation. `--text-primary` is a soft high-priority text role (`#eff1f4`), while
 `--text-secondary`, `--text-supporting`, and `--text-muted` step down to
 `#d4d8df`, `#b3bac5`, and `#929aa7`. Use the semantic `bg-surface-*` and
 `text-*` utilities instead of copying these values into an application. The
@@ -647,7 +647,7 @@ Color communicates meaning rather than palette choice:
 | --- | --- |
 | `brand` | Conscia identity and signature moments |
 | `brand-secondary` | Supporting brand expression |
-| `primary` | The primary next action |
+| `action-*` | Primary actions and their hover, active, foreground, and tinted-background roles |
 | `selection-*` | Current selection or active destination |
 | `information-*` | Informational messages and evidence |
 | `success-*` | Healthy, verified, approved, or completed states |
@@ -677,7 +677,7 @@ Prefer semantic variables over component-specific descendant selectors. This kee
 
 Accessibility is part of the component contract:
 
-- Radix-backed components provide keyboard interaction and focus management.
+- Base UI-backed components provide keyboard interaction and focus management.
 - Route-backed navigation uses semantic links and `aria-current`.
 - Dialogs and sheets provide labelled modal structure.
 - Form controls expose native labelling and validation attributes.

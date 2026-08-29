@@ -90,11 +90,11 @@ function PrimitiveCoverage() {
               </Avatar>
               <div className="min-w-0">
                 <div className="font-medium">Conscia Gateway</div>
-                <div className="text-sm text-muted-foreground">Connected and ready</div>
+                <div className="text-sm text-text-supporting">Connected and ready</div>
               </div>
               <Badge variant="success" className="ml-auto">Ready</Badge>
             </CardContent>
-            <CardFooter className="text-sm text-muted-foreground">Last checked a few moments ago.</CardFooter>
+            <CardFooter className="text-sm text-text-supporting">Last checked a few moments ago.</CardFooter>
           </Card>
           <div className="grid gap-3 sm:grid-cols-3">
             <Card variant="default"><CardContent className="p-4 text-sm">Default surface</CardContent></Card>
@@ -152,7 +152,7 @@ function PrimitiveCoverage() {
           <label className="flex items-center justify-between gap-3 text-sm">
             <span>
               <span className="block font-medium">Automatic diagnostics</span>
-              <span className="block text-muted-foreground">Run a health check after configuration changes.</span>
+              <span className="block text-text-supporting">Run a health check after configuration changes.</span>
             </span>
             <Switch checked={switchChecked} onCheckedChange={setSwitchChecked} aria-label="Automatic diagnostics" />
           </label>
@@ -163,7 +163,7 @@ function PrimitiveCoverage() {
         <div className="flex flex-wrap items-start gap-3 rounded-[var(--ds-radius-surface)] border bg-surface p-[var(--ds-surface-padding)]">
           <Collapsible className="w-full rounded-[var(--ds-radius-control)] border p-3">
             <CollapsibleTrigger className="text-sm font-medium">Show implementation notes</CollapsibleTrigger>
-            <CollapsibleContent className="pt-3 text-sm text-muted-foreground">
+            <CollapsibleContent className="pt-3 text-sm text-text-supporting">
               The baseline captures both the collapsed and expanded anatomy without changing the component implementation.
             </CollapsibleContent>
           </Collapsible>
@@ -191,9 +191,9 @@ function PrimitiveCoverage() {
       <ExampleSection title="Supporting components">
         <div className="grid gap-4 rounded-[var(--ds-radius-surface)] border bg-surface p-[var(--ds-surface-padding)]">
           <div className="flex flex-wrap items-center gap-3">
-            <span className="text-sm text-muted-foreground">Keyboard shortcut</span>
+            <span className="text-sm text-text-supporting">Keyboard shortcut</span>
             <ShortcutHint label="Command K">⌘K</ShortcutHint>
-            <span className="text-sm text-muted-foreground">Loading</span>
+            <span className="text-sm text-text-supporting">Loading</span>
             <Spinner size="sm" label="Loading model data" />
             <Spinner label="Loading" />
             <Spinner size="lg" />
@@ -205,7 +205,7 @@ function PrimitiveCoverage() {
               <Avatar><AvatarFallback>CM</AvatarFallback></Avatar>
               <Avatar><AvatarFallback>DS</AvatarFallback></Avatar>
             </AvatarGroup>
-            <span className="text-sm text-muted-foreground">Seven owners, four shown in the overflow count.</span>
+            <span className="text-sm text-text-supporting">Seven owners, four shown in the overflow count.</span>
           </div>
           <FilterBar onClearAll={() => setActiveFilters([])}>
             {activeFilters.includes("Provider") ? <FilterChip label="Provider" value="Amazon Bedrock" onRemove={() => setActiveFilters((filters) => filters.filter((filter) => filter !== "Provider"))} /> : null}

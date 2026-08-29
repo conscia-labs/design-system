@@ -15,15 +15,15 @@ function ProviderMark({ name, shortName, description, size = "default", classNam
       <div
         aria-hidden="true"
         className={cn(
-          "flex shrink-0 items-center justify-center rounded-md border border-border-subtle bg-surface-muted font-semibold tracking-tight text-foreground",
+          "flex shrink-0 items-center justify-center rounded-md border border-border-subtle bg-surface-muted font-semibold tracking-tight text-text-primary",
           size === "sm" ? "size-8 text-[10px]" : "size-10 text-xs",
         )}
       >
         {shortName}
       </div>
       <div className="min-w-0">
-        <div className="ds-type-ui truncate font-medium text-foreground">{name}</div>
-        {description ? <div className="ds-type-metadata mt-0.5 truncate text-muted-foreground">{description}</div> : null}
+        <div className="ds-type-ui truncate font-medium text-text-primary">{name}</div>
+        {description ? <div className="ds-type-metadata mt-0.5 truncate text-text-supporting">{description}</div> : null}
       </div>
     </div>
   );

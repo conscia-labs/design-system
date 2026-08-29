@@ -6,18 +6,18 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "./utils";
 
 const buttonVariants = cva(
-  "ds-type-button inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md transition-colors disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  "ds-type-button inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md transition-colors disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-focus focus-visible:ring-focus/50 focus-visible:ring-[3px] aria-invalid:ring-danger/20 dark:aria-invalid:ring-danger/40 aria-invalid:border-danger",
   {
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground shadow-xs hover:bg-accent-hover active:bg-accent-active",
+          "bg-action text-action-foreground shadow-xs hover:bg-action-hover active:bg-action-active",
         destructive:
           "bg-danger text-white shadow-xs hover:bg-danger/90 focus-visible:ring-danger/20 dark:bg-danger-background dark:text-danger-foreground dark:hover:bg-danger-border dark:focus-visible:ring-danger/40",
         outline:
-          "border border-border-default bg-surface-control text-foreground shadow-xs hover:bg-surface-control-hover hover:text-foreground",
-        secondary: "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
-        ghost: "text-foreground hover:bg-surface-muted hover:text-foreground",
+          "border border-border-default bg-surface-control text-text-primary shadow-xs hover:bg-surface-control-hover hover:text-text-primary",
+        secondary: "bg-surface-inverse text-text-inverse shadow-xs hover:bg-surface-inverse/80",
+        ghost: "text-text-primary hover:bg-surface-muted hover:text-text-primary",
         link: "text-text-link underline-offset-4 hover:underline"
       },
       size: {

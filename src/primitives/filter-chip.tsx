@@ -25,12 +25,12 @@ function FilterChip({
     <div
       data-slot="filter-chip"
       className={cn(
-        "inline-flex min-w-0 max-w-full items-center gap-1 rounded-full border border-border-default bg-surface-muted px-2 py-1 text-sm text-foreground",
+        "inline-flex min-w-0 max-w-full items-center gap-1 rounded-full border border-border-default bg-surface-muted px-2 py-1 text-sm text-text-primary",
         className,
       )}
       {...props}
     >
-      <span className="shrink-0 text-muted-foreground">{label}</span>
+      <span className="shrink-0 text-text-supporting">{label}</span>
       {value !== undefined ? <span className="min-w-0 truncate font-medium">{value}</span> : null}
       {onRemove ? (
         <IconButton
@@ -39,7 +39,7 @@ function FilterChip({
           variant="ghost"
           aria-label={removeLabel ?? fallbackRemoveLabel}
           onClick={onRemove}
-          className="-mr-1 size-5 rounded-full text-muted-foreground hover:bg-surface-control-hover hover:text-foreground"
+          className="-mr-1 size-5 rounded-full text-text-supporting hover:bg-surface-control-hover hover:text-text-primary"
         >
           <XIcon aria-hidden="true" className="size-3" />
         </IconButton>

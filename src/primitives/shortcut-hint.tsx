@@ -19,7 +19,7 @@ function ShortcutHint({
     <kbd
       data-slot="shortcut-hint"
       className={cn(
-        "inline-flex min-w-5 items-center justify-center rounded border border-border-default bg-surface-muted px-1.5 py-0.5 font-mono text-[0.6875rem] font-medium leading-none text-muted-foreground shadow-xs",
+        "inline-flex min-w-5 items-center justify-center rounded border border-border-default bg-surface-muted px-1.5 py-0.5 font-mono text-[0.6875rem] font-medium leading-none text-text-supporting shadow-xs",
         className,
       )}
       aria-hidden={accessibleLabel ? undefined : true}

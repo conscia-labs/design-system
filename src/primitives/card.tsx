@@ -4,11 +4,11 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "./utils";
 
 const cardVariants = cva(
-  "flex flex-col gap-5 rounded-lg border border-border-default py-[var(--ds-surface-padding)] text-card-foreground",
+  "flex flex-col gap-5 rounded-lg border border-border-default py-[var(--ds-surface-padding)] text-text-primary",
   {
     variants: {
       variant: {
-        default: "bg-card shadow-sm",
+        default: "bg-surface shadow-sm",
         muted: "bg-surface-muted shadow-none",
         elevated: "bg-surface-raised shadow-md",
       },
@@ -58,7 +58,7 @@ function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="card-description" className={cn("ds-type-ui text-muted-foreground", className)} {...props} />;
+  return <div data-slot="card-description" className={cn("ds-type-ui text-text-supporting", className)} {...props} />;
 }
 
 function CardContent({ className, ...props }: React.ComponentProps<"div">) {

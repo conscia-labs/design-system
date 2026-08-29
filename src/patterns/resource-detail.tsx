@@ -27,7 +27,7 @@ function ResourceSummary({
       data-slot="resource-summary"
       className={cn(
         "px-5 py-4",
-        variant === "plain" && "border-b border-border-subtle bg-background",
+        variant === "plain" && "border-b border-border-subtle bg-canvas",
         variant === "surface" &&
           "rounded-[var(--ds-radius-surface)] border border-border-subtle bg-surface",
         className,
@@ -47,12 +47,12 @@ function ResourceSummary({
             </div>
           ) : null}
           {description ? (
-            <p className="ds-type-ui mt-1 max-w-3xl text-muted-foreground">
+            <p className="ds-type-ui mt-1 max-w-3xl text-text-supporting">
               {description}
             </p>
           ) : null}
           {metadata ? (
-            <div className="ds-type-metadata mt-2 text-muted-foreground">
+            <div className="ds-type-metadata mt-2 text-text-supporting">
               {metadata}
             </div>
           ) : null}
@@ -114,7 +114,7 @@ function DetailSection({
             {title}
           </h2>
           {description ? (
-            <p className="ds-type-ui mt-1 max-w-3xl text-muted-foreground">
+            <p className="ds-type-ui mt-1 max-w-3xl text-text-supporting">
               {description}
             </p>
           ) : null}
@@ -152,7 +152,7 @@ function KeyValueItem({
 }) {
   return (
     <div data-slot="key-value-item" className="flex justify-between gap-4">
-      <dt className="text-muted-foreground">{label}</dt>
+      <dt className="text-text-supporting">{label}</dt>
       <dd
         className={cn(
           "text-right font-medium",

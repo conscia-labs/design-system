@@ -80,7 +80,7 @@ function BrandWordmark({
       aria-hidden={ariaLabel ? undefined : true}
       aria-label={ariaLabel}
       className={cn(
-        "h-auto w-36 shrink-0 text-foreground dark:text-white",
+        "h-auto w-36 shrink-0 text-text-primary dark:text-white",
         className,
       )}
       {...props}

@@ -40,8 +40,8 @@ function ValueMeter({
       {...props}
     >
       <div className="flex items-baseline justify-between gap-4 text-sm">
-        <span id={labelId} className="font-medium text-foreground">{label}</span>
-        <span className="text-muted-foreground">{resolvedValueLabel}</span>
+        <span id={labelId} className="font-medium text-text-primary">{label}</span>
+        <span className="text-text-supporting">{resolvedValueLabel}</span>
       </div>
       {percentage === null ? null : (
         <div
@@ -63,7 +63,7 @@ function ValueMeter({
           />
         </div>
       )}
-      {detail ? <div className="text-xs text-muted-foreground">{detail}</div> : null}
+      {detail ? <div className="text-xs text-text-supporting">{detail}</div> : null}
     </div>
   );
 }

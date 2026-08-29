@@ -26,7 +26,7 @@ function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
   return (
     <tr
       data-slot="table-row"
-      className={cn("h-[var(--ds-row-height)] border-b border-border-subtle transition-colors hover:bg-surface-muted/70 focus-within:bg-surface-muted/70 data-[state=selected]:bg-accent-background data-[disabled]:pointer-events-none data-[disabled]:opacity-50", className)}
+      className={cn("h-[var(--ds-row-height)] border-b border-border-subtle transition-colors hover:bg-surface-muted/70 focus-within:bg-surface-muted/70 data-[selected=true]:bg-selection-background data-[disabled]:pointer-events-none data-[disabled]:opacity-50", className)}
       {...props}
     />
   );
@@ -36,7 +36,7 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
   return (
     <th
       data-slot="table-head"
-      className={cn("ds-type-table-head h-[var(--ds-table-header-height)] whitespace-nowrap px-3 text-left align-middle uppercase text-muted-foreground", className)}
+      className={cn("ds-type-table-head h-[var(--ds-table-header-height)] whitespace-nowrap px-3 text-left align-middle uppercase text-text-supporting", className)}
       {...props}
     />
   );
@@ -47,7 +47,7 @@ function TableCell({ className, ...props }: React.ComponentProps<"td">) {
 }
 
 function TableCaption({ className, ...props }: React.ComponentProps<"caption">) {
-  return <caption data-slot="table-caption" className={cn("ds-type-metadata mt-2 text-left text-muted-foreground", className)} {...props} />;
+  return <caption data-slot="table-caption" className={cn("ds-type-metadata mt-2 text-left text-text-supporting", className)} {...props} />;
 }
 
 export {

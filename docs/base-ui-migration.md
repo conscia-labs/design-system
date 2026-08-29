@@ -1,6 +1,6 @@
 # Base UI v1 Migration
 
-Status: **Phase 5.5 complete**
+Status: **Phase 6 complete (consumer verification DNS-blocked)**
 
 Branch: `feature/base-ui-migration`
 
@@ -55,9 +55,9 @@ Kumo is used as architectural inspiration: custom styled components layered over
 - [x] Phase 4 — Rewrite behavior-heavy primitives with Base UI.
 - [x] Phase 5 — Rewrite composed patterns and application shells.
 - [x] Phase 5.5 — Add supporting primitives and interaction patterns.
-- [ ] Phase 6 — Remove Radix-specific styling and normalize tokens.
+- [x] Phase 6 — Remove Radix-specific styling and normalize tokens.
 - [ ] Phase 7 — Accessibility, interaction, responsive, and regression QA.
-- [ ] Phase 8 — Package hardening, migration guide, version `1.0.0`, and release.
+- [ ] Phase 8 — Finalize the migration guide, package hardening, version `1.0.0`, and release.
 
 Each phase requires its exit criteria and evidence to be recorded here before the next phase starts.
 
@@ -73,7 +73,11 @@ Each phase requires its exit criteria and evidence to be recorded here before th
 
 The feature branch was at `46aeb79` (`v0.3.4`) and was a clean ancestor of `main` at `064aad7` (`v0.4.0`). It was fast-forwarded without a merge commit.
 
-### Current implementation inventory
+### Pre-migration implementation inventory (historical)
+
+The following inventory records the implementation that existed before the
+Base UI rewrite. It is retained as historical evidence and is not a statement
+about the current runtime source.
 
 #### Custom Conscia-owned components to re-author
 
@@ -119,7 +123,7 @@ These remain Conscia APIs. Base UI is an internal behavior layer, not the public
 - Data/entity tables and row actions.
 - Workbench and reference patterns.
 
-#### Current Radix dependency inventory
+#### Pre-migration Radix dependency inventory (historical)
 
 The current package manifest contains these Radix dependencies and they are all migration candidates for removal:
 
@@ -140,9 +144,9 @@ The current package manifest contains these Radix dependencies and they are all 
 
 Current Radix imports are present in the primitive implementations and in `src/patterns/app-shell.tsx`. Current slot-like composition is also present in `src/primitives/button.tsx`, `src/patterns/app-shell.tsx`, `src/patterns/sidebar-navigation.tsx`, `src/patterns/confirmation-dialog.tsx`, and the playground examples.
 
-#### Styling and test inventory
+#### Pre-migration styling and test inventory (historical)
 
-- `src/foundation/styles.css` uses Radix collapsible variables and Radix-style `data-state` selectors.
+- `src/foundation/styles.css` used Radix collapsible variables and Radix-style `data-state` selectors.
 - Select styling references Radix select sizing and transform-origin variables.
 - Several playground and pattern call sites use `asChild`.
 - `playground/src/test/design-system-playground.test.mjs` asserts Radix imports and source implementation details.
@@ -610,6 +614,89 @@ implementation-specific prop.
 - [x] Package, consumer, accessibility, interaction, and visual evidence is
   recorded before starting Phase 6.
 
+## Phase 6 — Styling cleanup and semantic token normalization
+
+Phase 6 removes the remaining legacy token vocabulary from the source,
+playground, documentation, package metadata, and published CSS. The phase does
+not change component behavior or introduce a global redesign.
+
+### Canonical token contract
+
+- Actions use `action`, `action-foreground`, `action-hover`,
+  `action-active`, and `action-background`.
+- Surfaces use the existing `surface-*` roles plus `surface-inverse`.
+- Controls use `control-border` and `focus`.
+- Selection, status, brand, density, typography, and geometry tokens remain
+  Conscia-owned and continue to preserve their resolved light and dark values.
+- Sidebar styling uses canonical roles including `sidebar-canvas`,
+  `sidebar-hover`, `sidebar-active-background`, `sidebar-border`, and the
+  sidebar text/focus roles. Legacy `sidebar`, `sidebar-foreground`, and
+  `sidebar-accent` aliases are removed.
+- The Tailwind `@theme inline` bridge exposes canonical utilities only; no
+  legacy aliases are retained for external consumers.
+
+### State-marker policy
+
+- Collapsible relies on Base UI `data-panel-open` for the trigger and
+  `data-open`/`data-closed` panel state. The manually authored `data-state`
+  compatibility marker was removed.
+- DataTable emits `data-selected="true"` and `aria-selected` for selected
+  rows. `data-selected` is internal Conscia anatomy, not a public styling
+  contract.
+- Valid Base UI variables such as `--collapsible-panel-height`,
+  `--anchor-width`, and `--available-height` remain intentionally supported.
+- Domain-owned markers such as `data-sidebar-state`, `data-active`, and
+  workbench state attributes remain where they are not compatibility artifacts.
+
+### Phase 6 evidence
+
+- [x] Starting branch was clean at `9b19863` on
+  `feature/base-ui-migration`.
+- [x] Foundation variables and the Tailwind theme bridge use canonical roles
+  without legacy declarations.
+- [x] Primitive, pattern, playground, and README utility classes were
+  migrated to the canonical vocabulary.
+- [x] Collapsible and table selection compatibility markers were replaced.
+- [x] `radix-ui` was removed from package keywords.
+- [x] Package verification rejects Radix imports, `asChild`, legacy semantic
+  variables, legacy utility classes, and legacy Tailwind mappings.
+- [x] `pnpm test` passes with 33 contract tests and 42 unit tests.
+- [x] `pnpm typecheck`, `pnpm typecheck:playground`, `pnpm lint`, and
+  `pnpm lint:playground` pass.
+- [x] `pnpm test:package` passes with bundled Base UI and canonical-token
+  distribution guards.
+- [x] `pnpm build:playground` passes with all static routes generated. The
+  sandboxed attempt was classified as a process-port permission issue; the
+  permission-enabled rerun passed without a source change.
+- [x] `pnpm test:visual` passes all 42 cases in two consecutive clean runs
+  with no snapshot updates.
+- [ ] `pnpm test:consumer` remains environment-blocked after package build,
+  pack, and artifact verification because npm registry DNS is unavailable.
+
+### Phase 6 exit criteria
+
+- [x] No legacy token variables or utility classes remain in package source,
+  playground source, or shipped CSS.
+- [x] No legacy sidebar aliases remain in the token contract.
+- [x] Valid Base UI state attributes and positioning variables remain intact.
+- [x] Existing component names, behavior, appearance, dark mode, and density
+  modes remain covered by the existing browser matrix.
+- [x] Phase 6 decisions and evidence are recorded before Phase 7.
+
+### App-owner migration guide
+
+The app-owner and agent-facing guide is maintained separately from this
+internal engineering ledger at
+[`docs/design-system-v1-migration.md`](./design-system-v1-migration.md).
+It was drafted after Phase 6 so it can describe the actual canonical token
+contract, public exports, CSS entrypoints, Base UI composition rules, shell
+integration, and validation workflow.
+
+The guide is a release-track artifact, not a claim that the `1.0.0` package has
+already been published. Phase 7 and Phase 8 must revalidate it against the
+release candidate and update any changed public API, export, package, or test
+requirements before the release checklist is marked complete.
+
 ## Progress ledger
 
 | Phase | Status | Start commit | Completion commit | Evidence |
@@ -621,7 +708,7 @@ implementation-specific prop.
 | Phase 4 | Complete | `1dc8aa6` | Working tree | Base UI behavior wrappers, AlertDialog/Popover, dependency cleanup, package/playground gates, and two consecutive 40/40 browser runs |
 | Phase 5 | Complete | `e40cc6a` | `fab320e` | Shell composition migration, sidebar refinements, DataTable semantics, package cleanup, 41-test browser matrix, and validation evidence recorded |
 | Phase 5.5 | Complete | Working tree | Working tree | ShortcutHint, Spinner, AvatarGroup, FilterChip/FilterBar, CommandPalette, opt-in Toast, playground coverage, 42-test browser matrix, and packaged consumer verification |
-| Phase 6 | Pending | Pending | Pending | |
+| Phase 6 | Complete (consumer verification DNS-blocked) | `9b19863` | `3e0d098` | Canonical token cleanup, state-marker cleanup, metadata/package guards, app-owner migration guide, 33 contract + 42 unit tests, production build, and two consecutive 42/42 visual runs; consumer fixture remains DNS-blocked |
 | Phase 7 | Pending | Pending | Pending | |
 | Phase 8 | Pending | Pending | Pending | |
 
@@ -651,12 +738,18 @@ implementation-specific prop.
 | 2026-08-29 | Add `ShortcutHint`, `Spinner`, `AvatarGroup`, `FilterChip`, `FilterBar`, `CommandPalette`, and opt-in `Toast` before Phase 6. | These components address recurring product needs while keeping the primitive surface composable and avoiding speculative card/table variants. |
 | 2026-08-29 | Compose `AvatarGroup` from existing `Avatar` children and keep `FilterBar` as an active-filter strip. | Existing anatomy stays reusable, and filtering remains a pattern concern rather than a new data or toolbar abstraction. |
 | 2026-08-29 | Give `CommandPalette` explicit items and keep Toast provider/viewport opt-in. | Explicit ownership makes behavior predictable for package consumers and avoids hidden global registries or application-shell assumptions. |
+| 2026-08-29 | Use an explicit semantic token vocabulary for Phase 6 and remove legacy aliases. | A clean v1 break should publish Conscia roles directly instead of preserving shadcn-era names as hidden compatibility contracts. |
+| 2026-08-29 | Rename sidebar active styling to `sidebar-active-background` and remove raw sidebar aliases. | Sidebar roles should describe their visual intent and avoid ambiguous palette-oriented names. |
+| 2026-08-29 | Keep valid Base UI state attributes and positioning variables while removing only compatibility markers. | Base UI exposes these attributes and variables as the intended custom styling contract; removing them would break behavior or animation without reducing legacy coupling. |
+| 2026-08-29 | Maintain a separate app-owner and agent migration guide before the v1 release. | The internal ledger records repository work, while application owners need an ordered upgrade runbook, concrete API/token mappings, validation gates, and explicit stop conditions. |
 
 ## Blockers and notes
 
 Known environment notes: the package consumer fixture and production playground
 build now pass with the permission-enabled runner. Earlier Phase 0–5 records
 retain the historical npm-DNS and sandbox port limitations that affected those
-runs. Development runs may still log Base UI Combobox hydration warnings while
-the client-side caret styling is initialized; they do not affect the production
-build or the passing browser matrix.
+runs. Phase 6 consumer verification still reaches package build, pack, and
+artifact verification but cannot install the isolated fixture dependencies
+while npm registry DNS is unavailable. Development runs may still log Base UI
+Combobox hydration warnings while the client-side caret styling is initialized;
+they do not affect the production build or the passing browser matrix.

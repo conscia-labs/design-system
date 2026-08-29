@@ -175,7 +175,7 @@ function DataTable<TData>({
   const showPagination = Boolean(pagination && onPaginationChange);
 
   return (
-    <div data-slot="data-table" className={cn("bg-background", className)}>
+    <div data-slot="data-table" className={cn("bg-canvas", className)}>
       <div className={mobileRow ? "hidden md:block" : undefined}>
         <Table>
           {caption ? <TableCaption>{caption}</TableCaption> : null}
@@ -205,7 +205,7 @@ function DataTable<TData>({
                           type="button"
                           variant="ghost"
                           size="sm"
-                          className="-ml-2 h-8 gap-1.5 px-2 text-[var(--ds-metadata)] font-semibold uppercase text-muted-foreground hover:text-foreground"
+                          className="-ml-2 h-8 gap-1.5 px-2 text-[var(--ds-metadata)] font-semibold uppercase text-text-supporting hover:text-text-primary"
                           onClick={header.column.getToggleSortingHandler()}
                           aria-label={`Sort by ${meta?.label ?? header.column.id}`}
                         >
@@ -227,11 +227,11 @@ function DataTable<TData>({
               return (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() ? "selected" : undefined}
+                  data-selected={row.getIsSelected() ? "true" : undefined}
                   aria-selected={row.getIsSelected() ? "true" : undefined}
                   tabIndex={rowClickable ? 0 : undefined}
                   aria-label={rowClickable ? getRowLabel?.(row.original) ?? row.id : undefined}
-                  className={cn(rowClickable && "cursor-pointer outline-none focus-visible:ring-[3px] focus-visible:ring-ring/45")}
+                  className={cn(rowClickable && "cursor-pointer outline-none focus-visible:ring-[3px] focus-visible:ring-focus/45")}
                   onClick={() => {
                     if (rowClickable) onRowClick?.(row.original);
                   }}

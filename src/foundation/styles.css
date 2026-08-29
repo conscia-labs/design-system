@@ -77,56 +77,42 @@
 [data-appearance-scope="light"] {
   color-scheme: light;
   --radius: 0.5rem;
-  --background: #f9f9fa;
-  --foreground: #140c15;
-  --card: #ffffff;
-  --card-foreground: #140c15;
-  --popover: #ffffff;
-  --popover-foreground: #140c15;
-  --brand: #4962ff;
-  --brand-foreground: #ffffff;
-  --brand-secondary: #1c4e51;
-  --brand-secondary-foreground: #ffffff;
-  --brand-secondary-background: #eaf3f1;
-  --brand-secondary-border: #b2d4cf;
-  --primary: #3f55df;
-  --primary-foreground: #ffffff;
-  --secondary: #1e0721;
-  --secondary-foreground: #ffffff;
-  --muted: #f3f4f5;
-  --muted-foreground: #5f6270;
-  --accent: #3f55df;
-  --accent-hover: #3344c7;
-  --accent-active: #293999;
-  --accent-background: #eef0ff;
-  --accent-foreground: #ffffff;
-  --selection-background: #f0f1f6;
-  --selection-border: #aeb6e3;
-  --selection-indicator: #6672dc;
-  --selection-foreground: #242a44;
-  --destructive: #c44a53;
-  --border: #e4e5e5;
-  --input: #e4e5e5;
-  --ring: #6371d9;
-  --canvas: var(--background);
-  --surface: var(--card);
+  --canvas: #f9f9fa;
+  --surface: #ffffff;
   --surface-muted: #f3f4f5;
   --surface-raised: #ffffff;
   --surface-floating: #ffffff;
   --surface-overlay: #ffffff;
   --surface-control: var(--surface-muted);
   --surface-control-hover: var(--surface-raised);
-  --text-primary: var(--foreground);
+  --surface-inverse: #1e0721;
+  --text-primary: #140c15;
   --text-secondary: #373b4a;
   --text-supporting: #5f6270;
   --text-muted: #838692;
   --text-disabled: #a7a9b3;
   --text-inverse: #ffffff;
   --text-link: #3f4da8;
+  --brand: #4962ff;
+  --brand-foreground: #ffffff;
+  --brand-secondary: #1c4e51;
+  --brand-secondary-foreground: #ffffff;
+  --brand-secondary-background: #eaf3f1;
+  --brand-secondary-border: #b2d4cf;
+  --action: #3f55df;
+  --action-foreground: #ffffff;
+  --action-hover: #3344c7;
+  --action-active: #293999;
+  --action-background: #eef0ff;
+  --selection-background: #f0f1f6;
+  --selection-border: #aeb6e3;
+  --selection-indicator: #6672dc;
+  --selection-foreground: #242a44;
+  --control-border: #e4e5e5;
+  --focus: #6371d9;
   --border-subtle: #ececed;
   --border-default: #d9dadd;
   --border-strong: #babdc5;
-  --border-focus: var(--ring);
   --information: #28758a;
   --information-background: #eaf5f7;
   --information-border: #b8dce3;
@@ -147,31 +133,23 @@
   --neutral-background: #f3f4f5;
   --neutral-border: #d9dadd;
   --neutral-foreground: #373b4a;
-  --sidebar: #19141a;
-  --sidebar-foreground: #ffffff;
-  --sidebar-accent: rgb(255 255 255 / 7%);
-  --sidebar-active: rgb(255 255 255 / 9%);
+  --sidebar-canvas: #19141a;
+  --sidebar-header: #19141a;
+  --sidebar-content: #19141a;
+  --sidebar-hover: rgb(255 255 255 / 7%);
+  --sidebar-active-background: rgb(255 255 255 / 9%);
   --sidebar-active-foreground: #ffffff;
   --sidebar-active-indicator: #7f8ae8;
   --sidebar-border: rgb(255 255 255 / 8%);
-  /*
-   * Sidebar semantics intentionally sit on top of the existing palette. The
-   * legacy aliases above remain the compatibility surface for consumers that
-   * still use bg-sidebar and text-sidebar-foreground.
-   */
-  --sidebar-canvas: var(--sidebar);
-  --sidebar-header: var(--sidebar);
-  --sidebar-content: var(--sidebar);
-  --sidebar-hover: var(--sidebar-accent);
-  --sidebar-primary-text: var(--sidebar-foreground);
-  --sidebar-secondary-text: color-mix(in oklab, var(--sidebar-foreground) 78%, transparent);
-  --sidebar-metadata-text: color-mix(in oklab, var(--sidebar-foreground) 62%, transparent);
-  --sidebar-icon: color-mix(in oklab, var(--sidebar-foreground) 72%, transparent);
-  --sidebar-search: var(--sidebar-accent);
-  --sidebar-footer: var(--sidebar);
-  --sidebar-group-label: color-mix(in oklab, var(--sidebar-foreground) 72%, transparent);
-  --sidebar-group-count: color-mix(in oklab, var(--sidebar-foreground) 62%, transparent);
-  --sidebar-focus-ring: var(--ring);
+  --sidebar-primary-text: #ffffff;
+  --sidebar-secondary-text: color-mix(in oklab, #ffffff 78%, transparent);
+  --sidebar-metadata-text: color-mix(in oklab, #ffffff 62%, transparent);
+  --sidebar-icon: color-mix(in oklab, #ffffff 72%, transparent);
+  --sidebar-search: rgb(255 255 255 / 7%);
+  --sidebar-footer: #19141a;
+  --sidebar-group-label: color-mix(in oklab, #ffffff 72%, transparent);
+  --sidebar-group-count: color-mix(in oklab, #ffffff 62%, transparent);
+  --sidebar-focus-ring: var(--focus);
   --font-sans: "Source Sans 3 Variable", "Source Sans 3", "Source Sans", "Aptos", "Segoe UI", Arial, sans-serif;
   --ds-space-inline: 0.5rem;
   --ds-space-control: 0.625rem;
@@ -252,7 +230,7 @@
   --ds-radius-surface: 0.5rem;
   --ds-shadow-raised: 0 1px 2px rgb(20 12 21 / 6%);
   --ds-shadow-floating: 0 12px 28px rgb(20 12 21 / 10%);
-  --ds-focus-ring: 0 0 0 3px color-mix(in oklab, var(--ring) 26%, transparent);
+  --ds-focus-ring: 0 0 0 3px color-mix(in oklab, var(--focus) 26%, transparent);
   --ds-workbench-global-rail-width: 4.5rem;
   --ds-workbench-secondary-rail-width: 18.375rem;
   --ds-workbench-inspector-width: 19rem;
@@ -358,56 +336,42 @@
 :root.dark,
 :root[data-appearance="dark"] {
   color-scheme: dark;
-  --background: #17191c;
-  --foreground: #eff1f4;
-  --card: #1d2024;
-  --card-foreground: #eff1f4;
-  --popover: #2c2f36;
-  --popover-foreground: #eff1f4;
-  --brand: #6b7cff;
-  --brand-foreground: #ffffff;
-  --brand-secondary: #a3d6cf;
-  --brand-secondary-foreground: #102a2c;
-  --brand-secondary-background: #162c2d;
-  --brand-secondary-border: #315c59;
-  --primary: #5965cc;
-  --primary-foreground: #ffffff;
-  --secondary: #f3f4f5;
-  --secondary-foreground: #17181b;
-  --muted: #282b31;
-  --muted-foreground: #b3bac5;
-  --accent: #5965cc;
-  --accent-hover: #5f6bd2;
-  --accent-active: #505bb8;
-  --accent-background: #252a46;
-  --accent-foreground: #ffffff;
-  --selection-background: #2a2e3b;
-  --selection-border: #5c669b;
-  --selection-indicator: #7c86df;
-  --selection-foreground: #edf0f7;
-  --destructive: #ffa1a8;
-  --border: rgb(255 255 255 / 12%);
-  --input: rgb(255 255 255 / 12%);
-  --ring: #7c86df;
-  --canvas: var(--background);
-  --surface: var(--card);
+  --canvas: #17191c;
+  --surface: #1d2024;
   --surface-muted: #282b31;
   --surface-raised: #24272c;
   --surface-floating: #2c2f36;
   --surface-overlay: #31343a;
   --surface-control: var(--surface-raised);
   --surface-control-hover: var(--surface-muted);
-  --text-primary: var(--foreground);
+  --surface-inverse: #f3f4f5;
+  --text-primary: #eff1f4;
   --text-secondary: #d4d8df;
   --text-supporting: #b3bac5;
   --text-muted: #929aa7;
   --text-disabled: #747b87;
   --text-inverse: #17191c;
   --text-link: #aeb6ef;
+  --brand: #6b7cff;
+  --brand-foreground: #ffffff;
+  --brand-secondary: #a3d6cf;
+  --brand-secondary-foreground: #102a2c;
+  --brand-secondary-background: #162c2d;
+  --brand-secondary-border: #315c59;
+  --action: #5965cc;
+  --action-foreground: #ffffff;
+  --action-hover: #5f6bd2;
+  --action-active: #505bb8;
+  --action-background: #252a46;
+  --selection-background: #2a2e3b;
+  --selection-border: #5c669b;
+  --selection-indicator: #7c86df;
+  --selection-foreground: #edf0f7;
+  --control-border: rgb(255 255 255 / 12%);
+  --focus: #7c86df;
   --border-subtle: rgb(255 255 255 / 7%);
   --border-default: rgb(255 255 255 / 11%);
   --border-strong: rgb(255 255 255 / 18%);
-  --border-focus: var(--ring);
   --information: #8ed4df;
   --information-background: #163238;
   --information-border: #346b75;
@@ -428,26 +392,23 @@
   --neutral-background: #282b31;
   --neutral-border: rgb(255 255 255 / 12%);
   --neutral-foreground: #e5e8ed;
-  --sidebar: #151116;
-  --sidebar-foreground: #ffffff;
-  --sidebar-accent: rgb(255 255 255 / 7%);
-  --sidebar-active: rgb(255 255 255 / 9%);
+  --sidebar-canvas: #151116;
+  --sidebar-header: #151116;
+  --sidebar-content: #151116;
+  --sidebar-hover: rgb(255 255 255 / 7%);
+  --sidebar-active-background: rgb(255 255 255 / 9%);
   --sidebar-active-foreground: #ffffff;
   --sidebar-active-indicator: #7c86df;
   --sidebar-border: rgb(255 255 255 / 8%);
-  --sidebar-canvas: var(--sidebar);
-  --sidebar-header: var(--sidebar);
-  --sidebar-content: var(--sidebar);
-  --sidebar-hover: var(--sidebar-accent);
-  --sidebar-primary-text: var(--sidebar-foreground);
-  --sidebar-secondary-text: color-mix(in oklab, var(--sidebar-foreground) 78%, transparent);
-  --sidebar-metadata-text: color-mix(in oklab, var(--sidebar-foreground) 62%, transparent);
-  --sidebar-icon: color-mix(in oklab, var(--sidebar-foreground) 72%, transparent);
-  --sidebar-search: var(--sidebar-accent);
-  --sidebar-footer: var(--sidebar);
-  --sidebar-group-label: color-mix(in oklab, var(--sidebar-foreground) 72%, transparent);
-  --sidebar-group-count: color-mix(in oklab, var(--sidebar-foreground) 62%, transparent);
-  --sidebar-focus-ring: var(--ring);
+  --sidebar-primary-text: #ffffff;
+  --sidebar-secondary-text: color-mix(in oklab, #ffffff 78%, transparent);
+  --sidebar-metadata-text: color-mix(in oklab, #ffffff 62%, transparent);
+  --sidebar-icon: color-mix(in oklab, #ffffff 72%, transparent);
+  --sidebar-search: rgb(255 255 255 / 7%);
+  --sidebar-footer: #151116;
+  --sidebar-group-label: color-mix(in oklab, #ffffff 72%, transparent);
+  --sidebar-group-count: color-mix(in oklab, #ffffff 62%, transparent);
+  --sidebar-focus-ring: var(--focus);
   --ds-shadow-raised: 0 1px 2px rgb(0 0 0 / 24%);
   --ds-shadow-floating: 0 16px 32px rgb(0 0 0 / 30%);
 }
@@ -460,17 +421,14 @@
 [data-sidebar-variant="light"],
 :root:not(.dark):not([data-appearance="dark"])
   [data-sidebar-variant="auto"] {
-  --sidebar: var(--surface-muted);
-  --sidebar-foreground: var(--text-primary);
-  --sidebar-accent: var(--surface-raised);
-  --sidebar-active: var(--accent-background);
-  --sidebar-active-foreground: var(--selection-foreground);
-  --sidebar-active-indicator: var(--selection-indicator);
-  --sidebar-border: var(--border-subtle);
   --sidebar-canvas: var(--surface-muted);
   --sidebar-header: var(--surface);
   --sidebar-content: var(--surface-muted);
   --sidebar-hover: var(--surface-raised);
+  --sidebar-active-background: var(--action-background);
+  --sidebar-active-foreground: var(--selection-foreground);
+  --sidebar-active-indicator: var(--selection-indicator);
+  --sidebar-border: var(--border-subtle);
   --sidebar-primary-text: var(--text-primary);
   --sidebar-secondary-text: var(--text-secondary);
   --sidebar-metadata-text: var(--text-supporting);
@@ -479,7 +437,7 @@
   --sidebar-footer: var(--surface);
   --sidebar-group-label: var(--text-secondary);
   --sidebar-group-count: var(--text-supporting);
-  --sidebar-focus-ring: var(--border-focus);
+  --sidebar-focus-ring: var(--focus);
 }
 
 @theme inline {
@@ -487,34 +445,37 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-floating: var(--surface-floating);
+  --color-surface-overlay: var(--surface-overlay);
+  --color-surface-control: var(--surface-control);
+  --color-surface-control-hover: var(--surface-control-hover);
+  --color-surface-inverse: var(--surface-inverse);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-supporting: var(--text-supporting);
+  --color-text-muted: var(--text-muted);
+  --color-text-disabled: var(--text-disabled);
+  --color-text-inverse: var(--text-inverse);
+  --color-text-link: var(--text-link);
   --color-brand: var(--brand);
   --color-brand-foreground: var(--brand-foreground);
   --color-brand-secondary: var(--brand-secondary);
   --color-brand-secondary-foreground: var(--brand-secondary-foreground);
   --color-brand-secondary-background: var(--brand-secondary-background);
   --color-brand-secondary-border: var(--brand-secondary-border);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-hover: var(--accent-hover);
-  --color-accent-active: var(--accent-active);
-  --color-accent-background: var(--accent-background);
-  --color-accent-foreground: var(--accent-foreground);
+  --color-action: var(--action);
+  --color-action-foreground: var(--action-foreground);
+  --color-action-hover: var(--action-hover);
+  --color-action-active: var(--action-active);
+  --color-action-background: var(--action-background);
   --color-selection-background: var(--selection-background);
   --color-selection-border: var(--selection-border);
   --color-selection-indicator: var(--selection-indicator);
   --color-selection-foreground: var(--selection-foreground);
-  --color-destructive: var(--destructive);
   --color-information: var(--information);
   --color-information-background: var(--information-background);
   --color-information-border: var(--information-border);
@@ -535,37 +496,17 @@
   --color-neutral-background: var(--neutral-background);
   --color-neutral-border: var(--neutral-border);
   --color-neutral-foreground: var(--neutral-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-canvas: var(--canvas);
-  --color-surface: var(--surface);
-  --color-surface-muted: var(--surface-muted);
-  --color-surface-raised: var(--surface-raised);
-  --color-surface-floating: var(--surface-floating);
-  --color-surface-overlay: var(--surface-overlay);
-  --color-surface-control: var(--surface-control);
-  --color-surface-control-hover: var(--surface-control-hover);
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  --color-text-supporting: var(--text-supporting);
-  --color-text-muted: var(--text-muted);
-  --color-text-disabled: var(--text-disabled);
-  --color-text-inverse: var(--text-inverse);
-  --color-text-link: var(--text-link);
+  --color-control-border: var(--control-border);
+  --color-focus: var(--focus);
   --color-border-subtle: var(--border-subtle);
   --color-border-default: var(--border-default);
   --color-border-strong: var(--border-strong);
-  --color-border-focus: var(--border-focus);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-active: var(--sidebar-active);
-  --color-sidebar-active-foreground: var(--sidebar-active-foreground);
   --color-sidebar-canvas: var(--sidebar-canvas);
   --color-sidebar-header: var(--sidebar-header);
   --color-sidebar-content: var(--sidebar-content);
   --color-sidebar-hover: var(--sidebar-hover);
+  --color-sidebar-active-background: var(--sidebar-active-background);
+  --color-sidebar-active-foreground: var(--sidebar-active-foreground);
   --color-sidebar-primary-text: var(--sidebar-primary-text);
   --color-sidebar-secondary-text: var(--sidebar-secondary-text);
   --color-sidebar-metadata-text: var(--sidebar-metadata-text);
@@ -669,8 +610,8 @@
 
 @layer base {
   * {
-    border-color: var(--border);
-    outline-color: color-mix(in oklab, var(--ring) 50%, transparent);
+    border-color: var(--border-default);
+    outline-color: color-mix(in oklab, var(--focus) 50%, transparent);
   }
 
   html {
@@ -679,8 +620,8 @@
 
   body {
     min-height: 100vh;
-    background: var(--background);
-    color: var(--foreground);
+    background: var(--canvas);
+    color: var(--text-primary);
     font-family: var(--font-sans);
     font-size: var(--ds-body);
     font-weight: 400;
@@ -692,7 +633,7 @@
   h2,
   h3,
   h4 {
-    color: var(--foreground);
+    color: var(--text-primary);
     font-weight: var(--ds-title-weight);
     letter-spacing: var(--ds-title-tracking);
   }
@@ -705,7 +646,7 @@
   }
 
   ::selection {
-    background: color-mix(in oklab, var(--primary) 22%, transparent);
+    background: color-mix(in oklab, var(--action) 22%, transparent);
   }
 
   @media (prefers-reduced-motion: reduce) {

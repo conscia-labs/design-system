@@ -33,7 +33,7 @@ function PaginationControls({
   return (
     <div
       data-slot="pagination-controls"
-      className={cn("flex flex-col gap-2 border-t border-border-subtle px-5 py-3 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between", className)}
+      className={cn("flex flex-col gap-2 border-t border-border-subtle px-5 py-3 text-sm text-text-supporting sm:flex-row sm:items-center sm:justify-between", className)}
       {...props}
     >
       <div className="flex flex-wrap items-center gap-3">
@@ -51,7 +51,7 @@ function PaginationControls({
       <div className="flex items-center gap-1">
         <IconButton type="button" variant="outline" size="sm" className="size-8" aria-label="Previous page" onClick={onPrevious ?? (() => onPageChange?.(currentPage - 1))} disabled={currentPage <= 1}><ChevronLeft /></IconButton>
         {onPageChange ? pageItems(currentPage, pageCount).map((item, index) => item === "ellipsis" ? (
-          <span key={`ellipsis-${index}`} className="flex size-8 items-center justify-center text-muted-foreground" aria-hidden="true">…</span>
+          <span key={`ellipsis-${index}`} className="flex size-8 items-center justify-center text-text-supporting" aria-hidden="true">…</span>
         ) : (
           <IconButton type="button" key={item} variant={item === currentPage ? "secondary" : "ghost"} size="sm" className="size-8" aria-label={`Page ${item}`} aria-current={item === currentPage ? "page" : undefined} onClick={() => onPageChange(item)}>{item}</IconButton>
         )) : <span className="px-2 text-[var(--ds-metadata)]">Page {currentPage} of {pageCount}</span>}

@@ -247,7 +247,7 @@ function SidebarNavigation({
                 sideOffset={8}
                 className="min-w-56 rounded-[var(--ds-radius-surface)] p-1.5"
               >
-                <DropdownMenuLabel className="px-2 py-1.5 font-semibold text-muted-foreground">
+                <DropdownMenuLabel className="px-2 py-1.5 font-semibold text-text-supporting">
                   {entry.label}
                 </DropdownMenuLabel>
                 <DropdownMenuGroup>

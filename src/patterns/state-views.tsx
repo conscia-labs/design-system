@@ -22,7 +22,7 @@ function StateView({ title, description, action, icon, className, ...props }: St
         </div>
       ) : null}
       <h2 className="ds-type-section-title">{title}</h2>
-      {description ? <p className="ds-type-ui max-w-md text-muted-foreground">{description}</p> : null}
+      {description ? <p className="ds-type-ui max-w-md text-text-supporting">{description}</p> : null}
       {action ? <div className="mt-1">{action}</div> : null}
     </div>
   );
@@ -47,7 +47,7 @@ function LoadingRows({
             <div
               key={columnIndex}
               className={cn(
-                "h-3 rounded bg-muted",
+                "h-3 rounded bg-surface-muted",
                 columnIndex === 0 ? "w-44" : "w-24",
               )}
             />

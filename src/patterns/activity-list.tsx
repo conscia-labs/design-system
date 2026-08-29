@@ -21,9 +21,9 @@ function ActivityItem({ icon, title, description, metadata, status, className, .
         {icon}
       </div>
       <div className="min-w-0">
-        <div className="ds-type-ui font-medium text-foreground">{title}</div>
-        {description ? <div className="ds-type-ui mt-0.5 text-muted-foreground">{description}</div> : null}
-        {metadata ? <div className="ds-type-metadata mt-1 text-muted-foreground">{metadata}</div> : null}
+        <div className="ds-type-ui font-medium text-text-primary">{title}</div>
+        {description ? <div className="ds-type-ui mt-0.5 text-text-supporting">{description}</div> : null}
+        {metadata ? <div className="ds-type-metadata mt-1 text-text-supporting">{metadata}</div> : null}
       </div>
       {status ? <div className="shrink-0">{status}</div> : null}
     </div>

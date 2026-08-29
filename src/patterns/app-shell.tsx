@@ -263,7 +263,7 @@ function AppShell({
           data-sidebar-side={sidebarSide}
           suppressHydrationWarning
           className={cn(
-            "group/shell min-h-svh bg-canvas text-foreground",
+            "group/shell min-h-svh bg-canvas text-text-primary",
             "[--ds-app-sidebar-width:var(--ds-sidebar-width)] [--ds-app-sidebar-width-mobile:var(--ds-sidebar-width-mobile)] data-[sidebar-state=collapsed]:[--ds-app-sidebar-width:3.5rem]",
             className,
           )}
@@ -488,7 +488,7 @@ function navigationItemClasses(active?: boolean) {
     "group-data-[sidebar-state=collapsed]/shell:justify-center group-data-[sidebar-state=collapsed]/shell:px-0",
     "[&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:stroke-[1.75] [&>svg]:text-sidebar-icon",
     active &&
-      "bg-sidebar-active font-semibold text-sidebar-active-foreground shadow-[inset_3px_0_0_var(--sidebar-active-indicator)] hover:bg-sidebar-active hover:text-sidebar-active-foreground [&>svg]:text-sidebar-active-foreground",
+      "bg-sidebar-active-background font-semibold text-sidebar-active-foreground shadow-[inset_3px_0_0_var(--sidebar-active-indicator)] hover:bg-sidebar-active-background hover:text-sidebar-active-foreground [&>svg]:text-sidebar-active-foreground",
   );
 }
 
@@ -577,7 +577,7 @@ const NavigationSubItem = React.forwardRef<HTMLElement, NavigationSubItemProps>(
           "hover:bg-sidebar-hover hover:text-sidebar-primary-text focus-visible:ring-[3px] focus-visible:ring-sidebar-focus-ring",
           "group-data-[sidebar-state=collapsed]/shell:hidden [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:stroke-[1.75] [&>svg]:text-sidebar-icon",
           active &&
-            "bg-sidebar-active text-sidebar-active-foreground shadow-[inset_3px_0_0_var(--sidebar-active-indicator)] hover:bg-sidebar-active hover:text-sidebar-active-foreground [&>svg]:text-sidebar-active-foreground",
+            "bg-sidebar-active-background text-sidebar-active-foreground shadow-[inset_3px_0_0_var(--sidebar-active-indicator)] hover:bg-sidebar-active-background hover:text-sidebar-active-foreground [&>svg]:text-sidebar-active-foreground",
           className,
         ),
         ...props,
@@ -625,7 +625,7 @@ function SidebarTrigger({
     type: "button" as const,
     variant: "ghost" as const,
     className: cn(
-      "shrink-0 cursor-pointer text-muted-foreground hover:bg-surface-muted hover:text-foreground focus-visible:ring-ring",
+      "shrink-0 cursor-pointer text-text-supporting hover:bg-surface-muted hover:text-text-primary focus-visible:ring-focus",
       className,
     ),
     "aria-label": ariaLabel ?? "Toggle navigation",
@@ -783,8 +783,8 @@ function TopBar({
     <header
       data-slot="top-bar"
       className={cn(
-        "sticky top-0 z-10 flex h-[var(--ds-topbar-height)] min-h-[var(--ds-topbar-height)] shrink-0 items-center justify-between gap-3 border-b border-border-subtle bg-background/96 px-[var(--ds-topbar-padding-x)] backdrop-blur md:px-[var(--ds-topbar-padding-x-wide)]",
-        "supports-[backdrop-filter]:bg-background/88",
+        "sticky top-0 z-10 flex h-[var(--ds-topbar-height)] min-h-[var(--ds-topbar-height)] shrink-0 items-center justify-between gap-3 border-b border-border-subtle bg-canvas/96 px-[var(--ds-topbar-padding-x)] backdrop-blur md:px-[var(--ds-topbar-padding-x-wide)]",
+        "supports-[backdrop-filter]:bg-canvas/88",
         className,
       )}
       {...props}

@@ -15,7 +15,7 @@ export function PlaygroundPage({
         <div className="flex min-w-0 flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
           <div className="min-w-0">
             <h1 className="ds-type-page-title">{title}</h1>
-            <p className="ds-type-ui mt-1 max-w-3xl text-muted-foreground">{description}</p>
+            <p className="ds-type-ui mt-1 max-w-3xl text-text-supporting">{description}</p>
           </div>
           {actions}
         </div>
@@ -38,7 +38,7 @@ export function ExampleSection({
     <section className="flex min-w-0 flex-col gap-3">
       <div>
         <h2 className="ds-type-section-title">{title}</h2>
-        {description ? <p className="ds-type-ui mt-1 text-muted-foreground">{description}</p> : null}
+        {description ? <p className="ds-type-ui mt-1 text-text-supporting">{description}</p> : null}
       </div>
       {children}
     </section>

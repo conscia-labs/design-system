@@ -72,7 +72,7 @@ function BrandIcon({
       role={ariaLabel ? "img" : undefined}
       aria-hidden={ariaLabel ? undefined : true}
       aria-label={ariaLabel}
-      className={cn("size-6 shrink-0 text-foreground dark:text-white", className)}
+      className={cn("size-6 shrink-0 text-text-primary dark:text-white", className)}
       {...props}
     >
       <path d={CONSCIA_SYMBOL_PATH} fill="currentColor" />

@@ -32,7 +32,7 @@ export default function OverviewPage() {
                   <Badge variant="outline">{number}</Badge>
                   <div>
                     <div className="text-sm font-medium">{title}</div>
-                    <div className="text-[var(--ds-metadata)] text-muted-foreground">{path}</div>
+                    <div className="text-[var(--ds-metadata)] text-text-supporting">{path}</div>
                   </div>
                 </div>
               ))}
@@ -58,7 +58,7 @@ export default function OverviewPage() {
         </div>
         <aside className="h-fit rounded-[var(--ds-radius-surface)] border bg-surface p-4">
           <h2 className="text-sm font-semibold">Global controls</h2>
-          <p className="mt-1 text-sm text-muted-foreground">Controls write root attributes. Components adapt without page-specific overrides.</p>
+          <p className="mt-1 text-sm text-text-supporting">Controls write root attributes. Components adapt without page-specific overrides.</p>
           <div className="mt-4">
             <DesignPreferences />
           </div>

@@ -73,18 +73,18 @@ describe("Button", () => {
     );
 
     const button = screen.getByRole("button", { name: "Create connection" });
-    expect(button.className).toContain("bg-primary");
-    expect(button.className).toContain("text-primary-foreground");
+    expect(button.className).toContain("bg-action");
+    expect(button.className).toContain("text-action-foreground");
     expect(button.className).toContain("focus-visible:ring");
   });
 
   it("keeps every variant on an explicit semantic foreground", () => {
-    expect(buttonVariants({ variant: "default" })).toContain("text-primary-foreground");
+    expect(buttonVariants({ variant: "default" })).toContain("text-action-foreground");
     expect(buttonVariants({ variant: "destructive" })).toContain("text-white");
     expect(buttonVariants({ variant: "destructive" })).toContain("dark:text-danger-foreground");
-    expect(buttonVariants({ variant: "outline" })).toContain("text-foreground");
-    expect(buttonVariants({ variant: "secondary" })).toContain("text-secondary-foreground");
-    expect(buttonVariants({ variant: "ghost" })).toContain("text-foreground");
+    expect(buttonVariants({ variant: "outline" })).toContain("text-text-primary");
+    expect(buttonVariants({ variant: "secondary" })).toContain("text-text-inverse");
+    expect(buttonVariants({ variant: "ghost" })).toContain("text-text-primary");
     expect(buttonVariants({ variant: "link" })).toContain("text-text-link");
   });
 });
@@ -96,7 +96,7 @@ describe("BrandIcon", () => {
 
     expect(icon.getAttribute("data-slot")).toBe("brand-icon");
     expect(icon.getAttribute("viewBox")).toBe("0 0 240 240");
-    expect(icon.getAttribute("class")).toContain("text-foreground");
+    expect(icon.getAttribute("class")).toContain("text-text-primary");
     expect(icon.getAttribute("class")).toContain("dark:text-white");
     expect(icon.querySelector("path")?.getAttribute("fill")).toBe("currentColor");
     expect(container.querySelector('[aria-hidden="true"]')).toBeNull();
@@ -118,7 +118,7 @@ describe("BrandWordmark", () => {
 
     expect(wordmark.getAttribute("data-slot")).toBe("brand-wordmark");
     expect(wordmark.getAttribute("viewBox")).toBe("0 0 496 113");
-    expect(wordmark.getAttribute("class")).toContain("text-foreground");
+    expect(wordmark.getAttribute("class")).toContain("text-text-primary");
     expect(wordmark.getAttribute("class")).toContain("dark:text-white");
     expect(wordmark.querySelector("path")?.getAttribute("fill")).toBe("currentColor");
     expect(container.querySelector('[aria-hidden="true"]')).toBeNull();
@@ -443,7 +443,7 @@ describe("shared sidebar", () => {
     );
     expect(screen.getByText("3")).toBeTruthy();
     expect(activeItem.getAttribute("data-active")).toBe("true");
-    expect(activeItem.className).toContain("bg-sidebar-active");
+    expect(activeItem.className).toContain("bg-sidebar-active-background");
     expect(activeItem.className).toContain("focus-visible:ring-sidebar-focus-ring");
     expect(activeItem.className).toContain("cursor-pointer");
     expect(disabledItem.hasAttribute("disabled")).toBe(true);
@@ -589,9 +589,9 @@ describe("shared sidebar", () => {
     expect(topbar?.className).toContain("h-[var(--ds-topbar-height)]");
     expect(topbar?.className).toContain("min-h-[var(--ds-topbar-height)]");
     expect(topbar?.className).toContain("px-[var(--ds-topbar-padding-x)]");
-    expect(trigger.className).toContain("text-muted-foreground");
+    expect(trigger.className).toContain("text-text-supporting");
     expect(trigger.className).toContain("hover:bg-surface-muted");
-    expect(trigger.className).toContain("focus-visible:ring-ring");
+    expect(trigger.className).toContain("focus-visible:ring-focus");
     expect(
       container
         .querySelector('[data-slot="app-sidebar-header"]')

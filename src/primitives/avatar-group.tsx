@@ -27,7 +27,7 @@ function AvatarGroup({
       data-slot="avatar-group"
       data-size={size}
       className={cn(
-        "flex items-center [&>[data-slot=avatar]]:relative [&>[data-slot=avatar]]:z-0 [&>[data-slot=avatar]]:shrink-0 [&>[data-slot=avatar]]:ring-2 [&>[data-slot=avatar]]:ring-background [&>[data-slot=avatar]]:transition-[margin,z-index] hover:[&>[data-slot=avatar]]:z-10 data-[size=default]:gap-0 data-[size=default]:[&>[data-slot=avatar]]:-ml-2 data-[size=default]:[&>[data-slot=avatar]]:size-8 data-[size=lg]:gap-0 data-[size=lg]:[&>[data-slot=avatar]]:-ml-2.5 data-[size=lg]:[&>[data-slot=avatar]]:size-10 data-[size=sm]:gap-0 data-[size=sm]:[&>[data-slot=avatar]]:-ml-1.5 data-[size=sm]:[&>[data-slot=avatar]]:size-6 [&>[data-slot=avatar]:first-child]:ml-0",
+        "flex items-center [&>[data-slot=avatar]]:relative [&>[data-slot=avatar]]:z-0 [&>[data-slot=avatar]]:shrink-0 [&>[data-slot=avatar]]:ring-2 [&>[data-slot=avatar]]:ring-canvas [&>[data-slot=avatar]]:transition-[margin,z-index] hover:[&>[data-slot=avatar]]:z-10 data-[size=default]:gap-0 data-[size=default]:[&>[data-slot=avatar]]:-ml-2 data-[size=default]:[&>[data-slot=avatar]]:size-8 data-[size=lg]:gap-0 data-[size=lg]:[&>[data-slot=avatar]]:-ml-2.5 data-[size=lg]:[&>[data-slot=avatar]]:size-10 data-[size=sm]:gap-0 data-[size=sm]:[&>[data-slot=avatar]]:-ml-1.5 data-[size=sm]:[&>[data-slot=avatar]]:size-6 [&>[data-slot=avatar]:first-child]:ml-0",
         className,
       )}
       role="group"
@@ -37,7 +37,7 @@ function AvatarGroup({
       {overflowCount > 0 ? (
         <span
           data-slot="avatar-group-overflow"
-          className="relative z-0 inline-flex shrink-0 items-center justify-center rounded-full border-2 border-background bg-surface-muted font-medium text-muted-foreground data-[size=default]:-ml-2 data-[size=default]:size-8 data-[size=default]:text-xs data-[size=lg]:-ml-2.5 data-[size=lg]:size-10 data-[size=lg]:text-sm data-[size=sm]:-ml-1.5 data-[size=sm]:size-6 data-[size=sm]:text-[0.625rem]"
+          className="relative z-0 inline-flex shrink-0 items-center justify-center rounded-full border-2 border-canvas bg-surface-muted font-medium text-text-supporting data-[size=default]:-ml-2 data-[size=default]:size-8 data-[size=default]:text-xs data-[size=lg]:-ml-2.5 data-[size=lg]:size-10 data-[size=lg]:text-sm data-[size=sm]:-ml-1.5 data-[size=sm]:size-6 data-[size=sm]:text-[0.625rem]"
           aria-label={`${overflowCount} more ${overflowCount === 1 ? "avatar" : "avatars"}`}
           title={`${overflowCount} more ${overflowCount === 1 ? "avatar" : "avatars"}`}
         >

@@ -94,7 +94,7 @@ export default function FoundationPage() {
             <div className="ds-type-page-title">Page title</div>
             <div className="ds-type-section-title mt-3">Section title</div>
             <p className="ds-type-ui mt-2 text-text-secondary">Body text describes the operational implication of the current state without decorative emphasis.</p>
-            <div className="ds-type-metadata mt-2 text-muted-foreground">Metadata: updated 2 minutes ago</div>
+            <div className="ds-type-metadata mt-2 text-text-supporting">Metadata: updated 2 minutes ago</div>
           </div>
         </ExampleSection>
 

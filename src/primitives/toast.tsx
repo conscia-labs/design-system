@@ -149,7 +149,7 @@ function Toast({
       data-slot="toast"
       data-variant={variant}
       className={cn(
-        "pointer-events-auto relative grid w-full grid-cols-[minmax(0,1fr)_auto] gap-3 rounded-[var(--ds-radius-surface)] border bg-surface p-4 text-sm text-foreground shadow-[var(--ds-shadow-floating)] outline-none data-ending:animate-out data-starting:animate-in data-[variant=error]:border-danger-border data-[variant=error]:bg-danger-background data-[variant=error]:text-danger-foreground data-[variant=information]:border-information-border data-[variant=information]:bg-information-background data-[variant=information]:text-information-foreground data-[variant=success]:border-success-border data-[variant=success]:bg-success-background data-[variant=success]:text-success-foreground data-[variant=warning]:border-warning-border data-[variant=warning]:bg-warning-background data-[variant=warning]:text-warning-foreground",
+        "pointer-events-auto relative grid w-full grid-cols-[minmax(0,1fr)_auto] gap-3 rounded-[var(--ds-radius-surface)] border bg-surface p-4 text-sm text-text-primary shadow-[var(--ds-shadow-floating)] outline-none data-ending:animate-out data-starting:animate-in data-[variant=error]:border-danger-border data-[variant=error]:bg-danger-background data-[variant=error]:text-danger-foreground data-[variant=information]:border-information-border data-[variant=information]:bg-information-background data-[variant=information]:text-information-foreground data-[variant=success]:border-success-border data-[variant=success]:bg-success-background data-[variant=success]:text-success-foreground data-[variant=warning]:border-warning-border data-[variant=warning]:bg-warning-background data-[variant=warning]:text-warning-foreground",
         className,
       )}
       {...props}
@@ -179,11 +179,11 @@ function ToastTitle({ className, ...props }: React.ComponentProps<"h2">) {
 }
 
 function ToastDescription({ className, ...props }: React.ComponentProps<"p">) {
-  return <BaseToast.Description data-slot="toast-description" className={cn("mt-1 text-muted-foreground", className)} {...props} />;
+  return <BaseToast.Description data-slot="toast-description" className={cn("mt-1 text-text-supporting", className)} {...props} />;
 }
 
 function ToastAction({ className, ...props }: React.ComponentProps<"button">) {
-  return <BaseToast.Action data-slot="toast-action" className={cn("rounded px-2 py-1 text-xs font-medium text-text-link outline-none hover:bg-surface-muted focus-visible:ring-2 focus-visible:ring-ring", className)} {...props} />;
+  return <BaseToast.Action data-slot="toast-action" className={cn("rounded px-2 py-1 text-xs font-medium text-text-link outline-none hover:bg-surface-muted focus-visible:ring-2 focus-visible:ring-focus", className)} {...props} />;
 }
 
 function ToastClose({ "aria-label": ariaLabel = "Dismiss notification", children, className, ...props }: React.ComponentProps<"button">) {
@@ -191,7 +191,7 @@ function ToastClose({ "aria-label": ariaLabel = "Dismiss notification", children
     <BaseToast.Close
       data-slot="toast-close"
       aria-label={ariaLabel}
-      className={cn("rounded p-1 text-muted-foreground outline-none hover:bg-surface-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring", className)}
+      className={cn("rounded p-1 text-text-supporting outline-none hover:bg-surface-muted hover:text-text-primary focus-visible:ring-2 focus-visible:ring-focus", className)}
       {...props}
     >
       {children ?? <XIcon aria-hidden="true" className="size-4" />}

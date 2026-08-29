@@ -65,14 +65,14 @@ function MetricBandItem({
         </div>
       ) : null}
       <div className="grid min-w-0 gap-1">
-        <div className="ds-type-ui text-muted-foreground">{label}</div>
+        <div className="ds-type-ui text-text-supporting">{label}</div>
         {loading ? (
           <Skeleton className="h-7 w-14" />
         ) : (
           <div className="text-2xl font-semibold tracking-tight">{value ?? 0}</div>
         )}
         {detail ? (
-          <div className="ds-type-metadata text-muted-foreground">
+          <div className="ds-type-metadata text-text-supporting">
             {detail}
           </div>
         ) : null}

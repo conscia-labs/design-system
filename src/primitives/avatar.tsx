@@ -80,7 +80,7 @@ function AvatarFallback({
 }: React.ComponentProps<"div">) {
   const { status } = useAvatarContext();
 
-  return <div data-slot="avatar-fallback" className={cn("flex size-full items-center justify-center rounded-full bg-surface-muted text-xs font-medium text-muted-foreground", status === "loaded" ? "hidden" : "", className)} {...props} />;
+  return <div data-slot="avatar-fallback" className={cn("flex size-full items-center justify-center rounded-full bg-surface-muted text-xs font-medium text-text-supporting", status === "loaded" ? "hidden" : "", className)} {...props} />;
 }
 
 export { Avatar, AvatarFallback, AvatarImage };

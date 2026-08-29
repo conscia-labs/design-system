@@ -26,7 +26,7 @@ const tabRailClasses =
   "flex min-w-0 items-stretch overflow-x-auto overscroll-x-contain border-b border-border-subtle scroll-px-2 snap-x [scrollbar-width:none] [&::-webkit-scrollbar]:hidden";
 
 const navigationTabClasses =
-  "relative inline-flex h-full shrink-0 snap-start items-center justify-center gap-2 whitespace-nowrap rounded-t-[var(--ds-radius-control)] px-[var(--ds-tab-padding-x)] text-sm font-medium outline-none transition-[background-color,color,box-shadow] duration-150 after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-transparent after:transition-colors hover:bg-surface-muted focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/60 data-[active=false]:text-muted-foreground data-[active=false]:hover:text-foreground data-[active=true]:bg-selection-background data-[active=true]:font-semibold data-[active=true]:text-selection-foreground data-[active=true]:after:bg-selection-indicator";
+  "relative inline-flex h-full shrink-0 snap-start items-center justify-center gap-2 whitespace-nowrap rounded-t-[var(--ds-radius-control)] px-[var(--ds-tab-padding-x)] text-sm font-medium outline-none transition-[background-color,color,box-shadow] duration-150 after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-transparent after:transition-colors hover:bg-surface-muted focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus/60 data-[active=false]:text-text-supporting data-[active=false]:hover:text-text-primary data-[active=true]:bg-selection-background data-[active=true]:font-semibold data-[active=true]:text-selection-foreground data-[active=true]:after:bg-selection-indicator";
 
 function assignRef<T>(ref: React.Ref<T> | undefined, value: T | null) {
   if (typeof ref === "function") {
@@ -134,7 +134,7 @@ function TabsList({
         onScroll?.(event);
       }}
       className={cn(
-        "text-muted-foreground",
+        "text-text-supporting",
         resolvedVariant === "underline" && tabRailClasses,
         resolvedVariant === "underline" &&
           (resolvedSize === "compact"
@@ -181,7 +181,7 @@ function TabsTrigger({
             "data-active:bg-selection-background data-active:font-semibold data-active:text-selection-foreground data-active:after:bg-selection-indicator",
           ),
         resolvedVariant === "segmented" &&
-          "inline-flex h-full items-center justify-center gap-2 whitespace-nowrap rounded-[calc(var(--ds-radius-control)-2px)] px-3 text-sm font-medium text-muted-foreground outline-none transition-[background-color,color,box-shadow] hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/60 data-active:bg-background data-active:text-foreground data-active:shadow-xs",
+          "inline-flex h-full items-center justify-center gap-2 whitespace-nowrap rounded-[calc(var(--ds-radius-control)-2px)] px-3 text-sm font-medium text-text-supporting outline-none transition-[background-color,color,box-shadow] hover:text-text-primary focus-visible:ring-2 focus-visible:ring-focus/60 data-active:bg-canvas data-active:text-text-primary data-active:shadow-xs",
         className,
       )}
       {...props}
@@ -197,7 +197,7 @@ function TabsContent({
     <BaseTabs.Panel
       data-slot="tabs-content"
       className={cn(
-        "outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
+        "outline-none focus-visible:ring-2 focus-visible:ring-focus/50",
         className,
       )}
       {...props}

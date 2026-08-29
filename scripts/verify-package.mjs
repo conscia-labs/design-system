@@ -38,6 +38,8 @@ const bundledJavaScript = (
     (await findJavaScriptFiles("dist")).map((file) => readFile(file, "utf8")),
   )
 ).join("\n");
+const legacyVariablePattern = /--(?:background|foreground|card|card-foreground|popover|popover-foreground|primary|primary-foreground|secondary|secondary-foreground|muted|muted-foreground|accent|accent-hover|accent-active|accent-background|accent-foreground|destructive|border|input|ring|sidebar)(?=\s*:)/;
+const legacyUtilityPattern = /(?<![a-zA-Z0-9_-])(?:bg|text|border|ring|fill)-(?:background|foreground|card|card-foreground|popover|popover-foreground|primary|primary-foreground|secondary|secondary-foreground|muted|muted-foreground|accent|accent-hover|accent-active|accent-background|accent-foreground|destructive|border|input|ring|sidebar|sidebar-foreground|sidebar-accent|sidebar-active)(?![a-zA-Z0-9_-])/;
 assert.doesNotMatch(
   bundledJavaScript,
   /(?:from|import\()\s*["']@base-ui\/react(?:\/[^"']*)?["']/,
@@ -53,10 +55,37 @@ assert.doesNotMatch(
   /asChild/,
   "The v1 distribution must not retain the removed asChild API.",
 );
+assert.doesNotMatch(
+  bundledJavaScript,
+  legacyVariablePattern,
+  "The distribution must not retain legacy semantic token variables.",
+);
+assert.doesNotMatch(
+  bundledJavaScript,
+  legacyUtilityPattern,
+  "The distribution must not retain legacy semantic utility classes.",
+);
 
 const foundationCss = await readFile("dist/foundation.css", "utf8");
 const tailwindCss = await readFile("dist/tailwind.css", "utf8");
 const standaloneCss = await readFile("dist/standalone.css", "utf8");
+const bundledCss = `${foundationCss}\n${tailwindCss}\n${standaloneCss}`;
+
+assert.doesNotMatch(
+  bundledCss,
+  legacyVariablePattern,
+  "Published CSS must not retain legacy semantic token variables.",
+);
+assert.doesNotMatch(
+  bundledCss,
+  /--color-(?:background|foreground|card|card-foreground|popover|popover-foreground|primary|primary-foreground|secondary|secondary-foreground|muted|muted-foreground|accent|accent-hover|accent-active|accent-background|accent-foreground|destructive|border|input|ring|sidebar|sidebar-foreground|sidebar-accent|sidebar-active)(?=\s*:)/,
+  "Published CSS must not expose legacy Tailwind color mappings.",
+);
+assert.doesNotMatch(
+  bundledCss,
+  legacyUtilityPattern,
+  "Published CSS must not emit legacy semantic utility classes.",
+);
 
 assert.match(foundationCss, /@theme inline/);
 assert.match(foundationCss, /@custom-variant dark/);
@@ -72,6 +101,12 @@ assert.doesNotMatch(
   utilitySource,
   /^"use client";/,
   "Server-safe utilities must remain importable from React Server Components.",
+);
+
+const packageManifest = JSON.parse(await readFile("package.json", "utf8"));
+assert.ok(
+  !packageManifest.keywords?.includes("radix-ui"),
+  "Package metadata must not advertise Radix.",
 );
 
 const packageExports = await import("@conscia-labs/design-system");

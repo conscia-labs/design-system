@@ -35,7 +35,7 @@ function FieldLabel({
   return (
     <label
       data-slot="field-label"
-      className={cn("ds-type-label text-foreground", className)}
+      className={cn("ds-type-label text-text-primary", className)}
       {...props}
     />
   );
@@ -48,7 +48,7 @@ function FieldDescription({
   return (
     <p
       data-slot="field-description"
-      className={cn("ds-type-metadata mt-[var(--ds-field-message-gap)] text-muted-foreground", className)}
+      className={cn("ds-type-metadata mt-[var(--ds-field-message-gap)] text-text-supporting", className)}
       {...props}
     />
   );

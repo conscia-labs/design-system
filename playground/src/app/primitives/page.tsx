@@ -118,7 +118,7 @@ export default function PrimitivesPage() {
                   <Checkbox defaultChecked className="mt-0.5" />
                   <span>
                     Include this model in default developer access.
-                    <span className="block text-[var(--ds-metadata)] text-muted-foreground">Checkbox alignment remains stable with multi-line labels.</span>
+                    <span className="block text-[var(--ds-metadata)] text-text-supporting">Checkbox alignment remains stable with multi-line labels.</span>
                   </span>
                 </label>
               </FieldGroup>
@@ -151,7 +151,7 @@ export default function PrimitivesPage() {
                 <NavigationTab href="#tabs-activity">Activity</NavigationTab>
               </NavigationTabsList>
             </NavigationTabs>
-            <p className="pt-3 text-sm text-muted-foreground">
+            <p className="pt-3 text-sm text-text-supporting">
               Routed resource navigation exposes the current page and keeps the full tab target interactive.
             </p>
             <Tabs defaultValue="overview" className="pt-4">
@@ -160,9 +160,9 @@ export default function PrimitivesPage() {
                 <TabsTrigger value="usage">Usage</TabsTrigger>
                 <TabsTrigger value="activity">Activity</TabsTrigger>
               </TabsList>
-              <TabsContent value="overview" className="pt-3 text-sm text-muted-foreground">Shared tab behavior with stable selected state.</TabsContent>
-              <TabsContent value="usage" className="pt-3 text-sm text-muted-foreground">Usage view placeholder.</TabsContent>
-              <TabsContent value="activity" className="pt-3 text-sm text-muted-foreground">Activity view placeholder.</TabsContent>
+              <TabsContent value="overview" className="pt-3 text-sm text-text-supporting">Shared tab behavior with stable selected state.</TabsContent>
+              <TabsContent value="usage" className="pt-3 text-sm text-text-supporting">Usage view placeholder.</TabsContent>
+              <TabsContent value="activity" className="pt-3 text-sm text-text-supporting">Activity view placeholder.</TabsContent>
             </Tabs>
             <Tabs variant="segmented" defaultValue="table" className="rounded-[var(--ds-radius-surface)] border bg-surface p-4">
               <TabsList aria-label="Display mode example">
@@ -170,9 +170,9 @@ export default function PrimitivesPage() {
                 <TabsTrigger value="list">List</TabsTrigger>
                 <TabsTrigger value="compact">Compact</TabsTrigger>
               </TabsList>
-              <TabsContent value="table" className="pt-3 text-sm text-muted-foreground">Segmented tabs are reserved for compact mode switching.</TabsContent>
-              <TabsContent value="list" className="pt-3 text-sm text-muted-foreground">List mode placeholder.</TabsContent>
-              <TabsContent value="compact" className="pt-3 text-sm text-muted-foreground">Compact mode placeholder.</TabsContent>
+              <TabsContent value="table" className="pt-3 text-sm text-text-supporting">Segmented tabs are reserved for compact mode switching.</TabsContent>
+              <TabsContent value="list" className="pt-3 text-sm text-text-supporting">List mode placeholder.</TabsContent>
+              <TabsContent value="compact" className="pt-3 text-sm text-text-supporting">Compact mode placeholder.</TabsContent>
             </Tabs>
           </ExampleSection>
 
@@ -188,7 +188,7 @@ export default function PrimitivesPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  <TableRow data-state="selected">
+                  <TableRow data-selected="true">
                     <TableCell>Claude Sonnet 4</TableCell>
                     <TableCell><Badge variant="success">Available</Badge></TableCell>
                     <TableCell>Amazon Bedrock</TableCell>
@@ -199,7 +199,7 @@ export default function PrimitivesPage() {
                     <TableCell>Amazon Bedrock</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell colSpan={3} className="text-center text-muted-foreground">Empty state appears in the table content region when no rows match.</TableCell>
+                    <TableCell colSpan={3} className="text-center text-text-supporting">Empty state appears in the table content region when no rows match.</TableCell>
                   </TableRow>
                 </TableBody>
                 <TableFooter>

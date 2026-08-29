@@ -126,11 +126,11 @@ function CommandPalette({
               itemToStringValue={(item) => item.id}
             >
               <div className="flex items-center gap-2 border-b border-border-subtle px-4">
-                <SearchIcon aria-hidden="true" className="size-4 shrink-0 text-muted-foreground" />
+                <SearchIcon aria-hidden="true" className="size-4 shrink-0 text-text-supporting" />
                 <Combobox.Input
                   aria-label="Search commands"
                   autoFocus
-                  className="ds-type-control h-12 min-w-0 flex-1 bg-transparent outline-none placeholder:text-muted-foreground"
+                  className="ds-type-control h-12 min-w-0 flex-1 bg-transparent outline-none placeholder:text-text-supporting"
                   placeholder={placeholder}
                 />
               </div>
@@ -139,14 +139,14 @@ function CommandPalette({
                 className="max-h-[min(24rem,calc(100vh-10rem))] overflow-y-auto p-2 outline-none"
               >
                 {filteredItems.length === 0 ? (
-                  <div role="status" className="px-3 py-8 text-center text-sm text-muted-foreground">
+                  <div role="status" className="px-3 py-8 text-center text-sm text-text-supporting">
                     {emptyMessage}
                   </div>
                 ) : null}
                 {filteredItems.map((item, index) => (
                     <React.Fragment key={item.id}>
                     {item.group && (index === 0 || filteredItems[index - 1]?.group !== item.group) ? (
-                        <div role="presentation" className="px-3 pb-1 pt-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground first:pt-1">
+                        <div role="presentation" className="px-3 pb-1 pt-3 text-xs font-semibold uppercase tracking-wide text-text-supporting first:pt-1">
                           {item.group}
                         </div>
                       ) : null}
@@ -154,14 +154,14 @@ function CommandPalette({
                         index={index}
                         value={item}
                         disabled={item.disabled}
-                        className="data-highlighted:bg-surface-muted data-highlighted:text-foreground relative flex min-w-0 items-start gap-3 rounded-md px-3 py-2.5 text-left outline-none data-disabled:pointer-events-none data-disabled:opacity-50"
+                        className="data-highlighted:bg-surface-muted data-highlighted:text-text-primary relative flex min-w-0 items-start gap-3 rounded-md px-3 py-2.5 text-left outline-none data-disabled:pointer-events-none data-disabled:opacity-50"
                       >
-                        {item.icon ? <span className="mt-0.5 flex size-4 shrink-0 items-center justify-center text-muted-foreground">{item.icon}</span> : null}
+                        {item.icon ? <span className="mt-0.5 flex size-4 shrink-0 items-center justify-center text-text-supporting">{item.icon}</span> : null}
                         <span className="min-w-0 flex-1">
                           <span className="block truncate text-sm font-medium">{item.label}</span>
-                          {item.description ? <span className="mt-0.5 block truncate text-xs text-muted-foreground">{item.description}</span> : null}
+                          {item.description ? <span className="mt-0.5 block truncate text-xs text-text-supporting">{item.description}</span> : null}
                         </span>
-                        {item.shortcut ? <span className="shrink-0 text-xs text-muted-foreground">{item.shortcut}</span> : null}
+                        {item.shortcut ? <span className="shrink-0 text-xs text-text-supporting">{item.shortcut}</span> : null}
                       </Combobox.Item>
                     </React.Fragment>
                 ))}

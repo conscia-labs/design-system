@@ -39,7 +39,7 @@ function PageHeader({
     actionNode ??
     (action ? (
       <a
-        className="ds-type-button inline-flex h-[var(--ds-control-height)] items-center justify-center gap-2 whitespace-nowrap rounded-md bg-primary px-3 py-2 text-primary-foreground shadow-xs outline-none transition-colors hover:bg-accent-hover focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+        className="ds-type-button inline-flex h-[var(--ds-control-height)] items-center justify-center gap-2 whitespace-nowrap rounded-md bg-action px-3 py-2 text-action-foreground shadow-xs outline-none transition-colors hover:bg-action-hover focus-visible:border-focus focus-visible:ring-3 focus-visible:ring-focus/50"
         href={action.href}
       >
         {action.label}
@@ -49,7 +49,7 @@ function PageHeader({
   return (
     <header
       data-slot="page-header"
-      className={cn("flex flex-col gap-3 border-b border-border-subtle bg-background px-5 py-4 lg:flex-row lg:items-start lg:justify-between", className)}
+      className={cn("flex flex-col gap-3 border-b border-border-subtle bg-canvas px-5 py-4 lg:flex-row lg:items-start lg:justify-between", className)}
       {...props}
     >
       <div className="min-w-0">
@@ -57,8 +57,8 @@ function PageHeader({
           <h1 className="ds-type-page-title truncate">{title}</h1>
           {status}
         </div>
-        {description ? <p className="ds-type-ui mt-1 max-w-3xl text-muted-foreground">{description}</p> : null}
-        {metadata ? <div className="ds-type-metadata mt-2 text-muted-foreground">{metadata}</div> : null}
+        {description ? <p className="ds-type-ui mt-1 max-w-3xl text-text-supporting">{description}</p> : null}
+        {metadata ? <div className="ds-type-metadata mt-2 text-text-supporting">{metadata}</div> : null}
       </div>
       {resolvedActions ? <div className="flex shrink-0 flex-wrap items-center gap-2">{resolvedActions}</div> : null}
     </header>

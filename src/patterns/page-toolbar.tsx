@@ -21,7 +21,7 @@ function PageToolbar({
   return (
     <div
       data-slot="page-toolbar"
-      className={cn("grid gap-2 border-b border-border-subtle bg-background px-5 py-3 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center", className)}
+      className={cn("grid gap-2 border-b border-border-subtle bg-canvas px-5 py-3 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center", className)}
       {...props}
     >
       <div className="flex min-w-0 flex-1 flex-col gap-2 sm:flex-row sm:items-center">
