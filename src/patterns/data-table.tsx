@@ -17,7 +17,7 @@ import { ArrowDown, ArrowUp, ChevronsUpDown } from "lucide-react";
 
 import { Button } from "../primitives/button";
 import { Checkbox } from "../primitives/checkbox";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../primitives/table";
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "../primitives/table";
 import { cn } from "../primitives/utils";
 import { PaginationControls } from "./pagination";
 
@@ -51,6 +51,7 @@ type DataTableProps<TData> = {
   pageSizeOptions?: number[];
   totalLabel?: React.ReactNode;
   mobileRow?: (item: TData) => React.ReactNode;
+  caption?: React.ReactNode;
   empty?: React.ReactNode;
   className?: string;
 };
@@ -76,6 +77,7 @@ function DataTable<TData>({
   pageSizeOptions,
   totalLabel,
   mobileRow,
+  caption,
   empty,
   className,
 }: DataTableProps<TData>) {
@@ -94,8 +96,8 @@ function DataTable<TData>({
         header: ({ table }) => (
           <Checkbox
             aria-label="Select all rows on this page"
-            checked={table.getIsAllPageRowsSelected() || table.getIsSomePageRowsSelected()}
-            data-indeterminate={table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected() ? "true" : undefined}
+            checked={table.getIsAllPageRowsSelected()}
+            indeterminate={table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()}
             onCheckedChange={(checked) => table.toggleAllPageRowsSelected(Boolean(checked))}
           />
         ),
@@ -176,6 +178,7 @@ function DataTable<TData>({
     <div data-slot="data-table" className={cn("bg-background", className)}>
       <div className={mobileRow ? "hidden md:block" : undefined}>
         <Table>
+          {caption ? <TableCaption>{caption}</TableCaption> : null}
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -225,6 +228,7 @@ function DataTable<TData>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() ? "selected" : undefined}
+                  aria-selected={row.getIsSelected() ? "true" : undefined}
                   tabIndex={rowClickable ? 0 : undefined}
                   aria-label={rowClickable ? getRowLabel?.(row.original) ?? row.id : undefined}
                   className={cn(rowClickable && "cursor-pointer outline-none focus-visible:ring-[3px] focus-visible:ring-ring/45")}

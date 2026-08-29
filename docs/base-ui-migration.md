@@ -1,6 +1,6 @@
 # Base UI v1 Migration
 
-Status: **Phase 3 complete**
+Status: **Phase 5 complete**
 
 Branch: `feature/base-ui-migration`
 
@@ -52,8 +52,8 @@ Kumo is used as architectural inspiration: custom styled components layered over
 - [x] Phase 1 — Playground visual and interaction baseline.
 - [x] Phase 2 — Base UI dependency, packaging, and implementation conventions.
 - [x] Phase 3 — Rewrite simple custom primitives.
-- [ ] Phase 4 — Rewrite behavior-heavy primitives with Base UI.
-- [ ] Phase 5 — Rewrite composed patterns and application shells.
+- [x] Phase 4 — Rewrite behavior-heavy primitives with Base UI.
+- [x] Phase 5 — Rewrite composed patterns and application shells.
 - [ ] Phase 6 — Remove Radix-specific styling and normalize tokens.
 - [ ] Phase 7 — Accessibility, interaction, responsive, and regression QA.
 - [ ] Phase 8 — Package hardening, migration guide, version `1.0.0`, and release.
@@ -421,7 +421,8 @@ uses AlertDialog semantics. Existing `data-slot` markers remain internal;
 Radix-specific state variables were removed from migrated families. The
 remaining Radix Slot dependency is intentionally retained for app-shell and
 sidebar compatibility call sites scheduled for the later pattern/cleanup
-phases.
+phases. Phase 5 completes those call-site migrations and removes the
+dependency.
 
 ### Phase 4 evidence
 
@@ -450,6 +451,85 @@ passed 40/40. The first production playground build exposed a client-boundary
 issue in the source package entry; adding the existing client boundary to
 `src/index.ts` resolved it, and the build now passes.
 
+## Phase 5 — Composed patterns and application shells
+
+Phase 5 migrates the application shell and its consumers onto the Phase 4
+composition conventions, then adds focused refinements to the native sidebar
+and operational table patterns. This phase does not introduce a new
+NavigationMenu abstraction, new table types, or a visual redesign.
+
+### Implemented contract
+
+- `AppSidebar` now defaults to `variant="auto"`: light mode uses the light
+  surface hierarchy and dark mode retains the dark identity. Explicit `light`
+  and `dark` variants remain available.
+- `NavigationItem` and `NavigationSubItem` are ref-forwarding Conscia pattern
+  components using Base UI `useRender`; `asChild` and the Radix Slot
+  compatibility path are removed from the shell.
+- Collapsed section flyouts use the dedicated Base UI menu link anatomy so
+  route selection both navigates and dismisses the flyout. Mobile navigation
+  closes the Drawer-backed shell as soon as a link is selected.
+- Sidebar entries support optional visual `badge` and `count` metadata with
+  explicit accessible labels. The metadata is hidden from duplicate assistive
+  technology announcements while the link name includes the meaningful text.
+- `ProductIdentity` supports an optional `collapsedLabel` fallback for a
+  compact monogram or mark when the shell is collapsed.
+- Sidebar content exposes scroll-before and scroll-after state from a small
+  `ResizeObserver`/scroll subscription. CSS fade affordances appear only when
+  content overflows, and reduced-motion users receive no fade transition.
+  Active-section auto-scroll and additional sidebar primitives remain out of
+  scope.
+- `DataTable` accepts an optional semantic `caption`, renders an indeterminate
+  select-all checkbox for partial page selection, and exposes `aria-selected`
+  on selected rows. `EntityTable` forwards the caption without creating a new
+  table type.
+- The playground demonstrates the sidebar metadata and collapsed identity,
+  and the AI Models table uses a deterministic caption fixture.
+- `@radix-ui/react-slot` is removed from the runtime manifest and lockfile;
+  no source import remains. Package verification now rejects Radix runtime
+  imports and the removed `asChild` API from bundled JavaScript.
+
+### Phase 5 evidence
+
+- [x] App-shell and sidebar consumers use Base UI `render` composition and no
+  longer import Radix Slot or expose `asChild`.
+- [x] Desktop active state, collapse state, collapsed flyout navigation, menu
+  dismissal, mobile Drawer navigation, and mobile link dismissal are covered
+  by browser interaction tests.
+- [x] Sidebar badge/count semantics, appearance-aware default styling,
+  collapsed identity fallback, and table caption/selection semantics are
+  covered by unit and contract tests.
+- [x] Existing behavior-heavy primitives remain unchanged; no new
+  NavigationMenu, InteractiveTable, or specialized table primitive was added.
+- [x] Intentional visual refresh updated the 12 `/reference-patterns`
+  snapshots across desktop/mobile, appearance, and density states to include
+  the semantic table caption. No unrelated route or theme changes were
+  accepted.
+- [x] `pnpm test` passes: 31 contract tests and 36 unit tests.
+- [x] `pnpm typecheck`, `pnpm typecheck:playground`, `pnpm lint`, and
+  `pnpm lint:playground` pass.
+- [x] `pnpm test:package` passes, including build, `publint`, bundled Base UI
+  verification, no-Radix/no-`asChild` guards, and public export checks.
+- [x] `pnpm build:playground` passes with all static routes generated. The
+  first sandboxed attempt was classified as an environment permission issue
+  when Turbopack tried to bind a process port; the permission-enabled rerun
+  passed without a source change.
+- [x] `pnpm test:visual` passes 41/41 in two consecutive clean runs. The
+  suite now contains 36 visual cases and 5 interaction suites.
+- [x] `pnpm test:consumer` reaches package build, pack, and artifact
+  verification, then remains blocked by unavailable npm registry DNS while
+  installing the isolated fixture dependencies.
+
+### Phase 5 validation notes
+
+The first post-change visual run identified only the expected caption changes
+in the 12 reference-pattern captures. Those snapshots were regenerated once,
+then the complete 41-test suite passed twice consecutively. Browser validation
+also caught and corrected a subtle integration issue: Base UI `Menu.Item`
+closed the collapsed flyout without allowing the Next.js link to navigate;
+the sidebar now uses `Menu.LinkItem` with `closeOnClick` for that route-backed
+case.
+
 ## Progress ledger
 
 | Phase | Status | Start commit | Completion commit | Evidence |
@@ -459,7 +539,7 @@ issue in the source package entry; adding the existing client boundary to
 | Phase 2 | Complete | `d7c1a6f` | `657e8a6` | Base UI 1.7.0, proof harness, portal convention, and bundle guard recorded; full validation passed |
 | Phase 3 | Complete | Working tree | Working tree | Conscia-owned simple primitives, IconButton, Card/Table anatomy, focused behavior tests, package verification, and refreshed visual baselines |
 | Phase 4 | Complete | `1dc8aa6` | Working tree | Base UI behavior wrappers, AlertDialog/Popover, dependency cleanup, package/playground gates, and two consecutive 40/40 browser runs |
-| Phase 5 | Pending | Pending | Pending | |
+| Phase 5 | Complete | `e40cc6a` | `6c9358a` | Shell composition migration, sidebar refinements, DataTable semantics, package cleanup, 41-test browser matrix, and validation evidence recorded |
 | Phase 6 | Pending | Pending | Pending | |
 | Phase 7 | Pending | Pending | Pending | |
 | Phase 8 | Pending | Pending | Pending | |
@@ -481,7 +561,13 @@ issue in the source package entry; adding the existing client boundary to
 | 2026-08-28 | Make Alert title/description relationships automatic but non-live by default. | Provides a meaningful accessible group without turning every informational alert into an announcement. |
 | 2026-08-28 | Treat `ConsciaIconButton` as a strict compatibility alias. | The alias now follows the canonical accessible IconButton contract; consumers must provide an accessible name, while `Button size="icon"` remains available during migration. |
 | 2026-08-29 | Add the client directive to the source package root entry. | Next.js consumers resolving the workspace source need the same client boundary as the built package entry when Base UI client modules are present. |
+| 2026-08-29 | Make the native sidebar appearance-aware by default while retaining explicit light/dark variants. | The shell should inherit the product appearance without removing the ability to preserve a deliberately dark navigation identity. |
+| 2026-08-29 | Use Base UI `Menu.LinkItem` for collapsed route flyouts. | Route-backed menu entries must preserve native navigation and close the flyout after selection; action items and links have different Base UI behavior contracts. |
+| 2026-08-29 | Keep sidebar metadata opt-in and provide separate accessible labels. | Badges and counts improve operational scanning without forcing decorative presentation text into every navigation name. |
+| 2026-08-29 | Add overflow fades driven by measured scroll state, without active-section auto-scroll. | The sidebar needs a quiet affordance for hidden content while keeping route changes and focus movement predictable. |
+| 2026-08-29 | Strengthen `DataTable` with caption and ARIA selection semantics instead of adding table variants. | Semantic anatomy improves real consumers without multiplying the primitive surface or replacing the existing operational pattern. |
+| 2026-08-29 | Remove `@radix-ui/react-slot` after shell migration. | All remaining shell consumers now use Base UI composition, so retaining the compatibility dependency would preserve an implementation path that v1 explicitly removes. |
 
 ## Blockers and notes
 
-Known environment notes: the package consumer fixture cannot resolve npm registry dependencies because registry DNS is unavailable in this environment. Development runs may still log Base UI Combobox hydration warnings while the client-side caret styling is initialized; they do not affect the production build or the passing browser matrix.
+Known environment notes: the package consumer fixture cannot resolve npm registry dependencies because registry DNS is unavailable in this environment. The first sandboxed playground production build also could not bind the process port required by Turbopack; the permission-enabled rerun passed. Development runs may still log Base UI Combobox hydration warnings while the client-side caret styling is initialized; they do not affect the production build or the passing browser matrix.

@@ -248,6 +248,7 @@ export function AiModelsResourceList() {
           <EntityTable
             items={filteredModels}
             columns={columns}
+            caption="AI Models available to this organization"
             getRowId={(model) => model.id}
             selectedIds={selectedIds}
             onSelectionChange={setSelectedIds}

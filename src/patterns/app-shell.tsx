@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
+import { useRender } from "@base-ui/react/use-render";
 import { PanelLeftIcon, Search, X } from "lucide-react";
 
 import { Button, IconButton, type IconButtonProps } from "../primitives/button";
@@ -127,6 +127,57 @@ function useMediaQuery(query: string) {
   return matches;
 }
 
+function useSidebarOverflow() {
+  const contentRef = React.useRef<HTMLDivElement | null>(null);
+  const subscribe = React.useCallback((onStoreChange: () => void) => {
+    const element = contentRef.current;
+
+    if (!element) {
+      return () => undefined;
+    }
+
+    const handleScroll = () => onStoreChange();
+    element.addEventListener("scroll", handleScroll, { passive: true });
+
+    const resizeObserver =
+      typeof ResizeObserver === "undefined"
+        ? null
+        : new ResizeObserver(onStoreChange);
+    resizeObserver?.observe(element);
+    window.addEventListener("resize", onStoreChange);
+
+    return () => {
+      element.removeEventListener("scroll", handleScroll);
+      resizeObserver?.disconnect();
+      window.removeEventListener("resize", onStoreChange);
+    };
+  }, []);
+  const getSnapshot = React.useCallback(() => {
+    const element = contentRef.current;
+
+    if (!element) {
+      return 0;
+    }
+
+    const hasScrollBefore = element.scrollTop > 1;
+    const hasScrollAfter =
+      element.scrollHeight - element.clientHeight - element.scrollTop > 1;
+
+    return (hasScrollBefore ? 1 : 0) | (hasScrollAfter ? 2 : 0);
+  }, []);
+  const scrollState = React.useSyncExternalStore(
+    subscribe,
+    getSnapshot,
+    () => 0,
+  );
+
+  return {
+    contentRef,
+    hasScrollBefore: Boolean(scrollState & 1),
+    hasScrollAfter: Boolean(scrollState & 2),
+  };
+}
+
 function AppShell({
   defaultSidebarOpen = true,
   children,
@@ -227,7 +278,7 @@ function AppShell({
 
 function AppSidebar({
   side = "left",
-  variant = "dark",
+  variant = "auto",
   className,
   children,
   title = "Application navigation",
@@ -235,7 +286,7 @@ function AppSidebar({
   ...props
 }: React.ComponentProps<"aside"> & {
   side?: "left" | "right";
-  /** Preserve the historical dark sidebar by default; auto follows appearance. */
+  /** Use the appearance-aware sidebar by default; explicit variants remain available. */
   variant?: "light" | "dark" | "auto";
   title?: string;
   description?: string;
@@ -300,11 +351,16 @@ function AppSidebarContent({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const { contentRef, hasScrollBefore, hasScrollAfter } = useSidebarOverflow();
+
   return (
     <div
       data-slot="app-sidebar-content"
+      data-scroll-before={hasScrollBefore ? "true" : undefined}
+      data-scroll-after={hasScrollAfter ? "true" : undefined}
+      ref={contentRef}
       className={cn(
-        "flex min-h-0 min-w-0 flex-1 flex-col gap-[var(--ds-sidebar-group-gap)] overflow-x-hidden overflow-y-auto bg-sidebar-content px-[var(--ds-sidebar-content-padding-x)] py-[var(--ds-sidebar-content-padding-y)]",
+        "relative flex min-h-0 min-w-0 flex-1 flex-col gap-[var(--ds-sidebar-group-gap)] overflow-x-hidden overflow-y-auto bg-sidebar-content px-[var(--ds-sidebar-content-padding-x)] py-[var(--ds-sidebar-content-padding-y)]",
         className,
       )}
       {...props}
@@ -332,11 +388,13 @@ function ProductIdentity({
   label,
   description,
   icon,
+  collapsedLabel,
   className,
 }: {
   label: React.ReactNode;
   description?: React.ReactNode;
   icon?: React.ReactNode;
+  collapsedLabel?: React.ReactNode;
   className?: string;
 }) {
   return (
@@ -347,6 +405,11 @@ function ProductIdentity({
       {icon ? (
         <div className="flex size-7 shrink-0 items-center justify-center rounded-[var(--ds-radius-control)] bg-sidebar-hover text-sidebar-icon">
           {icon}
+        </div>
+      ) : null}
+      {collapsedLabel && !icon ? (
+        <div className="hidden shrink-0 items-center justify-center rounded-[var(--ds-radius-control)] bg-sidebar-hover px-2 py-1 text-xs font-semibold text-sidebar-primary-text group-data-[sidebar-state=collapsed]/shell:flex">
+          {collapsedLabel}
         </div>
       ) : null}
       <div className="min-w-0 group-data-[sidebar-state=collapsed]/shell:hidden">
@@ -424,85 +487,109 @@ function navigationItemClasses(active?: boolean) {
     "group-data-[sidebar-state=collapsed]/shell:justify-center group-data-[sidebar-state=collapsed]/shell:px-0",
     "[&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:stroke-[1.75] [&>svg]:text-sidebar-icon",
     active &&
-      "bg-sidebar-active text-sidebar-active-foreground shadow-[inset_3px_0_0_var(--sidebar-active-indicator)] hover:bg-sidebar-active hover:text-sidebar-active-foreground [&>svg]:text-sidebar-active-foreground",
+      "bg-sidebar-active font-semibold text-sidebar-active-foreground shadow-[inset_3px_0_0_var(--sidebar-active-indicator)] hover:bg-sidebar-active hover:text-sidebar-active-foreground [&>svg]:text-sidebar-active-foreground",
   );
 }
 
-function NavigationItem({
-  asChild = false,
-  active = false,
-  tooltip,
-  type,
-  "aria-expanded": ariaExpanded,
-  className,
-  children,
-  ...props
-}: React.ComponentProps<"button"> & {
-  asChild?: boolean;
+type NavigationItemProps = Omit<
+  React.ComponentProps<"button">,
+  "render"
+> & {
   active?: boolean;
   tooltip?: string;
-}) {
-  const Comp = asChild ? Slot : "button";
-  const { sidebarState, sidebarSide, isMobile } = useAppShell();
-  const item = (
-    <Comp
-      data-slot="navigation-item"
-      data-active={active ? "true" : undefined}
-      data-state={ariaExpanded === undefined ? undefined : ariaExpanded ? "open" : "closed"}
-      aria-expanded={ariaExpanded}
-      type={asChild ? undefined : (type ?? "button")}
-      className={cn(navigationItemClasses(active), className)}
-      {...props}
-    >
-      {children}
-    </Comp>
-  );
+  render?: useRender.ComponentProps<"button">["render"];
+};
 
-  if (!tooltip) {
-    return item;
-  }
+const NavigationItem = React.forwardRef<HTMLElement, NavigationItemProps>(
+  function NavigationItem(
+    {
+      active = false,
+      tooltip,
+      render,
+      type,
+      "aria-expanded": ariaExpanded,
+      className,
+      children,
+      ...props
+    },
+    ref,
+  ) {
+    const { sidebarState, sidebarSide, isMobile } = useAppShell();
+    const item = useRender({
+      defaultTagName: "button",
+      render,
+      ref,
+      props: {
+        "data-slot": "navigation-item",
+        "data-active": active ? "true" : undefined,
+        "aria-expanded": ariaExpanded,
+        type: render ? undefined : type ?? "button",
+        className: cn(navigationItemClasses(active), className),
+        ...props,
+        ...(render ? {} : { children }),
+      },
+    });
 
-  return (
-    <Tooltip>
-      <TooltipTrigger render={item} />
-      <TooltipContent
-        side={sidebarSide === "left" ? "right" : "left"}
-        align="center"
-        hidden={sidebarState !== "collapsed" || isMobile}
-      >
-        {tooltip}
-      </TooltipContent>
-    </Tooltip>
-  );
-}
+    if (!tooltip) {
+      return item;
+    }
 
-function NavigationSubItem({
-  asChild = false,
-  active = false,
-  className,
-  ...props
-}: React.ComponentProps<"a"> & {
-  asChild?: boolean;
+    return (
+      <Tooltip>
+        <TooltipTrigger render={item} />
+        <TooltipContent
+          side={sidebarSide === "left" ? "right" : "left"}
+          align="center"
+          hidden={sidebarState !== "collapsed" || isMobile}
+        >
+          {tooltip}
+        </TooltipContent>
+      </Tooltip>
+    );
+  },
+);
+
+type NavigationSubItemProps = Omit<React.ComponentProps<"a">, "render"> & {
   active?: boolean;
-}) {
-  const Comp = asChild ? Slot : "a";
+  render?: useRender.ComponentProps<"a">["render"];
+};
 
-  return (
-    <Comp
-      data-slot="navigation-sub-item"
-      data-active={active ? "true" : undefined}
-      className={cn(
-        "ds-type-navigation flex min-h-[var(--ds-sidebar-item-height-touch)] min-w-0 cursor-pointer items-center gap-2 rounded-[var(--ds-radius-control)] px-2 text-sidebar-secondary-text outline-none transition-colors duration-150 lg:h-[calc(var(--ds-sidebar-item-height)-0.25rem)] lg:min-h-0",
-        "hover:bg-sidebar-hover hover:text-sidebar-primary-text focus-visible:ring-[3px] focus-visible:ring-sidebar-focus-ring",
-        "group-data-[sidebar-state=collapsed]/shell:hidden [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:stroke-[1.75] [&>svg]:text-sidebar-icon",
-        active &&
-          "bg-sidebar-active text-sidebar-active-foreground shadow-[inset_3px_0_0_var(--sidebar-active-indicator)] hover:bg-sidebar-active hover:text-sidebar-active-foreground [&>svg]:text-sidebar-active-foreground",
-        className,
-      )}
-      {...props}
-    />
-  );
-}
+const NavigationSubItem = React.forwardRef<HTMLElement, NavigationSubItemProps>(
+  function NavigationSubItem(
+    {
+      active = false,
+      render,
+      className,
+      ...props
+    },
+    ref,
+  ) {
+    return useRender({
+      defaultTagName: "a",
+      render,
+      ref,
+      props: {
+        "data-slot": "navigation-sub-item",
+        "data-active": active ? "true" : undefined,
+        className: cn(
+          "ds-type-navigation flex min-h-[var(--ds-sidebar-item-height-touch)] min-w-0 cursor-pointer items-center gap-2 rounded-[var(--ds-radius-control)] px-2 text-sidebar-secondary-text outline-none transition-colors duration-150 lg:h-[calc(var(--ds-sidebar-item-height)-0.25rem)] lg:min-h-0",
+          "hover:bg-sidebar-hover hover:text-sidebar-primary-text focus-visible:ring-[3px] focus-visible:ring-sidebar-focus-ring",
+          "group-data-[sidebar-state=collapsed]/shell:hidden [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:stroke-[1.75] [&>svg]:text-sidebar-icon",
+          active &&
+            "bg-sidebar-active text-sidebar-active-foreground shadow-[inset_3px_0_0_var(--sidebar-active-indicator)] hover:bg-sidebar-active hover:text-sidebar-active-foreground [&>svg]:text-sidebar-active-foreground",
+          className,
+        ),
+        ...props,
+      },
+    });
+  },
+);
+
+/*
+ * NavigationItem and NavigationSubItem intentionally use Base UI's render
+ * contract instead of a Slot compatibility layer. This keeps the navigation
+ * API small while allowing framework links to own routing.
+ */
 
 function NavigationSubList({
   className,
@@ -794,3 +881,5 @@ export {
   TopBar,
   useAppShell,
 };
+
+export type { NavigationItemProps, NavigationSubItemProps };

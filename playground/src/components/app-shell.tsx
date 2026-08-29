@@ -27,11 +27,19 @@ import {
 } from "@conscia-labs/design-system";
 
 const navEntries = [
-  { id: "/", label: "Overview", icon: <BookOpen /> },
+  {
+    id: "/",
+    label: "Overview",
+    icon: <BookOpen />,
+    badge: "New",
+    badgeLabel: "new",
+  },
   {
     id: "library",
     label: "Library",
     icon: <Layers />,
+    count: 5,
+    countLabel: "5 sections",
     items: [
       { id: "/foundation", label: "Foundation", icon: <Layers /> },
       { id: "/primitives", label: "Primitives", icon: <Shapes /> },
@@ -81,6 +89,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <ProductIdentity
             label="Conscia Design System"
             description="Executable reference"
+            collapsedLabel="C"
           />
         </AppSidebarHeader>
         <AppSidebarContent>

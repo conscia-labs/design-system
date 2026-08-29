@@ -12,7 +12,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
-  DropdownMenuItem,
+  DropdownMenuLinkItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "../primitives/dropdown-menu";
@@ -29,6 +29,10 @@ export type SidebarNavigationItem = {
   id: string;
   label: string;
   icon?: React.ReactNode;
+  badge?: React.ReactNode;
+  badgeLabel?: string;
+  count?: React.ReactNode;
+  countLabel?: string;
   active?: boolean;
   startsSection?: boolean;
 };
@@ -69,6 +73,39 @@ function isSection(
   return "items" in entry;
 }
 
+function getNavigationAccessibleLabel(item: SidebarNavigationItem) {
+  const metadata = [item.badgeLabel, item.countLabel].filter(Boolean);
+
+  return metadata.length > 0
+    ? `${item.label}, ${metadata.join(", ")}`
+    : item.label;
+}
+
+function NavigationMetadata({
+  badge,
+  count,
+}: Pick<SidebarNavigationItem, "badge" | "count">) {
+  if (badge === undefined && count === undefined) {
+    return null;
+  }
+
+  return (
+    <span
+      aria-hidden="true"
+      className="ml-auto flex min-w-0 shrink-0 items-center gap-1.5 text-sidebar-metadata-text"
+    >
+      {badge !== undefined ? (
+        <span className="max-w-28 truncate rounded-full bg-sidebar-hover px-1.5 py-0.5 text-[length:var(--ds-metadata)] font-semibold leading-none">
+          {badge}
+        </span>
+      ) : null}
+      {count !== undefined ? (
+        <span className="ds-type-metadata tabular-nums">{count}</span>
+      ) : null}
+    </span>
+  );
+}
+
 function readOpenSections(storageKey?: string) {
   if (!storageKey || typeof window === "undefined") {
     return {};
@@ -97,7 +134,7 @@ function SidebarNavigation({
   storageKey,
   className,
 }: SidebarNavigationProps) {
-  const { isMobile, sidebarSide, sidebarState } = useAppShell();
+  const { isMobile, setMobileOpen, sidebarSide, sidebarState } = useAppShell();
   const [openSections, setOpenSections] = React.useState<
     Record<string, boolean>
   >({});
@@ -132,8 +169,11 @@ function SidebarNavigation({
   const handleNavigate = React.useCallback<
     React.MouseEventHandler<HTMLAnchorElement>
   >(() => {
+    if (isMobile) {
+      setMobileOpen(false);
+    }
     onNavigate?.();
-  }, [onNavigate]);
+  }, [isMobile, onNavigate, setMobileOpen]);
 
   return (
     <nav
@@ -155,10 +195,12 @@ function SidebarNavigation({
                   : undefined
               }
             >
-              <NavigationItem asChild active={entry.active} tooltip={entry.label}>
-                {renderLink(entry, {
+              <NavigationItem
+                active={entry.active}
+                tooltip={entry.label}
+                render={renderLink(entry, {
                   "aria-current": entry.active ? "page" : undefined,
-                  "aria-label": entry.label,
+                  "aria-label": getNavigationAccessibleLabel(entry),
                   onClick: handleNavigate,
                   children: (
                     <>
@@ -166,10 +208,11 @@ function SidebarNavigation({
                       <span className="truncate group-data-[sidebar-state=collapsed]/shell:hidden">
                         {entry.label}
                       </span>
+                      <NavigationMetadata badge={entry.badge} count={entry.count} />
                     </>
                   ),
                 })}
-              </NavigationItem>
+              />
             </NavigationGroup>
           );
         }
@@ -186,7 +229,17 @@ function SidebarNavigation({
                     : undefined
                 }
               >
-                <DropdownMenuTrigger render={<NavigationItem active={entry.active} aria-label={`${entry.label} menu`}>{entry.icon}<span className="sr-only">{entry.label}</span></NavigationItem>} />
+                <DropdownMenuTrigger
+                  render={
+                    <NavigationItem
+                      active={entry.active}
+                      aria-label={`${getNavigationAccessibleLabel(entry)} menu`}
+                    >
+                      {entry.icon}
+                      <span className="sr-only">{entry.label}</span>
+                    </NavigationItem>
+                  }
+                />
               </NavigationGroup>
               <DropdownMenuContent
                 side={sidebarSide === "left" ? "right" : "left"}
@@ -199,14 +252,19 @@ function SidebarNavigation({
                 </DropdownMenuLabel>
                 <DropdownMenuGroup>
                   {entry.items.map((item) => (
-                    <DropdownMenuItem
+                    <DropdownMenuLinkItem
                       key={item.id}
+                      closeOnClick
                       render={renderLink(item, {
                         "aria-current": item.active ? "page" : undefined,
-                        "aria-label": item.label,
+                        "aria-label": getNavigationAccessibleLabel(item),
                         onClick: handleNavigate,
                         children: (
-                          <>{item.icon}<span>{item.label}</span></>
+                          <>
+                            {item.icon}
+                            <span className="truncate">{item.label}</span>
+                            <NavigationMetadata badge={item.badge} count={item.count} />
+                          </>
                         ),
                       })}
                       className={cn(
@@ -238,7 +296,22 @@ function SidebarNavigation({
             )}
           >
             <NavigationGroup>
-              <CollapsibleTrigger render={<NavigationItem data-state={sectionOpen ? "open" : "closed"} active={entry.active} tooltip={entry.label} aria-label={entry.label} aria-expanded={sectionOpen}>{entry.icon}<span className="truncate group-data-[sidebar-state=collapsed]/shell:hidden">{entry.label}</span><ChevronRight className="ml-auto transition-transform duration-150 ease-out group-data-[sidebar-state=collapsed]/shell:hidden group-data-[state=open]/collapsible:rotate-90" /></NavigationItem>} />
+              <CollapsibleTrigger
+                render={
+                  <NavigationItem
+                    active={entry.active}
+                    tooltip={entry.label}
+                    aria-label={getNavigationAccessibleLabel(entry)}
+                  >
+                    {entry.icon}
+                    <span className="truncate group-data-[sidebar-state=collapsed]/shell:hidden">
+                      {entry.label}
+                    </span>
+                    <NavigationMetadata badge={entry.badge} count={entry.count} />
+                    <ChevronRight className="ml-auto transition-transform duration-150 ease-out group-data-[sidebar-state=collapsed]/shell:hidden group-data-[open]/collapsible:rotate-90" />
+                  </NavigationItem>
+                }
+              />
               <CollapsibleContent
                 data-slot="sidebar-collapsible-content"
                 className="overflow-hidden"
@@ -247,21 +320,20 @@ function SidebarNavigation({
                   {entry.items.map((item) => (
                     <NavigationSubItem
                       key={item.id}
-                      asChild
                       active={item.active}
-                    >
-                      {renderLink(item, {
+                      render={renderLink(item, {
                         "aria-current": item.active ? "page" : undefined,
-                        "aria-label": item.label,
+                        "aria-label": getNavigationAccessibleLabel(item),
                         onClick: handleNavigate,
                         children: (
                           <>
                             {item.icon}
                             <span className="truncate">{item.label}</span>
+                            <NavigationMetadata badge={item.badge} count={item.count} />
                           </>
                         ),
                       })}
-                    </NavigationSubItem>
+                    />
                   ))}
                 </NavigationSubList>
               </CollapsibleContent>

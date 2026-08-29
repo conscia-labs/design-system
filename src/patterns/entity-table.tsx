@@ -18,6 +18,7 @@ type EntityTableProps<T> = {
   onRowClick?: (item: T) => void;
   getRowLabel?: (item: T) => string;
   rowActions?: (item: T) => React.ReactNode;
+  caption?: React.ReactNode;
   className?: string;
 };
 
@@ -30,6 +31,7 @@ function EntityTable<T>({
   onRowClick,
   getRowLabel,
   rowActions,
+  caption,
   className
 }: EntityTableProps<T>) {
   return (
@@ -42,6 +44,7 @@ function EntityTable<T>({
       onRowClick={onRowClick}
       getRowLabel={getRowLabel}
       rowActions={rowActions}
+      caption={caption}
       className={className}
     />
   );

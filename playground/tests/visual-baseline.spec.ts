@@ -198,4 +198,38 @@ test.describe("interaction baseline", () => {
     await page.getByRole("option", { name: "Error", exact: true }).click();
     await expect(page.locator('[data-slot="state-view"][role="alert"]')).toBeVisible();
   });
+
+  test("sidebar navigation preserves active, collapsed, flyout, and mobile behavior", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 1100 });
+    await loadRoute(page, routes[0], "light", "comfortable");
+
+    await expect(page.getByRole("link", { name: "Foundation", exact: true })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+
+    await page.getByRole("button", { name: "Toggle navigation" }).click();
+    await expect(page.locator('[data-slot="app-shell"]')).toHaveAttribute(
+      "data-sidebar-state",
+      "collapsed",
+    );
+
+    await page.getByRole("button", { name: "Library, 5 sections menu" }).click();
+    await expect(page.getByRole("menu")).toBeVisible();
+    await page.getByRole("menuitem", { name: "Primitives", exact: true }).click();
+    await expect(page).toHaveURL(/\/primitives$/);
+    await expect(page.getByRole("menu")).toBeHidden();
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(routes[0].path);
+    await expect(page.getByRole("heading", { name: routes[0].heading, exact: true })).toBeVisible();
+    await page.getByRole("button", { name: "Toggle navigation" }).click();
+
+    const mobileNavigation = page.getByRole("dialog", { name: "Application navigation" });
+    await expect(mobileNavigation).toBeVisible();
+    await mobileNavigation.getByRole("link", { name: "Primitives", exact: true }).click();
+    await expect(page).toHaveURL(/\/primitives$/);
+    await expect(mobileNavigation).toBeHidden();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  });
 });

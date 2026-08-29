@@ -43,6 +43,16 @@ assert.doesNotMatch(
   /(?:from|import\()\s*["']@base-ui\/react(?:\/[^"']*)?["']/,
   "The distribution must bundle Base UI instead of leaving consumer imports.",
 );
+assert.doesNotMatch(
+  bundledJavaScript,
+  /@radix-ui\//,
+  "The distribution must not retain Radix runtime imports.",
+);
+assert.doesNotMatch(
+  bundledJavaScript,
+  /asChild/,
+  "The v1 distribution must not retain the removed asChild API.",
+);
 
 const foundationCss = await readFile("dist/foundation.css", "utf8");
 const tailwindCss = await readFile("dist/tailwind.css", "utf8");

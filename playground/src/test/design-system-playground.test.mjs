@@ -302,6 +302,9 @@ test("table states are stable for selected and hover rows", () => {
   assert.match(table, /data-\[state=selected\]:bg-accent-background/);
   assert.match(dataTable, /Checkbox/);
   assert.match(dataTable, /aria-label/);
+  assert.match(dataTable, /indeterminate=/);
+  assert.match(dataTable, /aria-selected=/);
+  assert.match(entityTable, /caption\?: React\.ReactNode/);
   assert.match(entityTable, /DataTable/);
   assert.match(entityTable, /onRowClick/);
   assert.match(primitives, /data-state="selected"/);
@@ -503,12 +506,31 @@ test("shared sidebar navigation supports collapsed flyouts without owning routes
   assert.match(navigation, /<Collapsible/);
   assert.match(navigation, /localStorage\.setItem/);
   assert.match(navigation, /renderLink/);
+  assert.match(navigation, /badge\?: React\.ReactNode/);
+  assert.match(navigation, /count\?: React\.ReactNode/);
+  assert.doesNotMatch(navigation, /asChild/);
+  assert.doesNotMatch(navigation, /@radix-ui\/react-slot/);
+  assert.match(playgroundShell, /collapsedLabel="C"/);
   assert.doesNotMatch(navigation, /next\/link/);
   assert.doesNotMatch(navigation, /usePathname/);
   assert.match(playgroundShell, /<SidebarNavigation/);
   assert.match(playgroundShell, /<SidebarSearch shortcut="⌘K" \/>/);
   assert.match(playgroundShell, /label: "Library"/);
   assert.match(playgroundShell, /<AppSidebar variant="auto">/);
+});
+
+test("app shell uses render composition and tracks sidebar overflow affordances", () => {
+  const shell = read("../../../src/patterns/app-shell.tsx");
+  const styles = read("../../../src/foundation/styles.css");
+
+  assert.match(shell, /useRender/);
+  assert.match(shell, /useSidebarOverflow/);
+  assert.match(shell, /data-scroll-before/);
+  assert.match(shell, /data-scroll-after/);
+  assert.doesNotMatch(shell, /@radix-ui\/react-slot/);
+  assert.doesNotMatch(shell, /asChild/);
+  assert.match(styles, /data-slot="app-sidebar-content"\]\[data-scroll-after="true"\]/);
+  assert.match(styles, /prefers-reduced-motion: reduce/);
 });
 
 test("shared package keeps canonical primitives clean and quarantines compatibility aliases", () => {

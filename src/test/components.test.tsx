@@ -18,6 +18,7 @@ import {
   AppSidebarHeader,
   NavigationGroup,
   NavigationItem,
+  NavigationSubItem,
   SidebarSearch,
   SidebarTrigger,
   TopBar,
@@ -212,6 +213,28 @@ describe("DataTable", () => {
     expect(columnHeader.getAttribute("aria-sort")).toBe("ascending");
     expect(onSubmit).not.toHaveBeenCalled();
   });
+
+  it("exposes caption and semantic selection state", () => {
+    render(
+      <DataTable
+        data={[{ id: "1", name: "Alpha" }, { id: "2", name: "Beta" }]}
+        columns={[{
+          id: "name",
+          header: "Name",
+          cell: (item) => item.name,
+        }]}
+        getRowId={(item) => item.id}
+        selectedIds={new Set(["1"])}
+        onSelectionChange={() => undefined}
+        caption="Example records"
+      />,
+    );
+
+    expect(screen.getByText("Example records")).toBeTruthy();
+    expect(screen.getByRole("checkbox", { name: "Select all rows on this page" })
+      .hasAttribute("data-indeterminate")).toBe(true);
+    expect(screen.getAllByRole("row")[1]?.getAttribute("aria-selected")).toBe("true");
+  });
 });
 
 describe("Workbench patterns", () => {
@@ -306,7 +329,65 @@ describe("SearchableSelect", () => {
 });
 
 describe("shared sidebar", () => {
-  it("keeps the dark default and exposes an opt-in light semantic variant", () => {
+  it("uses the appearance-aware sidebar variant by default", () => {
+    const { container } = render(
+      <AppShell>
+        <AppSidebar>
+          <AppSidebarContent>Navigation</AppSidebarContent>
+        </AppSidebar>
+      </AppShell>,
+    );
+
+    expect(container.querySelector('[data-slot="app-sidebar"]')?.getAttribute("data-sidebar-variant"))
+      .toBe("auto");
+  });
+
+  it("supports ref-safe render composition without nested interactive elements", () => {
+    render(
+      <AppShell>
+        <NavigationItem active render={<a href="/overview">Overview</a>} />
+        <NavigationSubItem render={<a href="/details">Details</a>} />
+      </AppShell>,
+    );
+
+    const overview = screen.getByRole("link", { name: "Overview" });
+    const details = screen.getByRole("link", { name: "Details" });
+
+    expect(overview.getAttribute("href")).toBe("/overview");
+    expect(overview.getAttribute("data-active")).toBe("true");
+    expect(overview.querySelector("button")).toBeNull();
+    expect(details.getAttribute("href")).toBe("/details");
+  });
+
+  it("renders navigation badges and counts with optional accessible metadata", () => {
+    const renderLink = (item: { label: string }, props: Record<string, unknown>) => (
+      <a href={`/${item.label.toLowerCase()}`} {...props} />
+    );
+
+    render(
+      <AppShell>
+        <SidebarNavigation
+          entries={[
+            {
+              id: "/overview",
+              label: "Overview",
+              badge: "New",
+              badgeLabel: "new",
+              count: 3,
+              countLabel: "3 updates",
+            },
+          ]}
+          renderLink={renderLink}
+        />
+      </AppShell>,
+    );
+
+    expect(screen.getByRole("link", { name: "Overview, new, 3 updates" })).toBeTruthy();
+    expect(screen.getByText("New")).toBeTruthy();
+    expect(screen.getByText("3")).toBeTruthy();
+  });
+
+  it("keeps explicit light semantic sidebar styling available", () => {
     const { container } = render(
       <AppShell>
         <AppSidebar variant="light">

@@ -34,9 +34,42 @@
   animation: ds-sidebar-collapse 150ms cubic-bezier(0.4, 0, 1, 1);
 }
 
+[data-slot="app-sidebar-content"]::before,
+[data-slot="app-sidebar-content"]::after {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  height: 1.5rem;
+  pointer-events: none;
+  content: "";
+  opacity: 0;
+  transition: opacity 150ms ease-out;
+}
+
+[data-slot="app-sidebar-content"]::before {
+  top: 0;
+  background: linear-gradient(to bottom, var(--sidebar-content), transparent);
+}
+
+[data-slot="app-sidebar-content"]::after {
+  bottom: 0;
+  background: linear-gradient(to top, var(--sidebar-content), transparent);
+}
+
+[data-slot="app-sidebar-content"][data-scroll-before="true"]::before,
+[data-slot="app-sidebar-content"][data-scroll-after="true"]::after {
+  opacity: 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
   [data-slot="sidebar-collapsible-content"] {
     animation: none !important;
+  }
+
+  [data-slot="app-sidebar-content"]::before,
+  [data-slot="app-sidebar-content"]::after {
+    transition: none;
   }
 }
 
@@ -422,7 +455,7 @@
 /*
  * Light sidebars use the same semantic surface family as the rest of the
  * light theme. The variant is scoped to the sidebar so an application can
- * keep a dark sidebar by default and opt into this hierarchy per shell.
+ * keep an explicitly dark sidebar or follow the appearance-aware default.
  */
 [data-sidebar-variant="light"],
 :root:not(.dark):not([data-appearance="dark"])
