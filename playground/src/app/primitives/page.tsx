@@ -49,7 +49,9 @@ import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
-  TooltipTrigger
+  TooltipTrigger,
+  ToastProvider,
+  ToastViewport
 } from "@conscia-labs/design-system";
 
 import { ExampleSection, PlaygroundPage } from "@/components/page";
@@ -57,12 +59,13 @@ import { PrimitiveCoverage } from "@/components/primitive-coverage";
 
 export default function PrimitivesPage() {
   return (
-    <TooltipProvider>
-      <PlaygroundPage
-        title="Primitives"
-        description="The first shared Conscia primitives, rendered with meaningful states and global appearance/density adaptation."
-      >
-        <div className="grid min-w-0 gap-6 xl:grid-cols-2">
+    <ToastProvider>
+      <TooltipProvider>
+        <PlaygroundPage
+          title="Primitives"
+          description="The first shared Conscia primitives, rendered with meaningful states and global appearance/density adaptation."
+        >
+          <div className="grid min-w-0 gap-6 xl:grid-cols-2">
           <ExampleSection title="Button">
             <div className="flex flex-wrap gap-2 rounded-[var(--ds-radius-surface)] border bg-surface p-4">
               <Button>Default</Button>
@@ -276,8 +279,10 @@ export default function PrimitivesPage() {
           </ExampleSection>
 
           <PrimitiveCoverage />
-        </div>
-      </PlaygroundPage>
-    </TooltipProvider>
+          </div>
+        </PlaygroundPage>
+        <ToastViewport />
+      </TooltipProvider>
+    </ToastProvider>
   );
 }

@@ -6,6 +6,7 @@ import {
   AlertDescription,
   AlertTitle,
   Avatar,
+  AvatarGroup,
   AvatarFallback,
   Badge,
   Button,
@@ -16,6 +17,7 @@ import {
   CardHeader,
   CardTitle,
   Checkbox,
+  CommandPalette,
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
@@ -24,12 +26,15 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
+  FilterBar,
+  FilterChip,
   FormSelect,
   Input,
   IconButton,
   Label,
   SearchableSelect,
   Separator,
+  ShortcutHint,
   Sheet,
   SheetBody,
   SheetClose,
@@ -40,8 +45,10 @@ import {
   SheetTitle,
   SheetTrigger,
   Skeleton,
+  Spinner,
   Switch,
   Textarea,
+  useToast,
 } from "@conscia-labs/design-system";
 
 import { ExampleSection } from "@/components/page";
@@ -55,6 +62,14 @@ const searchableOptions = [
 function PrimitiveCoverage() {
   const [searchableValue, setSearchableValue] = useState("bedrock");
   const [switchChecked, setSwitchChecked] = useState(true);
+  const [activeFilters, setActiveFilters] = useState(["Provider", "Availability"]);
+  const { add: addToast } = useToast();
+
+  const commandItems = [
+    { id: "open-models", label: "Open AI Models", description: "Browse the model catalog", group: "Navigate", shortcut: <ShortcutHint label="Command M">⌘M</ShortcutHint> },
+    { id: "open-settings", label: "Open settings", description: "Manage workspace preferences", keywords: ["preferences"], group: "Navigate", shortcut: <ShortcutHint label="Command comma">⌘,</ShortcutHint> },
+    { id: "refresh-catalog", label: "Refresh catalog", description: "Sync the latest provider models", keywords: ["sync", "reload"], group: "Actions", disabled: true },
+  ];
 
   return (
     <div data-testid="primitive-coverage" className="col-span-full grid min-w-0 gap-6 xl:grid-cols-2">
@@ -170,6 +185,51 @@ function PrimitiveCoverage() {
               </SheetFooter>
             </SheetContent>
           </Sheet>
+        </div>
+      </ExampleSection>
+
+      <ExampleSection title="Supporting components">
+        <div className="grid gap-4 rounded-[var(--ds-radius-surface)] border bg-surface p-[var(--ds-surface-padding)]">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="text-sm text-muted-foreground">Keyboard shortcut</span>
+            <ShortcutHint label="Command K">⌘K</ShortcutHint>
+            <span className="text-sm text-muted-foreground">Loading</span>
+            <Spinner size="sm" label="Loading model data" />
+            <Spinner label="Loading" />
+            <Spinner size="lg" />
+          </div>
+          <div className="flex flex-wrap items-center gap-4">
+            <AvatarGroup max={3} total={7} aria-label="Model owners">
+              <Avatar><AvatarFallback>AL</AvatarFallback></Avatar>
+              <Avatar><AvatarFallback>BK</AvatarFallback></Avatar>
+              <Avatar><AvatarFallback>CM</AvatarFallback></Avatar>
+              <Avatar><AvatarFallback>DS</AvatarFallback></Avatar>
+            </AvatarGroup>
+            <span className="text-sm text-muted-foreground">Seven owners, four shown in the overflow count.</span>
+          </div>
+          <FilterBar onClearAll={() => setActiveFilters([])}>
+            {activeFilters.includes("Provider") ? <FilterChip label="Provider" value="Amazon Bedrock" onRemove={() => setActiveFilters((filters) => filters.filter((filter) => filter !== "Provider"))} /> : null}
+            {activeFilters.includes("Availability") ? <FilterChip label="Availability" value="Available" onRemove={() => setActiveFilters((filters) => filters.filter((filter) => filter !== "Availability"))} /> : null}
+          </FilterBar>
+          <div className="flex flex-wrap gap-2">
+            <CommandPalette
+              items={commandItems}
+              onSelect={(item) => addToast({ title: item.label, description: "Command selected.", variant: "success" })}
+              trigger={<Button variant="outline">Open command palette</Button>}
+            />
+            <Button
+              variant="outline"
+              onClick={() => addToast({ title: "Catalog synced", description: "The provider catalog is up to date.", variant: "success" })}
+            >
+              Show success toast
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={() => addToast({ title: "Connection needs attention", description: "The provider did not respond within the expected window.", variant: "warning", priority: "high" })}
+            >
+              Show warning toast
+            </Button>
+          </div>
         </div>
       </ExampleSection>
     </div>

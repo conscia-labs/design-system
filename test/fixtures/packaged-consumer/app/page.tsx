@@ -42,12 +42,12 @@ export default function Page() {
           </Card>
           <DropdownMenu open>
             <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
-            <DropdownMenuContent forceMount className="border opacity-70">
+            <DropdownMenuContent className="border opacity-70">
               <DropdownMenuItem>Item</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
           <Dialog open>
-            <DialogContent forceMount>
+            <DialogContent>
               <DialogTitle>Production dialog</DialogTitle>
               <DialogDescription>Dialog styling probe</DialogDescription>
             </DialogContent>

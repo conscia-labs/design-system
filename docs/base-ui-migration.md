@@ -1,6 +1,6 @@
 # Base UI v1 Migration
 
-Status: **Phase 5 complete**
+Status: **Phase 5.5 complete**
 
 Branch: `feature/base-ui-migration`
 
@@ -54,6 +54,7 @@ Kumo is used as architectural inspiration: custom styled components layered over
 - [x] Phase 3 — Rewrite simple custom primitives.
 - [x] Phase 4 — Rewrite behavior-heavy primitives with Base UI.
 - [x] Phase 5 — Rewrite composed patterns and application shells.
+- [x] Phase 5.5 — Add supporting primitives and interaction patterns.
 - [ ] Phase 6 — Remove Radix-specific styling and normalize tokens.
 - [ ] Phase 7 — Accessibility, interaction, responsive, and regression QA.
 - [ ] Phase 8 — Package hardening, migration guide, version `1.0.0`, and release.
@@ -313,11 +314,12 @@ Snapshot names must include route, viewport, appearance, and density.
 2. Rewrite simple custom primitives without copying shadcn source.
 3. Rewrite behavior families in this order: Dialog/Sheet, menus, Select/SearchableSelect, Tabs, Tooltip, Checkbox/Switch/Collapsible.
 4. Rewrite patterns after their primitive dependencies stabilize.
-5. Remove Radix dependencies and Radix-specific CSS variables.
-6. Replace source-level implementation assertions with behavior contracts.
-7. Run the visual baseline after every component family.
-8. Harden package metadata, documentation, migration notes, and release checks.
-9. Release v1 only after no Radix imports, no shadcn-derived component source, and complete validation evidence.
+5. Add focused supporting primitives and interaction patterns before token cleanup.
+6. Remove Radix dependencies and Radix-specific CSS variables.
+7. Replace source-level implementation assertions with behavior contracts.
+8. Run the visual baseline after every component family.
+9. Harden package metadata, documentation, migration notes, and release checks.
+10. Release v1 only after no Radix imports, no shadcn-derived component source, and complete validation evidence.
 
 ## Phase 2 — Base UI dependency, packaging, and conventions
 
@@ -413,8 +415,8 @@ Phase 4 replaces the behavior-heavy Radix wrappers with Conscia-owned Base UI
 wrappers. Dialog, Drawer-backed Sheet, AlertDialog, Menu, Select, Combobox,
 Tabs, Tooltip, Checkbox, Switch, and Collapsible now use Base UI anatomy and
 state attributes while retaining the established Conscia names and visual
-tokens. Popover and AlertDialog are new public primitives; Toast, NumberField,
-and Base UI Field remain deferred.
+tokens. Popover and AlertDialog are new public primitives. Toast is delivered
+in Phase 5.5; NumberField and Base UI Field remain deferred.
 
 The SearchableSelect public API remains string-based. ConfirmationDialog now
 uses AlertDialog semantics. Existing `data-slot` markers remain internal;
@@ -530,6 +532,84 @@ closed the collapsed flyout without allowing the Next.js link to navigate;
 the sidebar now uses `Menu.LinkItem` with `closeOnClick` for that route-backed
 case.
 
+## Phase 5.5 — Supporting components and interaction patterns
+
+Phase 5.5 adds the focused supporting surface identified during the Phase 5
+review, before Phase 6 token cleanup. These additions are intentionally small
+and composable: they cover recurring product interaction needs without adding
+parallel card/table families or introducing a global application registry.
+
+### Implemented contract
+
+- `ShortcutHint` is a native, decorative-by-default `<kbd>` primitive. An
+  explicit `label` or ARIA label makes it discoverable to assistive technology.
+  The native sidebar search now uses this shared primitive.
+- `Spinner` is a token-aware, reduced-motion-friendly loading indicator. It is
+  decorative by default and becomes a labelled `status` only when a label is
+  supplied.
+- `AvatarGroup` composes existing `Avatar` children, supports `sm`, `default`,
+  and `lg` sizing, and exposes deterministic overflow through `max` and
+  optional `total` metadata. It does not create a separate avatar data model.
+- `FilterChip` provides a non-nested active-filter surface with an optional
+  accessible remove action. `FilterBar` composes those chips into a wrapping,
+  responsive active-filter strip with an opt-in clear-all action.
+- `CommandPalette` accepts explicit command items, filters labels and
+  keywords, supports disabled/grouped commands, keyboard navigation, and
+  selection callbacks. It uses the existing Conscia Dialog shell with Base UI
+  Combobox behavior internally; it does not maintain a global command registry.
+- `ToastProvider`, `ToastViewport`, `useToast`, and the toast anatomy provide
+  opt-in notifications backed by Base UI Toast management. The API supports
+  variants, priorities, actions, explicit dismissal, updates, and promise
+  lifecycles. The provider is not mounted globally by `AppShell`.
+- Existing Card and Table APIs remain unchanged. No `InteractiveCard`,
+  `CompactTable`, or alternate table family was introduced.
+
+### Public exports and compatibility
+
+The new primitives are exported from the primitives entrypoint and package
+root: `ShortcutHint`, `Spinner`, `AvatarGroup`, `FilterChip`, and the Toast
+provider/viewport/hook plus anatomy. `FilterBar` and `CommandPalette` are
+exported from the patterns entrypoint and package root. Existing public names,
+version `0.4.0`, and Base UI bundling conventions remain unchanged.
+
+The packaged-consumer fixture was updated to stop passing the removed
+Radix-era `forceMount` prop to open Dialog and DropdownMenu content. This keeps
+consumer verification aligned with the v1 API break rather than preserving an
+implementation-specific prop.
+
+### Phase 5.5 evidence
+
+- [x] Supporting primitives and patterns compile and are covered by focused
+  behavior tests, including representative `axe-core` checks.
+- [x] Command palette keyword filtering, keyboard selection, controlled open
+  state, and focus restoration are covered in Vitest and the playground.
+- [x] Toast creation, content, managed dismissal, variants, and opt-in
+  provider/viewport wiring are covered in Vitest and the playground.
+- [x] Playground coverage includes all seven additions with deterministic
+  fixture data, plus an end-to-end interaction suite for filtering commands,
+  clearing active filters, showing toasts, and mobile overflow checks.
+- [x] The intended `/primitives` visual refresh regenerated 12 snapshots across
+  desktop/mobile, light/dark, and comfortable/compact/operational density.
+  Foundation and reference-pattern snapshots were not changed.
+- [x] `pnpm test` passes: 31 contract tests and 42 unit tests.
+- [x] `pnpm typecheck`, `pnpm typecheck:playground`, `pnpm lint`, and
+  `pnpm lint:playground` pass.
+- [x] `pnpm test:package` passes, including bundled Base UI and public export
+  verification.
+- [x] `pnpm build:playground` passes and prerenders all playground routes.
+- [x] `pnpm test:consumer` passes with the packaged consumer production build.
+- [x] The full Playwright suite passes 42/42 on two consecutive clean runs.
+
+### Phase 5.5 exit criteria
+
+- [x] All requested supporting components are implemented and exported.
+- [x] New behavior is opt-in and does not add global provider or registry
+  assumptions to existing application shells.
+- [x] Visual changes are intentional, localized to the primitives page, and
+  protected by refreshed baselines.
+- [x] Package, consumer, accessibility, interaction, and visual evidence is
+  recorded before starting Phase 6.
+
 ## Progress ledger
 
 | Phase | Status | Start commit | Completion commit | Evidence |
@@ -540,6 +620,7 @@ case.
 | Phase 3 | Complete | Working tree | Working tree | Conscia-owned simple primitives, IconButton, Card/Table anatomy, focused behavior tests, package verification, and refreshed visual baselines |
 | Phase 4 | Complete | `1dc8aa6` | Working tree | Base UI behavior wrappers, AlertDialog/Popover, dependency cleanup, package/playground gates, and two consecutive 40/40 browser runs |
 | Phase 5 | Complete | `e40cc6a` | `fab320e` | Shell composition migration, sidebar refinements, DataTable semantics, package cleanup, 41-test browser matrix, and validation evidence recorded |
+| Phase 5.5 | Complete | Working tree | Working tree | ShortcutHint, Spinner, AvatarGroup, FilterChip/FilterBar, CommandPalette, opt-in Toast, playground coverage, 42-test browser matrix, and packaged consumer verification |
 | Phase 6 | Pending | Pending | Pending | |
 | Phase 7 | Pending | Pending | Pending | |
 | Phase 8 | Pending | Pending | Pending | |
@@ -567,7 +648,15 @@ case.
 | 2026-08-29 | Add overflow fades driven by measured scroll state, without active-section auto-scroll. | The sidebar needs a quiet affordance for hidden content while keeping route changes and focus movement predictable. |
 | 2026-08-29 | Strengthen `DataTable` with caption and ARIA selection semantics instead of adding table variants. | Semantic anatomy improves real consumers without multiplying the primitive surface or replacing the existing operational pattern. |
 | 2026-08-29 | Remove `@radix-ui/react-slot` after shell migration. | All remaining shell consumers now use Base UI composition, so retaining the compatibility dependency would preserve an implementation path that v1 explicitly removes. |
+| 2026-08-29 | Add `ShortcutHint`, `Spinner`, `AvatarGroup`, `FilterChip`, `FilterBar`, `CommandPalette`, and opt-in `Toast` before Phase 6. | These components address recurring product needs while keeping the primitive surface composable and avoiding speculative card/table variants. |
+| 2026-08-29 | Compose `AvatarGroup` from existing `Avatar` children and keep `FilterBar` as an active-filter strip. | Existing anatomy stays reusable, and filtering remains a pattern concern rather than a new data or toolbar abstraction. |
+| 2026-08-29 | Give `CommandPalette` explicit items and keep Toast provider/viewport opt-in. | Explicit ownership makes behavior predictable for package consumers and avoids hidden global registries or application-shell assumptions. |
 
 ## Blockers and notes
 
-Known environment notes: the package consumer fixture cannot resolve npm registry dependencies because registry DNS is unavailable in this environment. The first sandboxed playground production build also could not bind the process port required by Turbopack; the permission-enabled rerun passed. Development runs may still log Base UI Combobox hydration warnings while the client-side caret styling is initialized; they do not affect the production build or the passing browser matrix.
+Known environment notes: the package consumer fixture and production playground
+build now pass with the permission-enabled runner. Earlier Phase 0–5 records
+retain the historical npm-DNS and sandbox port limitations that affected those
+runs. Development runs may still log Base UI Combobox hydration warnings while
+the client-side caret styling is initialized; they do not affect the production
+build or the passing browser matrix.

@@ -6,6 +6,7 @@ import { PanelLeftIcon, Search, X } from "lucide-react";
 
 import { Button, IconButton, type IconButtonProps } from "../primitives/button";
 import { Input } from "../primitives/input";
+import { ShortcutHint } from "../primitives/shortcut-hint";
 import { Separator } from "../primitives/separator";
 import {
   Sheet,
@@ -711,9 +712,9 @@ function SidebarSearch({
           {triggerLabel}
         </span>
         {shortcut ? (
-          <kbd className="ds-type-metadata ml-auto rounded border border-sidebar-border px-1.5 py-0.5 font-medium text-sidebar-metadata-text group-data-[sidebar-state=collapsed]/shell:hidden">
+          <ShortcutHint className="ds-type-metadata ml-auto border-sidebar-border bg-transparent text-sidebar-metadata-text group-data-[sidebar-state=collapsed]/shell:hidden">
             {shortcut}
-          </kbd>
+          </ShortcutHint>
         ) : null}
       </button>
     );

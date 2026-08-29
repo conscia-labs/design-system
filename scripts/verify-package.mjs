@@ -86,6 +86,15 @@ for (const exportName of [
   "SearchableSelect",
   "AlertDialog",
   "Popover",
+  "ShortcutHint",
+  "Spinner",
+  "AvatarGroup",
+  "FilterChip",
+  "FilterBar",
+  "CommandPalette",
+  "ToastProvider",
+  "ToastViewport",
+  "useToast",
 ]) {
   assert.equal(
     typeof packageExports[exportName],

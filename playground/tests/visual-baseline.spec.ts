@@ -199,6 +199,30 @@ test.describe("interaction baseline", () => {
     await expect(page.locator('[data-slot="state-view"][role="alert"]')).toBeVisible();
   });
 
+  test("supporting components filter commands, clear filters, and show toasts", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 1100 });
+    await loadRoute(page, routes[1], "light", "comfortable");
+
+    const commandTrigger = page.getByRole("button", { name: "Open command palette", exact: true });
+    await commandTrigger.click();
+    const commandInput = page.getByRole("combobox", { name: "Search commands", exact: true });
+    await expect(commandInput).toBeVisible();
+    await commandInput.fill("preferences");
+    await expect(page.getByRole("option", { name: /Open settings/ })).toBeVisible();
+    await expect(page.getByRole("option", { name: /Open AI Models/ })).toHaveCount(0);
+    await commandInput.press("ArrowDown");
+    await commandInput.press("Enter");
+    await expect(page.locator('[data-slot="dialog-content"]')).toBeHidden();
+    await expect(page.getByText("Command selected.", { exact: true })).toBeVisible();
+
+    await page.getByRole("button", { name: "Clear all", exact: true }).click();
+    await expect(page.locator('[data-slot="filter-chip"]')).toHaveCount(0);
+
+    await page.getByRole("button", { name: "Show success toast", exact: true }).click();
+    await expect(page.getByText("Catalog synced", { exact: true })).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  });
+
   test("sidebar navigation preserves active, collapsed, flyout, and mobile behavior", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 1100 });
     await loadRoute(page, routes[0], "light", "comfortable");

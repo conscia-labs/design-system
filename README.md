@@ -46,7 +46,8 @@ Semantic CSS variables for:
 
 ### Primitives
 
-Reusable interface building blocks composed from React, Radix UI, and ShadCN conventions:
+Reusable Conscia-owned interface building blocks composed from native React
+markup and Base UI behavior where interaction complexity requires it:
 
 - Alert
 - Avatar
@@ -66,6 +67,11 @@ Reusable interface building blocks composed from React, Radix UI, and ShadCN con
 - Table
 - Tabs and navigation tabs
 - Tooltip
+- Shortcut hint
+- Spinner
+- Avatar group
+- Filter chip
+- Toast provider and viewport
 
 ### Patterns
 
@@ -80,6 +86,57 @@ Higher-level compositions for recurring product workflows:
 - Empty, loading, and error states
 - Activity lists and metric bands
 - Code blocks and value meters
+- Command palette
+- Filter bar
+
+### Supporting interaction patterns
+
+#### Command palette
+
+`CommandPalette` accepts an explicit list of commands, filters labels and
+keywords, and supports keyboard navigation without a global command registry:
+
+```tsx
+import { Button, CommandPalette } from "@conscia-labs/design-system";
+
+<CommandPalette
+  items={[{ id: "settings", label: "Open settings", keywords: ["preferences"] }]}
+  onSelect={(item) => openCommand(item.id)}
+  trigger={<Button variant="outline">Open commands</Button>}
+/>
+```
+
+#### Toasts
+
+Toasts are opt-in. Mount one provider and viewport, then use `useToast` from a
+descendant component:
+
+```tsx
+import {
+  Button,
+  ToastProvider,
+  ToastViewport,
+  useToast,
+} from "@conscia-labs/design-system";
+
+function SaveButton() {
+  const { add } = useToast();
+  return (
+    <Button onClick={() => add({ title: "Saved", variant: "success" })}>
+      Save
+    </Button>
+  );
+}
+
+function App() {
+  return (
+    <ToastProvider>
+      <SaveButton />
+      <ToastViewport />
+    </ToastProvider>
+  );
+}
+```
 
 ## Quick start
 
