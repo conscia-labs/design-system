@@ -1,6 +1,6 @@
 {
   "name": "@conscia-labs/design-system",
-  "version": "0.4.0",
+  "version": "1.0.0",
   "description": "The shared React component library for building clear, consistent, and accessible Conscia product experiences.",
   "license": "MIT",
   "type": "module",

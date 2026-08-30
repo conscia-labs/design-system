@@ -1,6 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const baseURL = "http://127.0.0.1:3020";
+const browserChannel = process.env.PLAYWRIGHT_CHANNEL;
+const channel = browserChannel === "bundled" ? undefined : browserChannel || "chrome";
 
 export default defineConfig({
   testDir: "./playground/tests",
@@ -39,7 +41,16 @@ export default defineConfig({
         ...devices["Desktop Chrome"],
         // Use the installed Chromium-based Chrome locally; CI can override this
         // with PLAYWRIGHT_CHANNEL or install Playwright's bundled Chromium.
-        channel: process.env.PLAYWRIGHT_CHANNEL || "chrome",
+        channel,
+      },
+      testIgnore: /mobile-drawer\.spec\.ts/,
+    },
+    {
+      name: "mobile-chromium",
+      testMatch: /mobile-drawer\.spec\.ts/,
+      use: {
+        ...devices["Pixel 5"],
+        channel,
       },
     },
   ],

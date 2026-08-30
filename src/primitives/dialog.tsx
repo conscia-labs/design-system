@@ -15,6 +15,6 @@ function DialogContent({ className, children, showCloseButton = true, size = "de
 function DialogHeader({ className, ...props }: React.ComponentProps<"div">) { return <div data-slot="dialog-header" className={cn("flex flex-col gap-2 text-left", className)} {...props} />; }
 function DialogTitle({ className, ...props }: React.ComponentProps<typeof BaseDialog.Title>) { return <BaseDialog.Title data-slot="dialog-title" className={cn("text-base font-semibold leading-none", className)} {...props} />; }
 function DialogDescription({ className, ...props }: React.ComponentProps<typeof BaseDialog.Description>) { return <BaseDialog.Description data-slot="dialog-description" className={cn("text-sm text-text-supporting", className)} {...props} />; }
-function DialogBody({ className, ...props }: React.ComponentProps<"div">) { return <div data-slot="dialog-body" className={cn("min-h-0 overflow-y-auto text-sm", className)} {...props} />; }
+function DialogBody({ className, ...props }: React.ComponentProps<"div">) { return <div data-slot="dialog-body" className={cn("-mx-1 min-h-0 overflow-y-auto px-1 text-sm", className)} {...props} />; }
 function DialogFooter({ className, ...props }: React.ComponentProps<"div">) { return <div data-slot="dialog-footer" className={cn("flex flex-col-reverse gap-2 sm:flex-row sm:justify-end", className)} {...props} />; }
 export { Dialog, DialogBody, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogOverlay, DialogPortal, DialogTitle, DialogTrigger };

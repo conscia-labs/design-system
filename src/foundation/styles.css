@@ -89,7 +89,7 @@
   --text-primary: #140c15;
   --text-secondary: #373b4a;
   --text-supporting: #5f6270;
-  --text-muted: #838692;
+  --text-muted: #707481;
   --text-disabled: #a7a9b3;
   --text-inverse: #ffffff;
   --text-link: #3f4da8;
@@ -353,7 +353,7 @@
   --text-inverse: #17191c;
   --text-link: #aeb6ef;
   --brand: #6b7cff;
-  --brand-foreground: #ffffff;
+  --brand-foreground: #17191c;
   --brand-secondary: #a3d6cf;
   --brand-secondary-foreground: #102a2c;
   --brand-secondary-background: #162c2d;

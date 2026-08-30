@@ -12,6 +12,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../primiti
 import { Input } from "../primitives/input";
 import { Label } from "../primitives/label";
 import { Separator } from "../primitives/separator";
+import { Sheet, SheetContent, SheetTitle } from "../primitives/sheet";
 import { Skeleton } from "../primitives/skeleton";
 import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "../primitives/table";
 import { Textarea } from "../primitives/textarea";
@@ -159,6 +160,7 @@ describe("Conscia simple primitives", () => {
     expect(screen.getByRole("group").getAttribute("aria-describedby")).toBeTruthy();
     expect(screen.getByText("Available model connections")).toBeTruthy();
     expect(screen.getByText("Total: 1")).toBeTruthy();
+    expect(container.querySelector('[data-slot="table-container"]')?.getAttribute("tabindex")).toBe("0");
     expect(screen.getByTestId("loading-connection").getAttribute("aria-hidden")).toBe("true");
 
     const results = await axe.run(container);
@@ -177,5 +179,34 @@ describe("Conscia simple primitives", () => {
     expect(alert.getAttribute("aria-labelledby")).toBe("custom-alert-title");
     expect(alert.getAttribute("aria-describedby")).toBe("custom-alert-description");
     expect(alert.getAttribute("aria-live")).toBeNull();
+  });
+
+  it("keeps Sheet positioning and swipe direction aligned", () => {
+    const sides = [
+      ["top", "top-0", "up"],
+      ["right", "right-0", "right"],
+      ["bottom", "bottom-0", "down"],
+      ["left", "left-0", "left"],
+    ] as const;
+    const { rerender } = render(
+      <Sheet side="top" open>
+        <SheetContent>
+          <SheetTitle>Side-aware sheet</SheetTitle>
+        </SheetContent>
+      </Sheet>,
+    );
+
+    for (const [side, positionClass, swipeDirection] of sides) {
+      rerender(
+        <Sheet side={side} open>
+          <SheetContent>
+            <SheetTitle>Side-aware sheet</SheetTitle>
+          </SheetContent>
+        </Sheet>,
+      );
+      const content = document.querySelector('[data-slot="sheet-content"]');
+      expect(content?.className).toContain(positionClass);
+      expect(content?.getAttribute("data-swipe-direction")).toBe(swipeDirection);
+    }
   });
 });

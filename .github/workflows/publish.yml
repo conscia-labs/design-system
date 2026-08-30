@@ -34,6 +34,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Install Playwright browser
+        run: pnpm exec playwright install --with-deps chromium
+
       - name: Verify release version
         run: node scripts/verify-release-version.mjs
 
@@ -44,6 +47,10 @@ jobs:
           pnpm typecheck
           pnpm typecheck:playground
           pnpm test
+          pnpm test:package
+          pnpm test:consumer
+          pnpm build:playground
+          PLAYWRIGHT_CHANNEL=bundled pnpm test:visual
 
       - name: Check whether version is already published
         id: registry
@@ -59,4 +66,4 @@ jobs:
 
       - name: Publish to npm
         if: steps.registry.outputs.published != 'true'
-        run: npm publish
+        run: npm publish --access public

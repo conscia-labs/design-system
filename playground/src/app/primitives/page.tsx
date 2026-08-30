@@ -115,7 +115,7 @@ export default function PrimitivesPage() {
                   <Input id="disabled-field" disabled defaultValue="Inherited from platform catalog" />
                 </Field>
                 <label className="grid grid-cols-[1rem_minmax(0,1fr)] items-start gap-2 text-sm">
-                  <Checkbox defaultChecked className="mt-0.5" />
+                  <Checkbox aria-label="Include this model in default developer access" defaultChecked className="mt-0.5" />
                   <span>
                     Include this model in default developer access.
                     <span className="block text-[var(--ds-metadata)] text-text-supporting">Checkbox alignment remains stable with multi-line labels.</span>

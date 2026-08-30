@@ -204,6 +204,7 @@ test.describe("interaction baseline", () => {
     await loadRoute(page, routes[1], "light", "comfortable");
 
     const commandTrigger = page.getByRole("button", { name: "Open command palette", exact: true });
+    await expect(commandTrigger).toHaveAttribute("aria-expanded", "false");
     await commandTrigger.click();
     const commandInput = page.getByRole("combobox", { name: "Search commands", exact: true });
     await expect(commandInput).toBeVisible();

@@ -6,6 +6,8 @@ The shared React component library for building clear, consistent, and accessibl
 
 > **Package:** available publicly as [`@conscia-labs/design-system`](https://www.npmjs.com/package/@conscia-labs/design-system).
 >
+> **v1.0.0:** this README documents the clean-break v1 contract. The repository is now preparing the `1.0.0` release candidate for publication through the Phase 8 workflow.
+>
 > **Migration:** upgrading an application to v1? Follow the [Design System v1 Migration Guide](https://github.com/conscia-labs/design-system/blob/main/docs/design-system-v1-migration.md).
 
 ## Why this package exists
@@ -34,6 +36,19 @@ Use the design system to:
 
 Product applications remain responsible for routing, authentication, permissions, data fetching, mutations, validation, and business-specific behavior.
 
+## Migrating to v1.0.0
+
+Version `1.0.0` is a clean API and implementation break. Component concepts and
+public names remain recognizable, but Radix and shadcn implementation details
+are no longer part of the contract. In particular:
+
+- Replace `asChild` with the documented `render` prop where custom-host composition is required.
+- Replace legacy token utilities such as `bg-primary`, `bg-muted`, and `border-input` with the canonical Conscia semantic roles documented in the migration guide.
+- Do not add `@base-ui/react`, `@radix-ui/*`, or copied shadcn components to the application; Base UI is bundled and used internally by the design system.
+- Recheck dialogs, sheets, menus, selects, comboboxes, tabs, tooltips, forms, tables, and icon-only actions against the application’s keyboard and accessibility tests.
+
+The complete, agent-readable upgrade runbook is [`docs/design-system-v1-migration.md`](./docs/design-system-v1-migration.md) in this repository. You can also open the [migration guide on GitHub](https://github.com/conscia-labs/design-system/blob/main/docs/design-system-v1-migration.md). The guide is intentionally kept in the repository’s `docs/` directory rather than the npm tarball, so the GitHub link is the durable location for app owners and coding agents.
+
 ## What is included
 
 ### Foundation
@@ -52,9 +67,11 @@ Reusable Conscia-owned interface building blocks composed from native React
 markup and Base UI behavior where interaction complexity requires it:
 
 - Alert
+- AlertDialog
 - Avatar
 - Badge
 - Button
+- IconButton
 - Card
 - Checkbox
 - Collapsible
@@ -62,13 +79,14 @@ markup and Base UI behavior where interaction complexity requires it:
 - Dropdown menu
 - Field and form controls
 - Input and textarea
-- Select and searchable select
+- Select, FormSelect, and searchable select
 - Sheet
 - Skeleton
 - Switch
 - Table
 - Tabs and navigation tabs
 - Tooltip
+- Popover
 - Shortcut hint
 - Spinner
 - Avatar group
@@ -144,16 +162,19 @@ function App() {
 
 ### 1. Install the package
 
+For the v1 release, install the explicit `1.0.0` range after Phase 8 publishes
+the package.
+
 Using pnpm:
 
 ```bash
-pnpm add @conscia-labs/design-system
+pnpm add @conscia-labs/design-system@^1.0.0
 ```
 
 Using npm:
 
 ```bash
-npm install @conscia-labs/design-system
+npm install @conscia-labs/design-system@^1.0.0
 ```
 
 The package targets React 19 and ships as modern ESM with TypeScript
@@ -760,23 +781,45 @@ Reusable foundation, primitive, and pattern code belongs in `src`. Fixtures and 
 
 ## Releasing
 
-Releases are published from GitHub Actions through npm trusted publishing. The
-release tag must exactly match the version in `package.json`.
+The `1.0.0` release is the first public v1 package. Releases are published from
+GitHub Actions through npm trusted publishing, with the release tag required to
+match the version in `package.json` exactly. npm’s trusted-publishing flow
+provides short-lived CI authentication and provenance for the published
+package.
 
-For example, to publish the next patch:
+Before creating the v1 release tag, complete the release checklist in the
+[migration ledger](./docs/base-ui-migration.md), finalize the
+[app-owner migration guide](./docs/design-system-v1-migration.md), and run the
+full local validation suite:
 
 ```bash
-pnpm version patch --no-git-tag-version
-git add package.json
-git commit -m "Release v0.2.1"
-git tag -a v0.2.1 -m "Release v0.2.1"
-git push origin main
-git push origin v0.2.1
+pnpm lint
+pnpm lint:playground
+pnpm typecheck
+pnpm typecheck:playground
+pnpm test
+pnpm test:package
+pnpm test:consumer
+pnpm build:playground
+pnpm test:visual
 ```
 
-Pushing the tag starts the `npm-production` release workflow. The
-workflow verifies the tag, runs the package tests, builds the publishable
-artifacts, and publishes without a long-lived npm token.
+Then prepare and tag the release:
+
+```bash
+pnpm version 1.0.0 --no-git-tag-version
+git add package.json README.md docs/base-ui-migration.md docs/design-system-v1-migration.md
+git commit -m "Release v1.0.0"
+git tag -a v1.0.0 -m "Release v1.0.0"
+git push origin main
+git push origin v1.0.0
+```
+
+Pushing the tag starts the `npm-production` release workflow. The workflow
+verifies that `v1.0.0` matches `package.json`, runs the release validation, and
+publishes the package to npm without a long-lived npm token. Because this is a
+scoped public package, the release configuration must retain public access;
+see npm’s [scoped-package publishing guidance](https://docs.npmjs.com/creating-and-publishing-scoped-public-packages/).
 
 ## Design-system boundaries
 

@@ -106,7 +106,7 @@ function PrimitiveCoverage() {
             <Label htmlFor="coverage-notes">Notes</Label>
             <Textarea id="coverage-notes" defaultValue="Documented for the visual baseline." />
           </div>
-          <div className="grid gap-2" aria-label="Loading state">
+          <div className="grid gap-2" role="group" aria-label="Loading state">
             <Skeleton className="h-4 w-2/5" />
             <Skeleton className="h-4 w-full" />
             <Skeleton className="h-4 w-3/4" />
@@ -146,7 +146,7 @@ function PrimitiveCoverage() {
             </Field>
           </FieldGroup>
           <label className="flex items-start gap-2 text-sm">
-            <Checkbox defaultChecked className="mt-0.5" />
+            <Checkbox aria-label="Include this provider in the default catalog" defaultChecked className="mt-0.5" />
             <span>Include this provider in the default catalog.</span>
           </label>
           <label className="flex items-center justify-between gap-3 text-sm">

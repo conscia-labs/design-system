@@ -1,6 +1,6 @@
 # Base UI v1 Migration
 
-Status: **Phase 6 complete (consumer verification DNS-blocked)**
+Status: **Phase 8 release candidate validated; publication pending**
 
 Branch: `feature/base-ui-migration`
 
@@ -8,7 +8,7 @@ Starting commit: `064aad7` (`v0.4.0`)
 
 Package: `@conscia-labs/design-system`
 
-Current package version: `0.4.0`
+Current package version: `1.0.0`
 
 ## Objective
 
@@ -56,7 +56,7 @@ Kumo is used as architectural inspiration: custom styled components layered over
 - [x] Phase 5 — Rewrite composed patterns and application shells.
 - [x] Phase 5.5 — Add supporting primitives and interaction patterns.
 - [x] Phase 6 — Remove Radix-specific styling and normalize tokens.
-- [ ] Phase 7 — Accessibility, interaction, responsive, and regression QA.
+- [x] Phase 7 — Accessibility, interaction, responsive, and regression QA.
 - [ ] Phase 8 — Finalize the migration guide, package hardening, version `1.0.0`, and release.
 
 Each phase requires its exit criteria and evidence to be recorded here before the next phase starts.
@@ -673,6 +673,10 @@ not change component behavior or introduce a global redesign.
 - [ ] `pnpm test:consumer` remains environment-blocked after package build,
   pack, and artifact verification because npm registry DNS is unavailable.
 
+The consumer check above was the Phase 6 result. During Phase 7, the packaged
+consumer assertion was updated from the removed `--sidebar` alias to the
+canonical `--sidebar-canvas` role, and the isolated consumer build passed.
+
 ### Phase 6 exit criteria
 
 - [x] No legacy token variables or utility classes remain in package source,
@@ -692,10 +696,150 @@ It was drafted after Phase 6 so it can describe the actual canonical token
 contract, public exports, CSS entrypoints, Base UI composition rules, shell
 integration, and validation workflow.
 
-The guide is a release-track artifact, not a claim that the `1.0.0` package has
-already been published. Phase 7 and Phase 8 must revalidate it against the
-release candidate and update any changed public API, export, package, or test
-requirements before the release checklist is marked complete.
+The guide is a release-track artifact. The `1.0.0` release candidate has been
+validated against the current public API, exports, package, and test
+requirements; publication evidence will be appended after the release tag and
+registry verification complete.
+
+## Phase 7 — Accessibility, interaction, responsive, and regression QA
+
+Phase 7 hardens the migrated system against accessibility, keyboard, focus,
+responsive, packaging, and visual regressions. It does not redesign the token
+system or introduce new component families.
+
+### QA harness and coverage
+
+- Added `playground/tests/phase7-quality.spec.ts` with deterministic preference
+  initialization for both current and legacy storage keys, fixed fonts/media,
+  WCAG 2A/2AA axe-core scans, keyboard/focus checks, and document-overflow
+  assertions.
+- Added `playground/tests/mobile-drawer.spec.ts` using a touch-enabled
+  Chromium project and a real CDP touch sequence for the native mobile sidebar
+  drawer.
+- Updated `playwright.config.ts` with the `mobile-chromium` project while
+  keeping the desktop Chromium visual project separate from the touch test.
+- The existing 36 visual snapshots and six interaction baselines remain the
+  visual reference. The complete suite now runs 51 tests: eight Phase 7
+  quality tests, 42 existing visual/interaction tests, and one mobile touch
+  regression.
+- No snapshots were updated. Both final full runs completed without visual
+  differences.
+
+### Accessibility and behavior corrections
+
+- Corrected the light `--text-muted` value from `#838692` to `#707481`, which
+  raises the representative contrast ratio on the light canvas to 4.66:1.
+- Corrected dark `--brand-foreground` from white to `#17191c` on the brand
+  surface, raising the representative contrast ratio to 4.99:1.
+- Added explicit accessible names to the representative Base UI checkbox
+  fixtures and made the loading fixture a labelled semantic group.
+- Made the table overflow container keyboard focusable and gave it a visible
+  focus ring, satisfying the scrollable-region accessibility requirement.
+- Added a horizontal gutter inside the scrollable dialog body so full-width
+  controls retain their focus ring without changing their visible alignment.
+- Moved Combobox empty states outside listboxes and adopted Base UI’s filtered
+  render-function pattern for `SearchableSelect`; the test now proves that a
+  filtered keyboard selection chooses the filtered option rather than an
+  invisible/unfiltered item.
+- Applied the same listbox anatomy correction to `CommandPalette`.
+- Made `Sheet` side-aware: its root `side` maps to the matching Drawer swipe
+  direction, the content default follows the root side, and `SheetBody` owns
+  `Drawer.Content` so scrollable content does not swallow mobile drawer
+  gestures.
+- Stabilized existing browser interactions by waiting for hydrated
+  `aria-expanded="false"` trigger state before opening mobile navigation and
+  the command palette.
+
+### Validation evidence
+
+- Starting commit: `b45ed3d` (`feat: complete phase 6 token migration and guide`).
+- `pnpm test`: passed — 33 contract tests and 43 unit tests.
+- `pnpm typecheck`: passed.
+- `pnpm typecheck:playground`: passed.
+- `pnpm lint`: passed with zero warnings.
+- `pnpm lint:playground`: passed with zero warnings.
+- `pnpm test:package`: passed — build, publint, and distribution guards.
+- `pnpm build:playground`: passed — all static routes generated. The initial
+  sandboxed attempt hit Turbopack’s local worker-port permission limit; the
+  permission-enabled rerun passed without a source change.
+- `pnpm test:consumer`: passed — the packed `0.4.0` tarball installed into an
+  isolated Next.js application and produced a successful production build.
+- `pnpm test:visual`: passed 51/51 in two final consecutive runs, including
+  the 42-test snapshot/interaction baseline, eight Phase 7 tests, and the
+  mobile touch-drawer regression. No snapshot updates were required.
+- In-app browser smoke passed for the Foundation route: the page loaded with
+  the expected title and heading, the navigation trigger was available, and
+  the shell rendered without an error overlay.
+
+### Browser and tooling limitations
+
+- The local Playwright installation contains Chromium-based Chrome only;
+  Firefox and WebKit binaries were not installed, so this phase does not claim
+  cross-engine automation coverage.
+- Axe-core checks are automated WCAG scans, not a substitute for manual screen
+  reader testing or product-specific assistive-technology review. Those remain
+  appropriate release checks for Phase 8.
+- Generated `dist` output and `test-results` artifacts are local validation
+  products and are not treated as source changes.
+
+### Phase 7 exit criteria
+
+- [x] Representative closed and open component states pass automated
+  accessibility checks.
+- [x] Keyboard navigation, selection, focus restoration, checkbox/switch/
+  collapsible state changes, and mobile drawer swipe behavior pass.
+- [x] Mobile routes avoid document-level horizontal overflow in all three
+  density modes.
+- [x] Existing visual baselines pass twice consecutively without unexplained
+  differences.
+- [x] Unit, contract, typecheck, lint, package, playground build, and packed
+  consumer checks pass.
+- [x] Phase 7 changes, limitations, and evidence are recorded before Phase 8.
+
+## Phase 8 — Package hardening, v1.0.0, and release
+
+Phase 8 is the final migration phase. It converts the validated release
+candidate into the public `@conscia-labs/design-system@1.0.0` package and
+records the release evidence. It does not add new component behavior.
+
+### Release candidate checklist
+
+- [x] Root README documents the v1.0.0 contract, install range, migration-guide
+  location, and release workflow.
+- [x] App-owner and agent migration guide is finalized for the release
+  candidate.
+- [x] Package version is `1.0.0` and the scoped package retains public access.
+- [x] Publish workflow verifies the tag, runs lint/typecheck/unit/package/
+  consumer/playground/browser gates, and uses bundled Chromium in CI.
+- [x] `pnpm test`, typechecks, lint, package verification, consumer build,
+  playground production build, and two consecutive 51/51 browser runs pass.
+- [x] The exact `1.0.0` package tarball contains only the intended `dist`,
+  license, package metadata, and README files.
+- [ ] Release commit and `v1.0.0` tag are pushed to the release branch.
+- [ ] GitHub Actions publishes the scoped package and npm registry metadata is
+  verified after publication.
+
+### Release controls
+
+The release tag must equal `v` plus the `package.json` version. The publish
+workflow uses GitHub Actions trusted publishing with `id-token: write`, runs
+the package and consumer checks before `npm publish --access public`, and uses
+the bundled Playwright Chromium project for reproducible browser validation.
+The package’s existing `publishConfig` keeps the registry and scoped-package
+visibility explicit.
+
+### Candidate evidence
+
+- Starting commit: `b45ed3d` (`feat: complete phase 6 token migration and guide`).
+- Candidate package version: `1.0.0`.
+- Candidate package verification: passed, including `publint`, bundled Base UI
+  checks, canonical token guards, public exports, and exact tarball contents.
+- Candidate consumer verification: passed with an isolated Next.js production
+  build using the packed `1.0.0` tarball.
+- Candidate browser verification: passed 51/51 twice with no snapshot changes,
+  using both the local Chrome channel and the bundled Chromium release mode.
+- Publication state: pending release commit/tag push and npm registry
+  verification.
 
 ## Progress ledger
 
@@ -708,9 +852,9 @@ requirements before the release checklist is marked complete.
 | Phase 4 | Complete | `1dc8aa6` | Working tree | Base UI behavior wrappers, AlertDialog/Popover, dependency cleanup, package/playground gates, and two consecutive 40/40 browser runs |
 | Phase 5 | Complete | `e40cc6a` | `fab320e` | Shell composition migration, sidebar refinements, DataTable semantics, package cleanup, 41-test browser matrix, and validation evidence recorded |
 | Phase 5.5 | Complete | Working tree | Working tree | ShortcutHint, Spinner, AvatarGroup, FilterChip/FilterBar, CommandPalette, opt-in Toast, playground coverage, 42-test browser matrix, and packaged consumer verification |
-| Phase 6 | Complete (consumer verification DNS-blocked) | `9b19863` | `3e0d098` | Canonical token cleanup, state-marker cleanup, metadata/package guards, app-owner migration guide, 33 contract + 42 unit tests, production build, and two consecutive 42/42 visual runs; consumer fixture remains DNS-blocked |
-| Phase 7 | Pending | Pending | Pending | |
-| Phase 8 | Pending | Pending | Pending | |
+| Phase 6 | Complete | `9b19863` | `b45ed3d` | Canonical token cleanup, state-marker cleanup, metadata/package guards, app-owner migration guide, 33 contract + 42 unit tests, production build, and two consecutive 42/42 visual runs; consumer verification was pending at the phase boundary and was closed during Phase 7 |
+| Phase 7 | Complete (uncommitted) | `b45ed3d` | Working tree | WCAG axe scans, keyboard/focus coverage, responsive overflow checks, touch Drawer swipe regression, Sheet side alignment, dialog focus-ring clearance, 43 unit tests, package/consumer verification, and two consecutive 51/51 browser runs with no snapshot changes |
+| Phase 8 | In progress | `b45ed3d` | Pending | v1.0.0 candidate hardened and validated; release commit, tag push, npm publication, and registry verification remain |
 
 ## Decision log
 
@@ -742,14 +886,19 @@ requirements before the release checklist is marked complete.
 | 2026-08-29 | Rename sidebar active styling to `sidebar-active-background` and remove raw sidebar aliases. | Sidebar roles should describe their visual intent and avoid ambiguous palette-oriented names. |
 | 2026-08-29 | Keep valid Base UI state attributes and positioning variables while removing only compatibility markers. | Base UI exposes these attributes and variables as the intended custom styling contract; removing them would break behavior or animation without reducing legacy coupling. |
 | 2026-08-29 | Maintain a separate app-owner and agent migration guide before the v1 release. | The internal ledger records repository work, while application owners need an ordered upgrade runbook, concrete API/token mappings, validation gates, and explicit stop conditions. |
+| 2026-08-30 | Treat accessibility failures as release-relevant even when visual snapshots are unchanged. | Phase 7 found contrast, accessible-name, scroll-region, listbox-anatomy, and hydration-readiness issues that screenshot comparison alone could not detect. |
+| 2026-08-30 | Keep `Drawer.Content` around scrollable `SheetBody` content, not the entire Sheet surface. | Base UI uses the content marker to protect scrolling and text selection; narrowing it preserves those guarantees while allowing the native sidebar surface to receive swipe dismissal. |
+| 2026-08-30 | Derive Sheet Drawer swipe direction from its side and test the side contract. | A panel’s visual position and dismissal direction must remain aligned across top, right, bottom, and left variants. |
+| 2026-08-30 | Give `DialogBody` a small internal horizontal gutter. | Full-width controls need room for their 3px focus ring inside the scrollable body without changing their visible alignment. |
+| 2026-08-30 | Make release validation explicit in the publish workflow. | A v1 package must pass package, consumer, playground, and browser checks before the tag can publish; CI uses bundled Chromium for reproducibility. |
 
 ## Blockers and notes
 
 Known environment notes: the package consumer fixture and production playground
-build now pass with the permission-enabled runner. Earlier Phase 0–5 records
-retain the historical npm-DNS and sandbox port limitations that affected those
-runs. Phase 6 consumer verification still reaches package build, pack, and
-artifact verification but cannot install the isolated fixture dependencies
-while npm registry DNS is unavailable. Development runs may still log Base UI
-Combobox hydration warnings while the client-side caret styling is initialized;
-they do not affect the production build or the passing browser matrix.
+build pass with the permission-enabled runner. Earlier Phase 0–5 records retain
+the historical npm-DNS and sandbox port limitations that affected those runs.
+The local Playwright installation currently contains Chromium-based Chrome only;
+Firefox and WebKit coverage is not available until those browser binaries are
+installed. Development runs may still log Base UI Combobox hydration warnings
+while client-side caret styling is initialized; they do not affect the
+production build or the passing browser matrix.

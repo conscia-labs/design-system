@@ -300,7 +300,7 @@ function AppSidebar({
 
   return (
     <>
-      <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+      <Sheet side={side} open={mobileOpen} onOpenChange={setMobileOpen}>
         <SheetContent
           side={side}
           data-sidebar-variant={variant}
@@ -361,7 +361,7 @@ function AppSidebarContent({
       data-scroll-after={hasScrollAfter ? "true" : undefined}
       ref={contentRef}
       className={cn(
-        "relative flex min-h-0 min-w-0 flex-1 flex-col gap-[var(--ds-sidebar-group-gap)] overflow-x-hidden overflow-y-auto bg-sidebar-content px-[var(--ds-sidebar-content-padding-x)] py-[var(--ds-sidebar-content-padding-y)]",
+        "relative flex min-h-0 min-w-0 flex-1 flex-col gap-[var(--ds-sidebar-group-gap)] overflow-x-clip overflow-y-auto bg-sidebar-content px-[var(--ds-sidebar-content-padding-x)] py-[var(--ds-sidebar-content-padding-y)]",
         className,
       )}
       {...props}

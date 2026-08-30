@@ -134,15 +134,15 @@ function CommandPalette({
                   placeholder={placeholder}
                 />
               </div>
+              {filteredItems.length === 0 ? (
+                <div role="status" className="px-3 py-8 text-center text-sm text-text-supporting">
+                  {emptyMessage}
+                </div>
+              ) : null}
               <Combobox.List
                 aria-label="Commands"
                 className="max-h-[min(24rem,calc(100vh-10rem))] overflow-y-auto p-2 outline-none"
               >
-                {filteredItems.length === 0 ? (
-                  <div role="status" className="px-3 py-8 text-center text-sm text-text-supporting">
-                    {emptyMessage}
-                  </div>
-                ) : null}
                 {filteredItems.map((item, index) => (
                     <React.Fragment key={item.id}>
                     {item.group && (index === 0 || filteredItems[index - 1]?.group !== item.group) ? (

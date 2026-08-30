@@ -69,7 +69,7 @@ const productionCss = (
 
 const checks = [
   ["card padding", /padding-inline:var\(--ds-surface-padding\)/],
-  ["sidebar background", /background-color:var\(--sidebar\)/],
+  ["sidebar background", /background-color:var\(--sidebar-canvas\)/],
   ["flex layout", /display:flex/],
   ["dropdown opacity", /opacity:\.7/],
   ["borders", /border-style:var\(--tw-border-style\)/],
