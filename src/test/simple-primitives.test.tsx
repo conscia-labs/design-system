@@ -14,10 +14,44 @@ import { Label } from "../primitives/label";
 import { Separator } from "../primitives/separator";
 import { Sheet, SheetContent, SheetTitle } from "../primitives/sheet";
 import { Skeleton } from "../primitives/skeleton";
+import { LabeledSwitch, Switch } from "../primitives/switch";
 import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "../primitives/table";
 import { Textarea } from "../primitives/textarea";
 
 describe("Conscia simple primitives", () => {
+  it("keeps the default switch compact and supports text inside a labeled switch", async () => {
+    const user = userEvent.setup();
+    const { container } = render(
+      <>
+        <Switch aria-label="Automatic diagnostics" />
+        <LabeledSwitch
+          aria-label="Availability"
+          onLabel="ENABLED"
+          offLabel="DISABLED"
+        />
+      </>,
+    );
+
+    const defaultSwitch = screen.getByRole("switch", { name: "Automatic diagnostics" });
+    const labeledSwitch = screen.getByRole("switch", { name: "Availability" });
+
+    expect(defaultSwitch.className).toContain("rounded-full");
+    expect(defaultSwitch.querySelector('[data-slot="switch-on-label"]')).toBeNull();
+    expect(labeledSwitch.className).toContain("rounded-[0.625rem]");
+    expect(labeledSwitch.getAttribute("data-labeled")).toBe("true");
+    expect(screen.getByText("ENABLED").getAttribute("aria-hidden")).toBe("true");
+    expect(screen.getByText("DISABLED").getAttribute("aria-hidden")).toBe("true");
+
+    await user.click(labeledSwitch);
+
+    expect(labeledSwitch.getAttribute("data-checked")).toBe("");
+    expect(labeledSwitch.getAttribute("data-unchecked")).toBeNull();
+    expect(container.querySelector('[data-slot="switch-thumb"]')).toBeTruthy();
+
+    const results = await axe.run(container);
+    expect(results.violations).toEqual([]);
+  });
+
   it("keeps Button native by default and supports render composition", async () => {
     const user = userEvent.setup();
     let clicked = false;

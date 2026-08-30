@@ -312,6 +312,26 @@ export function CreateConnectionCard() {
 }
 ```
 
+### Text-in-track switches
+
+Use `LabeledSwitch` when the switch state should be visible inside the control.
+It keeps Base UI’s switch behavior and accepts any React node for either label:
+
+```tsx
+import { LabeledSwitch } from "@conscia-labs/design-system";
+
+<LabeledSwitch
+  aria-label="Deployment status"
+  defaultChecked
+  onLabel="ENABLED"
+  offLabel="DISABLED"
+/>
+```
+
+`Switch` also accepts `onLabel` and `offLabel` when a single API needs to support
+both the compact unlabeled style and the text-in-track style. If a label is
+provided without its pair, the missing label defaults to `ON` or `OFF`.
+
 ## Building an application shell
 
 The shared shell owns presentation and responsive behavior. The host application supplies routes, links, user context, and actions.

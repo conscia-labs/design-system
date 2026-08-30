@@ -32,6 +32,7 @@ import {
   Input,
   IconButton,
   Label,
+  LabeledSwitch,
   SearchableSelect,
   Separator,
   ShortcutHint,
@@ -155,6 +156,13 @@ function PrimitiveCoverage() {
               <span className="block text-text-supporting">Run a health check after configuration changes.</span>
             </span>
             <Switch checked={switchChecked} onCheckedChange={setSwitchChecked} aria-label="Automatic diagnostics" />
+          </label>
+          <label className="flex items-center justify-between gap-3 text-sm">
+            <span>
+              <span className="block font-medium">Deployment status</span>
+              <span className="block text-text-supporting">Text stays inside the track for quick scanning.</span>
+            </span>
+            <LabeledSwitch defaultChecked aria-label="Deployment status" onLabel="ENABLED" offLabel="DISABLED" />
           </label>
         </div>
       </ExampleSection>
