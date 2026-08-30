@@ -1,6 +1,6 @@
 # Design System v1 Migration Guide
 
-Status: **Finalized for the Phase 8 release candidate**
+Status: **Published with @conscia-labs/design-system@1.0.0**
 
 Package: <code>@conscia-labs/design-system</code>
 
@@ -12,10 +12,9 @@ Conscia-owned v1 design system. It is intentionally procedural: an agent
 should be able to follow it in order, record evidence, and stop at a defined
 boundary when an application-specific decision is required.
 
-The repository release candidate is <code>1.0.0</code>. This guide is the
-release-track contract for application owners and coding agents. Update it if
-the release candidate changes a public prop, export, CSS entrypoint, or package
-requirement.
+The published release is <code>1.0.0</code>. This guide is the release-track
+contract for application owners and coding agents. Update it if a future
+release changes a public prop, export, CSS entrypoint, or package requirement.
 
 ## 1. Migration contract
 

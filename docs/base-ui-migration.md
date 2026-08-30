@@ -1,6 +1,6 @@
 # Base UI v1 Migration
 
-Status: **Phase 8 release candidate validated; publication pending**
+Status: **Phase 8 complete — @conscia-labs/design-system@1.0.0 published**
 
 Branch: `feature/base-ui-migration`
 
@@ -57,7 +57,7 @@ Kumo is used as architectural inspiration: custom styled components layered over
 - [x] Phase 5.5 — Add supporting primitives and interaction patterns.
 - [x] Phase 6 — Remove Radix-specific styling and normalize tokens.
 - [x] Phase 7 — Accessibility, interaction, responsive, and regression QA.
-- [ ] Phase 8 — Finalize the migration guide, package hardening, version `1.0.0`, and release.
+- [x] Phase 8 — Finalize the migration guide, package hardening, version `1.0.0`, and release.
 
 Each phase requires its exit criteria and evidence to be recorded here before the next phase starts.
 
@@ -696,10 +696,9 @@ It was drafted after Phase 6 so it can describe the actual canonical token
 contract, public exports, CSS entrypoints, Base UI composition rules, shell
 integration, and validation workflow.
 
-The guide is a release-track artifact. The `1.0.0` release candidate has been
+The guide is a release-track artifact. The published `1.0.0` package has been
 validated against the current public API, exports, package, and test
-requirements; publication evidence will be appended after the release tag and
-registry verification complete.
+requirements.
 
 ## Phase 7 — Accessibility, interaction, responsive, and regression QA
 
@@ -816,8 +815,9 @@ records the release evidence. It does not add new component behavior.
   playground production build, and two consecutive 51/51 browser runs pass.
 - [x] The exact `1.0.0` package tarball contains only the intended `dist`,
   license, package metadata, and README files.
-- [ ] Release commit and `v1.0.0` tag are pushed to the release branch.
-- [ ] GitHub Actions publishes the scoped package and npm registry metadata is
+- [x] Release commit and `v1.0.0` tag are pushed to `main` and the migration
+  branch.
+- [x] GitHub Actions publishes the scoped package and npm registry metadata is
   verified after publication.
 
 ### Release controls
@@ -842,8 +842,15 @@ visibility explicit.
   bundled Chromium release mode. The CI publish job runs the platform-stable
   accessibility, keyboard, responsive, and touch suites; it does not compare
   Linux screenshots against the repository’s local visual baselines.
-- Publication state: pending release commit/tag push and npm registry
-  verification.
+- Release commit: `9b68d06` (`ci: make v1 release browser gates platform stable`).
+- Release tag: `v1.0.0` points to `9b68d06`.
+- Publish workflow: passed as run `33300792489`; `main` CI passed as run
+  `33300762112`.
+- npm registry: `1.0.0` is published and `latest` points to `1.0.0`.
+- The initial tag attempt failed before publication because Linux screenshot
+  rendering differed from the repository’s local baselines. The unpublished
+  tag was replaced with the platform-stable workflow commit and the release
+  then completed successfully.
 
 ## Progress ledger
 
@@ -857,8 +864,8 @@ visibility explicit.
 | Phase 5 | Complete | `e40cc6a` | `fab320e` | Shell composition migration, sidebar refinements, DataTable semantics, package cleanup, 41-test browser matrix, and validation evidence recorded |
 | Phase 5.5 | Complete | Working tree | Working tree | ShortcutHint, Spinner, AvatarGroup, FilterChip/FilterBar, CommandPalette, opt-in Toast, playground coverage, 42-test browser matrix, and packaged consumer verification |
 | Phase 6 | Complete | `9b19863` | `b45ed3d` | Canonical token cleanup, state-marker cleanup, metadata/package guards, app-owner migration guide, 33 contract + 42 unit tests, production build, and two consecutive 42/42 visual runs; consumer verification was pending at the phase boundary and was closed during Phase 7 |
-| Phase 7 | Complete (uncommitted) | `b45ed3d` | Working tree | WCAG axe scans, keyboard/focus coverage, responsive overflow checks, touch Drawer swipe regression, Sheet side alignment, dialog focus-ring clearance, 43 unit tests, package/consumer verification, and two consecutive 51/51 browser runs with no snapshot changes |
-| Phase 8 | In progress | `b45ed3d` | Pending | v1.0.0 candidate hardened and validated; release commit, tag push, npm publication, and registry verification remain |
+| Phase 7 | Complete | `b45ed3d` | `234b073` | WCAG axe scans, keyboard/focus coverage, responsive overflow checks, touch Drawer swipe regression, Sheet side alignment, dialog focus-ring clearance, 43 unit tests, package/consumer verification, and two consecutive 51/51 browser runs with no snapshot changes |
+| Phase 8 | Complete | `b45ed3d` | `9b68d06` | v1.0.0 package hardening, finalized README/migration guide, platform-stable publish gates, successful main CI and publish workflow, pushed release tag, and npm registry verification |
 
 ## Decision log
 
@@ -895,6 +902,7 @@ visibility explicit.
 | 2026-08-30 | Derive Sheet Drawer swipe direction from its side and test the side contract. | A panel’s visual position and dismissal direction must remain aligned across top, right, bottom, and left variants. |
 | 2026-08-30 | Give `DialogBody` a small internal horizontal gutter. | Full-width controls need room for their 3px focus ring inside the scrollable body without changing their visible alignment. |
 | 2026-08-30 | Make release validation explicit in the publish workflow. | A v1 package must pass package, consumer, playground, and browser checks before the tag can publish; CI uses bundled Chromium for reproducibility. |
+| 2026-08-30 | Keep Linux CI browser gates focused on platform-stable behavior rather than local screenshot baselines. | Screenshot rasterization differs across operating systems; the visual matrix remains a local release-candidate gate while CI validates accessibility, keyboard, responsive, and touch behavior. |
 
 ## Blockers and notes
 
@@ -905,4 +913,6 @@ The local Playwright installation currently contains Chromium-based Chrome only;
 Firefox and WebKit coverage is not available until those browser binaries are
 installed. Development runs may still log Base UI Combobox hydration warnings
 while client-side caret styling is initialized; they do not affect the
-production build or the passing browser matrix.
+production build or the passing browser matrix. The v1.0.0 publish workflow and
+main CI run completed successfully; future releases should keep the CI browser
+behavior gates separate from platform-specific local screenshot baselines.

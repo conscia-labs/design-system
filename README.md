@@ -6,7 +6,7 @@ The shared React component library for building clear, consistent, and accessibl
 
 > **Package:** available publicly as [`@conscia-labs/design-system`](https://www.npmjs.com/package/@conscia-labs/design-system).
 >
-> **v1.0.0:** this README documents the clean-break v1 contract. The repository is now preparing the `1.0.0` release candidate for publication through the Phase 8 workflow.
+> **v1.0.0:** this README documents the clean-break v1 contract. `1.0.0` is published as the stable v1 release.
 >
 > **Migration:** upgrading an application to v1? Follow the [Design System v1 Migration Guide](https://github.com/conscia-labs/design-system/blob/main/docs/design-system-v1-migration.md).
 
@@ -162,8 +162,7 @@ function App() {
 
 ### 1. Install the package
 
-For the v1 release, install the explicit `1.0.0` range after Phase 8 publishes
-the package.
+For v1, install the explicit `1.0.0` range:
 
 Using pnpm:
 
@@ -787,7 +786,7 @@ match the version in `package.json` exactly. npm’s trusted-publishing flow
 provides short-lived CI authentication and provenance for the published
 package.
 
-Before creating the v1 release tag, complete the release checklist in the
+Before creating a release tag, complete the release checklist in the
 [migration ledger](./docs/base-ui-migration.md), finalize the
 [app-owner migration guide](./docs/design-system-v1-migration.md), and run the
 full local validation suite:
@@ -804,19 +803,20 @@ pnpm build:playground
 pnpm test:visual
 ```
 
-Then prepare and tag the release:
+Then prepare and tag a release. Replace `VERSION` with the package version you
+are releasing:
 
 ```bash
-pnpm version 1.0.0 --no-git-tag-version
+pnpm version VERSION --no-git-tag-version
 git add package.json README.md docs/base-ui-migration.md docs/design-system-v1-migration.md
-git commit -m "Release v1.0.0"
-git tag -a v1.0.0 -m "Release v1.0.0"
+git commit -m "Release vVERSION"
+git tag -a vVERSION -m "Release vVERSION"
 git push origin main
-git push origin v1.0.0
+git push origin vVERSION
 ```
 
 Pushing the tag starts the `npm-production` release workflow. The workflow
-verifies that `v1.0.0` matches `package.json`, runs the release validation, and
+verifies that the tag matches `package.json`, runs the release validation, and
 publishes the package to npm without a long-lived npm token. Because this is a
 scoped public package, the release configuration must retain public access;
 see npm’s [scoped-package publishing guidance](https://docs.npmjs.com/creating-and-publishing-scoped-public-packages/).
