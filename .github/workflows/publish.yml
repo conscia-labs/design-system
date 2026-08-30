@@ -50,7 +50,8 @@ jobs:
           pnpm test:package
           pnpm test:consumer
           pnpm build:playground
-          PLAYWRIGHT_CHANNEL=bundled pnpm test:visual
+          PLAYWRIGHT_CHANNEL=bundled pnpm exec playwright test playground/tests/phase7-quality.spec.ts --project=chromium
+          PLAYWRIGHT_CHANNEL=bundled pnpm exec playwright test playground/tests/mobile-drawer.spec.ts --project=mobile-chromium
 
       - name: Check whether version is already published
         id: registry

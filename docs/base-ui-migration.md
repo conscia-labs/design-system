@@ -810,7 +810,8 @@ records the release evidence. It does not add new component behavior.
   candidate.
 - [x] Package version is `1.0.0` and the scoped package retains public access.
 - [x] Publish workflow verifies the tag, runs lint/typecheck/unit/package/
-  consumer/playground/browser gates, and uses bundled Chromium in CI.
+  consumer/playground/accessibility/interaction gates, and uses bundled
+  Chromium in CI.
 - [x] `pnpm test`, typechecks, lint, package verification, consumer build,
   playground production build, and two consecutive 51/51 browser runs pass.
 - [x] The exact `1.0.0` package tarball contains only the intended `dist`,
@@ -836,8 +837,11 @@ visibility explicit.
   checks, canonical token guards, public exports, and exact tarball contents.
 - Candidate consumer verification: passed with an isolated Next.js production
   build using the packed `1.0.0` tarball.
-- Candidate browser verification: passed 51/51 twice with no snapshot changes,
-  using both the local Chrome channel and the bundled Chromium release mode.
+- Candidate browser verification: passed the 51-test visual/interaction matrix
+  twice with no snapshot changes, using both the local Chrome channel and the
+  bundled Chromium release mode. The CI publish job runs the platform-stable
+  accessibility, keyboard, responsive, and touch suites; it does not compare
+  Linux screenshots against the repository’s local visual baselines.
 - Publication state: pending release commit/tag push and npm registry
   verification.
 
