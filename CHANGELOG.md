@@ -2,9 +2,15 @@
 
 ## Unreleased
 
+## 1.0.1 - 2026-08-31
+
 - Add the path-free, theme-aware `BrandWordmark` primitive using the canonical
   no-tagline Conscia vector geometry, with shared exports, documentation,
   playground coverage, and accessible naming behavior.
+- Add the opt-in `LabeledSwitch` variant for text-in-track ON/OFF or
+  ENABLED/DISABLED states while preserving the compact default switch.
+- Add the `LoadingButton` primitive for pending async actions, including stable
+  button content, a small spinner, disabled state, and `aria-busy` semantics.
 
 ## 0.4.0 - 2026-08-15
 
