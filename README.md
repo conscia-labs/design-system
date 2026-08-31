@@ -71,6 +71,7 @@ markup and Base UI behavior where interaction complexity requires it:
 - Avatar
 - Badge
 - Button
+- LoadingButton
 - IconButton
 - Card
 - Checkbox
@@ -331,6 +332,20 @@ import { LabeledSwitch } from "@conscia-labs/design-system";
 `Switch` also accepts `onLabel` and `offLabel` when a single API needs to support
 both the compact unlabeled style and the text-in-track style. If a label is
 provided without its pair, the missing label defaults to `ON` or `OFF`.
+
+### Loading buttons
+
+Use `LoadingButton` for async actions that need stable button layout while a
+mutation is pending. It disables the button, sets `aria-busy`, and replaces the
+normal content with a small spinner and `pendingLabel`:
+
+```tsx
+import { LoadingButton } from "@conscia-labs/design-system";
+
+<LoadingButton pending={saveMutation.isPending} pendingLabel="Saving…">
+  Save changes
+</LoadingButton>
+```
 
 ## Building an application shell
 

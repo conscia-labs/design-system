@@ -33,6 +33,7 @@ import {
   IconButton,
   Label,
   LabeledSwitch,
+  LoadingButton,
   SearchableSelect,
   Separator,
   ShortcutHint,
@@ -205,6 +206,7 @@ function PrimitiveCoverage() {
             <Spinner size="sm" label="Loading model data" />
             <Spinner label="Loading" />
             <Spinner size="lg" />
+            <LoadingButton size="sm" pending pendingLabel="Saving…">Save changes</LoadingButton>
           </div>
           <div className="flex flex-wrap items-center gap-4">
             <AvatarGroup max={3} total={7} aria-label="Model owners">

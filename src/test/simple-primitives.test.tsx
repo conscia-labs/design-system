@@ -11,6 +11,7 @@ import { Button, IconButton } from "../primitives/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../primitives/card";
 import { Input } from "../primitives/input";
 import { Label } from "../primitives/label";
+import { LoadingButton } from "../primitives/loading-button";
 import { Separator } from "../primitives/separator";
 import { Sheet, SheetContent, SheetTitle } from "../primitives/sheet";
 import { Skeleton } from "../primitives/skeleton";
@@ -19,6 +20,30 @@ import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, Tabl
 import { Textarea } from "../primitives/textarea";
 
 describe("Conscia simple primitives", () => {
+  it("keeps LoadingButton content stable and prevents duplicate pending actions", async () => {
+    const { container, rerender } = render(
+      <LoadingButton pending pendingLabel="Saving changes…">
+        Save changes
+      </LoadingButton>,
+    );
+
+    const pendingButton = screen.getByRole("button", { name: "Saving changes…" });
+    expect(pendingButton.getAttribute("disabled")).toBe("");
+    expect(pendingButton.getAttribute("aria-busy")).toBe("true");
+    expect(pendingButton.querySelector('[data-slot="spinner"]')).toBeTruthy();
+    expect(pendingButton.textContent).not.toContain("Save changes");
+
+    rerender(<LoadingButton>Save changes</LoadingButton>);
+
+    const readyButton = screen.getByRole("button", { name: "Save changes" });
+    expect(readyButton.getAttribute("disabled")).toBeNull();
+    expect(readyButton.getAttribute("aria-busy")).toBeNull();
+    expect(readyButton.querySelector('[data-slot="spinner"]')).toBeNull();
+
+    const results = await axe.run(container);
+    expect(results.violations).toEqual([]);
+  });
+
   it("keeps the default switch compact and supports text inside a labeled switch", async () => {
     const user = userEvent.setup();
     const { container } = render(

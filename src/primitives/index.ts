@@ -17,6 +17,7 @@ export * from "./filter-chip";
 export * from "./form-select";
 export * from "./input";
 export * from "./label";
+export * from "./loading-button";
 export * from "./popover";
 export * from "./select";
 export * from "./searchable-select";
