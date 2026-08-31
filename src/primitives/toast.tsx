@@ -4,6 +4,7 @@ import * as React from "react";
 import { Toast as BaseToast, type ToastObject } from "@base-ui/react/toast";
 import { XIcon } from "lucide-react";
 
+import { overlayLayers } from "./overlay-layers";
 import { cn } from "./utils";
 
 type ToastVariant = "default" | "error" | "information" | "success" | "warning";
@@ -120,7 +121,8 @@ function ToastViewport({ className, placement = "bottom-end", ...props }: ToastV
       <BaseToast.Viewport
         data-slot="toast-viewport"
         className={cn(
-          "pointer-events-none fixed z-[100] flex w-[min(24rem,calc(100vw-2rem))] max-w-[calc(100vw-2rem)] flex-col gap-2 p-4 outline-none",
+          "pointer-events-none fixed flex w-[min(24rem,calc(100vw-2rem))] max-w-[calc(100vw-2rem)] flex-col gap-2 p-4 outline-none",
+          overlayLayers.transient,
           placement === "bottom-end" && "right-0 bottom-0 items-end",
           placement === "bottom-start" && "bottom-0 left-0 items-start",
           placement === "top-end" && "top-0 right-0 items-end",

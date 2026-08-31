@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## 1.0.3 - 2026-08-31
+
+- Fix nested Select, FormSelect, SearchableSelect, Popover, and DropdownMenu
+  overlays inside Dialog and Sheet surfaces by forwarding nested-safe modal
+  behavior and applying the shared overlay hierarchy to portal Positioners.
+- Add browser and unit regression coverage for nested modal composition,
+  keyboard and pointer selection, focus restoration, form submission, portal
+  placement, and popup layering.
+
 ## 1.0.2 - 2026-08-31
 
 - Improve labeled switch spacing by widening the text track and insetting the

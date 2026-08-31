@@ -6,7 +6,7 @@ The shared React component library for building clear, consistent, and accessibl
 
 > **Package:** available publicly as [`@conscia-labs/design-system`](https://www.npmjs.com/package/@conscia-labs/design-system).
 >
-> **v1.0.0:** this README documents the clean-break v1 contract. `1.0.0` is published as the stable v1 release.
+> **Current release:** `1.0.3` is the latest stable v1 release.
 >
 > **Migration:** upgrading an application to v1? Follow the [Design System v1 Migration Guide](https://github.com/conscia-labs/design-system/blob/main/docs/design-system-v1-migration.md).
 
@@ -693,6 +693,40 @@ Use `SearchableSelect` when users need to find an item in a longer list by label
 
 Both `FormSelect` and `SearchableSelect` contribute a named value to a native
 HTML form when their `name` prop is provided.
+
+### Nested overlays
+
+Portaled controls can be used inside `Dialog` and `Sheet` without clipping
+their popup. The popup Positioner is mounted in a Base UI portal and uses the
+shared overlay layer hierarchy:
+
+| Layer | Components | z-index |
+| --- | --- | ---: |
+| Modal | `Dialog`, `Sheet`, `AlertDialog` | 40 |
+| Popup | `Select`, `Popover`, `SearchableSelect`, `DropdownMenu` | 50 |
+| Transient | `Toast`, `Tooltip` | 100 |
+
+Base UI `Select` is modal by default, so `FormSelect` preserves that default
+for backwards compatibility. Set `modal={false}` when a `Select` or
+`FormSelect` is nested in a modal surface so it does not add a second backdrop,
+focus boundary, or inert page state. `SearchableSelect` also exposes `modal`
+and preserves Combobox's current non-modal default:
+
+```tsx
+<Dialog open={open} onOpenChange={setOpen}>
+  <DialogContent>
+    <DialogBody className="overflow-y-auto">
+      <FormSelect modal={false} name="vendor" options={vendorOptions} />
+      <SearchableSelect modal={false} name="model" options={modelOptions} onValueChange={setModel} />
+    </DialogBody>
+  </DialogContent>
+</Dialog>
+```
+
+`Select`, `Popover`, and `DropdownMenu` already forward their Base UI root
+props, including `modal`. Use the same `modal={false}` setting for those
+controls when they are nested. No consuming-app z-index override or portal
+adapter is required.
 
 ## Semantic color
 

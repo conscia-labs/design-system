@@ -25,6 +25,12 @@ type FormSelectProps = {
   defaultValue?: string;
   required?: boolean;
   disabled?: boolean;
+  /**
+   * Whether the popup blocks interaction outside the select while open.
+   * Leave unset to preserve Base UI Select's modal default. Use `false` when
+   * the select is nested inside a Dialog or Sheet.
+   */
+  modal?: boolean;
   placeholder?: string;
   options: FormSelectOption[];
   className?: string;
@@ -56,6 +62,7 @@ function FormSelect({
   defaultValue,
   required,
   disabled,
+  modal,
   placeholder,
   options,
   className,
@@ -85,6 +92,7 @@ function FormSelect({
         value={toSelectValue(currentValue)}
         required={required}
         disabled={disabled}
+        modal={modal}
         onValueChange={handleValueChange}
       >
         <SelectTrigger id={id} aria-label={ariaLabel} className={triggerClassName}>
