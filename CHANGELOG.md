@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 1.0.2 - 2026-08-31
+
+- Improve labeled switch spacing by widening the text track and insetting the
+  ON/OFF or ENABLED/DISABLED labels away from the outer edges.
+
 ## 1.0.1 - 2026-08-31
 
 - Add the path-free, theme-aware `BrandWordmark` primitive using the canonical
