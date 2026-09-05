@@ -68,7 +68,7 @@ describe("nested overlay behavior", () => {
     await user.click(formTrigger);
     const formSelectPositioner = document.querySelector('[data-slot="select-positioner"]');
     expect(formSelectPositioner?.parentElement?.querySelector('[data-base-ui-inert=""]')).toBeNull();
-    expect(formTrigger.getAttribute("aria-expanded")).toBe("true");
+    await waitFor(() => expect(formTrigger.getAttribute("aria-expanded")).toBe("true"));
     expect((document.querySelector('input[name="status"]') as HTMLInputElement).value).toBe("draft");
     await user.keyboard("{Escape}");
     await waitFor(() => expect(formTrigger.getAttribute("aria-expanded")).toBe("false"));
