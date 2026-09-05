@@ -51,6 +51,10 @@ It creates and pushes the annotated version tag; that tag workflow verifies the
 version and branch ancestry, builds the playground, deploys GitHub Pages, and
 publishes the package to npm.
 
+The `pnpm version` lifecycle hook automatically refreshes the README release
+marker and generated agent metadata. Only the changelog and release notes need
+manual version-specific edits.
+
 ## Recommended GitHub branch rules (when available)
 
 If the repository plan supports rulesets, protect both long-lived branches and

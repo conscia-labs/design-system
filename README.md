@@ -6,7 +6,7 @@ The shared React component library for building clear, consistent, and accessibl
 
 > **Package:** available publicly as [`@conscia-labs/design-system`](https://www.npmjs.com/package/@conscia-labs/design-system).
 >
-> **Current release:** `1.0.3` is the latest stable v1 release.
+> **Current release:** `1.1.0` is the latest stable v1 release.
 >
 > **Migration:** upgrading an application to v1? Follow the [Design System v1 Migration Guide](https://github.com/conscia-labs/design-system/blob/main/docs/design-system-v1-migration.md).
 
@@ -972,8 +972,9 @@ git switch dev
 git pull --ff-only origin dev
 git switch -c release/vVERSION
 pnpm version VERSION --no-git-tag-version
-# Update README.md and any release notes for VERSION.
-git add package.json README.md
+# Update CHANGELOG.md and any release notes for VERSION.
+# Review the generated metadata, then stage the complete release change.
+git add -A
 git commit -m "Release vVERSION"
 git push -u origin release/vVERSION
 # Open release/vVERSION -> dev, then dev -> main pull requests.
@@ -988,6 +989,9 @@ the release workflow, which verifies the version and branch ancestry, runs the
 release validation, deploys Pages, and publishes the package to npm without a
 long-lived npm token. Because this is a scoped public package, the release
 configuration must retain public access; see npm’s [scoped-package publishing guidance](https://docs.npmjs.com/creating-and-publishing-scoped-public-packages/).
+
+The `pnpm version` lifecycle hook refreshes the README release marker and
+generated agent metadata, including `agent-manifest.json` and `playground/public/llms.txt`.
 
 ## Design-system boundaries
 

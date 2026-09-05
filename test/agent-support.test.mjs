@@ -22,6 +22,7 @@ test("agent manifest stays aligned with the package and public site", async () =
 
   assert.equal(agentManifest.package, packageManifest.name);
   assert.equal(agentManifest.version, packageManifest.version);
+  assert.equal(packageManifest.scripts.version, "node scripts/sync-release-metadata.mjs");
   assert.deepEqual(publicManifest, agentManifest);
   assert.equal(publicGuide, installedGuide);
   assert.ok(agentManifest.componentFamilies.length > 0);
