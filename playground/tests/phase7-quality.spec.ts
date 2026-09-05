@@ -5,11 +5,15 @@ import { expect, test, type Page } from "@playwright/test";
 
 const require = createRequire(import.meta.url);
 const axeSource = readFileSync(require.resolve("axe-core/axe.min.js"), "utf8");
+const packageManifest = JSON.parse(
+  readFileSync(new URL("../../package.json", import.meta.url), "utf8"),
+) as { version: string };
 
 type Appearance = "light" | "dark";
 type Density = "comfortable" | "compact" | "operational";
 
 const routes = [
+  { path: "/", heading: "Overview" },
   { path: "/components", heading: "Components" },
   { path: "/components/alert", heading: "Alert" },
   { path: "/components/alert-dialog", heading: "Alert dialog" },
@@ -151,6 +155,32 @@ async function expectNoDocumentOverflow(page: Page, state: string) {
     `${state} should not create document-level horizontal overflow`,
   ).toBeLessThanOrEqual(overflow.viewportWidth);
 }
+
+test.describe("Overview adoption guide", () => {
+  test("shows the package version and links into the component catalog", async ({ page }) => {
+    await loadRoute(page, "/", "Overview", "light", "comfortable");
+
+    await expect(
+      page.locator(`[aria-label="Design system version ${packageManifest.version}"]`),
+    ).toBeVisible();
+    await expect(
+      page.getByText(`Version ${packageManifest.version}`, { exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Get started", exact: true }),
+    ).toBeVisible();
+
+    await page.getByRole("tab", { name: "Styles", exact: true }).click();
+    await expect(
+      page.getByRole("tabpanel", { name: "Styles", exact: true }),
+    ).toContainText("@conscia-labs/design-system/tailwind.css");
+
+    await page.getByRole("link", { name: "Browse components", exact: true }).click();
+    await expect(
+      page.getByRole("heading", { name: "Components", exact: true }),
+    ).toBeVisible();
+  });
+});
 
 test.describe("Phase 7 accessibility regression", () => {
   test("representative routes have no automatically detectable violations", async ({ page }) => {

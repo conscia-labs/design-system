@@ -32,6 +32,30 @@ test("playground inventory covers every public runtime export", () => {
   assert.deepEqual(missing, []);
 });
 
+test("playground displays the package version from one source", () => {
+  const layout = read("../app/layout.tsx");
+  const shell = read("../components/app-shell.tsx");
+  const metadata = read("../lib/design-system-metadata.ts");
+
+  assert.match(metadata, /import packageManifest from "\.\.\/\.\.\/\.\.\/package\.json"/);
+  assert.match(metadata, /designSystemVersion = packageManifest\.version/);
+  assert.match(layout, /version=\{designSystemVersion\}/);
+  assert.match(shell, /Design system version \$\{version\}/);
+});
+
+test("CI integrates on dev and deploys Pages only from main releases", () => {
+  const ci = read("../../../.github/workflows/ci.yml");
+  const publish = read("../../../.github/workflows/publish.yml");
+
+  assert.match(ci, /pull_request:[\s\S]*- dev[\s\S]*- main/);
+  assert.match(ci, /push:[\s\S]*- dev[\s\S]*- main/);
+  assert.match(ci, /Require releases to come from dev/);
+  assert.match(ci, /github\.event_name == 'push' && github\.ref == 'refs\/heads\/main'/);
+  assert.doesNotMatch(ci, /workflow_dispatch/);
+  assert.match(publish, /fetch-depth: 0/);
+  assert.match(publish, /git merge-base --is-ancestor/);
+});
+
 test("component documentation is registry-driven and gives every family its own route", () => {
   const inventory = read("../components/component-inventory.ts");
   const docs = read("../components/component-docs.ts");
