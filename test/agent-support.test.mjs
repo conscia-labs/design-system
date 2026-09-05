@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import { mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -78,4 +79,14 @@ test("consumer initializer supports a non-mutating dry run", async () => {
     code: "ENOENT",
   });
   assert.match(result.content, /## Conscia design system/);
+});
+
+test("release command refuses to tag from the integration branch", () => {
+  const result = spawnSync(process.execPath, ["scripts/create-release-tag.mjs"], {
+    cwd: process.cwd(),
+    encoding: "utf8",
+  });
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /Release tags must be created from main/);
 });

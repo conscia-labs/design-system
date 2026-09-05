@@ -939,12 +939,12 @@ Feature and fix branches target `dev`, and a release pull request is opened from
 branch. See [CONTRIBUTING.md](./CONTRIBUTING.md) for the complete branch model
 and recommended GitHub branch rules.
 
-Merging the release pull request publishes the playground to GitHub Pages.
-Publishing the npm package is a separate, deliberate step: an annotated tag on
-the released `main` commit starts the npm trusted-publishing workflow. The tag
-must match the version in `package.json` exactly and point to a commit on
-`main`. npm’s trusted-publishing flow provides short-lived CI authentication
-and provenance for the published package.
+Merging the release pull request runs CI but does not publish. Run `pnpm release`
+from the reviewed `main` commit to create and push the version tag. That single
+tag workflow validates the release, deploys the playground to GitHub Pages, and
+publishes the npm package. The tag must match the version in `package.json`
+exactly and point to a commit on `main`. npm’s trusted-publishing flow provides
+short-lived CI authentication and provenance for the published package.
 
 Before creating a release tag, complete the release checklist in the
 [migration ledger](./docs/base-ui-migration.md), finalize the
@@ -980,15 +980,14 @@ git push -u origin release/vVERSION
 
 git switch main
 git pull --ff-only origin main
-git tag -a vVERSION -m "Release vVERSION"
-git push origin vVERSION
+pnpm release
 ```
 
-The merge to `main` deploys Pages; pushing the tag starts the `npm-production`
-release workflow. The workflow verifies the version and branch ancestry, runs
-the release validation, and publishes the package to npm without a long-lived
-npm token. Because this is a scoped public package, the release configuration
-must retain public access; see npm’s [scoped-package publishing guidance](https://docs.npmjs.com/creating-and-publishing-scoped-public-packages/).
+The merge to `main` runs CI. `pnpm release` pushes the version tag and starts
+the release workflow, which verifies the version and branch ancestry, runs the
+release validation, deploys Pages, and publishes the package to npm without a
+long-lived npm token. Because this is a scoped public package, the release
+configuration must retain public access; see npm’s [scoped-package publishing guidance](https://docs.npmjs.com/creating-and-publishing-scoped-public-packages/).
 
 ## Design-system boundaries
 
