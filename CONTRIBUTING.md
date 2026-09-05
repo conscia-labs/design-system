@@ -50,9 +50,10 @@ hidden behind an explicit application-level feature flag.
 The tag workflow verifies that the tag matches `package.json` and points to a
 commit on `main` before publishing to npm.
 
-## Recommended GitHub branch rules
+## Recommended GitHub branch rules (when available)
 
-Protect both long-lived branches and disallow force pushes and deletion.
+If the repository plan supports rulesets, protect both long-lived branches and
+disallow force pushes and deletion.
 
 - Set `dev` as the repository default branch so new pull requests target the
   integration branch by default.
@@ -66,3 +67,13 @@ Protect both long-lived branches and disallow force pushes and deletion.
 Repository administrators should be subject to the rules unless an emergency
 procedure explicitly requires a bypass. If an emergency change lands on
 `main`, immediately merge or cherry-pick it back into `dev`.
+
+If branch protection is unavailable on the repository plan, use the workflow
+and review process as the control instead:
+
+- Keep `dev` as the default branch and open normal pull requests into `dev`.
+- Merge `dev` into `main` only for a release, after manually confirming the
+  `validate` and `release-policy` checks.
+- Never push directly to `main`; the workflow cannot prevent an authorized
+  direct push, and any such push will deploy Pages.
+- Tag only the reviewed `main` release commit.
