@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import { mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -21,6 +22,7 @@ test("agent manifest stays aligned with the package and public site", async () =
 
   assert.equal(agentManifest.package, packageManifest.name);
   assert.equal(agentManifest.version, packageManifest.version);
+  assert.equal(packageManifest.scripts.version, "node scripts/sync-release-metadata.mjs");
   assert.deepEqual(publicManifest, agentManifest);
   assert.equal(publicGuide, installedGuide);
   assert.ok(agentManifest.componentFamilies.length > 0);
@@ -78,4 +80,14 @@ test("consumer initializer supports a non-mutating dry run", async () => {
     code: "ENOENT",
   });
   assert.match(result.content, /## Conscia design system/);
+});
+
+test("release command refuses to tag from the integration branch", () => {
+  const result = spawnSync(process.execPath, ["scripts/create-release-tag.mjs"], {
+    cwd: process.cwd(),
+    encoding: "utf8",
+  });
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /Release tags must be created from main/);
 });
