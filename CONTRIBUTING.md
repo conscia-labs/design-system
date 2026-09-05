@@ -9,8 +9,8 @@ branch. Normal development must not be merged directly to `main`.
 | --- | --- | --- |
 | `feature/*`, `fix/*`, `docs/*` | Short-lived work branched from `dev` | None |
 | `dev` | Integrated, releasable development | CI only |
-| `main` | Released source only | GitHub Pages after every merge |
-| `vX.Y.Z` tag | Exact npm release commit on `main` | npm publish |
+| `main` | Released source only | CI only; release tag deploys Pages |
+| `vX.Y.Z` tag | Exact npm release commit on `main` | GitHub Pages and npm publish |
 
 ## Day-to-day development
 
@@ -37,18 +37,19 @@ hidden behind an explicit application-level feature flag.
 2. Open a pull request from `dev` to `main`. CI rejects pull requests to `main`
    from any other branch.
 3. Merge the release pull request after validation and review. The resulting
-   push to `main` publishes the current playground to GitHub Pages.
-4. Tag that exact commit and push the tag:
+   push to `main` runs CI; the release command below performs the deployment.
+4. From that exact, up-to-date `main` commit, run the release command:
 
    ```bash
    git switch main
    git pull --ff-only origin main
-   git tag -a vVERSION -m "Release vVERSION"
-   git push origin vVERSION
+   pnpm release
    ```
 
-The tag workflow verifies that the tag matches `package.json` and points to a
-commit on `main` before publishing to npm.
+`pnpm release` requires a clean worktree and an exact match with `origin/main`.
+It creates and pushes the annotated version tag; that tag workflow verifies the
+version and branch ancestry, builds the playground, deploys GitHub Pages, and
+publishes the package to npm.
 
 ## Recommended GitHub branch rules (when available)
 
@@ -75,5 +76,5 @@ and review process as the control instead:
 - Merge `dev` into `main` only for a release, after manually confirming the
   `validate` and `release-policy` checks.
 - Never push directly to `main`; the workflow cannot prevent an authorized
-  direct push, and any such push will deploy Pages.
-- Tag only the reviewed `main` release commit.
+  direct push, and direct pushes only run CI.
+- Run `pnpm release` only from the reviewed `main` release commit.

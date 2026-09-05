@@ -43,17 +43,23 @@ test("playground displays the package version from one source", () => {
   assert.match(shell, /Design system version \$\{version\}/);
 });
 
-test("CI integrates on dev and deploys Pages only from main releases", () => {
+test("CI validates branches while the release tag deploys Pages and npm", () => {
   const ci = read("../../../.github/workflows/ci.yml");
   const publish = read("../../../.github/workflows/publish.yml");
 
   assert.match(ci, /pull_request:[\s\S]*- dev[\s\S]*- main/);
   assert.match(ci, /push:[\s\S]*- dev[\s\S]*- main/);
   assert.match(ci, /Require releases to come from dev/);
-  assert.match(ci, /github\.event_name == 'push' && github\.ref == 'refs\/heads\/main'/);
+  assert.match(ci, /Build static playground/);
+  assert.doesNotMatch(ci, /Configure GitHub Pages|Upload GitHub Pages artifact|deploy-pages/);
   assert.doesNotMatch(ci, /workflow_dispatch/);
+  assert.match(publish, /tags:[\s\S]*"v\*\.\*\.\*"/);
   assert.match(publish, /fetch-depth: 0/);
   assert.match(publish, /git merge-base --is-ancestor/);
+  assert.match(publish, /Configure GitHub Pages/);
+  assert.match(publish, /Upload GitHub Pages artifact/);
+  assert.match(publish, /deploy-pages:/);
+  assert.match(publish, /needs: validate-release/);
 });
 
 test("component documentation is registry-driven and gives every family its own route", () => {

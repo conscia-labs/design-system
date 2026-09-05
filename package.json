@@ -72,6 +72,7 @@
     "test:unit": "vitest run",
     "test:visual": "playwright test",
     "test:visual:update": "playwright test --update-snapshots",
+    "release": "node scripts/create-release-tag.mjs",
     "test:package": "pnpm build && pnpm lint:package && node scripts/verify-package.mjs",
     "test:consumer": "node scripts/test-packaged-consumer.mjs",
     "lint": "eslint src --max-warnings=0",
