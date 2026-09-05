@@ -82,7 +82,7 @@ test("consumer initializer supports a non-mutating dry run", async () => {
   assert.match(result.content, /## Conscia design system/);
 });
 
-test("release command refuses to tag from the integration branch", () => {
+test("release command refuses to tag from a non-main branch", () => {
   const result = spawnSync(process.execPath, ["scripts/create-release-tag.mjs"], {
     cwd: process.cwd(),
     encoding: "utf8",

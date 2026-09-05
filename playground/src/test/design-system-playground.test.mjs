@@ -43,13 +43,13 @@ test("playground displays the package version from one source", () => {
   assert.match(shell, /Design system version \$\{version\}/);
 });
 
-test("CI validates branches while the release tag deploys Pages and npm", () => {
+test("CI validates main while the release tag deploys Pages and npm", () => {
   const ci = read("../../../.github/workflows/ci.yml");
   const publish = read("../../../.github/workflows/publish.yml");
 
-  assert.match(ci, /pull_request:[\s\S]*- dev[\s\S]*- main/);
-  assert.match(ci, /push:[\s\S]*- dev[\s\S]*- main/);
-  assert.match(ci, /Require releases to come from dev/);
+  assert.match(ci, /pull_request:[\s\S]*- main/);
+  assert.match(ci, /push:[\s\S]*- main/);
+  assert.doesNotMatch(ci, /dev|release-policy/);
   assert.match(ci, /Build static playground/);
   assert.doesNotMatch(ci, /Configure GitHub Pages|Upload GitHub Pages artifact|deploy-pages/);
   assert.doesNotMatch(ci, /workflow_dispatch/);

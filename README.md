@@ -933,11 +933,11 @@ Reusable foundation, primitive, and pattern code belongs in `src`. Fixtures and 
 
 ## Releasing
 
-Development is integrated through `dev`; `main` contains released source only.
-Feature and fix branches target `dev`, and a release pull request is opened from
-`dev` to `main`. The CI workflow rejects pull requests to `main` from any other
-branch. See [CONTRIBUTING.md](./CONTRIBUTING.md) for the complete branch model
-and recommended GitHub branch rules.
+Development and releases use `main`. Feature and fix branches target `main`,
+and every change merged there must be production-ready. Publishing remains
+separate: `pnpm release` creates the version tag that deploys Pages and npm. See
+[CONTRIBUTING.md](./CONTRIBUTING.md) for the complete branch model and
+recommended GitHub branch rules.
 
 Merging the release pull request runs CI but does not publish. Run `pnpm release`
 from the reviewed `main` commit to create and push the version tag. That single
@@ -963,13 +963,13 @@ pnpm build:playground:static
 pnpm test:visual
 ```
 
-Prepare the version change on a branch from `dev`, merge it into `dev`, then
-open and merge the release pull request from `dev` to `main`. Replace `VERSION`
-with the package version you are releasing:
+Prepare the version change on a branch from `main`, then open and merge the
+release pull request into `main`. Replace `VERSION` with the package version you
+are releasing:
 
 ```bash
-git switch dev
-git pull --ff-only origin dev
+git switch main
+git pull --ff-only origin main
 git switch -c release/vVERSION
 pnpm version VERSION --no-git-tag-version
 # Update CHANGELOG.md and any release notes for VERSION.
@@ -977,7 +977,7 @@ pnpm version VERSION --no-git-tag-version
 git add -A
 git commit -m "Release vVERSION"
 git push -u origin release/vVERSION
-# Open release/vVERSION -> dev, then dev -> main pull requests.
+# Open and merge release/vVERSION -> main after CI and review.
 
 git switch main
 git pull --ff-only origin main
