@@ -54,6 +54,8 @@ commit on `main` before publishing to npm.
 
 Protect both long-lived branches and disallow force pushes and deletion.
 
+- Set `dev` as the repository default branch so new pull requests target the
+  integration branch by default.
 - `dev`: require a pull request, one approval, resolved conversations, and the
   `validate` status check. Disallow direct pushes.
 - `main`: require a pull request, one approval, resolved conversations, and the
