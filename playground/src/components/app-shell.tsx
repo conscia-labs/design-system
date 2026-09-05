@@ -8,7 +8,7 @@ import { BarChart3, Bell, BookOpen, Boxes, ChevronDown, Component, Gauge, Layout
 import {
   AppHeader, AppHeaderActions, AppHeaderSearch, AppHeaderStart,
   AppShell as DesignAppShell, AppSidebar, AppSidebarContent, AppSidebarFooter,
-  Avatar, AvatarFallback, BrandIcon, Button, CommandPalette,
+  Avatar, AvatarFallback, Badge, BrandIcon, Button, CommandPalette,
   DesignPreferenceControls, DesignSystemPreferenceSync,
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger,
   IconButton, MainRegion, PageFrame, ShortcutHint, SidebarNavigation, SidebarTrigger,
@@ -47,7 +47,7 @@ const commandItems = navEntries.flatMap((entry) => entry.items.map((item) => ({
   keywords: [entry.label],
 })));
 
-export function AppShell({ children }: { children: ReactNode }) {
+export function AppShell({ children, version }: { children: ReactNode; version: string }) {
   const pathname = usePathname();
   const router = useRouter();
   const [commandOpen, setCommandOpen] = useState(false);
@@ -99,6 +99,9 @@ export function AppShell({ children }: { children: ReactNode }) {
           </button>
         </AppHeaderSearch>
         <AppHeaderActions>
+          <Badge variant="neutral" aria-label={`Design system version ${version}`} className="shrink-0 tabular-nums">
+            v{version}
+          </Badge>
           <IconButton variant="ghost" aria-label="Notifications"><Bell /></IconButton>
           <button type="button" aria-label="Open account menu" className="rounded-full outline-none focus-visible:ring-[3px] focus-visible:ring-focus/50">
             <Avatar className="size-8"><AvatarFallback>CD</AvatarFallback></Avatar>

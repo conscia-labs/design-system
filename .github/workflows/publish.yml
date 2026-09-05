@@ -18,6 +18,19 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Verify release commit is on main
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          git fetch --no-tags origin main
+          release_commit="$(git rev-list -n 1 "$RELEASE_TAG")"
+          if ! git merge-base --is-ancestor "$release_commit" origin/main; then
+            echo "Release tag $RELEASE_TAG must point to a commit on main."
+            exit 1
+          fi
 
       - name: Install pnpm
         uses: pnpm/action-setup@v6

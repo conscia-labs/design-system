@@ -933,11 +933,18 @@ Reusable foundation, primitive, and pattern code belongs in `src`. Fixtures and 
 
 ## Releasing
 
-The `1.0.0` release is the first public v1 package. Releases are published from
-GitHub Actions through npm trusted publishing, with the release tag required to
-match the version in `package.json` exactly. npm’s trusted-publishing flow
-provides short-lived CI authentication and provenance for the published
-package.
+Development is integrated through `dev`; `main` contains released source only.
+Feature and fix branches target `dev`, and a release pull request is opened from
+`dev` to `main`. The CI workflow rejects pull requests to `main` from any other
+branch. See [CONTRIBUTING.md](./CONTRIBUTING.md) for the complete branch model
+and recommended GitHub branch rules.
+
+Merging the release pull request publishes the playground to GitHub Pages.
+Publishing the npm package is a separate, deliberate step: an annotated tag on
+the released `main` commit starts the npm trusted-publishing workflow. The tag
+must match the version in `package.json` exactly and point to a commit on
+`main`. npm’s trusted-publishing flow provides short-lived CI authentication
+and provenance for the published package.
 
 Before creating a release tag, complete the release checklist in the
 [migration ledger](./docs/base-ui-migration.md), finalize the
@@ -956,23 +963,32 @@ pnpm build:playground:static
 pnpm test:visual
 ```
 
-Then prepare and tag a release. Replace `VERSION` with the package version you
-are releasing:
+Prepare the version change on a branch from `dev`, merge it into `dev`, then
+open and merge the release pull request from `dev` to `main`. Replace `VERSION`
+with the package version you are releasing:
 
 ```bash
+git switch dev
+git pull --ff-only origin dev
+git switch -c release/vVERSION
 pnpm version VERSION --no-git-tag-version
-git add package.json README.md docs/base-ui-migration.md docs/design-system-v1-migration.md
+# Update README.md and any release notes for VERSION.
+git add package.json README.md
 git commit -m "Release vVERSION"
+git push -u origin release/vVERSION
+# Open release/vVERSION -> dev, then dev -> main pull requests.
+
+git switch main
+git pull --ff-only origin main
 git tag -a vVERSION -m "Release vVERSION"
-git push origin main
 git push origin vVERSION
 ```
 
-Pushing the tag starts the `npm-production` release workflow. The workflow
-verifies that the tag matches `package.json`, runs the release validation, and
-publishes the package to npm without a long-lived npm token. Because this is a
-scoped public package, the release configuration must retain public access;
-see npm’s [scoped-package publishing guidance](https://docs.npmjs.com/creating-and-publishing-scoped-public-packages/).
+The merge to `main` deploys Pages; pushing the tag starts the `npm-production`
+release workflow. The workflow verifies the version and branch ancestry, runs
+the release validation, and publishes the package to npm without a long-lived
+npm token. Because this is a scoped public package, the release configuration
+must retain public access; see npm’s [scoped-package publishing guidance](https://docs.npmjs.com/creating-and-publishing-scoped-public-packages/).
 
 ## Design-system boundaries
 
