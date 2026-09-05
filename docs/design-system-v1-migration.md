@@ -452,26 +452,23 @@ styles, and the mobile drawer. The application still owns route data,
 permissions, labels, link rendering, active-route calculation, and business
 actions.
 
-Use the current structure:
+Prefer the integrated structure for new and migrated shells:
 
 ~~~tsx
-<AppShell>
+<AppShell headerLayout="integrated">
+  <AppHeader>
+    <AppHeaderStart><SidebarTrigger />{/* identity */}</AppHeaderStart>
+    <AppHeaderSearch mobileTrigger={mobileSearch}>{search}</AppHeaderSearch>
+    <AppHeaderActions>{accountActions}</AppHeaderActions>
+  </AppHeader>
   <AppSidebar variant="auto">
-    <AppSidebarHeader>
-      <ProductIdentity label="Conscia" description="Administration" />
-    </AppSidebarHeader>
     <AppSidebarContent>
       <SidebarNavigation entries={entries} renderLink={renderLink} />
     </AppSidebarContent>
     <AppSidebarFooter>{accountMenu}</AppSidebarFooter>
   </AppSidebar>
 
-  <MainRegion>
-    <TopBar>
-      <SidebarTrigger />
-    </TopBar>
-    <PageFrame>{children}</PageFrame>
-  </MainRegion>
+  <MainRegion><PageFrame>{children}</PageFrame></MainRegion>
 </AppShell>
 ~~~
 
@@ -481,7 +478,8 @@ Migration rules:
   application appearance. Use <code>variant="dark"</code> only for a
   deliberately dark navigation identity and <code>variant="light"</code> for a
   deliberately light one.
-- Keep <code>SidebarTrigger</code> inside <code>TopBar</code>; it must remain
+- Keep <code>SidebarTrigger</code> inside <code>AppHeader</code> or
+  <code>TopBar</code>; it must remain
   available when the rail is collapsed or represented as a mobile drawer.
 - Replace local light-only <code>--sidebar-*</code> overrides with the canonical
   sidebar utilities or the <code>AppSidebar</code> variant before retaining a
@@ -491,7 +489,10 @@ Migration rules:
   intentionally needs to coordinate them.
 - Keep <code>renderLink</code> responsible for routing. Do not turn sidebar
   links into buttons just to reproduce an old slot-based composition pattern.
-- Keep group expansion persistence in the application’s chosen
+- Convert ordinary navigation sections to explicit
+  <code>type: "group"</code> entries. Use <code>type: "submenu"</code> only for
+  genuine hierarchy; untyped sections retain their v1 collapsible behavior.
+- Keep submenu expansion persistence in the application’s chosen
   <code>SidebarNavigation</code> <code>storageKey</code>; it is distinct from
   the shell’s open state.
 

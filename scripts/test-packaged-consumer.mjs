@@ -87,6 +87,16 @@ const installedPackageRoot = join(
   fixtureRoot,
   "node_modules/@conscia-labs/design-system",
 );
+const installedAgentGuide = await readFile(
+  join(installedPackageRoot, "AGENT_GUIDE.md"),
+  "utf8",
+);
+const installedAgentManifest = JSON.parse(
+  await readFile(join(installedPackageRoot, "agent-manifest.json"), "utf8"),
+);
+assert.match(installedAgentGuide, /Prefer patterns for recurring product workflows/);
+assert.equal(installedAgentManifest.package, "@conscia-labs/design-system");
+assert.ok(installedAgentManifest.componentFamilies.length > 0);
 const installedFoundation = await readFile(
   join(installedPackageRoot, "dist/foundation.css"),
   "utf8",

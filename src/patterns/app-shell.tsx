@@ -101,6 +101,11 @@ type AppShellContextValue = {
   toggleSidebar: () => void;
 };
 
+type AppShellProps = React.ComponentProps<"div"> & {
+  defaultSidebarOpen?: boolean;
+  headerLayout?: "split" | "integrated";
+};
+
 const AppShellContext = React.createContext<AppShellContextValue | null>(null);
 
 function useAppShell() {
@@ -181,13 +186,12 @@ function useSidebarOverflow() {
 
 function AppShell({
   defaultSidebarOpen = true,
+  headerLayout = "split",
   children,
   className,
   style,
   ...props
-}: React.ComponentProps<"div"> & {
-  defaultSidebarOpen?: boolean;
-}) {
+}: AppShellProps) {
   const isMobile = useMediaQuery("(max-width: 1023px)");
   const [sidebarOpen, setSidebarOpenState] = React.useState(defaultSidebarOpen);
   const [sidebarSide, setSidebarSide] = React.useState<"left" | "right">("left");
@@ -261,6 +265,7 @@ function AppShell({
           data-slot="app-shell"
           data-sidebar-state={sidebarOpen ? "expanded" : "collapsed"}
           data-sidebar-side={sidebarSide}
+          data-header-layout={headerLayout}
           suppressHydrationWarning
           className={cn(
             "group/shell min-h-svh bg-canvas text-text-primary",
@@ -322,6 +327,7 @@ function AppSidebar({
           "fixed inset-y-0 z-20 hidden w-[var(--ds-app-sidebar-width)] shrink-0 flex-col border-sidebar-border bg-sidebar-canvas text-sidebar-primary-text transition-[width] duration-200 ease-linear lg:flex",
           side === "left" ? "left-0 border-r" : "right-0 border-l",
           "group-data-[sidebar-state=collapsed]/shell:w-[var(--ds-app-sidebar-width)]",
+          "group-data-[header-layout=integrated]/shell:top-[var(--ds-topbar-height)]",
           className,
         )}
         {...props}
@@ -451,9 +457,12 @@ function NavigationGroup({
   children: React.ReactNode;
   className?: string;
 }) {
+  const labelId = React.useId();
+
   return (
     <section
       data-slot="navigation-group"
+      aria-labelledby={label ? labelId : undefined}
       className={cn(
         "flex min-w-0 flex-col gap-[var(--ds-sidebar-label-gap)]",
         className,
@@ -462,6 +471,7 @@ function NavigationGroup({
       {label ? (
         <div
           data-slot="navigation-group-label"
+          id={labelId}
           className="flex min-h-6 items-center gap-2 px-2 pb-0 pt-2 text-[length:var(--ds-sidebar-group-label-size)] font-semibold uppercase leading-[var(--ds-sidebar-group-label-line-height)] tracking-[0.04em] text-sidebar-group-label group-data-[sidebar-state=collapsed]/shell:hidden"
         >
           {label}
@@ -488,7 +498,7 @@ function navigationItemClasses(active?: boolean) {
     "group-data-[sidebar-state=collapsed]/shell:justify-center group-data-[sidebar-state=collapsed]/shell:px-0",
     "[&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:stroke-[1.75] [&>svg]:text-sidebar-icon",
     active &&
-      "bg-sidebar-active-background font-semibold text-sidebar-active-foreground shadow-[inset_3px_0_0_var(--sidebar-active-indicator)] hover:bg-sidebar-active-background hover:text-sidebar-active-foreground [&>svg]:text-sidebar-active-foreground",
+      "bg-sidebar-active-background font-semibold text-sidebar-active-foreground hover:bg-sidebar-active-background hover:text-sidebar-active-foreground [&>svg]:text-sidebar-active-foreground",
   );
 }
 
@@ -577,7 +587,7 @@ const NavigationSubItem = React.forwardRef<HTMLElement, NavigationSubItemProps>(
           "hover:bg-sidebar-hover hover:text-sidebar-primary-text focus-visible:ring-[3px] focus-visible:ring-sidebar-focus-ring",
           "group-data-[sidebar-state=collapsed]/shell:hidden [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:stroke-[1.75] [&>svg]:text-sidebar-icon",
           active &&
-            "bg-sidebar-active-background text-sidebar-active-foreground shadow-[inset_3px_0_0_var(--sidebar-active-indicator)] hover:bg-sidebar-active-background hover:text-sidebar-active-foreground [&>svg]:text-sidebar-active-foreground",
+            "bg-sidebar-active-background font-semibold text-sidebar-active-foreground hover:bg-sidebar-active-background hover:text-sidebar-active-foreground [&>svg]:text-sidebar-active-foreground",
           className,
         ),
         ...props,
@@ -609,7 +619,7 @@ function NavigationSubList({
 }
 
 /**
- * Place this control inside TopBar, not AppSidebar, so it remains available
+ * Place this control inside AppHeader or TopBar, not AppSidebar, so it remains available
  * after the sidebar collapses and in the mobile drawer layout.
  */
 function SidebarTrigger({
@@ -768,8 +778,73 @@ function MainRegion({
       className={cn(
         "flex min-h-svh min-w-0 w-full flex-1 flex-col transition-[padding] duration-200 ease-linear",
         "group-data-[sidebar-side=left]/shell:lg:pl-[var(--ds-app-sidebar-width)] group-data-[sidebar-side=right]/shell:lg:pr-[var(--ds-app-sidebar-width)]",
+        "group-data-[header-layout=integrated]/shell:pt-[var(--ds-topbar-height)]",
         className,
       )}
+      {...props}
+    />
+  );
+}
+
+function AppHeader({
+  className,
+  ...props
+}: React.ComponentProps<"header">) {
+  return (
+    <header
+      data-slot="app-header"
+      className={cn(
+        "fixed inset-x-0 top-0 z-30 flex h-[var(--ds-topbar-height)] min-h-[var(--ds-topbar-height)] items-center gap-2 border-b border-border-subtle bg-canvas/96 px-[var(--ds-topbar-padding-x)] backdrop-blur supports-[backdrop-filter]:bg-canvas/88 md:gap-3 md:px-[var(--ds-topbar-padding-x-wide)]",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+function AppHeaderStart({
+  className,
+  ...props
+}: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="app-header-start"
+      className={cn("flex min-w-0 flex-1 items-center gap-2", className)}
+      {...props}
+    />
+  );
+}
+
+type AppHeaderSearchProps = React.ComponentProps<"div"> & {
+  mobileTrigger: React.ReactNode;
+};
+
+function AppHeaderSearch({
+  mobileTrigger,
+  children,
+  className,
+  ...props
+}: AppHeaderSearchProps) {
+  return (
+    <div
+      data-slot="app-header-search"
+      className={cn("ml-auto flex shrink-0 items-center", className)}
+      {...props}
+    >
+      <div className="hidden w-[min(22rem,32vw)] md:block">{children}</div>
+      <div className="md:hidden">{mobileTrigger}</div>
+    </div>
+  );
+}
+
+function AppHeaderActions({
+  className,
+  ...props
+}: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="app-header-actions"
+      className={cn("flex shrink-0 items-center gap-1", className)}
       {...props}
     />
   );
@@ -861,6 +936,10 @@ function InspectorRegion({
 }
 
 export {
+  AppHeader,
+  AppHeaderActions,
+  AppHeaderSearch,
+  AppHeaderStart,
   AppShell,
   AppSidebar,
   AppSidebarContent,
@@ -883,4 +962,9 @@ export {
   useAppShell,
 };
 
-export type { NavigationItemProps, NavigationSubItemProps };
+export type {
+  AppHeaderSearchProps,
+  AppShellProps,
+  NavigationItemProps,
+  NavigationSubItemProps,
+};

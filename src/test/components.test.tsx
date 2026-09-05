@@ -11,6 +11,10 @@ import { Input } from "../primitives/input";
 import { SearchableSelect } from "../primitives/searchable-select";
 import { Textarea } from "../primitives/textarea";
 import {
+  AppHeader,
+  AppHeaderActions,
+  AppHeaderSearch,
+  AppHeaderStart,
   AppShell,
   AppSidebar,
   AppSidebarContent,
@@ -24,7 +28,11 @@ import {
   TopBar,
 } from "../patterns/app-shell";
 import { SidebarNavigation } from "../patterns/sidebar-navigation";
+import { AttentionItem, AttentionList } from "../patterns/attention-list";
+import { ActivityItem } from "../patterns/activity-list";
+import { DataPanel, DataPanelContent, DataPanelFooter, DataPanelHeader } from "../patterns/data-panel";
 import { DataTable, type SortingState } from "../patterns/data-table";
+import { MetricCard, MetricTrend } from "../patterns/metric-card";
 import { ValueMeter } from "../patterns/value-meter";
 import {
   IdentityRow,
@@ -329,6 +337,72 @@ describe("SearchableSelect", () => {
 });
 
 describe("shared sidebar", () => {
+  it("supports the integrated full-width application header anatomy", () => {
+    const { container } = render(
+      <AppShell headerLayout="integrated">
+        <AppHeader>
+          <AppHeaderStart>Identity</AppHeaderStart>
+          <AppHeaderSearch mobileTrigger={<button type="button">Mobile search</button>}>
+            Desktop search
+          </AppHeaderSearch>
+          <AppHeaderActions>Account</AppHeaderActions>
+        </AppHeader>
+        <AppSidebar><AppSidebarContent>Navigation</AppSidebarContent></AppSidebar>
+      </AppShell>,
+    );
+
+    expect(container.querySelector('[data-slot="app-shell"]')?.getAttribute("data-header-layout")).toBe("integrated");
+    expect(container.querySelector('[data-slot="app-header"]')?.className).toContain("fixed");
+    expect(container.querySelector('[data-slot="app-sidebar"]')?.className).toContain("group-data-[header-layout=integrated]/shell:top-[var(--ds-topbar-height)]");
+    expect(screen.getByRole("button", { name: "Mobile search" })).toBeTruthy();
+  });
+
+  it("renders explicit static groups as accessible flat destinations", () => {
+    const renderLink = (item: { id: string }, props: Record<string, unknown>) => <a href={item.id} {...props} />;
+    const { container } = render(
+      <AppShell defaultSidebarOpen={false}>
+        <SidebarNavigation
+          entries={[{
+            type: "group",
+            id: "delivery",
+            label: "Delivery metrics",
+            items: [{ id: "/dashboard", label: "Dashboard", collapsedLabel: "D", active: true }],
+          }]}
+          renderLink={renderLink}
+        />
+      </AppShell>,
+    );
+
+    const group = container.querySelector('[data-slot="navigation-group"]');
+    const groupLabel = screen.getByText("Delivery metrics");
+    const dashboard = screen.getByRole("link", { name: "Dashboard" });
+    expect(group?.getAttribute("aria-labelledby")).toBe(groupLabel.id);
+    expect(dashboard.getAttribute("aria-current")).toBe("page");
+    expect(dashboard.className).not.toContain("inset_3px");
+    expect(screen.getByText("D").className).toContain("group-data-[sidebar-state=collapsed]/shell:inline");
+    expect(container.querySelector('[data-slot="sidebar-collapsible-content"]')).toBeNull();
+  });
+
+  it("keeps explicit submenus closed by default and opens for an active child", () => {
+    const renderLink = (item: { id: string }, props: Record<string, unknown>) => <a href={item.id} {...props} />;
+    render(
+      <AppShell>
+        <SidebarNavigation
+          entries={[{
+            type: "submenu",
+            id: "advanced",
+            label: "Advanced",
+            items: [{ id: "/audit", label: "Audit logs", active: true }],
+          }]}
+          renderLink={renderLink}
+        />
+      </AppShell>,
+    );
+
+    expect(screen.getByRole("button", { name: "Advanced" }).getAttribute("data-active")).toBeNull();
+    expect(screen.getByRole("link", { name: "Audit logs" }).getAttribute("aria-current")).toBe("page");
+  });
+
   it("uses the appearance-aware sidebar variant by default", () => {
     const { container } = render(
       <AppShell>
@@ -597,6 +671,54 @@ describe("shared sidebar", () => {
         .querySelector('[data-slot="app-sidebar-header"]')
         ?.className,
     ).toContain("min-h-[var(--ds-topbar-height)]");
+  });
+});
+
+describe("dashboard patterns", () => {
+  it("separates metric direction from sentiment and describes visualizations", async () => {
+    const { container } = render(
+      <MetricCard
+        label="Lead time"
+        value="18.6"
+        unit="hours"
+        trend={<MetricTrend direction="down" sentiment="positive" value="22%" accessibleLabel="Down 22 percent, a positive change" />}
+        visualization={<svg aria-hidden="true" />}
+        visualizationSummary="Lead time trends downward."
+      />,
+    );
+
+    const trend = container.querySelector('[data-slot="metric-trend"]');
+    expect(trend?.getAttribute("data-direction")).toBe("down");
+    expect(trend?.getAttribute("data-sentiment")).toBe("positive");
+    expect(screen.getByText("Lead time trends downward.")).toBeTruthy();
+    expect((await axe.run(container)).violations).toEqual([]);
+  });
+
+  it("provides flush and padded data panel anatomy", () => {
+    const { container } = render(
+      <DataPanel>
+        <DataPanelHeader title="Deployments" description="Recent activity" actions={<button type="button">View all</button>} />
+        <DataPanelContent padded>Rows</DataPanelContent>
+        <DataPanelFooter>Updated now</DataPanelFooter>
+      </DataPanel>,
+    );
+    expect(container.querySelector('[data-slot="data-panel-content"]')?.getAttribute("data-padded")).toBe("true");
+    expect(screen.getByRole("heading", { name: "Deployments" })).toBeTruthy();
+  });
+
+  it("keeps attention findings non-live and activity layout conditional", async () => {
+    const { container } = render(
+      <>
+        <AttentionList><AttentionItem tone="warning" title="Recovery time increased" /></AttentionList>
+        <ActivityItem title="Policy updated" />
+        <ActivityItem title="Deployment completed" leading={<span>•</span>} trailing={<span>2m</span>} layout="compact" />
+      </>,
+    );
+    expect(container.querySelector('[data-slot="attention-item"]')?.getAttribute("role")).toBeNull();
+    expect(screen.getByText(/Warning:/)).toBeTruthy();
+    expect(container.querySelectorAll('[data-slot="activity-item-leading"]')).toHaveLength(1);
+    expect(container.querySelector('[data-slot="activity-item"][data-layout="compact"]')).toBeTruthy();
+    expect((await axe.run(container)).violations).toEqual([]);
   });
 });
 

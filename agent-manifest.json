@@ -1,0 +1,472 @@
+{
+  "schemaVersion": 1,
+  "package": "@conscia-labs/design-system",
+  "version": "1.0.3",
+  "guide": "./AGENT_GUIDE.md",
+  "playground": "https://conscia-labs.github.io/design-system/",
+  "componentFamilies": [
+    {
+      "category": "Foundation",
+      "family": "Preferences and utilities",
+      "slug": "preferences-and-utilities",
+      "description": "Appearance, density, root preference helpers, and class composition.",
+      "route": "/foundation",
+      "exports": [
+        "applyConsciaPreferences",
+        "appearanceOptions",
+        "cn",
+        "densityOptions"
+      ]
+    },
+    {
+      "category": "Primitive",
+      "family": "Alert",
+      "slug": "alert",
+      "description": "Persistent semantic messages and announcements.",
+      "route": "/components/alert",
+      "exports": [
+        "Alert",
+        "AlertDescription",
+        "AlertTitle",
+        "alertVariants"
+      ]
+    },
+    {
+      "category": "Primitive",
+      "family": "Alert dialog",
+      "slug": "alert-dialog",
+      "description": "Confirmation for consequential actions.",
+      "route": "/components/alert-dialog",
+      "exports": [
+        "AlertDialog",
+        "AlertDialogAction",
+        "AlertDialogBody",
+        "AlertDialogCancel",
+        "AlertDialogClose",
+        "AlertDialogContent",
+        "AlertDialogDescription",
+        "AlertDialogFooter",
+        "AlertDialogHeader",
+        "AlertDialogOverlay",
+        "AlertDialogPortal",
+        "AlertDialogTitle",
+        "AlertDialogTrigger"
+      ]
+    },
+    {
+      "category": "Primitive",
+      "family": "Avatar",
+      "slug": "avatar",
+      "description": "People, identities, and compact groups.",
+      "route": "/components/avatar",
+      "exports": [
+        "Avatar",
+        "AvatarFallback",
+        "AvatarImage",
+        "AvatarGroup"
+      ]
+    },
+    {
+      "category": "Primitive",
+      "family": "Badge",
+      "slug": "badge",
+      "description": "Status and categorical labels.",
+      "route": "/components/badge",
+      "exports": [
+        "Badge",
+        "badgeVariants"
+      ]
+    },
+    {
+      "category": "Primitive",
+      "family": "Brand",
+      "slug": "brand",
+      "description": "Theme-aware Conscia identity marks.",
+      "route": "/components/brand",
+      "exports": [
+        "BrandIcon",
+        "BrandWordmark"
+      ]
+    },
+    {
+      "category": "Primitive",
+      "family": "Button",
+      "slug": "button",
+      "description": "Actions, icon actions, and pending actions.",
+      "route": "/components/button",
+      "exports": [
+        "Button",
+        "IconButton",
+        "LoadingButton",
+        "buttonVariants"
+      ]
+    },
+    {
+      "category": "Primitive",
+      "family": "Card",
+      "slug": "card",
+      "description": "General-purpose content surface anatomy.",
+      "route": "/components/card",
+      "exports": [
+        "Card",
+        "CardContent",
+        "CardDescription",
+        "CardFooter",
+        "CardHeader",
+        "CardTitle",
+        "cardVariants"
+      ]
+    },
+    {
+      "category": "Primitive",
+      "family": "Form controls",
+      "slug": "form-controls",
+      "description": "Labels, fields, inputs, selection, and boolean controls.",
+      "route": "/components/form-controls",
+      "exports": [
+        "Checkbox",
+        "Field",
+        "FieldDescription",
+        "FieldError",
+        "FieldGroup",
+        "FieldLabel",
+        "FormSelect",
+        "Input",
+        "Label",
+        "LabeledSwitch",
+        "SearchableSelect",
+        "Select",
+        "SelectContent",
+        "SelectGroup",
+        "SelectItem",
+        "SelectLabel",
+        "SelectScrollDownButton",
+        "SelectScrollUpButton",
+        "SelectSeparator",
+        "SelectTrigger",
+        "SelectValue",
+        "Switch",
+        "Textarea"
+      ]
+    },
+    {
+      "category": "Primitive",
+      "family": "Disclosure",
+      "slug": "disclosure",
+      "description": "Collapsible regions and tabbed interfaces.",
+      "route": "/components/disclosure",
+      "exports": [
+        "Collapsible",
+        "CollapsibleContent",
+        "CollapsibleTrigger",
+        "NavigationTab",
+        "NavigationTabs",
+        "NavigationTabsList",
+        "Tabs",
+        "TabsContent",
+        "TabsList",
+        "TabsTrigger"
+      ]
+    },
+    {
+      "category": "Primitive",
+      "family": "Menus and overlays",
+      "slug": "menus-and-overlays",
+      "description": "Dialogs, sheets, menus, popovers, and tooltips.",
+      "route": "/components/menus-and-overlays",
+      "exports": [
+        "Dialog",
+        "DialogBody",
+        "DialogClose",
+        "DialogContent",
+        "DialogDescription",
+        "DialogFooter",
+        "DialogHeader",
+        "DialogOverlay",
+        "DialogPortal",
+        "DialogTitle",
+        "DialogTrigger",
+        "DropdownMenu",
+        "DropdownMenuContent",
+        "DropdownMenuGroup",
+        "DropdownMenuItem",
+        "DropdownMenuLabel",
+        "DropdownMenuLinkItem",
+        "DropdownMenuSeparator",
+        "DropdownMenuSub",
+        "DropdownMenuSubContent",
+        "DropdownMenuSubTrigger",
+        "DropdownMenuTrigger",
+        "Popover",
+        "PopoverArrow",
+        "PopoverClose",
+        "PopoverContent",
+        "PopoverDescription",
+        "PopoverPositioner",
+        "PopoverPortal",
+        "PopoverTitle",
+        "PopoverTrigger",
+        "Sheet",
+        "SheetBody",
+        "SheetClose",
+        "SheetContent",
+        "SheetDescription",
+        "SheetFooter",
+        "SheetHeader",
+        "SheetOverlay",
+        "SheetPortal",
+        "SheetTitle",
+        "SheetTrigger",
+        "Tooltip",
+        "TooltipContent",
+        "TooltipProvider",
+        "TooltipTrigger"
+      ]
+    },
+    {
+      "category": "Primitive",
+      "family": "Table",
+      "slug": "table",
+      "description": "Semantic tabular anatomy for bounded datasets.",
+      "route": "/components/table",
+      "exports": [
+        "Table",
+        "TableBody",
+        "TableCaption",
+        "TableCell",
+        "TableFooter",
+        "TableHead",
+        "TableHeader",
+        "TableRow"
+      ]
+    },
+    {
+      "category": "Primitive",
+      "family": "Supporting primitives",
+      "slug": "supporting-primitives",
+      "description": "Filters, loading, separators, shortcuts, and toast feedback.",
+      "route": "/components/supporting-primitives",
+      "exports": [
+        "FilterChip",
+        "Separator",
+        "ShortcutHint",
+        "Skeleton",
+        "Spinner",
+        "Toast",
+        "ToastAction",
+        "ToastClose",
+        "ToastContent",
+        "ToastDescription",
+        "ToastProvider",
+        "ToastTitle",
+        "ToastViewport",
+        "useToast"
+      ]
+    },
+    {
+      "category": "Pattern",
+      "family": "Application shell",
+      "slug": "application-shell",
+      "description": "Integrated and split application chrome.",
+      "route": "/components/application-shell",
+      "exports": [
+        "AppHeader",
+        "AppHeaderActions",
+        "AppHeaderSearch",
+        "AppHeaderStart",
+        "AppShell",
+        "AppSidebar",
+        "AppSidebarContent",
+        "AppSidebarFooter",
+        "AppSidebarHeader",
+        "InspectorRegion",
+        "MainRegion",
+        "PageBoundary",
+        "PageContent",
+        "PageFrame",
+        "ProductIdentity",
+        "SidebarSeparator",
+        "SidebarSearch",
+        "SidebarTrigger",
+        "TopBar",
+        "useAppShell"
+      ]
+    },
+    {
+      "category": "Pattern",
+      "family": "Sidebar navigation",
+      "slug": "sidebar-navigation",
+      "description": "Static groups, leaf routes, and explicit submenus.",
+      "route": "/components/sidebar-navigation",
+      "exports": [
+        "NavigationGroup",
+        "NavigationItem",
+        "NavigationSubItem",
+        "NavigationSubList",
+        "SidebarNavigation"
+      ]
+    },
+    {
+      "category": "Pattern",
+      "family": "Page composition",
+      "slug": "page-composition",
+      "description": "Headers, toolbars, detail sections, and back links.",
+      "route": "/components/page-composition",
+      "exports": [
+        "DetailBackLink",
+        "DetailSection",
+        "DetailSections",
+        "KeyValueItem",
+        "KeyValueList",
+        "PageHeader",
+        "PageToolbar",
+        "ResourceSummary"
+      ]
+    },
+    {
+      "category": "Pattern",
+      "family": "Inventory and tables",
+      "slug": "inventory-and-tables",
+      "description": "Responsive data-heavy resource collections.",
+      "route": "/components/inventory-and-tables",
+      "exports": [
+        "DataTable",
+        "EntityTable",
+        "InventoryDesktop",
+        "InventoryMobile",
+        "InventorySurface",
+        "PaginationControls"
+      ]
+    },
+    {
+      "category": "Pattern",
+      "family": "Metrics and data panels",
+      "slug": "metrics-and-data-panels",
+      "description": "Operational summaries, trends, charts, and panel anatomy.",
+      "route": "/components/metrics-and-data-panels",
+      "exports": [
+        "DataPanel",
+        "DataPanelContent",
+        "DataPanelFooter",
+        "DataPanelHeader",
+        "MetricBand",
+        "MetricBandItem",
+        "MetricCard",
+        "MetricTrend",
+        "ValueMeter"
+      ]
+    },
+    {
+      "category": "Pattern",
+      "family": "Activity and attention",
+      "slug": "activity-and-attention",
+      "description": "Operational activity and persistent findings.",
+      "route": "/components/activity-and-attention",
+      "exports": [
+        "ActivityItem",
+        "ActivityList",
+        "AttentionItem",
+        "AttentionList"
+      ]
+    },
+    {
+      "category": "Pattern",
+      "family": "State and feedback",
+      "slug": "state-and-feedback",
+      "description": "Empty, loading, error, confirmation, and command states.",
+      "route": "/components/state-and-feedback",
+      "exports": [
+        "CommandPalette",
+        "ConfirmationDialog",
+        "ErrorState",
+        "LoadingRows",
+        "StateView"
+      ]
+    },
+    {
+      "category": "Pattern",
+      "family": "Filters and preferences",
+      "slug": "filters-and-preferences",
+      "description": "Applied filters and shared display preferences.",
+      "route": "/components/filters-and-preferences",
+      "exports": [
+        "AppearanceControl",
+        "DensityControl",
+        "DesignPreferenceControls",
+        "DesignSystemPreferenceSync",
+        "FilterBar",
+        "useConsciaPreferences"
+      ]
+    },
+    {
+      "category": "Pattern",
+      "family": "Workbench",
+      "slug": "workbench",
+      "description": "Multi-rail operational workspaces and resource rows.",
+      "route": "/components/workbench",
+      "exports": [
+        "IdentityRow",
+        "ResourceRow",
+        "ResourceRowContent",
+        "ResourceRowDescription",
+        "ResourceRowIcon",
+        "ResourceRowMeta",
+        "ResourceRowTitle",
+        "WorkbenchBackdrop",
+        "WorkbenchInspector",
+        "WorkbenchInspectorSection",
+        "WorkbenchMain",
+        "WorkbenchMobileToolbar",
+        "WorkbenchRail",
+        "WorkbenchSection",
+        "WorkbenchSectionHeader",
+        "WorkbenchShell"
+      ]
+    },
+    {
+      "category": "Pattern",
+      "family": "Content helpers",
+      "slug": "content-helpers",
+      "description": "Provider identity and copyable code examples.",
+      "route": "/components/content-helpers",
+      "exports": [
+        "CodeBlock",
+        "ProviderMark"
+      ]
+    },
+    {
+      "category": "Compatibility",
+      "family": "Conscia aliases",
+      "slug": "conscia-aliases",
+      "description": "Deprecated pre-v1 aliases retained for migration only.",
+      "route": "/components/conscia-aliases",
+      "exports": [
+        "ConsciaButton",
+        "ConsciaCard",
+        "ConsciaCardContent",
+        "ConsciaCardDescription",
+        "ConsciaCardFooter",
+        "ConsciaCardHeader",
+        "ConsciaCardTitle",
+        "ConsciaCheckbox",
+        "ConsciaFormSelect",
+        "ConsciaIconButton",
+        "ConsciaInput",
+        "ConsciaSelect",
+        "ConsciaSelectContent",
+        "ConsciaSelectGroup",
+        "ConsciaSelectItem",
+        "ConsciaSelectTrigger",
+        "ConsciaSelectValue",
+        "ConsciaSwitch",
+        "ConsciaTable",
+        "ConsciaTableBody",
+        "ConsciaTableCell",
+        "ConsciaTableHead",
+        "ConsciaTableHeader",
+        "ConsciaTableRow",
+        "ConsciaTextarea"
+      ]
+    }
+  ]
+}

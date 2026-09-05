@@ -4,6 +4,55 @@ import { test } from "node:test";
 
 const read = (path) => readFileSync(new URL(path, import.meta.url), "utf8");
 
+function runtimeExportsFromIndex(indexPath, directoryPath) {
+  const index = read(indexPath);
+  const moduleNames = [...index.matchAll(/export \* from "\.\/(.+)";/g)].map((match) => match[1]);
+  const exports = new Set();
+
+  for (const moduleName of moduleNames) {
+    const source = read(`${directoryPath}/${moduleName}.${moduleName === "preferences" || moduleName === "utils" ? "ts" : "tsx"}`);
+    for (const match of source.matchAll(/export (?:function|const)\s+([A-Za-z0-9_]+)/g)) exports.add(match[1]);
+    for (const match of source.matchAll(/export \{([\s\S]*?)\};/g)) {
+      for (const name of match[1].split(",").map((item) => item.trim().split(/\s+as\s+/).at(-1)).filter(Boolean)) exports.add(name);
+    }
+  }
+
+  return exports;
+}
+
+test("playground inventory covers every public runtime export", () => {
+  const inventory = read("../components/component-inventory.ts");
+  const runtimeExports = new Set([
+    ...runtimeExportsFromIndex("../../../src/primitives/index.ts", "../../../src/primitives"),
+    ...runtimeExportsFromIndex("../../../src/patterns/index.ts", "../../../src/patterns"),
+    ...runtimeExportsFromIndex("../../../src/foundation/index.ts", "../../../src/foundation"),
+  ]);
+  const missing = [...runtimeExports].filter((name) => !inventory.includes(`"${name}"`));
+
+  assert.deepEqual(missing, []);
+});
+
+test("component documentation is registry-driven and gives every family its own route", () => {
+  const inventory = read("../components/component-inventory.ts");
+  const docs = read("../components/component-docs.ts");
+  const shell = read("../components/app-shell.tsx");
+  const componentPage = read("../app/components/[slug]/page.tsx");
+
+  const componentEntries = [...inventory.matchAll(/category: "(Primitive|Pattern|Compatibility)", family: "([^"]+)", slug: "([^"]+)"/g)];
+  const slugs = componentEntries.map((entry) => entry[3]);
+
+  assert.equal(slugs.length, 23);
+  assert.equal(new Set(slugs).size, slugs.length);
+  for (const slug of slugs) assert.match(inventory, new RegExp(`route: "/components/${slug}"`));
+  assert.match(docs, /if \(!details\) throw new Error/);
+  assert.match(shell, /componentDocs\.map/);
+  assert.match(componentPage, /generateStaticParams/);
+  assert.match(componentPage, /title="Options"/);
+  assert.match(componentPage, /title="Usage"/);
+  assert.match(componentPage, /Accessibility/);
+  assert.match(componentPage, /Public exports/);
+});
+
 test("appearance and density are controlled through root attributes", () => {
   const preferences = read("../components/design-preferences.tsx");
   const sharedControls = read("../../../src/patterns/preference-controls.tsx");
@@ -80,6 +129,29 @@ test("operational density exposes a token-backed Workspace-like type scale", () 
   assert.match(foundation, /data-density="operational"/);
   assert.match(foundation, /ds-type-page-title/);
   assert.match(foundation, /ds-type-eyebrow/);
+});
+
+test("typography has dedicated role, density, font-loading, and usage documentation", () => {
+  const typography = read("../app/typography/page.tsx");
+  const shell = read("../components/app-shell.tsx");
+
+  assert.match(shell, /id: "\/typography", label: "Typography"/);
+  assert.match(typography, /Source Sans 3 Variable/);
+  for (const utility of [
+    "ds-type-display-title",
+    "ds-type-page-title",
+    "ds-type-section-title",
+    "ds-type-card-title",
+    "ds-type-body",
+    "ds-type-ui",
+    "ds-type-metadata",
+    "ds-type-eyebrow",
+  ]) assert.match(typography, new RegExp(utility));
+  for (const density of ["comfortable", "compact", "operational"]) {
+    assert.match(typography, new RegExp(`density="${density}"`));
+  }
+  assert.match(typography, /Preserve heading order/);
+  assert.match(typography, /@conscia-labs\/design-system\/styles\.css/);
 });
 
 test("Conscia green separates secondary brand expression from operational success", () => {
@@ -490,7 +562,7 @@ test("shared shell patterns expose structure without gateway-specific behavior",
   assert.match(shell, /--ds-sidebar-item-height-touch/);
   assert.match(shell, /bg-sidebar-active-background/);
   assert.match(shell, /text-sidebar-active-foreground/);
-  assert.match(shell, /--sidebar-active-indicator/);
+  assert.doesNotMatch(shell, /--sidebar-active-indicator/);
   assert.doesNotMatch(shell, /bg-action-background text-sidebar-primary-text/);
   assert.match(styles, /--sidebar-active-background:/);
   assert.match(styles, /--color-sidebar-active-background:/);
@@ -540,7 +612,7 @@ test("sidebar semantics resolve through light and dark scopes without a new pale
   assert.match(shell, /leading-\[var\(--ds-sidebar-group-label-line-height\)\]/);
   assert.match(shell, /font-semibold uppercase leading-\[var\(--ds-sidebar-group-label-line-height\)\] tracking-\[0\.04em\]/);
   assert.match(navigation, /gap-\[var\(--ds-sidebar-group-gap\)\]/);
-  assert.match(shell, /Place this control inside TopBar/);
+  assert.match(shell, /Place this control inside AppHeader or TopBar/);
   assert.match(
     shell,
     /text-\[length:var\(--ds-sidebar-group-label-size\)\]/,
@@ -562,12 +634,13 @@ test("shared sidebar navigation supports collapsed flyouts without owning routes
   assert.match(navigation, /count\?: React\.ReactNode/);
   assert.doesNotMatch(navigation, /asChild/);
   assert.doesNotMatch(navigation, /@radix-ui\/react-slot/);
-  assert.match(playgroundShell, /collapsedLabel="C"/);
+  assert.match(navigation, /collapsedLabel\?: React\.ReactNode/);
   assert.doesNotMatch(navigation, /next\/link/);
   assert.doesNotMatch(navigation, /usePathname/);
   assert.match(playgroundShell, /<SidebarNavigation/);
-  assert.match(playgroundShell, /<SidebarSearch shortcut="⌘K" \/>/);
-  assert.match(playgroundShell, /label: "Library"/);
+  assert.match(playgroundShell, /headerLayout="integrated"/);
+  assert.match(playgroundShell, /type: "group"/);
+  assert.match(playgroundShell, /label: "Reference examples"/);
   assert.match(playgroundShell, /<AppSidebar variant="auto">/);
 });
 

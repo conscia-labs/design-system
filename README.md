@@ -353,17 +353,19 @@ The shared shell owns presentation and responsive behavior. The host application
 
 ```tsx
 import {
+  AppHeader,
+  AppHeaderActions,
+  AppHeaderSearch,
+  AppHeaderStart,
   AppShell,
   AppSidebar,
   AppSidebarContent,
-  AppSidebarHeader,
   MainRegion,
   PageContent,
   PageFrame,
   PageHeader,
-  ProductIdentity,
+  SidebarNavigation,
   SidebarTrigger,
-  TopBar,
 } from "@conscia-labs/design-system";
 
 export function ProductShell({
@@ -374,23 +376,23 @@ export function ProductShell({
   children: React.ReactNode;
 }) {
   return (
-    <AppShell>
+    <AppShell headerLayout="integrated">
+      <AppHeader>
+        <AppHeaderStart>
+          <SidebarTrigger />
+          {/* Brand and product/workspace context */}
+        </AppHeaderStart>
+        <AppHeaderSearch mobileTrigger={mobileSearchTrigger}>
+          {globalSearch}
+        </AppHeaderSearch>
+        <AppHeaderActions>{accountActions}</AppHeaderActions>
+      </AppHeader>
+
       <AppSidebar>
-        <AppSidebarHeader>
-          <ProductIdentity
-            label="Conscia"
-            description="Administration"
-          />
-        </AppSidebarHeader>
         <AppSidebarContent>{navigation}</AppSidebarContent>
       </AppSidebar>
 
       <MainRegion>
-        <TopBar>
-          {/* Keep the toggle in the topbar; it must remain visible when the sidebar collapses. */}
-          <SidebarTrigger />
-        </TopBar>
-
         <PageFrame width="wide">
           <PageContent>
             <PageHeader
@@ -405,6 +407,66 @@ export function ProductShell({
   );
 }
 ```
+
+`AppHeader` is the preferred global chrome: it spans the viewport while the
+sidebar begins below it. The historical `TopBar` plus `AppSidebarHeader`
+composition remains supported through the default `headerLayout="split"` for
+existing v1 consumers.
+
+Use static groups for normal application navigation:
+
+```tsx
+const entries = [
+  {
+    type: "group",
+    id: "delivery",
+    label: "Delivery metrics",
+    items: [
+      { id: "/dashboard", label: "Dashboard", icon: <LayoutDashboard /> },
+      { id: "/reporting", label: "Reporting", icon: <FileText /> },
+    ],
+  },
+] satisfies SidebarNavigationEntry[];
+
+<SidebarNavigation entries={entries} renderLink={renderLink} />;
+```
+
+Static labels organize the information architecture without becoming controls.
+Only use `type: "submenu"` when destinations form a genuine nested hierarchy
+or the section is unusually long. Untyped sections retain their historical
+collapsible behavior for compatibility, but new code should always choose an
+explicit type.
+
+## Building an operational dashboard
+
+Use `MetricCard` for a metric with direction, sentiment, benchmark, and optional
+visualization. Direction and sentiment are deliberately independent: lower
+lead time is a downward but positive change.
+
+```tsx
+<MetricCard
+  label="Lead time for changes"
+  description="First commit to production"
+  value="18.6"
+  unit="hours"
+  trend={
+    <MetricTrend
+      direction="down"
+      sentiment="positive"
+      value="22%"
+      accessibleLabel="Down 22 percent, a positive change"
+    />
+  }
+  visualization={<ProductChart />}
+  visualizationSummary="Lead time is lower at the end of the period."
+/>
+```
+
+`DataPanel` provides flush panel anatomy for charts and divided rows;
+`AttentionList` represents persistent operational findings without announcing
+them as live alerts. `ActivityItem` accepts `leading` and `trailing` slots for
+status markers and structured metadata. The package supplies chart and trend
+tokens but intentionally does not bundle a charting library or dashboard grid.
 
 ## Building a workbench surface
 
@@ -543,17 +605,14 @@ accessible naming content, and use `className` to control its width.
 
 ### Sidebar variants and semantic surfaces
 
-`AppSidebar` keeps the historical dark treatment by default. Consumers that
-want the sidebar to follow the application appearance can opt into the
-refreshed hierarchy with `variant="auto"`; `variant="light"` is available for
-an explicitly light sidebar.
+`AppSidebar` follows application appearance by default through `variant="auto"`.
+`variant="dark"` and `variant="light"` remain available when a product needs an
+explicitly fixed treatment.
 
 ```tsx
-<AppShell>
+<AppShell headerLayout="integrated">
+  <AppHeader>{/* global identity, search, and actions */}</AppHeader>
   <AppSidebar variant="auto">
-    <AppSidebarHeader>
-      <ProductIdentity label="Conscia" description="Administration" />
-    </AppSidebarHeader>
     <AppSidebarContent>{navigation}</AppSidebarContent>
     <AppSidebarFooter>{accountMenu}</AppSidebarFooter>
   </AppSidebar>
@@ -607,15 +666,10 @@ can still be supplied as arbitrary React nodes. Routing, conversation rows,
 row actions, account menus, permissions, and appearance controls remain
 application-owned.
 
-The shell uses `--ds-topbar-height` as the shared chrome-height contract. The
-sidebar header aliases the historical `--ds-sidebar-header-height` token to the
-same value, so the two rails stay aligned. `TopBar` also owns shared horizontal
-padding through its responsive `--ds-topbar-padding-x` tokens; applications
-should not add a normal-use hardcoded height or padding override. Keep leading
-and trailing actions inside the topbar so icons and labels share the same
-vertical rhythm and visible focus treatment. `SidebarTrigger` should be
-rendered as a child of `TopBar`, never inside `AppSidebar`; the topbar remains
-mounted when the sidebar enters collapsed or mobile states.
+The shell uses `--ds-topbar-height` as the shared chrome-height contract.
+`AppHeader` and the compatibility `TopBar` both use the responsive
+`--ds-topbar-padding-x` tokens. Keep `SidebarTrigger` in either header—not
+inside `AppSidebar`—so it remains available in collapsed and mobile states.
 
 Sidebar section labels use the field-label size with a restrained medium weight
 and tracking. Navigation rows retain the shared comfortable/touch heights,
@@ -636,7 +690,7 @@ The ownership boundary is:
 | Shared design system | Application-owned |
 | --- | --- |
 | Sidebar variant tokens, surface hierarchy, geometry, responsive drawer, focus states, active/hover/disabled styling, tooltips, and search affordance behavior | Routes, permissions, navigation data, query/filter state, conversation or inventory data, row actions, account/profile menus, sign-out, and product-specific persistence keys |
-| `NavigationGroup` keyboard expansion and `SidebarNavigation` collapsed flyouts | Group labels/content, link destinations, active-route calculation, and business-specific empty states |
+| Static group structure, explicit submenu expansion, collapsed flyouts, and active/hover/focus styling | Group labels/content, link destinations, active-route calculation, and business-specific empty states |
 
 ## Choosing the right component
 
@@ -813,6 +867,35 @@ import { cn } from "@conscia-labs/design-system/utils";
 
 All public entry points are ESM-only.
 
+## Agent integration
+
+The package ships a concise [`AGENT_GUIDE.md`](./AGENT_GUIDE.md) and generated
+[`agent-manifest.json`](./agent-manifest.json) alongside its runtime files. The
+guide records the integration contract, component-selection rules, important
+boundaries, and verification expectations for the exact installed version. The
+manifest maps every public component family to its exports and live playground
+route.
+
+Add or update a managed Conscia section in a consuming repository's
+`AGENTS.md` after installing the package:
+
+```bash
+pnpm exec conscia-design-system init-agents
+```
+
+Preview the instructions without writing a file:
+
+```bash
+pnpm exec conscia-design-system init-agents --dry-run
+```
+
+The initializer preserves all instructions outside its marker-delimited block,
+so applications can safely rerun it when upgrading. The block tells coding
+agents to read the package-local guide before UI work. Agents and developers can
+also use the [live playground](https://conscia-labs.github.io/design-system/),
+[`llms.txt`](https://conscia-labs.github.io/design-system/llms.txt), and the
+[public machine-readable inventory](https://conscia-labs.github.io/design-system/agent-manifest.json).
+
 ## Local development
 
 Install dependencies:
@@ -839,6 +922,7 @@ pnpm typecheck:playground
 pnpm test
 pnpm test:package
 pnpm build:playground
+pnpm build:playground:static
 ```
 
 `pnpm test:package` creates the production artifacts, validates the package
@@ -868,7 +952,7 @@ pnpm typecheck:playground
 pnpm test
 pnpm test:package
 pnpm test:consumer
-pnpm build:playground
+pnpm build:playground:static
 pnpm test:visual
 ```
 

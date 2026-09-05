@@ -3,7 +3,7 @@ import nextTs from "eslint-config-next/typescript";
 
 const eslintConfig = [
   {
-    ignores: ["playground/.next/**", "**/.next/**", "**/node_modules/**"]
+    ignores: ["playground/.next/**", "playground/out/**", "**/.next/**", "**/node_modules/**"]
   },
   ...nextVitals,
   ...nextTs,

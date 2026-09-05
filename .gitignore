@@ -1,7 +1,9 @@
 node_modules/
 **/.next/
+playground/out/
 dist/
 coverage/
+test-results/
 *.tsbuildinfo
 
 .DS_Store

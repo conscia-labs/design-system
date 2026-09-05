@@ -49,7 +49,7 @@ jobs:
           pnpm test
           pnpm test:package
           pnpm test:consumer
-          pnpm build:playground
+          pnpm build:playground:static
           PLAYWRIGHT_CHANNEL=bundled pnpm exec playwright test playground/tests/phase7-quality.spec.ts --project=chromium
           PLAYWRIGHT_CHANNEL=bundled pnpm exec playwright test playground/tests/mobile-drawer.spec.ts --project=mobile-chromium
 

@@ -10,9 +10,38 @@ type Appearance = "light" | "dark";
 type Density = "comfortable" | "compact" | "operational";
 
 const routes = [
+  { path: "/components", heading: "Components" },
+  { path: "/components/alert", heading: "Alert" },
+  { path: "/components/alert-dialog", heading: "Alert dialog" },
+  { path: "/components/avatar", heading: "Avatar" },
+  { path: "/components/badge", heading: "Badge" },
+  { path: "/components/brand", heading: "Brand" },
+  { path: "/components/button", heading: "Button" },
+  { path: "/components/card", heading: "Card" },
+  { path: "/components/form-controls", heading: "Form controls" },
+  { path: "/components/disclosure", heading: "Disclosure" },
+  { path: "/components/menus-and-overlays", heading: "Menus and overlays" },
+  { path: "/components/table", heading: "Table" },
+  { path: "/components/supporting-primitives", heading: "Supporting primitives" },
+  { path: "/components/application-shell", heading: "Application shell" },
+  { path: "/components/sidebar-navigation", heading: "Sidebar navigation" },
+  { path: "/components/page-composition", heading: "Page composition" },
+  { path: "/components/inventory-and-tables", heading: "Inventory and tables" },
+  { path: "/components/metrics-and-data-panels", heading: "Metrics and data panels" },
+  { path: "/components/activity-and-attention", heading: "Activity and attention" },
+  { path: "/components/state-and-feedback", heading: "State and feedback" },
+  { path: "/components/filters-and-preferences", heading: "Filters and preferences" },
+  { path: "/components/workbench", heading: "Workbench" },
+  { path: "/components/content-helpers", heading: "Content helpers" },
+  { path: "/components/conscia-aliases", heading: "Conscia aliases" },
   { path: "/foundation", heading: "Foundation" },
+  { path: "/typography", heading: "Typography" },
   { path: "/primitives", heading: "Primitives" },
+  { path: "/tables", heading: "Tables and data tables" },
   { path: "/reference-patterns", heading: "AI Models" },
+  { path: "/patterns", heading: "Pattern catalog" },
+  { path: "/shell-navigation", heading: "Shell and navigation" },
+  { path: "/delivery-metrics", heading: "Delivery metrics" },
 ] as const;
 
 async function loadRoute(
@@ -320,8 +349,8 @@ test.describe("Phase 7 responsive regression", () => {
     await expectNoDocumentOverflow(page, "open mobile navigation");
     await expectNoAxeViolations(page, "open mobile navigation");
 
-    await navigation.getByRole("link", { name: "Primitives", exact: true }).click();
-    await expect(page).toHaveURL(/\/primitives$/);
+    await navigation.getByRole("link", { name: "Button", exact: true }).click();
+    await expect(page).toHaveURL(/\/components\/button$/);
     await expect(navigation).toBeHidden();
   });
 });

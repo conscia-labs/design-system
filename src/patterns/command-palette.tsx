@@ -131,6 +131,12 @@ function CommandPalette({
                   aria-label="Search commands"
                   autoFocus
                   className="ds-type-control h-12 min-w-0 flex-1 bg-transparent outline-none placeholder:text-text-supporting"
+                  onKeyDown={(event) => {
+                    if (event.key === "Escape") {
+                      event.preventDefault();
+                      handleOpenChange(false);
+                    }
+                  }}
                   placeholder={placeholder}
                 />
               </div>

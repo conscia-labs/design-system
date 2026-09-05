@@ -29,6 +29,7 @@ export type SidebarNavigationItem = {
   id: string;
   label: string;
   icon?: React.ReactNode;
+  collapsedLabel?: React.ReactNode;
   badge?: React.ReactNode;
   badgeLabel?: string;
   count?: React.ReactNode;
@@ -37,17 +38,37 @@ export type SidebarNavigationItem = {
   startsSection?: boolean;
 };
 
+/** @deprecated Prefer an explicit SidebarNavigationGroup or SidebarNavigationSubmenu. */
 export type SidebarNavigationSection = Omit<
   SidebarNavigationItem,
   "active"
 > & {
+  type?: undefined;
   active?: boolean;
   items: SidebarNavigationItem[];
 };
 
+export type SidebarNavigationGroup = {
+  type: "group";
+  id: string;
+  label: string;
+  count?: React.ReactNode;
+  items: SidebarNavigationItem[];
+};
+
+export type SidebarNavigationSubmenu = Omit<
+  SidebarNavigationSection,
+  "active" | "type"
+> & {
+  type: "submenu";
+  defaultOpen?: boolean;
+};
+
 export type SidebarNavigationEntry =
   | SidebarNavigationItem
-  | SidebarNavigationSection;
+  | SidebarNavigationSection
+  | SidebarNavigationGroup
+  | SidebarNavigationSubmenu;
 
 export type SidebarNavigationLinkProps = {
   "aria-current"?: "page";
@@ -56,7 +77,7 @@ export type SidebarNavigationLinkProps = {
   onClick?: React.MouseEventHandler<HTMLAnchorElement>;
 };
 
-type SidebarNavigationProps = {
+export type SidebarNavigationProps = {
   entries: SidebarNavigationEntry[];
   renderLink: (
     item: SidebarNavigationItem,
@@ -67,10 +88,22 @@ type SidebarNavigationProps = {
   className?: string;
 };
 
-function isSection(
+function hasItems(
   entry: SidebarNavigationEntry,
-): entry is SidebarNavigationSection {
+): entry is SidebarNavigationSection | SidebarNavigationGroup | SidebarNavigationSubmenu {
   return "items" in entry;
+}
+
+function isStaticGroup(
+  entry: SidebarNavigationEntry,
+): entry is SidebarNavigationGroup {
+  return hasItems(entry) && entry.type === "group";
+}
+
+function isCollapsibleSection(
+  entry: SidebarNavigationEntry,
+): entry is SidebarNavigationSection | SidebarNavigationSubmenu {
+  return hasItems(entry) && entry.type !== "group";
 }
 
 function getNavigationAccessibleLabel(item: SidebarNavigationItem) {
@@ -103,6 +136,23 @@ function NavigationMetadata({
         <span className="ds-type-metadata tabular-nums">{count}</span>
       ) : null}
     </span>
+  );
+}
+
+function NavigationItemContent({ item }: { item: SidebarNavigationItem }) {
+  return (
+    <>
+      {item.icon}
+      {!item.icon && item.collapsedLabel ? (
+        <span className="hidden shrink-0 font-semibold group-data-[sidebar-state=collapsed]/shell:inline">
+          {item.collapsedLabel}
+        </span>
+      ) : null}
+      <span className="truncate group-data-[sidebar-state=collapsed]/shell:hidden">
+        {item.label}
+      </span>
+      <NavigationMetadata badge={item.badge} count={item.count} />
+    </>
   );
 }
 
@@ -154,7 +204,7 @@ function SidebarNavigation({
     if (
       !storageReady.current ||
       !storageKey ||
-      !entries.some(isSection)
+      !entries.some(isCollapsibleSection)
     ) {
       return;
     }
@@ -185,7 +235,27 @@ function SidebarNavigation({
       )}
     >
       {entries.map((entry) => {
-        if (!isSection(entry)) {
+        if (isStaticGroup(entry)) {
+          return (
+            <NavigationGroup key={entry.id} label={entry.label} count={entry.count}>
+              {entry.items.map((item) => (
+                <NavigationItem
+                  key={item.id}
+                  active={item.active}
+                  tooltip={item.label}
+                  render={renderLink(item, {
+                    "aria-current": item.active ? "page" : undefined,
+                    "aria-label": getNavigationAccessibleLabel(item),
+                    onClick: handleNavigate,
+                    children: <NavigationItemContent item={item} />,
+                  })}
+                />
+              ))}
+            </NavigationGroup>
+          );
+        }
+
+        if (!hasItems(entry)) {
           return (
             <NavigationGroup
               key={entry.id}
@@ -202,22 +272,18 @@ function SidebarNavigation({
                   "aria-current": entry.active ? "page" : undefined,
                   "aria-label": getNavigationAccessibleLabel(entry),
                   onClick: handleNavigate,
-                  children: (
-                    <>
-                      {entry.icon}
-                      <span className="truncate group-data-[sidebar-state=collapsed]/shell:hidden">
-                        {entry.label}
-                      </span>
-                      <NavigationMetadata badge={entry.badge} count={entry.count} />
-                    </>
-                  ),
+                  children: <NavigationItemContent item={entry} />,
                 })}
               />
             </NavigationGroup>
           );
         }
 
-        const sectionOpen = (openSections[entry.id] ?? false) || entry.active;
+        const activeChild = entry.items.some((item) => item.active);
+        const defaultOpen = entry.type === "submenu" ? entry.defaultOpen : false;
+        const legacyActive = entry.type === undefined ? entry.active : false;
+        const sectionOpen =
+          (openSections[entry.id] ?? defaultOpen) || activeChild || legacyActive;
 
         if (sidebarState === "collapsed" && !isMobile) {
           return (
@@ -232,8 +298,8 @@ function SidebarNavigation({
                 <DropdownMenuTrigger
                   render={
                     <NavigationItem
-                      active={entry.active}
                       aria-label={`${getNavigationAccessibleLabel(entry)} menu`}
+                      className={activeChild ? "text-sidebar-primary-text" : undefined}
                     >
                       {entry.icon}
                       <span className="sr-only">{entry.label}</span>
@@ -270,7 +336,7 @@ function SidebarNavigation({
                       className={cn(
                         "min-h-9 cursor-pointer rounded-[var(--ds-radius-control)] [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:stroke-[1.75]",
                         item.active &&
-                          "bg-selection-background text-selection-foreground shadow-[inset_2px_0_0_var(--selection-indicator)] focus:bg-selection-background focus:text-selection-foreground",
+                          "bg-selection-background font-semibold text-selection-foreground focus:bg-selection-background focus:text-selection-foreground",
                       )}
                     />
                   ))}
@@ -299,9 +365,9 @@ function SidebarNavigation({
               <CollapsibleTrigger
                 render={
                   <NavigationItem
-                    active={entry.active}
                     tooltip={entry.label}
                     aria-label={getNavigationAccessibleLabel(entry)}
+                    className={activeChild ? "text-sidebar-primary-text" : undefined}
                   >
                     {entry.icon}
                     <span className="truncate group-data-[sidebar-state=collapsed]/shell:hidden">

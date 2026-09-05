@@ -8,9 +8,15 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
+    "bin",
     "dist",
+    "AGENT_GUIDE.md",
+    "agent-manifest.json",
     "README.md"
   ],
+  "bin": {
+    "conscia-design-system": "./bin/conscia-design-system.mjs"
+  },
   "sideEffects": [
     "./dist/foundation.css",
     "./dist/standalone.css",
@@ -47,16 +53,21 @@
     "./tailwind.css": "./dist/tailwind.css",
     "./standalone.css": "./dist/standalone.css",
     "./styles.css": "./dist/styles.css",
+    "./agent-guide.md": "./AGENT_GUIDE.md",
+    "./agent-manifest.json": "./agent-manifest.json",
     "./package.json": "./package.json"
   },
   "scripts": {
-    "dev:playground": "next dev playground --webpack -p 3020 --hostname 127.0.0.1",
-    "build": "pnpm build:js && pnpm build:css",
+    "dev:playground": "pnpm build:agent && next dev playground --webpack -p 3020 --hostname 127.0.0.1",
+    "build": "pnpm build:agent && pnpm build:js && pnpm build:css",
+    "build:agent": "node scripts/build-agent-manifest.mjs",
     "build:js": "tsup",
     "build:css": "node scripts/build-css.mjs",
-    "build:playground": "next build playground",
+    "build:playground": "pnpm build:agent && next build playground",
+    "build:playground:static": "pnpm build:agent && node scripts/build-playground-static.mjs",
     "start:playground": "next start playground -p 3020",
-    "test": "pnpm test:contracts && pnpm test:unit",
+    "test": "pnpm test:contracts && pnpm test:agent && pnpm test:unit",
+    "test:agent": "node --test test/agent-support.test.mjs",
     "test:contracts": "node --test playground/src/test/*.test.mjs",
     "test:unit": "vitest run",
     "test:visual": "playwright test",
@@ -74,7 +85,7 @@
     "type": "git",
     "url": "git+https://github.com/conscia-labs/design-system.git"
   },
-  "homepage": "https://github.com/conscia-labs/design-system#readme",
+  "homepage": "https://conscia-labs.github.io/design-system/",
   "bugs": {
     "url": "https://github.com/conscia-labs/design-system/issues"
   },

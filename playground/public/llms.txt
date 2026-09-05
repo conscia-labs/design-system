@@ -1,0 +1,41 @@
+# Conscia Design System
+
+> Agent-oriented index for @conscia-labs/design-system 1.0.3.
+
+- Live playground: https://conscia-labs.github.io/design-system/
+- Agent guide: https://conscia-labs.github.io/design-system/agent-guide.md
+- Machine-readable inventory: https://conscia-labs.github.io/design-system/agent-manifest.json
+- Package: https://www.npmjs.com/package/@conscia-labs/design-system
+- Source: https://github.com/conscia-labs/design-system
+
+Read the agent guide before changing UI in a consuming application. Prefer a
+published pattern over rebuilding the same workflow from primitives. Import
+only public exports and keep routing, data, permissions, and business behavior
+in the application.
+
+## Component families
+
+- Preferences and utilities (Foundation): Appearance, density, root preference helpers, and class composition. https://conscia-labs.github.io/design-system/foundation/ Exports: applyConsciaPreferences, appearanceOptions, cn, densityOptions.
+- Alert (Primitive): Persistent semantic messages and announcements. https://conscia-labs.github.io/design-system/components/alert/ Exports: Alert, AlertDescription, AlertTitle, alertVariants.
+- Alert dialog (Primitive): Confirmation for consequential actions. https://conscia-labs.github.io/design-system/components/alert-dialog/ Exports: AlertDialog, AlertDialogAction, AlertDialogBody, AlertDialogCancel, AlertDialogClose, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, AlertDialogPortal, AlertDialogTitle, AlertDialogTrigger.
+- Avatar (Primitive): People, identities, and compact groups. https://conscia-labs.github.io/design-system/components/avatar/ Exports: Avatar, AvatarFallback, AvatarImage, AvatarGroup.
+- Badge (Primitive): Status and categorical labels. https://conscia-labs.github.io/design-system/components/badge/ Exports: Badge, badgeVariants.
+- Brand (Primitive): Theme-aware Conscia identity marks. https://conscia-labs.github.io/design-system/components/brand/ Exports: BrandIcon, BrandWordmark.
+- Button (Primitive): Actions, icon actions, and pending actions. https://conscia-labs.github.io/design-system/components/button/ Exports: Button, IconButton, LoadingButton, buttonVariants.
+- Card (Primitive): General-purpose content surface anatomy. https://conscia-labs.github.io/design-system/components/card/ Exports: Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, cardVariants.
+- Form controls (Primitive): Labels, fields, inputs, selection, and boolean controls. https://conscia-labs.github.io/design-system/components/form-controls/ Exports: Checkbox, Field, FieldDescription, FieldError, FieldGroup, FieldLabel, FormSelect, Input, Label, LabeledSwitch, SearchableSelect, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, Switch, Textarea.
+- Disclosure (Primitive): Collapsible regions and tabbed interfaces. https://conscia-labs.github.io/design-system/components/disclosure/ Exports: Collapsible, CollapsibleContent, CollapsibleTrigger, NavigationTab, NavigationTabs, NavigationTabsList, Tabs, TabsContent, TabsList, TabsTrigger.
+- Menus and overlays (Primitive): Dialogs, sheets, menus, popovers, and tooltips. https://conscia-labs.github.io/design-system/components/menus-and-overlays/ Exports: Dialog, DialogBody, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogOverlay, DialogPortal, DialogTitle, DialogTrigger, DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuLinkItem, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, Popover, PopoverArrow, PopoverClose, PopoverContent, PopoverDescription, PopoverPositioner, PopoverPortal, PopoverTitle, PopoverTrigger, Sheet, SheetBody, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetOverlay, SheetPortal, SheetTitle, SheetTrigger, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger.
+- Table (Primitive): Semantic tabular anatomy for bounded datasets. https://conscia-labs.github.io/design-system/components/table/ Exports: Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow.
+- Supporting primitives (Primitive): Filters, loading, separators, shortcuts, and toast feedback. https://conscia-labs.github.io/design-system/components/supporting-primitives/ Exports: FilterChip, Separator, ShortcutHint, Skeleton, Spinner, Toast, ToastAction, ToastClose, ToastContent, ToastDescription, ToastProvider, ToastTitle, ToastViewport, useToast.
+- Application shell (Pattern): Integrated and split application chrome. https://conscia-labs.github.io/design-system/components/application-shell/ Exports: AppHeader, AppHeaderActions, AppHeaderSearch, AppHeaderStart, AppShell, AppSidebar, AppSidebarContent, AppSidebarFooter, AppSidebarHeader, InspectorRegion, MainRegion, PageBoundary, PageContent, PageFrame, ProductIdentity, SidebarSeparator, SidebarSearch, SidebarTrigger, TopBar, useAppShell.
+- Sidebar navigation (Pattern): Static groups, leaf routes, and explicit submenus. https://conscia-labs.github.io/design-system/components/sidebar-navigation/ Exports: NavigationGroup, NavigationItem, NavigationSubItem, NavigationSubList, SidebarNavigation.
+- Page composition (Pattern): Headers, toolbars, detail sections, and back links. https://conscia-labs.github.io/design-system/components/page-composition/ Exports: DetailBackLink, DetailSection, DetailSections, KeyValueItem, KeyValueList, PageHeader, PageToolbar, ResourceSummary.
+- Inventory and tables (Pattern): Responsive data-heavy resource collections. https://conscia-labs.github.io/design-system/components/inventory-and-tables/ Exports: DataTable, EntityTable, InventoryDesktop, InventoryMobile, InventorySurface, PaginationControls.
+- Metrics and data panels (Pattern): Operational summaries, trends, charts, and panel anatomy. https://conscia-labs.github.io/design-system/components/metrics-and-data-panels/ Exports: DataPanel, DataPanelContent, DataPanelFooter, DataPanelHeader, MetricBand, MetricBandItem, MetricCard, MetricTrend, ValueMeter.
+- Activity and attention (Pattern): Operational activity and persistent findings. https://conscia-labs.github.io/design-system/components/activity-and-attention/ Exports: ActivityItem, ActivityList, AttentionItem, AttentionList.
+- State and feedback (Pattern): Empty, loading, error, confirmation, and command states. https://conscia-labs.github.io/design-system/components/state-and-feedback/ Exports: CommandPalette, ConfirmationDialog, ErrorState, LoadingRows, StateView.
+- Filters and preferences (Pattern): Applied filters and shared display preferences. https://conscia-labs.github.io/design-system/components/filters-and-preferences/ Exports: AppearanceControl, DensityControl, DesignPreferenceControls, DesignSystemPreferenceSync, FilterBar, useConsciaPreferences.
+- Workbench (Pattern): Multi-rail operational workspaces and resource rows. https://conscia-labs.github.io/design-system/components/workbench/ Exports: IdentityRow, ResourceRow, ResourceRowContent, ResourceRowDescription, ResourceRowIcon, ResourceRowMeta, ResourceRowTitle, WorkbenchBackdrop, WorkbenchInspector, WorkbenchInspectorSection, WorkbenchMain, WorkbenchMobileToolbar, WorkbenchRail, WorkbenchSection, WorkbenchSectionHeader, WorkbenchShell.
+- Content helpers (Pattern): Provider identity and copyable code examples. https://conscia-labs.github.io/design-system/components/content-helpers/ Exports: CodeBlock, ProviderMark.
+- Conscia aliases (Compatibility): Deprecated pre-v1 aliases retained for migration only. https://conscia-labs.github.io/design-system/components/conscia-aliases/ Exports: ConsciaButton, ConsciaCard, ConsciaCardContent, ConsciaCardDescription, ConsciaCardFooter, ConsciaCardHeader, ConsciaCardTitle, ConsciaCheckbox, ConsciaFormSelect, ConsciaIconButton, ConsciaInput, ConsciaSelect, ConsciaSelectContent, ConsciaSelectGroup, ConsciaSelectItem, ConsciaSelectTrigger, ConsciaSelectValue, ConsciaSwitch, ConsciaTable, ConsciaTableBody, ConsciaTableCell, ConsciaTableHead, ConsciaTableHeader, ConsciaTableRow, ConsciaTextarea.

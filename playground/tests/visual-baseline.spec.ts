@@ -14,7 +14,14 @@ const densities = ["comfortable", "compact", "operational"] as const satisfies D
 const routes = [
   { id: "foundation", path: "/foundation", heading: "Foundation" },
   { id: "primitives", path: "/primitives", heading: "Primitives" },
+  { id: "tables", path: "/tables", heading: "Tables and data tables" },
   { id: "reference-patterns", path: "/reference-patterns", heading: "AI Models" },
+  { id: "patterns", path: "/patterns", heading: "Pattern catalog" },
+  { id: "shell-navigation", path: "/shell-navigation", heading: "Shell and navigation" },
+  { id: "delivery-metrics", path: "/delivery-metrics", heading: "Delivery metrics" },
+  { id: "components", path: "/components", heading: "Components" },
+  { id: "component-button", path: "/components/button", heading: "Button" },
+  { id: "typography", path: "/typography", heading: "Typography" },
 ] as const;
 
 async function setDeterministicPreferences(
@@ -183,7 +190,7 @@ test.describe("interaction baseline", () => {
 
   test("reference pattern controls preserve deterministic states", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 1100 });
-    await loadRoute(page, routes[2], "light", "comfortable");
+    await loadRoute(page, routes[3], "light", "comfortable");
 
     const search = page.getByRole("textbox", { name: "Search AI Models", exact: true });
     await search.fill("Claude");
@@ -224,11 +231,22 @@ test.describe("interaction baseline", () => {
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   });
 
-  test("sidebar navigation preserves active, collapsed, flyout, and mobile behavior", async ({ page }) => {
+  test("integrated header and static sidebar navigation preserve desktop and mobile behavior", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 1100 });
     await loadRoute(page, routes[0], "light", "comfortable");
 
-    await expect(page.getByRole("link", { name: "Foundation", exact: true })).toHaveAttribute(
+    await expect(page.locator('[data-slot="app-header"]')).toBeVisible();
+    const shellGeometry = await page.evaluate(() => {
+      const header = document.querySelector<HTMLElement>('[data-slot="app-header"]')?.getBoundingClientRect();
+      const sidebar = document.querySelector<HTMLElement>('[data-slot="app-sidebar"]')?.getBoundingClientRect();
+      const main = document.querySelector<HTMLElement>("main")?.getBoundingClientRect();
+      return { header, sidebar, main };
+    });
+    expect(shellGeometry.header?.left).toBe(0);
+    expect(shellGeometry.header?.right).toBe(1440);
+    expect(shellGeometry.sidebar?.top).toBe(shellGeometry.header?.bottom);
+    expect(shellGeometry.main?.top).toBe(shellGeometry.header?.bottom);
+    await expect(page.getByRole("link", { name: "Tokens and principles", exact: true })).toHaveAttribute(
       "aria-current",
       "page",
     );
@@ -238,23 +256,56 @@ test.describe("interaction baseline", () => {
       "data-sidebar-state",
       "collapsed",
     );
+    await expect(
+      page.locator('[data-slot="app-sidebar"]').getByText("Foundation", { exact: true }),
+    ).toBeHidden();
 
-    await page.getByRole("button", { name: "Library, 5 sections menu" }).click();
-    await expect(page.getByRole("menu")).toBeVisible();
-    await page.getByRole("menuitem", { name: "Primitives", exact: true }).click();
-    await expect(page).toHaveURL(/\/primitives$/);
-    await expect(page.getByRole("menu")).toBeHidden();
+    await page.getByRole("link", { name: "Button", exact: true }).click();
+    await expect(page).toHaveURL(/\/components\/button$/);
 
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(routes[0].path);
     await expect(page.getByRole("heading", { name: routes[0].heading, exact: true })).toBeVisible();
+    const mobileSearch = page.getByRole("button", { name: "Search design system", exact: true });
+    await expect(mobileSearch).toBeVisible();
+    await mobileSearch.click();
+    await expect(page.getByRole("combobox", { name: "Search commands", exact: true })).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(page.getByRole("combobox", { name: "Search commands", exact: true })).toBeHidden();
     await page.getByRole("button", { name: "Toggle navigation" }).click();
 
     const mobileNavigation = page.getByRole("dialog", { name: "Application navigation" });
     await expect(mobileNavigation).toBeVisible();
-    await mobileNavigation.getByRole("link", { name: "Primitives", exact: true }).click();
-    await expect(page).toHaveURL(/\/primitives$/);
+    await mobileNavigation.getByRole("link", { name: "Button", exact: true }).click();
+    await expect(page).toHaveURL(/\/components\/button$/);
     await expect(mobileNavigation).toBeHidden();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  });
+
+  test("table catalog filters, sorts, selects, and switches to mobile rows", async ({ page }) => {
+    const tablesRoute = routes.find((route) => route.id === "tables")!;
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await loadRoute(page, tablesRoute, "light", "comfortable");
+
+    const dataTable = page.locator('[data-slot="data-table"]').first();
+    await page.getByRole("textbox", { name: "Search connections", exact: true }).fill("vertex");
+    await expect(dataTable.locator("tbody tr")).toHaveCount(2);
+
+    await page.getByRole("checkbox", { name: "Select Vertex AI", exact: true }).click();
+    await expect(page.getByText("1 row selected.", { exact: true })).toBeVisible();
+
+    const sortResources = page.getByRole("button", { name: "Sort by Resources", exact: true });
+    await sortResources.click();
+    await expect(sortResources.locator("..")).toHaveAttribute("aria-sort", /ascending|descending/);
+
+    await page.getByRole("textbox", { name: "Search connections", exact: true }).fill("no result");
+    await expect(page.getByRole("heading", { name: "No matching connections", exact: true })).toBeVisible();
+    await page.getByRole("button", { name: "Clear filters", exact: true }).click();
+    await expect(dataTable.locator("tbody tr")).toHaveCount(5);
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect(dataTable.locator('[role="list"]')).toBeVisible();
+    await expect(dataTable.locator("table")).toBeHidden();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   });
 });

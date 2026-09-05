@@ -74,7 +74,11 @@ function CodeBlock({
         </div>
         {snippets.map((snippet) => (
           <TabsContent key={snippet.value} value={snippet.value} className="m-0">
-            <pre className="max-h-[32rem] overflow-auto p-4 text-sm leading-6">
+            <pre
+              aria-label={`${snippet.label} code example`}
+              tabIndex={0}
+              className="max-h-[32rem] overflow-auto p-4 text-sm leading-6 outline-none focus-visible:ring-[3px] focus-visible:ring-inset focus-visible:ring-focus/50"
+            >
               <code>{snippet.code}</code>
             </pre>
           </TabsContent>

@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+- Add the preferred integrated application header with structured start,
+  responsive search, and action regions while retaining the split v1 shell.
+- Add explicit static sidebar groups and opt-in submenus, remove the active
+  left indicator, and retain legacy untyped collapsible sections for migration.
+- Add chart/trend tokens, `MetricCard`, `MetricTrend`, `DataPanel`, and
+  `AttentionList`, plus flexible leading/trailing activity-row slots.
+- Expand the playground with an enforceable public-component inventory,
+  pattern and shell catalogs, and a responsive delivery-metrics reference.
+- Add package-local agent guidance, a generated component manifest, an
+  idempotent consumer `AGENTS.md` initializer, and a static GitHub Pages
+  deployment for the playground.
+
 ## 1.0.3 - 2026-08-31
 
 - Fix nested Select, FormSelect, SearchableSelect, Popover, and DropdownMenu

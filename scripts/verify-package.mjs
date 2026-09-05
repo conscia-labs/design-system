@@ -2,6 +2,9 @@ import assert from "node:assert/strict";
 import { access, readFile, readdir } from "node:fs/promises";
 
 const expectedFiles = [
+  "AGENT_GUIDE.md",
+  "agent-manifest.json",
+  "bin/conscia-design-system.mjs",
   "dist/index.js",
   "dist/index.d.ts",
   "dist/foundation/index.js",
@@ -104,6 +107,16 @@ assert.doesNotMatch(
 );
 
 const packageManifest = JSON.parse(await readFile("package.json", "utf8"));
+const agentManifest = JSON.parse(
+  await readFile("agent-manifest.json", "utf8"),
+);
+assert.equal(agentManifest.package, packageManifest.name);
+assert.equal(agentManifest.version, packageManifest.version);
+assert.ok(agentManifest.componentFamilies.length > 0);
+assert.equal(
+  packageManifest.bin?.["conscia-design-system"],
+  "./bin/conscia-design-system.mjs",
+);
 assert.ok(
   !packageManifest.keywords?.includes("radix-ui"),
   "Package metadata must not advertise Radix.",

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it } from "vitest";
 
@@ -71,6 +71,7 @@ describe("nested overlay behavior", () => {
     expect(formTrigger.getAttribute("aria-expanded")).toBe("true");
     expect((document.querySelector('input[name="status"]') as HTMLInputElement).value).toBe("draft");
     await user.keyboard("{Escape}");
+    await waitFor(() => expect(formTrigger.getAttribute("aria-expanded")).toBe("false"));
   });
 
   it("keeps a Select inside a Dialog interactive with no nested modal backdrop", async () => {
@@ -78,7 +79,9 @@ describe("nested overlay behavior", () => {
     let selected = "draft";
     render(<DialogHarness><SelectFixture onValueChange={(value) => { selected = value; }} /></DialogHarness>);
 
-    await user.click(screen.getByTestId("select-trigger"));
+    const trigger = screen.getByTestId("select-trigger");
+    await user.click(trigger);
+    await waitFor(() => expect(trigger.getAttribute("aria-expanded")).toBe("true"));
 
     const selectPositioner = document.querySelector('[data-slot="select-positioner"]');
     const selectPortal = selectPositioner?.parentElement;
@@ -87,8 +90,9 @@ describe("nested overlay behavior", () => {
     expect(selectPortal?.closest("body")).toBe(document.body);
     expect(selectPortal?.querySelector('[data-base-ui-inert=""]')).toBeNull();
 
-    await user.click(screen.getByRole("option", { name: "Ready" }));
+    await user.click(await screen.findByRole("option", { name: "Ready" }));
     expect(selected).toBe("ready");
+    await waitFor(() => expect(trigger.getAttribute("aria-expanded")).toBe("false"));
   });
 
   it("keeps SearchableSelect keyboard and mouse selection available inside a Dialog", async () => {
@@ -118,9 +122,12 @@ describe("nested overlay behavior", () => {
     const trigger = screen.getByTestId("select-trigger");
 
     await user.click(trigger);
-    expect(document.querySelector('[data-slot="select-positioner"]')?.className).toContain("z-50");
+    await waitFor(() => expect(trigger.getAttribute("aria-expanded")).toBe("true"));
+    const positioner = document.querySelector('[data-slot="select-positioner"]');
+    expect(positioner?.className).toContain("z-50");
+    await waitFor(() => expect(positioner?.hasAttribute("hidden")).toBe(false));
     await user.keyboard("{Escape}");
-    expect(trigger.getAttribute("aria-expanded")).toBe("false");
+    await waitFor(() => expect(trigger.getAttribute("aria-expanded")).toBe("false"));
     expect(document.activeElement).toBe(trigger);
   });
 
