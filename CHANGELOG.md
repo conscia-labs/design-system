@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.1.2 - 2026-09-05 Unreleased
 
 - Add the preferred integrated application header with structured start,
   responsive search, and action regions while retaining the split v1 shell.

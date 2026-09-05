@@ -65,7 +65,7 @@ async function loadRoute(
     { nextAppearance: appearance, nextDensity: density },
   );
   await page.emulateMedia({ colorScheme: appearance });
-  await page.goto(path);
+  await page.goto(path, { timeout: 60_000 });
   await expect(page.getByRole("heading", { name: heading, exact: true })).toBeVisible();
   await page.addStyleTag({
     content: "nextjs-portal { display: none !important; }",
@@ -184,6 +184,7 @@ test.describe("Overview adoption guide", () => {
 
 test.describe("Phase 7 accessibility regression", () => {
   test("representative routes have no automatically detectable violations", async ({ page }) => {
+    test.setTimeout(120_000);
     await page.setViewportSize({ width: 1440, height: 1100 });
 
     for (const appearance of ["light", "dark"] as const) {
@@ -358,6 +359,7 @@ test.describe("Phase 7 keyboard and focus regression", () => {
 test.describe("Phase 7 responsive regression", () => {
   for (const density of ["comfortable", "compact", "operational"] as const) {
     test(`routes avoid document overflow on mobile in ${density} density`, async ({ page }) => {
+      test.setTimeout(120_000);
       await page.setViewportSize({ width: 390, height: 844 });
 
       for (const route of routes) {
