@@ -6,7 +6,7 @@ The shared React component library for building clear, consistent, and accessibl
 
 > **Package:** available publicly as [`@conscia-labs/design-system`](https://www.npmjs.com/package/@conscia-labs/design-system).
 >
-> **Current release:** `1.1.0` is the latest stable v1 release.
+> **Current release:** `1.1.2` is the latest stable v1 release.
 >
 > **Migration:** upgrading an application to v1? Follow the [Design System v1 Migration Guide](https://github.com/conscia-labs/design-system/blob/main/docs/design-system-v1-migration.md).
 

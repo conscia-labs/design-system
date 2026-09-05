@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "package": "@conscia-labs/design-system",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "guide": "./AGENT_GUIDE.md",
   "playground": "https://conscia-labs.github.io/design-system/",
   "componentFamilies": [

@@ -1,6 +1,6 @@
 # Conscia Design System
 
-> Agent-oriented index for @conscia-labs/design-system 1.1.0.
+> Agent-oriented index for @conscia-labs/design-system 1.1.2.
 
 - Live playground: https://conscia-labs.github.io/design-system/
 - Agent guide: https://conscia-labs.github.io/design-system/agent-guide.md
