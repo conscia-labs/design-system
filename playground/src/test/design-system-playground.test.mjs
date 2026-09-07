@@ -4,6 +4,24 @@ import { test } from "node:test";
 
 const read = (path) => readFileSync(new URL(path, import.meta.url), "utf8");
 
+function relativeLuminance(hex) {
+  const channels = hex.match(/.{2}/g).map((channel) => Number.parseInt(channel, 16) / 255);
+  const [red, green, blue] = channels.map((channel) => (
+    channel <= 0.04045
+      ? channel / 12.92
+      : ((channel + 0.055) / 1.055) ** 2.4
+  ));
+
+  return (0.2126 * red) + (0.7152 * green) + (0.0722 * blue);
+}
+
+function contrastRatio(first, second) {
+  const lighter = Math.max(relativeLuminance(first), relativeLuminance(second));
+  const darker = Math.min(relativeLuminance(first), relativeLuminance(second));
+
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
 function runtimeExportsFromIndex(indexPath, directoryPath) {
   const index = read(indexPath);
   const moduleNames = [...index.matchAll(/export \* from "\.\/(.+)";/g)].map((match) => match[1]);
@@ -184,21 +202,44 @@ test("typography has dedicated role, density, font-loading, and usage documentat
   assert.match(typography, /@conscia-labs\/design-system\/styles\.css/);
 });
 
-test("Conscia green separates secondary brand expression from operational success", () => {
+test("official Conscia colors map to distinct primary, accent, and supporting brand roles", () => {
   const styles = read("../../../src/foundation/styles.css");
   const foundation = read("../app/foundation/page.tsx");
+  const overview = read("../app/page.tsx");
+  const appShell = read("../components/app-shell.tsx");
+  const componentDemo = read("../components/component-demo.tsx");
+  const patterns = read("../app/patterns/page.tsx");
+  const darkTheme = styles.match(/:root\.dark,[\s\S]*?(?=\/\*\n \* Light sidebars)/)?.[0];
 
-  for (const token of [
-    "--brand-secondary:",
-    "--brand-secondary-background:",
-    "--brand-secondary-border:",
-    "--success:",
-    "--success-background:",
-  ]) {
-    assert.match(styles, new RegExp(token));
-  }
+  assert.ok(darkTheme, "dark theme token block should be present");
+  assert.equal(styles.match(/#1e0721/g)?.length, 1);
+  assert.equal(styles.match(/#4962ff/g)?.length, 1);
+  assert.equal(styles.match(/#1c4e51/g)?.length, 1);
+  assert.match(styles, /--palette-burgundy: #1e0721;/);
+  assert.match(styles, /--palette-electric-blue: #4962ff;/);
+  assert.match(styles, /--palette-green: #1c4e51;/);
+  assert.match(styles, /--brand: var\(--palette-burgundy\);/);
+  assert.match(styles, /--brand-accent: var\(--palette-electric-blue\);/);
+  assert.match(styles, /--brand-supporting: var\(--palette-green\);/);
+  assert.match(styles, /--brand-secondary: var\(--brand-supporting\);/);
+  assert.match(styles, /--color-brand-accent: var\(--brand-accent\);/);
+  assert.match(styles, /--color-brand-supporting: var\(--brand-supporting\);/);
+  assert.match(darkTheme, /--brand: var\(--palette-burgundy\);/);
+  assert.match(darkTheme, /--brand-foreground: #ffffff;/);
+  assert.match(darkTheme, /--brand-accent: #6b7cff;/);
+  assert.match(darkTheme, /--brand-supporting: #a3d6cf;/);
+  assert.match(darkTheme, /--chart-series-1: var\(--brand-accent\);/);
+  assert.ok(contrastRatio("1e0721", "ffffff") >= 4.5);
 
-  assert.match(foundation, /Secondary brand · restrained supporting expression/);
+  assert.match(foundation, /Burgundy · primary identity surface/);
+  assert.match(foundation, /Electric blue · brand accent/);
+  assert.match(foundation, /Green · supporting brand expression/);
+  assert.match(appShell, /text-brand dark:text-white/);
+  assert.match(overview, /border-t-brand/);
+  assert.match(componentDemo, /bg-brand p-3 text-brand-foreground/);
+  assert.match(patterns, /bg-brand p-3 text-brand-foreground/);
+  assert.match(styles, /workbench-section-action[\s\S]*?color: var\(--brand-accent\)/);
+  assert.match(styles, /resource-row[^}]*hover[\s\S]*?color: var\(--brand-accent\)/);
 });
 
 test("appearance preference supports light, dark, system, persistence, and system sync", () => {
@@ -604,7 +645,7 @@ test("shared shell patterns expose structure without gateway-specific behavior",
   assert.doesNotMatch(shell, /usePathname/);
 });
 
-test("sidebar semantics resolve through light and dark scopes without a new palette", () => {
+test("sidebar semantics resolve through shared light and dark roles", () => {
   const styles = read("../../../src/foundation/styles.css");
   const shell = read("../../../src/patterns/app-shell.tsx");
   const navigation = read("../../../src/patterns/sidebar-navigation.tsx");

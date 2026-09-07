@@ -72,7 +72,7 @@ export function AppShell({ children, version }: { children: ReactNode; version: 
       <AppHeader>
         <AppHeaderStart>
           <SidebarTrigger aria-label="Toggle navigation" />
-          <Link href="/" className="flex min-w-0 shrink-0 items-center gap-2" aria-label="Conscia Design System home">
+          <Link href="/" className="flex min-w-0 shrink-0 items-center gap-2 text-brand dark:text-white" aria-label="Conscia Design System home">
             <BrandIcon aria-hidden="true" className="size-6" />
             <span className="hidden text-sm font-semibold sm:inline">Conscia</span>
           </Link>

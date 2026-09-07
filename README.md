@@ -8,7 +8,7 @@ primitives, and product patterns for operational applications.
 
 > **Package:** available publicly as [`@conscia-labs/design-system`](https://www.npmjs.com/package/@conscia-labs/design-system).
 >
-> **Current release:** `1.1.2` is the latest stable v1 release.
+> **Current release:** `1.2.0` is the latest stable v1 release.
 >
 > **Documentation:** browse the [live design system](https://conscia-labs.github.io/design-system/)
 > for the complete component reference, examples, and usage guidance.
@@ -88,6 +88,12 @@ Appearance values are `light`, `dark`, and `system`. Density values are
 Use semantic Conscia tokens and utilities rather than copying palette values
 into an application. See the [foundation documentation](https://conscia-labs.github.io/design-system/foundation/)
 for the token contract.
+
+Conscia burgundy is the primary identity surface: pair `bg-brand` with
+`text-brand-foreground`. Use `brand-accent` for blue emphasis and
+`brand-supporting-*` for restrained green expression. The low-level palette
+variables preserve the official colors, while semantic blue and green roles
+adapt where dark-mode contrast requires it.
 
 ## Choose the right level
 

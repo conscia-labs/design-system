@@ -78,7 +78,7 @@ export default function PatternsPage() {
 
       <ExampleSection title="Workbench" description="Multi-rail patterns retain consistent geometry while applications own data and routing.">
         <WorkbenchShell className="grid min-h-80 overflow-hidden rounded-[var(--ds-radius-surface)] border bg-surface md:grid-cols-[4.5rem_16rem_minmax(0,1fr)_16rem]">
-          <WorkbenchRail variant="global" className="border-r bg-sidebar-canvas p-3 text-sidebar-primary-text">CS</WorkbenchRail>
+          <WorkbenchRail variant="global" className="border-r bg-brand p-3 text-brand-foreground">CS</WorkbenchRail>
           <WorkbenchRail variant="secondary" className="border-r p-3">
             <WorkbenchSection><WorkbenchSectionHeader title="Resources" metadata="3" />
               <ResourceRow selected className="mt-3 flex items-center gap-2 rounded-md bg-selection-background p-2"><ResourceRowIcon><Box className="size-4" /></ResourceRowIcon><ResourceRowContent><ResourceRowTitle className="block text-sm">AI models</ResourceRowTitle><ResourceRowMeta className="text-xs text-text-supporting">5 available</ResourceRowMeta></ResourceRowContent></ResourceRow>

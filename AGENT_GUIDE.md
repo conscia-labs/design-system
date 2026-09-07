@@ -181,6 +181,9 @@ Use semantic tokens and utilities rather than palette colors:
 - Surfaces: `canvas`, `surface`, `surface-raised`, `surface-muted`, and
   `surface-floating`.
 - Text: `text-primary`, `text-secondary`, `text-supporting`, and `text-muted`.
+- Brand: `brand` with `brand-foreground` for burgundy identity surfaces,
+  `brand-accent` for blue emphasis, and `brand-supporting-*` for restrained
+  green expression. Use the matching foreground token on filled surfaces.
 - Actions and selection: `action-*` and `selection-*`.
 - Status: `information-*`, `success-*`, `warning-*`, and `danger-*`.
 - Neutral structure: `border-subtle`, `control-border`, and shared radius,
@@ -189,6 +192,12 @@ Use semantic tokens and utilities rather than palette colors:
 Use `className` for layout and local composition. Override semantic variables
 only when the product intentionally changes a system-level decision. Avoid
 component descendant selectors.
+
+The low-level `palette-burgundy`, `palette-electric-blue`, and `palette-green`
+variables preserve official brand values, but applications should compose with
+the semantic brand roles above. Do not use `text-brand` as ordinary text on a
+dark canvas; burgundy is intentionally stable across appearances and is
+designed as an identity surface with `text-brand-foreground`.
 
 ## Accessibility ownership
 

@@ -71,19 +71,22 @@ export default function FoundationPage() {
         </ExampleSection>
 
         <ExampleSection title="Brand roles">
-          <div className="grid gap-3 rounded-[var(--ds-radius-surface)] border bg-surface p-4 md:grid-cols-2">
+          <div className="grid gap-3 rounded-[var(--ds-radius-surface)] border bg-surface p-4 md:grid-cols-2 xl:grid-cols-3">
             <div className="flex items-center gap-3 rounded-[var(--ds-radius-control)] bg-surface-muted p-4">
-              <BrandIcon aria-label="Conscia" className="size-10" />
+              <BrandIcon aria-label="Conscia" className="size-10 text-brand dark:text-white" />
               <div className="text-sm font-medium text-text-primary">Symbol mark · theme-aware</div>
             </div>
             <div className="flex items-center rounded-[var(--ds-radius-control)] bg-surface-muted p-4">
-              <BrandWordmark aria-label="Conscia" className="w-36 max-w-full" />
+              <BrandWordmark aria-label="Conscia" className="w-36 max-w-full text-brand dark:text-white" />
             </div>
             <div className="rounded-[var(--ds-radius-control)] bg-brand p-4 text-sm font-medium text-brand-foreground">
-              Primary brand · identity and signature moments
+              Burgundy · primary identity surface
             </div>
-            <div className="rounded-[var(--ds-radius-control)] border border-brand-secondary-border bg-brand-secondary-background p-4 text-sm font-medium text-brand-secondary">
-              Secondary brand · restrained supporting expression
+            <div className="rounded-[var(--ds-radius-control)] bg-brand-accent p-4 text-sm font-medium text-brand-accent-foreground">
+              Electric blue · brand accent
+            </div>
+            <div className="rounded-[var(--ds-radius-control)] border border-brand-supporting-border bg-brand-supporting-background p-4 text-sm font-medium text-brand-supporting">
+              Green · supporting brand expression
             </div>
           </div>
         </ExampleSection>
