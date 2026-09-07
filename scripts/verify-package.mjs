@@ -92,6 +92,22 @@ assert.doesNotMatch(
 
 assert.match(foundationCss, /@theme inline/);
 assert.match(foundationCss, /@custom-variant dark/);
+for (const declaration of [
+  "--palette-burgundy: #1e0721",
+  "--palette-electric-blue: #4962ff",
+  "--palette-green: #1c4e51",
+  "--brand: var(--palette-burgundy)",
+  "--brand-accent: var(--palette-electric-blue)",
+  "--brand-supporting: var(--palette-green)",
+  "--brand-secondary: var(--brand-supporting)",
+  "--color-brand-accent: var(--brand-accent)",
+  "--color-brand-supporting: var(--brand-supporting)",
+]) {
+  assert.ok(
+    bundledCss.includes(declaration),
+    `Published CSS must include ${declaration}.`,
+  );
+}
 assert.doesNotMatch(foundationCss, /@tailwind utilities/);
 assert.doesNotMatch(foundationCss, /\.flex\s*\{/);
 assert.doesNotMatch(foundationCss, /box-sizing:border-box/);

@@ -36,7 +36,7 @@ const guidance: Record<string, ComponentGuidance> = {
   brand: {
     whenToUse: "Use the icon where horizontal space is limited and the wordmark when the full Conscia identity should be visible.",
     accessibility: "Add an accessible name when the mark is a link; otherwise hide decorative marks from assistive technology.",
-    options: [{ name: "mark", values: "BrandIcon · BrandWordmark", guidance: "Both inherit currentColor and adapt to the active theme." }],
+    options: [{ name: "mark", values: "BrandIcon · BrandWordmark", guidance: "Both inherit currentColor. Use burgundy on light identity surfaces and white on dark identity surfaces." }],
   },
   button: {
     whenToUse: "Use buttons for actions. Use link composition for navigation that should retain button styling.",

@@ -1,6 +1,18 @@
 # Changelog
 
-## 1.1.2 - 2026-09-05 Unreleased
+## 1.2.0 - 2026-09-07
+
+- Restore official Conscia burgundy (`#1e0721`) as the primary `brand` role,
+  add stable burgundy, electric-blue, and green palette primitives, and expose
+  theme-aware `brand-accent` and `brand-supporting-*` semantics.
+- Preserve `brand-secondary-*` as v1 compatibility aliases, keep operational
+  actions independent from brand identity, and move the first chart series to
+  the accessible blue brand accent.
+- Document the intentional `bg-brand` visual change and add source, packaged
+  consumer, contrast, dark-mode, and playground coverage for the corrected
+  contract.
+
+## 1.1.2 - 2026-09-05
 
 - Add the preferred integrated application header with structured start,
   responsive search, and action regions while retaining the split v1 shell.

@@ -2,6 +2,12 @@
 
 @custom-variant dark (&:is(.dark *));
 
+:root {
+  --palette-burgundy: #1e0721;
+  --palette-electric-blue: #4962ff;
+  --palette-green: #1c4e51;
+}
+
 @keyframes ds-sidebar-expand {
   from {
     height: 0;
@@ -85,7 +91,7 @@
   --surface-overlay: #ffffff;
   --surface-control: var(--surface-muted);
   --surface-control-hover: var(--surface-raised);
-  --surface-inverse: #1e0721;
+  --surface-inverse: var(--palette-burgundy);
   --text-primary: #140c15;
   --text-secondary: #373b4a;
   --text-supporting: #5f6270;
@@ -93,12 +99,18 @@
   --text-disabled: #a7a9b3;
   --text-inverse: #ffffff;
   --text-link: #3f4da8;
-  --brand: #4962ff;
+  --brand: var(--palette-burgundy);
   --brand-foreground: #ffffff;
-  --brand-secondary: #1c4e51;
-  --brand-secondary-foreground: #ffffff;
-  --brand-secondary-background: #eaf3f1;
-  --brand-secondary-border: #b2d4cf;
+  --brand-accent: var(--palette-electric-blue);
+  --brand-accent-foreground: #ffffff;
+  --brand-supporting: var(--palette-green);
+  --brand-supporting-foreground: #ffffff;
+  --brand-supporting-background: #eaf3f1;
+  --brand-supporting-border: #b2d4cf;
+  --brand-secondary: var(--brand-supporting);
+  --brand-secondary-foreground: var(--brand-supporting-foreground);
+  --brand-secondary-background: var(--brand-supporting-background);
+  --brand-secondary-border: var(--brand-supporting-border);
   --action: #3f55df;
   --action-foreground: #ffffff;
   --action-hover: #3344c7;
@@ -133,7 +145,7 @@
   --neutral-background: #f3f4f5;
   --neutral-border: #d9dadd;
   --neutral-foreground: #373b4a;
-  --chart-series-1: var(--action);
+  --chart-series-1: var(--brand-accent);
   --chart-series-2: var(--information);
   --chart-series-3: var(--success);
   --chart-series-4: var(--warning);
@@ -363,12 +375,18 @@
   --text-disabled: #747b87;
   --text-inverse: #17191c;
   --text-link: #aeb6ef;
-  --brand: #6b7cff;
-  --brand-foreground: #17191c;
-  --brand-secondary: #a3d6cf;
-  --brand-secondary-foreground: #102a2c;
-  --brand-secondary-background: #162c2d;
-  --brand-secondary-border: #315c59;
+  --brand: var(--palette-burgundy);
+  --brand-foreground: #ffffff;
+  --brand-accent: #6b7cff;
+  --brand-accent-foreground: #17191c;
+  --brand-supporting: #a3d6cf;
+  --brand-supporting-foreground: #102a2c;
+  --brand-supporting-background: #162c2d;
+  --brand-supporting-border: #315c59;
+  --brand-secondary: var(--brand-supporting);
+  --brand-secondary-foreground: var(--brand-supporting-foreground);
+  --brand-secondary-background: var(--brand-supporting-background);
+  --brand-secondary-border: var(--brand-supporting-border);
   --action: #5965cc;
   --action-foreground: #ffffff;
   --action-hover: #5f6bd2;
@@ -403,7 +421,7 @@
   --neutral-background: #282b31;
   --neutral-border: rgb(255 255 255 / 12%);
   --neutral-foreground: #e5e8ed;
-  --chart-series-1: var(--brand);
+  --chart-series-1: var(--brand-accent);
   --chart-series-2: var(--information);
   --chart-series-3: var(--success);
   --chart-series-4: var(--warning);
@@ -485,6 +503,12 @@
   --color-text-link: var(--text-link);
   --color-brand: var(--brand);
   --color-brand-foreground: var(--brand-foreground);
+  --color-brand-accent: var(--brand-accent);
+  --color-brand-accent-foreground: var(--brand-accent-foreground);
+  --color-brand-supporting: var(--brand-supporting);
+  --color-brand-supporting-foreground: var(--brand-supporting-foreground);
+  --color-brand-supporting-background: var(--brand-supporting-background);
+  --color-brand-supporting-border: var(--brand-supporting-border);
   --color-brand-secondary: var(--brand-secondary);
   --color-brand-secondary-foreground: var(--brand-secondary-foreground);
   --color-brand-secondary-background: var(--brand-secondary-background);
@@ -793,7 +817,7 @@
   }
 
   [data-slot="workbench-section-action"] {
-    color: var(--brand);
+    color: var(--brand-accent);
     font-size: var(--ds-menu-item-size);
   }
 
@@ -816,7 +840,7 @@
 
   [data-slot="resource-row"]:hover,
   [data-slot="resource-row"]:focus-visible {
-    color: var(--brand);
+    color: var(--brand-accent);
   }
 
   [data-slot="resource-row"]:focus-visible {
@@ -835,7 +859,7 @@
 
   [data-slot="resource-row"]:hover > svg:last-child,
   [data-slot="resource-row"]:focus-visible > svg:last-child {
-    color: var(--brand);
+    color: var(--brand-accent);
     transform: translateX(2px);
   }
 
@@ -944,8 +968,8 @@
     flex: 0 0 auto;
     place-items: center;
     border-radius: 999px;
-    background: var(--brand-secondary-background);
-    color: var(--brand-secondary);
+    background: var(--brand-supporting-background);
+    color: var(--brand-supporting);
     font-size: var(--ds-menu-label-size);
     font-weight: 700;
   }

@@ -40,6 +40,13 @@ export default function Page() {
           <Card>
             <CardContent>Packaged card padding</CardContent>
           </Card>
+          <div className="grid gap-2 sm:grid-cols-3">
+            <div className="bg-brand p-3 text-brand-foreground">Burgundy brand surface</div>
+            <div className="bg-brand-accent p-3 text-brand-accent-foreground">Blue brand accent</div>
+            <div className="border border-brand-supporting-border bg-brand-supporting-background p-3 text-brand-supporting">
+              Green supporting expression
+            </div>
+          </div>
           <DropdownMenu open>
             <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
             <DropdownMenuContent className="border opacity-70">

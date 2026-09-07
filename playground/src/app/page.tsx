@@ -93,7 +93,7 @@ export default function OverviewPage() {
       }
     >
       <section
-        className="overflow-hidden rounded-[var(--ds-radius-surface)] border border-border-default bg-surface-raised shadow-[var(--ds-shadow-raised)]"
+        className="overflow-hidden rounded-[var(--ds-radius-surface)] border border-border-default border-t-4 border-t-brand bg-surface-raised shadow-[var(--ds-shadow-raised)]"
       >
         <div className="grid gap-8 p-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end lg:p-8">
           <div className="max-w-3xl">

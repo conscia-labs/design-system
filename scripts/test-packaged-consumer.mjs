@@ -70,6 +70,9 @@ const productionCss = (
 const checks = [
   ["card padding", /padding-inline:var\(--ds-surface-padding\)/],
   ["sidebar background", /background-color:var\(--sidebar-canvas\)/],
+  ["burgundy brand background", /background-color:var\(--brand\)/],
+  ["blue brand accent", /background-color:var\(--brand-accent\)/],
+  ["green supporting brand", /background-color:var\(--brand-supporting-background\)/],
   ["flex layout", /display:flex/],
   ["dropdown opacity", /opacity:\.7/],
   ["borders", /border-style:var\(--tw-border-style\)/],

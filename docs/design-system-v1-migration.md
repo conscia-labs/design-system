@@ -394,6 +394,10 @@ Canonical roles include:
 - Text: <code>text-primary</code>, <code>text-secondary</code>,
   <code>text-supporting</code>, <code>text-muted</code>,
   <code>text-inverse</code>, and <code>text-link</code>.
+- Brand: <code>brand</code> and <code>brand-foreground</code> for burgundy
+  identity surfaces, <code>brand-accent</code> and
+  <code>brand-accent-foreground</code> for blue emphasis, and the
+  <code>brand-supporting-*</code> family for restrained green expression.
 - Controls: <code>control-border</code> and <code>focus</code>.
 - Selection: <code>selection-background</code>, <code>selection-border</code>,
   <code>selection-indicator</code>, and <code>selection-foreground</code>.
@@ -411,6 +415,21 @@ Canonical roles include:
 Do not add aliases in the application to hide an incomplete migration. An app
 may have product-specific tokens, but shared design-system roles should remain
 semantic and should not reintroduce the removed names.
+
+### 7.1 Brand token correction in 1.2.0
+
+Version 1.2.0 corrects <code>brand</code> from electric blue to the official
+Conscia burgundy. Existing <code>bg-brand</code> usage therefore changes
+visually. Use <code>bg-brand-accent</code> with
+<code>text-brand-accent-foreground</code> where the previous blue treatment is
+intended.
+
+The <code>brand-secondary-*</code> green family remains available as a v1
+compatibility alias. New work should use <code>brand-supporting-*</code>.
+Palette variables are stable references for the official burgundy, electric
+blue, and green values, but application UI should prefer semantic utilities.
+Because burgundy remains exact across appearances, use it as a filled identity
+surface with <code>brand-foreground</code>, not as ordinary dark-canvas text.
 
 ## 8. State selectors and positioning variables
 
