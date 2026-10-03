@@ -8,7 +8,7 @@ primitives, and product patterns for operational applications.
 
 > **Package:** available publicly as [`@conscia-labs/design-system`](https://www.npmjs.com/package/@conscia-labs/design-system).
 >
-> **Current release:** `1.2.0` is the latest stable v1 release.
+> **Current release:** `1.2.1` is the latest stable v1 release.
 >
 > **Documentation:** browse the [live design system](https://conscia-labs.github.io/design-system/)
 > for the complete component reference, examples, and usage guidance.
