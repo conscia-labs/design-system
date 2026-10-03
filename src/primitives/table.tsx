@@ -1,10 +1,79 @@
+"use client";
+
 import * as React from "react";
 
 import { cn } from "./utils";
 
-function Table({ className, ...props }: React.ComponentProps<"table">) {
+type TableProps = React.ComponentProps<"table"> & {
+  /** Tracks horizontal overflow so the wrapper only enters the tab order when needed. */
+  scrollable?: boolean;
+  /** Accessible name announced when the table requires horizontal scrolling. */
+  scrollableLabel?: string;
+};
+
+function Table({
+  className,
+  scrollable = true,
+  scrollableLabel = "Scrollable table",
+  ...props
+}: TableProps) {
+  const containerRef = React.useRef<HTMLDivElement | null>(null);
+  const [isOverflowing, setIsOverflowing] = React.useState(false);
+
+  React.useEffect(() => {
+    const element = containerRef.current;
+
+    if (!element || !scrollable) {
+      setIsOverflowing(false);
+      return;
+    }
+
+    const updateOverflow = () => {
+      setIsOverflowing(element.scrollWidth > element.clientWidth + 1);
+    };
+
+    updateOverflow();
+
+    const resizeObserver =
+      typeof ResizeObserver === "undefined"
+        ? null
+        : new ResizeObserver(updateOverflow);
+    resizeObserver?.observe(element);
+
+    const table = element.querySelector("table");
+    if (table) {
+      resizeObserver?.observe(table);
+    }
+
+    const mutationObserver =
+      typeof MutationObserver === "undefined"
+        ? null
+        : new MutationObserver(updateOverflow);
+    mutationObserver?.observe(element, {
+      characterData: true,
+      childList: true,
+      subtree: true,
+    });
+
+    return () => {
+      resizeObserver?.disconnect();
+      mutationObserver?.disconnect();
+    };
+  }, [scrollable]);
+
   return (
-    <div data-slot="table-container" tabIndex={0} className="relative w-full overflow-x-auto outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-inset">
+    <div
+      ref={containerRef}
+      data-slot="table-container"
+      data-overflowing={isOverflowing ? "true" : "false"}
+      role={isOverflowing ? "region" : undefined}
+      aria-label={isOverflowing ? scrollableLabel : undefined}
+      tabIndex={isOverflowing ? 0 : undefined}
+      className={cn(
+        "relative w-full outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-inset",
+        isOverflowing ? "overflow-x-auto" : "overflow-x-clip",
+      )}
+    >
       <table data-slot="table" className={cn("w-full caption-bottom ds-type-ui", className)} {...props} />
     </div>
   );
@@ -60,3 +129,5 @@ export {
   TableHeader,
   TableRow
 };
+
+export type { TableProps };

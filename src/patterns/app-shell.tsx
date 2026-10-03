@@ -289,6 +289,8 @@ function AppSidebar({
   children,
   title = "Application navigation",
   description = "Primary product navigation.",
+  "aria-label": ariaLabel,
+  "aria-labelledby": ariaLabelledBy,
   ...props
 }: React.ComponentProps<"aside"> & {
   side?: "left" | "right";
@@ -323,6 +325,8 @@ function AppSidebar({
         data-slot="app-sidebar"
         data-side={side}
         data-sidebar-variant={variant}
+        aria-label={ariaLabelledBy ? undefined : ariaLabel ?? title}
+        aria-labelledby={ariaLabelledBy}
         className={cn(
           "fixed inset-y-0 z-20 hidden w-[var(--ds-app-sidebar-width)] shrink-0 flex-col border-sidebar-border bg-sidebar-canvas text-sidebar-primary-text transition-[width] duration-200 ease-linear lg:flex",
           side === "left" ? "left-0 border-r" : "right-0 border-l",

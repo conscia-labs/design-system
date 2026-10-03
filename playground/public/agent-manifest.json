@@ -14,8 +14,11 @@
       "exports": [
         "applyConsciaPreferences",
         "appearanceOptions",
+        "appearanceStorageKey",
         "cn",
-        "densityOptions"
+        "densityOptions",
+        "densityStorageKey",
+        "getConsciaPreferenceBootstrapScript"
       ]
     },
     {
@@ -393,6 +396,7 @@
         "AppearanceControl",
         "DensityControl",
         "DesignPreferenceControls",
+        "DesignSystemPreferenceScript",
         "DesignSystemPreferenceSync",
         "FilterBar",
         "useConsciaPreferences"

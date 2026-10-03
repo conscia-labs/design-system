@@ -14,6 +14,8 @@ function AvatarGroup({
   max,
   size = "default",
   total,
+  "aria-label": ariaLabel,
+  "aria-labelledby": ariaLabelledBy,
   ...props
 }: AvatarGroupProps) {
   const avatars = React.Children.toArray(children);
@@ -31,6 +33,8 @@ function AvatarGroup({
         className,
       )}
       role="group"
+      aria-label={ariaLabelledBy ? undefined : ariaLabel ?? "Avatar group"}
+      aria-labelledby={ariaLabelledBy}
       {...props}
     >
       {visibleAvatars}

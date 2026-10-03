@@ -39,7 +39,7 @@ function FilterChip({
           variant="ghost"
           aria-label={removeLabel ?? fallbackRemoveLabel}
           onClick={onRemove}
-          className="-mr-1 size-5 rounded-full text-text-supporting hover:bg-surface-control-hover hover:text-text-primary"
+          className="-mr-1 size-6 rounded-full text-text-supporting hover:bg-surface-control-hover hover:text-text-primary"
         >
           <XIcon aria-hidden="true" className="size-3" />
         </IconButton>

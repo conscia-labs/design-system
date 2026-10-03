@@ -219,7 +219,7 @@ describe("Conscia simple primitives", () => {
     expect(screen.getByRole("group").getAttribute("aria-describedby")).toBeTruthy();
     expect(screen.getByText("Available model connections")).toBeTruthy();
     expect(screen.getByText("Total: 1")).toBeTruthy();
-    expect(container.querySelector('[data-slot="table-container"]')?.getAttribute("tabindex")).toBe("0");
+    expect(container.querySelector('[data-slot="table-container"]')?.getAttribute("tabindex")).toBeNull();
     expect(screen.getByTestId("loading-connection").getAttribute("aria-hidden")).toBe("true");
 
     const results = await axe.run(container);

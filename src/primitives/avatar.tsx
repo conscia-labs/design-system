@@ -39,14 +39,18 @@ function Avatar({
   );
 }
 
+type AvatarImageProps = Omit<React.ComponentProps<"img">, "alt"> & {
+  alt: string;
+};
+
 function AvatarImage({
-  alt = "",
+  alt,
   className,
   onError,
   onLoad,
   src,
   ...props
-}: React.ComponentProps<"img">) {
+}: AvatarImageProps) {
   const { status, setStatus } = useAvatarContext();
 
   useAvatarEffect(() => {
@@ -84,3 +88,4 @@ function AvatarFallback({
 }
 
 export { Avatar, AvatarFallback, AvatarImage };
+export type { AvatarImageProps };

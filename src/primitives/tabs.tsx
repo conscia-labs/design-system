@@ -70,11 +70,28 @@ function useHorizontalScrollRail<T extends HTMLElement>(externalRef?: React.Ref<
   React.useEffect(() => {
     updateScrollPosition();
     const element = internalRef.current;
-    if (!element || typeof ResizeObserver === "undefined") return;
+    if (!element) return;
 
-    const observer = new ResizeObserver(updateScrollPosition);
-    observer.observe(element);
-    return () => observer.disconnect();
+    const resizeObserver =
+      typeof ResizeObserver === "undefined"
+        ? null
+        : new ResizeObserver(updateScrollPosition);
+    resizeObserver?.observe(element);
+
+    const mutationObserver =
+      typeof MutationObserver === "undefined"
+        ? null
+        : new MutationObserver(updateScrollPosition);
+    mutationObserver?.observe(element, {
+      characterData: true,
+      childList: true,
+      subtree: true,
+    });
+
+    return () => {
+      resizeObserver?.disconnect();
+      mutationObserver?.disconnect();
+    };
   }, [updateScrollPosition]);
 
   return [scrollPosition, ref, updateScrollPosition] as const;

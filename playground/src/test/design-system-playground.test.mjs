@@ -114,12 +114,12 @@ test("appearance and density are controlled through root attributes", () => {
   assert.match(sharedControls, /document\.documentElement/);
   assert.match(sharedPreferences, /dataset/);
   assert.match(sharedPreferences, /operational/);
-  assert.match(themeScript, /dataset\.appearance/);
-  assert.match(themeScript, /dataset\.density/);
+  assert.match(themeScript, /DesignSystemPreferenceScript/);
+  assert.match(sharedPreferences, /getConsciaPreferenceBootstrapScript/);
   assert.match(styles, /\[data-density="compact"\]/);
   assert.match(styles, /\[data-density="operational"\]/);
   assert.match(sharedControls, /DENSITY_KEY,\s*"comfortable"/);
-  assert.match(themeScript, /\|\| "comfortable"/);
+  assert.match(sharedPreferences, /densityStorageKey/);
   assert.match(styles, /:root\[data-appearance="dark"\]/);
   assert.match(styles, /--ds-control-height/);
   assert.match(styles, /--ds-row-height/);
@@ -249,7 +249,7 @@ test("appearance preference supports light, dark, system, persistence, and syste
   assert.match(sharedPreferences, /appearanceOptions: ConsciaAppearance\[\] = \["light", "dark", "system"\]/);
   assert.match(sharedControls, /values=\{appearanceOptions\}/);
 
-  assert.match(sharedControls, /APPEARANCE_KEY = "conscia-appearance:v1"/);
+  assert.match(sharedControls, /appearanceStorageKey/);
   assert.match(sharedControls, /allowedValues\.includes/);
   assert.match(sharedControls, /localStorage\.getItem\(key\)/);
   assert.match(sharedControls, /localStorage\.setItem\(key, value\)/);

@@ -15,7 +15,7 @@ export default defineConfig({
   sourcemap: true,
   splitting: true,
   clean: true,
-  minify: false,
+  minify: true,
   external: ["react", "react-dom", "use-sync-external-store"],
   noExternal: ["@base-ui/react"],
 });

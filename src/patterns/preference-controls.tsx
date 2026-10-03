@@ -6,13 +6,16 @@ import {
   appearanceOptions,
   applyConsciaPreferences,
   densityOptions,
+  appearanceStorageKey,
+  densityStorageKey,
+  getConsciaPreferenceBootstrapScript,
   type ConsciaAppearance,
   type ConsciaDensity,
 } from "../foundation/preferences";
 import { cn } from "../primitives/utils";
 
-const APPEARANCE_KEY = "conscia-appearance:v1";
-const DENSITY_KEY = "conscia-density:v1";
+const APPEARANCE_KEY = appearanceStorageKey;
+const DENSITY_KEY = densityStorageKey;
 const PREFERENCE_EVENT = "conscia-preferences";
 const volatilePreferences = new Map<string, string>();
 
@@ -26,8 +29,11 @@ function readPreference<T extends string>(
   }
 
   try {
+    const legacyKey = key.endsWith(":v1") ? key.slice(0, -3) : key;
     const value =
-      window.localStorage.getItem(key) ?? volatilePreferences.get(key);
+      window.localStorage.getItem(key) ??
+      window.localStorage.getItem(legacyKey) ??
+      volatilePreferences.get(key);
 
     return value && allowedValues.includes(value as T)
       ? (value as T)
@@ -108,6 +114,15 @@ function DesignSystemPreferenceSync() {
   return null;
 }
 
+function DesignSystemPreferenceScript({ nonce }: { nonce?: string }) {
+  return (
+    <script
+      nonce={nonce}
+      dangerouslySetInnerHTML={{ __html: getConsciaPreferenceBootstrapScript() }}
+    />
+  );
+}
+
 function AppearanceControl({ className }: { className?: string }) {
   const { appearance } = useConsciaPreferences();
 
@@ -185,6 +200,7 @@ export {
   AppearanceControl,
   DensityControl,
   DesignPreferenceControls,
+  DesignSystemPreferenceScript,
   DesignSystemPreferenceSync,
   useConsciaPreferences,
 };

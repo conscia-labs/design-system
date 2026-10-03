@@ -3,6 +3,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it } from "vitest";
 
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogTitle } from "../primitives/alert-dialog";
 import { Dialog, DialogBody, DialogContent, DialogTitle } from "../primitives/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../primitives/dropdown-menu";
 import { FormSelect } from "../primitives/form-select";
@@ -57,6 +58,53 @@ function SelectFixture({ onValueChange, modal = false }: { onValueChange: (value
 }
 
 describe("nested overlay behavior", () => {
+  it("gives modal close controls a density-aware touch target", () => {
+    const { rerender } = render(
+      <Dialog open>
+        <DialogContent>
+          <DialogTitle>Dialog</DialogTitle>
+        </DialogContent>
+      </Dialog>,
+    );
+
+    expect(document.querySelector('[data-slot="dialog-close"]')?.className).toContain(
+      "size-[var(--ds-control-height-sm)]",
+    );
+
+    rerender(
+      <AlertDialog open>
+        <AlertDialogContent>
+          <AlertDialogTitle>Confirm</AlertDialogTitle>
+          <AlertDialogBody>Details</AlertDialogBody>
+          <AlertDialogFooter />
+        </AlertDialogContent>
+      </AlertDialog>,
+    );
+
+    expect(document.querySelector('[data-slot="alert-dialog-content"] button')?.className).toContain(
+      "size-[var(--ds-control-height-sm)]",
+    );
+  });
+
+  it("constrains alert-dialog content and makes its body the scroll region", () => {
+    render(
+      <AlertDialog open>
+        <AlertDialogContent>
+          <AlertDialogTitle>Confirm</AlertDialogTitle>
+          <AlertDialogBody>Long consequence details</AlertDialogBody>
+          <AlertDialogFooter />
+        </AlertDialogContent>
+      </AlertDialog>,
+    );
+
+    expect(document.querySelector('[data-slot="alert-dialog-content"]')?.className).toContain(
+      "max-h-[min(42rem,calc(100vh-2rem))]",
+    );
+    expect(document.querySelector('[data-slot="alert-dialog-body"]')?.className).toContain(
+      "overflow-y-auto",
+    );
+  });
+
   it("forwards FormSelect modal=false inside a Dialog and preserves form values", async () => {
     const user = userEvent.setup();
     function FormFixture() {

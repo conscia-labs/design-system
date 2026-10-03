@@ -151,11 +151,11 @@ function KeyValueItem({
   breakValue?: boolean;
 }) {
   return (
-    <div data-slot="key-value-item" className="flex justify-between gap-4">
-      <dt className="text-text-supporting">{label}</dt>
+    <div data-slot="key-value-item" className="flex min-w-0 items-start justify-between gap-4">
+      <dt className="min-w-0 max-w-[40%] text-text-supporting">{label}</dt>
       <dd
         className={cn(
-          "text-right font-medium",
+          "min-w-0 flex-1 break-words text-right font-medium",
           breakValue && "break-all",
         )}
       >

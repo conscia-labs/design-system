@@ -48,7 +48,7 @@ await writeFile(
   ),
 );
 
-run(["install", "--frozen-lockfile=false"], fixtureRoot);
+run(["install", "--no-frozen-lockfile"], fixtureRoot);
 run(["build"], fixtureRoot);
 
 async function findCssFiles(directory) {

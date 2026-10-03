@@ -2,7 +2,7 @@
 import * as React from "react";
 import { Drawer } from "@base-ui/react/drawer";
 import { XIcon } from "lucide-react";
-import { overlayLayers } from "./overlay-layers";
+import { overlayCloseClasses, overlayLayers } from "./overlay-layers";
 import { cn } from "./utils";
 
 type SheetSide = "top" | "right" | "bottom" | "left";
@@ -32,7 +32,7 @@ function SheetOverlay({ className, ...props }: React.ComponentProps<typeof Drawe
 function SheetContent({ className, children, side: sideProp, closeLabel = "Close", ...props }: React.ComponentProps<typeof Drawer.Popup> & { side?: SheetSide; closeLabel?: string }) {
   const contextSide = React.useContext(SheetSideContext);
   const side = sideProp ?? contextSide;
-  return <SheetPortal><SheetOverlay /><Drawer.Viewport className={cn("fixed inset-0 pointer-events-none", overlayLayers.modal)}><Drawer.Popup data-slot="sheet-content" className={cn("pointer-events-auto absolute flex w-full flex-col gap-6 bg-canvas p-6 text-text-primary shadow-lg outline-none data-open:animate-in data-closed:animate-out", sideClasses[side], className)} {...props}>{children}<Drawer.Close data-slot="sheet-close" className="absolute right-4 top-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-focus focus:ring-offset-2 focus:ring-offset-canvas [&_svg]:size-4"><XIcon /><span className="sr-only">{closeLabel}</span></Drawer.Close></Drawer.Popup></Drawer.Viewport></SheetPortal>;
+  return <SheetPortal><SheetOverlay /><Drawer.Viewport className={cn("fixed inset-0 pointer-events-none", overlayLayers.modal)}><Drawer.Popup data-slot="sheet-content" className={cn("pointer-events-auto absolute flex w-full flex-col gap-6 bg-canvas p-6 text-text-primary shadow-lg outline-none data-open:animate-in data-closed:animate-out", sideClasses[side], className)} {...props}>{children}<Drawer.Close data-slot="sheet-close" className={overlayCloseClasses}><XIcon aria-hidden="true" /><span className="sr-only">{closeLabel}</span></Drawer.Close></Drawer.Popup></Drawer.Viewport></SheetPortal>;
 }
 function SheetHeader({ className, ...props }: React.ComponentProps<"div">) { return <div data-slot="sheet-header" className={cn("grid gap-2 pr-8", className)} {...props} />; }
 function SheetTitle({ className, ...props }: React.ComponentProps<typeof Drawer.Title>) { return <Drawer.Title data-slot="sheet-title" className={cn("text-lg font-semibold leading-tight", className)} {...props} />; }

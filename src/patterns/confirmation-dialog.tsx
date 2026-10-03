@@ -6,7 +6,7 @@ import { Button } from "../primitives/button";
 import { AlertDialog, AlertDialogAction, AlertDialogBody, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../primitives/alert-dialog";
 
 type ConfirmationDialogProps = {
-  trigger: React.ReactNode;
+  trigger: React.ReactElement;
   title: React.ReactNode;
   description: React.ReactNode;
   children?: React.ReactNode;
@@ -42,7 +42,7 @@ function ConfirmationDialog({ trigger, title, description, children, confirmLabe
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger render={trigger as React.ReactElement}>{trigger}</AlertDialogTrigger>
+      <AlertDialogTrigger render={trigger}>{trigger}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
