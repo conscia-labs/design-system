@@ -8,7 +8,7 @@ primitives, and product patterns for operational applications.
 
 > **Package:** available publicly as [`@conscia-labs/design-system`](https://www.npmjs.com/package/@conscia-labs/design-system).
 >
-> **Current release:** `1.2.1` is the latest stable v1 release.
+> **Current release:** `1.2.2` is the latest stable v1 release.
 >
 > **Documentation:** browse the [live design system](https://conscia-labs.github.io/design-system/)
 > for the complete component reference, examples, and usage guidance.
@@ -183,6 +183,18 @@ is version-matched to the package. The live playground also publishes
 The repository's `playground` contains the executable documentation site. Run it
 locally with `pnpm dev:playground`; the static site is published to GitHub Pages
 by the version-tag release workflow.
+
+### Tab styles
+
+Underline tabs are quiet by default in 1.2.2: the selected underline remains,
+while the full-width rail is removed. Use `<Tabs variant="divider">` or
+`<NavigationTabsList variant="divider">` to retain the previous divider.
+`<Tabs variant="pills">` offers a softer option for small peer views.
+Segmented controls remain unchanged; compact sizing is supported through
+`size="compact"`.
+
+Compare interactive examples on the [Tabs documentation page](https://conscia-labs.github.io/design-system/components/tabs/).
+
 
 ## License
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.2 - 2026-10-05
+
+- Make underline tabs quiet by default, removing the full-width rail from content and routed navigation tabs. Use `variant="divider"` on `Tabs` or `NavigationTabsList` to preserve the previous rail.
+- Add `variant="pills"` for small groups of peer views; preserve segmented controls.
+- Add a dedicated Tabs playground page linked from Components, showcasing quiet, divider, pills, compact, and segmented tabs.
+- Update component and consumer guidance with tab variants and migration instructions.
+
 ## 1.2.0 - 2026-09-07
 
 - Restore official Conscia burgundy (`#1e0721`) as the primary `brand` role,
