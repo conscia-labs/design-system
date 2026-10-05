@@ -32,6 +32,7 @@ function CodeBlock({
   const [activeValue, setActiveValue] = React.useState(initialValue);
   const [copiedValue, setCopiedValue] = React.useState<string | null>(null);
   const [copyError, setCopyError] = React.useState(false);
+  const [hasScrollableTabs, setHasScrollableTabs] = React.useState(false);
   const tabsListRef = React.useRef<HTMLDivElement>(null);
   const copyStatusId = React.useId();
   const activeSnippet =
@@ -55,6 +56,41 @@ function CodeBlock({
     }
   }, [selectedValue]);
 
+  React.useEffect(() => {
+    const tabsList = tabsListRef.current;
+    if (!tabsList) return;
+
+    const updateScrollableState = () => {
+      const nextHasScrollableTabs = tabsList.scrollWidth > tabsList.clientWidth + 1;
+      setHasScrollableTabs((current) =>
+        current === nextHasScrollableTabs ? current : nextHasScrollableTabs,
+      );
+    };
+
+    updateScrollableState();
+    const resizeObserver =
+      typeof ResizeObserver === "undefined"
+        ? null
+        : new ResizeObserver(updateScrollableState);
+    resizeObserver?.observe(tabsList);
+    for (const child of tabsList.children) resizeObserver?.observe(child);
+
+    const mutationObserver =
+      typeof MutationObserver === "undefined"
+        ? null
+        : new MutationObserver(updateScrollableState);
+    mutationObserver?.observe(tabsList, {
+      characterData: true,
+      childList: true,
+      subtree: true,
+    });
+
+    return () => {
+      resizeObserver?.disconnect();
+      mutationObserver?.disconnect();
+    };
+  }, [snippets]);
+
   if (!activeSnippet) return null;
 
   return (
@@ -73,6 +109,7 @@ function CodeBlock({
             variant="segmented"
             size="compact"
             aria-label={selectorLabel}
+            tabIndex={hasScrollableTabs ? 0 : undefined}
             className="min-w-0 max-w-full overflow-x-auto overscroll-x-contain @max-[28rem]/code-block:w-full @max-[28rem]/code-block:self-stretch"
           >
             {snippets.map((snippet) => (
