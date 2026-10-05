@@ -1,5 +1,5 @@
 import * as React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import axe from "axe-core";
 import { describe, expect, it, vi } from "vitest";
@@ -293,7 +293,44 @@ describe("Workbench patterns", () => {
 });
 
 describe("SearchableSelect", () => {
-  it("supports keyboard selection, skips disabled options, and integrates with forms", async () => {
+  it("selects the highlighted option and searches option keywords", async () => {
+    const user = userEvent.setup();
+    function Example() {
+      const [value, setValue] = React.useState("");
+      return <SearchableSelect aria-label="Provider" value={value} onValueChange={setValue}
+        options={[
+          { value: "bedrock", label: "Amazon Bedrock", keywords: ["AWS"] },
+          { value: "vertex", label: "Vertex AI", keywords: ["Google"] },
+        ]} />;
+    }
+    render(<Example />);
+    const combobox = screen.getByRole("combobox", { name: "Provider" });
+    await user.click(combobox);
+    const firstOption = screen.getByRole("option", { name: "Amazon Bedrock" });
+    await user.keyboard("{ArrowDown}");
+    await waitFor(() => expect(combobox.getAttribute("aria-activedescendant")).toBe(firstOption.id));
+    await user.keyboard("{Enter}");
+    expect((combobox as HTMLInputElement).value).toBe("Amazon Bedrock");
+
+    await user.click(combobox);
+    expect(screen.getByRole("option", { name: "Vertex AI" })).toBeTruthy();
+    await user.clear(combobox);
+    await user.type(combobox, "google");
+    expect(screen.queryByRole("option", { name: "Amazon Bedrock" })).toBeNull();
+    await user.keyboard("{Enter}");
+    expect((combobox as HTMLInputElement).value).toBe("Vertex AI");
+  });
+
+  it("connects validation and help text to the combobox", () => {
+    render(<><p id="provider-error">Select an available provider.</p>
+      <SearchableSelect aria-label="Provider" aria-invalid aria-describedby="provider-error"
+        options={[]} onValueChange={() => undefined} /></>);
+    const combobox = screen.getByRole("combobox", { name: "Provider" });
+    expect(combobox.getAttribute("aria-invalid")).toBe("true");
+    expect(combobox.getAttribute("aria-describedby")).toBe("provider-error");
+  });
+
+  it("supports keyboard selection, prevents disabled selection, and integrates with forms", async () => {
     const user = userEvent.setup();
 
     function Example() {
@@ -323,7 +360,13 @@ describe("SearchableSelect", () => {
       "true",
     );
 
-    await user.keyboard("{ArrowDown}{ArrowDown}{Enter}");
+    await user.keyboard("{ArrowDown}{ArrowDown}");
+    await waitFor(() => expect(combobox.getAttribute("aria-activedescendant")).toBe(screen.getByRole("option", { name: "Staging" }).id));
+    await user.keyboard("{Enter}");
+    expect((combobox as HTMLInputElement).value).toBe("");
+    await user.keyboard("{ArrowDown}");
+    await waitFor(() => expect(combobox.getAttribute("aria-activedescendant")).toBe(screen.getByRole("option", { name: "Production" }).id));
+    await user.keyboard("{Enter}");
     expect((combobox as HTMLInputElement).value).toBe("Production");
     expect((container.querySelector('input[name="environment"]') as HTMLInputElement).value).toBe("prod");
 

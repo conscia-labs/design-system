@@ -18,7 +18,10 @@ import {
 import { componentDocs } from "@/components/component-docs";
 
 const navEntries = [
-  { type: "group", id: "overview", label: "Overview", items: [{ id: "/", label: "Introduction", icon: <LayoutDashboard /> }] },
+  { type: "group", id: "overview", label: "Overview", items: [
+    { id: "/", label: "Introduction", icon: <LayoutDashboard /> },
+    { id: "/developer-overview", label: "Developer overview", icon: <Gauge /> },
+  ] },
   { type: "group", id: "foundation", label: "Foundation", items: [
     { id: "/foundation", label: "Tokens and principles", icon: <Shapes /> },
     { id: "/typography", label: "Typography", icon: <Type /> },
@@ -117,7 +120,10 @@ export function AppShell({ children, version }: { children: ReactNode; version: 
         placeholder="Search components and examples..."
         onSelect={(item) => router.push(item.id)}
       />
-      <AppSidebar variant="auto">
+      <AppSidebar
+        variant="auto"
+        treatment={pathname === "/developer-overview" ? "quiet" : undefined}
+      >
         <AppSidebarContent>
           <SidebarNavigation entries={entries} renderLink={renderNavigationLink} />
         </AppSidebarContent>

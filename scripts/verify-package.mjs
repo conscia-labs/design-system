@@ -92,6 +92,36 @@ assert.doesNotMatch(
 
 assert.match(foundationCss, /@theme inline/);
 assert.match(foundationCss, /@custom-variant dark/);
+assert.match(
+  foundationCss,
+  /\[data-sidebar-variant=.auto.\]\[data-sidebar-treatment=.quiet.\]/,
+  "The quiet treatment must follow semantic roles for appearance-aware sidebars.",
+);
+assert.match(
+  foundationCss,
+  /\[data-sidebar-variant=.light.\]\[data-sidebar-treatment=.quiet.\]/,
+  "The quiet treatment must support the light sidebar variant.",
+);
+assert.doesNotMatch(
+  foundationCss,
+  /(?:^|})\[data-sidebar-treatment=.quiet.\]\s*\{/,
+  "The quiet treatment must not override the explicit dark sidebar variant.",
+);
+assert.match(
+  foundationCss,
+  /--sidebar-active-background:\s*var\(--selection-background\)/,
+  "The quiet sidebar treatment must use the semantic selection role.",
+);
+assert.match(
+  standaloneCss,
+  /--sidebar-active-background:\s*var\(--selection-background\)/,
+  "The standalone stylesheet must include the quiet sidebar token mapping.",
+);
+assert.match(
+  standaloneCss,
+  /grid-template-columns:repeat\(1,minmax\(0,1fr\)\)/,
+  "The standalone stylesheet must include compact full-width metric rows.",
+);
 for (const declaration of [
   "--palette-burgundy: #1e0721",
   "--palette-electric-blue: #4962ff",

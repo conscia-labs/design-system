@@ -9,7 +9,7 @@ function Field({
   return (
     <div
       data-slot="field"
-      className={cn("grid gap-[var(--ds-field-label-gap)]", className)}
+      className={cn("grid gap-[var(--ds-field-label-gap)] [&>[data-slot=field-description]]:mt-[calc(var(--ds-field-message-gap)-var(--ds-field-label-gap))] [&>[data-slot=field-error]]:mt-[calc(var(--ds-field-message-gap)-var(--ds-field-label-gap))]", className)}
       {...props}
     />
   );

@@ -96,6 +96,7 @@
   --text-secondary: #373b4a;
   --text-supporting: #5f6270;
   --text-muted: #707481;
+  --control-indicator: #707481;
   --text-disabled: #a7a9b3;
   --text-inverse: #ffffff;
   --text-link: #3f4da8;
@@ -372,6 +373,7 @@
   --text-secondary: #d4d8df;
   --text-supporting: #b3bac5;
   --text-muted: #929aa7;
+  --control-indicator: #929aa7;
   --text-disabled: #747b87;
   --text-inverse: #17191c;
   --text-link: #aeb6ef;
@@ -480,6 +482,34 @@
   --sidebar-focus-ring: var(--focus);
 }
 
+/*
+ * The quiet treatment follows the active appearance through the shared
+ * surface and selection roles. Explicitly dark sidebars keep their dark
+ * appearance contract; their existing selection treatment is already quiet.
+ */
+[data-sidebar-variant="light"][data-sidebar-treatment="quiet"],
+[data-sidebar-variant="auto"][data-sidebar-treatment="quiet"],
+:root:not(.dark):not([data-appearance="dark"])
+  [data-sidebar-variant="auto"][data-sidebar-treatment="quiet"] {
+  --sidebar-canvas: var(--surface-muted);
+  --sidebar-header: var(--surface-muted);
+  --sidebar-content: var(--surface-muted);
+  --sidebar-hover: var(--surface-raised);
+  --sidebar-active-background: var(--selection-background);
+  --sidebar-active-foreground: var(--selection-foreground);
+  --sidebar-active-indicator: var(--selection-indicator);
+  --sidebar-border: var(--border-subtle);
+  --sidebar-primary-text: var(--text-primary);
+  --sidebar-secondary-text: var(--text-secondary);
+  --sidebar-metadata-text: var(--text-supporting);
+  --sidebar-icon: var(--text-secondary);
+  --sidebar-search: var(--surface-raised);
+  --sidebar-footer: var(--surface-muted);
+  --sidebar-group-label: var(--text-secondary);
+  --sidebar-group-count: var(--text-supporting);
+  --sidebar-focus-ring: var(--focus);
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -498,6 +528,7 @@
   --color-text-secondary: var(--text-secondary);
   --color-text-supporting: var(--text-supporting);
   --color-text-muted: var(--text-muted);
+  --color-control-indicator: var(--control-indicator);
   --color-text-disabled: var(--text-disabled);
   --color-text-inverse: var(--text-inverse);
   --color-text-link: var(--text-link);

@@ -285,6 +285,7 @@ function AppShell({
 function AppSidebar({
   side = "left",
   variant = "auto",
+  treatment,
   className,
   children,
   title = "Application navigation",
@@ -296,6 +297,8 @@ function AppSidebar({
   side?: "left" | "right";
   /** Use the appearance-aware sidebar by default; explicit variants remain available. */
   variant?: "light" | "dark" | "auto";
+  /** Apply a low-chroma treatment while preserving the active appearance. */
+  treatment?: "quiet";
   title?: string;
   description?: string;
 }) {
@@ -311,6 +314,7 @@ function AppSidebar({
         <SheetContent
           side={side}
           data-sidebar-variant={variant}
+          data-sidebar-treatment={treatment}
           className="w-[var(--ds-sidebar-width-mobile)] border-sidebar-border bg-sidebar-canvas p-0 text-sidebar-primary-text [&>[data-slot=sheet-close]]:right-3 [&>[data-slot=sheet-close]]:top-3 [&>[data-slot=sheet-close]]:text-sidebar-secondary-text [&>[data-slot=sheet-close]]:hover:text-sidebar-primary-text"
         >
           <SheetHeader className="sr-only">
@@ -325,6 +329,7 @@ function AppSidebar({
         data-slot="app-sidebar"
         data-side={side}
         data-sidebar-variant={variant}
+        data-sidebar-treatment={treatment}
         aria-label={ariaLabelledBy ? undefined : ariaLabel ?? title}
         aria-labelledby={ariaLabelledBy}
         className={cn(

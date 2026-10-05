@@ -85,8 +85,65 @@ function ComponentDemo({ slug }: { slug: string }) {
       return <div className={`${surface} grid gap-5`}><FilterBar onClearAll={() => setFilters([])}>{filters.includes("Status") ? <FilterChip label="Status" value="Connected" onRemove={() => setFilters([])} /> : null}</FilterBar><Separator /><div className="flex flex-wrap gap-6"><AppearanceControl /><DensityControl /></div></div>;
     case "workbench":
       return <WorkbenchShell className="grid min-h-72 overflow-hidden rounded-[var(--ds-radius-surface)] border bg-surface md:grid-cols-[4rem_13rem_minmax(0,1fr)_13rem]"><WorkbenchRail variant="global" className="border-r bg-brand p-3 text-brand-foreground"><BrandIcon className="size-6 text-brand-foreground dark:text-brand-foreground" /></WorkbenchRail><WorkbenchRail variant="secondary" className="border-r p-3"><WorkbenchSection><WorkbenchSectionHeader title="Resources" metadata="3" /><ResourceRow selected className="mt-3"><ResourceRowIcon><Box /></ResourceRowIcon><ResourceRowContent><ResourceRowTitle>AI models</ResourceRowTitle><ResourceRowMeta>5 available</ResourceRowMeta></ResourceRowContent></ResourceRow></WorkbenchSection></WorkbenchRail><WorkbenchMain className="p-5"><h3 className="ds-type-section-title">Primary work area</h3><p className="mt-2 text-sm text-text-supporting">Focused tools and content.</p></WorkbenchMain><WorkbenchInspector className="border-l p-4"><WorkbenchInspectorSection label="Details"><ResourceRowDescription>Contextual metadata.</ResourceRowDescription></WorkbenchInspectorSection></WorkbenchInspector></WorkbenchShell>;
-    case "content-helpers":
-      return <div className="grid gap-4 lg:grid-cols-2"><div className={surface}><ProviderMark name="Amazon Bedrock" shortName="AB" description="Connected and ready" /></div><CodeBlock snippets={[{ value: "tsx", label: "React", code: 'import { ProviderMark } from "@conscia-labs/design-system";\n\n<ProviderMark name="Amazon Bedrock" shortName="AB" />' }]} /></div>;
+    case "content-helpers": {
+      const requestSnippets = [
+        {
+          value: "typescript",
+          label: "TypeScript",
+          code: 'const response = await fetch("/api/models", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ model: "example-model", prompt: "Summarize the current deployment status." }) });',
+        },
+        {
+          value: "python",
+          label: "Python",
+          code: 'response = requests.post("/api/models", headers={"Content-Type": "application/json"}, json={"model": "example-model", "prompt": "Summarize the current deployment status."})',
+        },
+        {
+          value: "environment",
+          label: "Environment",
+          code: "MODEL_NAME=example-model\nREQUEST_TIMEOUT_SECONDS=30\nCLIENT_REGION=eu-west-1",
+        },
+      ];
+
+      return (
+        <div className="grid gap-5">
+          <div className="grid gap-4 lg:grid-cols-2">
+            <div className={surface}>
+              <ProviderMark
+                name="Amazon Bedrock"
+                shortName="AB"
+                description="Connected and ready"
+              />
+            </div>
+            <CodeBlock
+              snippets={[
+                {
+                  value: "tsx",
+                  label: "React",
+                  code: 'import { ProviderMark } from "@conscia-labs/design-system";\n\n<ProviderMark name="Amazon Bedrock" />',
+                },
+              ]}
+            />
+          </div>
+          <section className="grid gap-2">
+            <h3 className="ds-type-ui font-semibold">Constrained container</h3>
+            <p className="ds-type-metadata text-text-supporting">
+              A narrow card or desktop rail keeps the format choices and copy action
+              available.
+            </p>
+            <div
+              data-testid="code-block-constrained-container"
+              className="w-full max-w-[15.5rem]"
+            >
+              <CodeBlock
+                selectorLabel="Request example"
+                copyLabel="Copy complete request with environment details"
+                snippets={requestSnippets}
+              />
+            </div>
+          </section>
+        </div>
+      );
+    }
     case "conscia-aliases":
       return <div className="grid gap-4"><Alert variant="warning"><AlertTitle>Compatibility only</AlertTitle><AlertDescription>Use canonical component names in all new code.</AlertDescription></Alert><div className={`${surface} flex items-center gap-3`}><ConsciaButton>Legacy alias</ConsciaButton><ChevronRight className="text-text-supporting" /><Button>Button</Button></div></div>;
     default:

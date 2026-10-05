@@ -131,7 +131,7 @@ export default function OverviewPage() {
         description="A Tailwind v4 application needs the package, one global stylesheet import, and the components it uses."
       >
         <div className="grid gap-4 xl:grid-cols-[minmax(0,1.4fr)_minmax(18rem,0.6fr)]">
-          <CodeBlock snippets={quickStartSnippets} />
+          <CodeBlock selectorLabel="Quickstart section" snippets={quickStartSnippets} />
           <ol className="grid gap-3 rounded-[var(--ds-radius-surface)] border border-border-subtle bg-surface p-4">
             <li className="flex gap-3">
               <Badge

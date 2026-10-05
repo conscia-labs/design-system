@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "package": "@conscia-labs/design-system",
-  "version": "1.2.2",
+  "version": "1.3.0",
   "guide": "./AGENT_GUIDE.md",
   "playground": "https://conscia-labs.github.io/design-system/",
   "componentFamilies": [
@@ -270,7 +270,7 @@
       "category": "Pattern",
       "family": "Application shell",
       "slug": "application-shell",
-      "description": "Integrated and split application chrome.",
+      "description": "Integrated and split application chrome with an optional quiet sidebar treatment.",
       "route": "/components/application-shell",
       "exports": [
         "AppHeader",
@@ -345,7 +345,7 @@
       "category": "Pattern",
       "family": "Metrics and data panels",
       "slug": "metrics-and-data-panels",
-      "description": "Operational summaries, trends, charts, and panel anatomy.",
+      "description": "Operational summaries, responsive compact metric bands, trends, charts, and panel anatomy.",
       "route": "/components/metrics-and-data-panels",
       "exports": [
         "DataPanel",
@@ -363,7 +363,7 @@
       "category": "Pattern",
       "family": "Activity and attention",
       "slug": "activity-and-attention",
-      "description": "Operational activity and persistent findings.",
+      "description": "Link-hosted operational activity and persistent findings.",
       "route": "/components/activity-and-attention",
       "exports": [
         "ActivityItem",

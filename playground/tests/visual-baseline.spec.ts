@@ -19,6 +19,7 @@ const routes = [
   { id: "patterns", path: "/patterns", heading: "Pattern catalog" },
   { id: "shell-navigation", path: "/shell-navigation", heading: "Shell and navigation" },
   { id: "delivery-metrics", path: "/delivery-metrics", heading: "Delivery metrics" },
+  { id: "developer-overview", path: "/developer-overview", heading: "Developer overview example" },
   { id: "components", path: "/components", heading: "Components" },
   { id: "component-button", path: "/components/button", heading: "Button" },
   { id: "typography", path: "/typography", heading: "Typography" },

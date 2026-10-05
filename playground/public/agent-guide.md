@@ -178,6 +178,26 @@ Prefer the integrated global header for new application shells:
 </AppShell>
 ```
 
+Use the optional quiet sidebar treatment for lower-contrast product surfaces.
+It works with `variant="auto" | "light" | "dark"` and keeps appearance and
+density preferences in control:
+
+```tsx
+<AppSidebar variant="auto" treatment="quiet">
+  <AppSidebarContent>{navigation}</AppSidebarContent>
+</AppSidebar>
+```
+
+`MetricBand` also supports `presentation="compact"`. It keeps each metric in
+its own row on narrow screens and uses the configured number of columns on
+desktop. Metric values accept React nodes, including links; in compact
+presentation, an omitted value is shown as unavailable rather than zero.
+`ActivityItem` already supports recent
+request history: put the direct diagnostics anchor in `title`, use `metadata`
+for a timestamp, and place a readable outcome `Badge` in `status`. The anchor
+can open in a new tab through normal browser controls; do not wrap the full row
+around other interactive content.
+
 ## Styling
 
 Use semantic tokens and utilities rather than palette colors:
