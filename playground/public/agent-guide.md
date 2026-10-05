@@ -104,6 +104,10 @@ playground route for each family.
 
 - Use `Table` for semantic table anatomy. Use `DataTable` for sorting,
   selection, column definitions, responsive rows, or pagination.
+- Underline tabs are quiet by default (no full-width rail). Use `variant="divider"`
+  for structural separation, `variant="pills"` for small peer views, and
+  `variant="segmented"` for mode switching. `NavigationTabsList` supports
+  `variant="divider"` as well. Root variants inherit through lists and triggers.
 - Use `Tabs` for layered content or mode switching. Use `NavigationTabs` for
   route-backed destinations.
 - Use `Select` for a short, familiar list. Use `SearchableSelect` for longer

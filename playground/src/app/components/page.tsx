@@ -12,6 +12,10 @@ export default function ComponentsPage() {
       title="Components"
       description="Every public component family, with focused examples, options, accessibility guidance, and package imports."
     >
+      <Link href="/components/tabs" className="group flex items-center justify-between gap-4 rounded-[var(--ds-radius-surface)] border bg-surface p-5 outline-none hover:bg-surface-muted focus-visible:ring-2 focus-visible:ring-focus">
+        <div><h2 className="ds-type-section-title">Tabs</h2><p className="ds-type-ui mt-1 text-text-supporting">Explore quiet underline, divider, pills, compact, and segmented options.</p></div>
+        <ArrowRight className="size-4 shrink-0" aria-hidden="true" />
+      </Link>
       <div className="grid gap-px overflow-hidden rounded-[var(--ds-radius-surface)] border bg-border-subtle md:grid-cols-2 xl:grid-cols-3">
         {componentDocs.map((doc) => (
           <Link

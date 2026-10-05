@@ -456,7 +456,7 @@ test("dark reading fixture consumes semantic text and surface utilities", () => 
 test("tabs separate routed navigation from layered content and mode switching", () => {
   const tabs = read("../../../src/primitives/tabs.tsx");
   const foundation = read("../../../src/foundation/styles.css");
-  const primitives = read("../app/primitives/page.tsx");
+  const primitives = read("../components/tabs-showcase.tsx");
 
   assert.match(tabs, /underline/);
   assert.match(tabs, /segmented/);
