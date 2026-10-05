@@ -1,6 +1,9 @@
 import {
   AppShell,
   AppSidebar,
+  ActivityItem,
+  ActivityList,
+  Badge,
   Card,
   CardContent,
   Dialog,
@@ -12,6 +15,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   MainRegion,
+  MetricBand,
+  MetricBandItem,
   PageContent,
   PageToolbar,
 } from "@conscia-labs/design-system";
@@ -27,7 +32,7 @@ const topbarClassName = cn(
 export default function Page() {
   return (
     <AppShell>
-      <AppSidebar className="bg-sidebar">
+      <AppSidebar treatment="quiet" className="bg-sidebar">
         <div className="flex h-full flex-col">Navigation</div>
       </AppSidebar>
       <MainRegion>
@@ -37,6 +42,18 @@ export default function Page() {
         </div>
         <PageToolbar />
         <PageContent>
+          <MetricBand columns={3} presentation="compact">
+            <MetricBandItem label="Available AI models" value={<a href="/models">6</a>} detail="Explore models" />
+            <MetricBandItem label="Monthly spend" value="Less than $0.01" detail="Example allowance" />
+            <MetricBandItem label="Requests this month" value="14" detail="Example total" />
+          </MetricBand>
+          <ActivityList>
+            <ActivityItem
+              title={<a href="/requests/req-example">gpt-4.1 diagnostics</a>}
+              metadata={<time dateTime="2026-10-06T09:12:00Z">4 minutes ago</time>}
+              status={<Badge variant="neutral">Provider failure</Badge>}
+            />
+          </ActivityList>
           <Card>
             <CardContent>Packaged card padding</CardContent>
           </Card>

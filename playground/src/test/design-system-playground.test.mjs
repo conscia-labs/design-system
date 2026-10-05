@@ -602,6 +602,10 @@ test("shared code and value patterns remain domain agnostic", () => {
 
   assert.match(codeBlock, /CodeBlockSnippet/);
   assert.match(codeBlock, /navigator\.clipboard\.writeText/);
+  assert.match(codeBlock, /@container\/code-block/);
+  assert.match(codeBlock, /overflow-x-auto overscroll-x-contain/);
+  assert.match(codeBlock, /selectorLabel/);
+  assert.match(codeBlock, /role="status"/);
   assert.match(valueMeter, /role="progressbar"/);
   assert.doesNotMatch(`${codeBlock}\n${valueMeter}`, /Gateway|API key|AI Model|Conscia/);
 });
@@ -712,7 +716,11 @@ test("shared sidebar navigation supports collapsed flyouts without owning routes
   assert.match(playgroundShell, /headerLayout="integrated"/);
   assert.match(playgroundShell, /type: "group"/);
   assert.match(playgroundShell, /label: "Reference examples"/);
-  assert.match(playgroundShell, /<AppSidebar variant="auto">/);
+  assert.match(playgroundShell, /<AppSidebar\s+variant="auto"/);
+  assert.match(
+    playgroundShell,
+    /treatment=\{pathname === "\/developer-overview" \? "quiet" : undefined\}/,
+  );
 });
 
 test("app shell uses render composition and tracks sidebar overflow affordances", () => {

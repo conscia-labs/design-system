@@ -15,7 +15,7 @@ type AlertContextValue = {
 const AlertContext = React.createContext<AlertContextValue | null>(null);
 
 const alertVariants = cva(
-  "relative grid w-full grid-cols-[auto_1fr] items-start gap-x-3 rounded-[var(--ds-radius-surface)] border px-4 py-3.5 text-sm [&>svg]:mt-0.5 [&>svg]:size-5",
+  "relative grid w-full grid-cols-[minmax(0,1fr)] items-start gap-x-3 rounded-[var(--ds-radius-surface)] border px-4 py-3.5 text-sm has-[>svg]:grid-cols-[auto_minmax(0,1fr)] [&>svg]:col-start-1 [&>svg]:row-span-2 [&>svg]:mt-0.5 [&>svg]:size-5 [&:has(>svg)>[data-slot=alert-title]]:col-start-2 [&:has(>svg)>[data-slot=alert-description]]:col-start-2",
   {
     variants: {
       variant: {
@@ -81,7 +81,7 @@ function AlertTitle({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="alert-title"
       id={id}
-      className={cn("font-medium leading-5", className)}
+      className={cn("col-start-1 min-w-0 break-words font-semibold leading-5", className)}
       {...props}
     />
   );
@@ -98,7 +98,7 @@ function AlertDescription({ className, ...props }: React.ComponentProps<"div">) 
     <div
       data-slot="alert-description"
       id={id}
-      className={cn("col-start-2 mt-0.5 text-sm leading-5 opacity-80", className)}
+      className={cn("col-start-1 mt-1 min-w-0 break-words text-sm leading-5", className)}
       {...props}
     />
   );

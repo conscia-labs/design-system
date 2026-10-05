@@ -77,9 +77,7 @@ function CommandPalette({
       if (!isControlled) {
         setInternalOpen(nextOpen);
       }
-      if (nextOpen) {
-        setQuery("");
-      }
+      setQuery("");
       onOpenChange?.(nextOpen);
     },
     [isControlled, onOpenChange],

@@ -4,13 +4,13 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "./utils";
 
 const cardVariants = cva(
-  "flex flex-col gap-5 rounded-lg border border-border-default py-[var(--ds-surface-padding)] text-text-primary",
+  "flex min-w-0 flex-col gap-[var(--ds-surface-padding)] rounded-[var(--ds-radius-surface)] border border-border-default py-[var(--ds-surface-padding)] text-text-primary",
   {
     variants: {
       variant: {
-        default: "bg-surface shadow-sm",
+        default: "bg-surface shadow-none",
         muted: "bg-surface-muted shadow-none",
-        elevated: "bg-surface-raised shadow-md",
+        elevated: "border-transparent bg-surface-raised shadow-[var(--ds-shadow-floating)]",
       },
     },
     defaultVariants: {
@@ -47,7 +47,7 @@ function CardHeader({ action, children, className, ...props }: CardHeaderProps) 
       )}
       {...props}
     >
-      {action ? <div className="min-w-0">{children}</div> : children}
+      {action ? <div className="grid min-w-0 gap-1.5">{children}</div> : children}
       {action ? <div className="justify-self-end">{action}</div> : null}
     </div>
   );

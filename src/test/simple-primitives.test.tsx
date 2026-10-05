@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../primitives/avatar";
 import { Badge } from "../primitives/badge";
 import { Button, IconButton } from "../primitives/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../primitives/card";
+import { Checkbox } from "../primitives/checkbox";
 import { Input } from "../primitives/input";
 import { Label } from "../primitives/label";
 import { LoadingButton } from "../primitives/loading-button";
@@ -20,6 +21,21 @@ import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, Tabl
 import { Textarea } from "../primitives/textarea";
 
 describe("Conscia simple primitives", () => {
+  it("distinguishes partial checkbox selection and allows completing the selection", async () => {
+    const user = userEvent.setup();
+    function Selection() {
+      const [checked, setChecked] = React.useState(false);
+      return <Checkbox aria-label="Select all resources" checked={checked} indeterminate={!checked} onCheckedChange={setChecked} />;
+    }
+    render(<Selection />);
+    const checkbox = screen.getByRole("checkbox", { name: "Select all resources" });
+    expect(checkbox.getAttribute("aria-checked")).toBe("mixed");
+    expect(checkbox.querySelector('[data-slot="checkbox-indicator"]')?.hasAttribute("data-indeterminate")).toBe(true);
+    await user.click(checkbox);
+    expect(checkbox.getAttribute("aria-checked")).toBe("true");
+    expect(checkbox.hasAttribute("data-indeterminate")).toBe(false);
+  });
+
   it("keeps LoadingButton content stable and prevents duplicate pending actions", async () => {
     const { container, rerender } = render(
       <LoadingButton pending pendingLabel="Saving changes…">

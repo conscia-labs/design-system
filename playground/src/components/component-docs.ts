@@ -82,7 +82,10 @@ const guidance: Record<string, ComponentGuidance> = {
   "application-shell": {
     whenToUse: "Use as the shared geometry for authenticated product surfaces with a header, sidebar, main region, and optional inspector.",
     accessibility: "Preserve landmark order, label navigation, and provide a mobile search trigger and named sidebar toggle.",
-    options: [{ name: "headerLayout", values: "integrated · split", guidance: "Integrated is canonical; split remains available for compatibility." }],
+    options: [
+      { name: "headerLayout", values: "integrated · split", guidance: "Integrated is canonical; split remains available for compatibility." },
+      { name: "AppSidebar treatment", values: "omitted (default) · quiet", guidance: "Quiet maps existing sidebar variables to semantic surfaces and selection roles while variant continues to control appearance." },
+    ],
   },
   "sidebar-navigation": {
     whenToUse: "Use static labeled groups for most application navigation and explicit submenus only for genuine hierarchy.",
@@ -102,12 +105,19 @@ const guidance: Record<string, ComponentGuidance> = {
   "metrics-and-data-panels": {
     whenToUse: "Use for operational metrics, chart-adjacent summaries, divided data regions, and compact trend communication.",
     accessibility: "Every visualization slot needs a textual summary. Direction and sentiment must be expressed in text, not color alone.",
-    options: [{ name: "emphasis", values: "primary · supporting", guidance: "Give primary metrics more visual weight without changing their semantic meaning." }],
+    options: [
+      { name: "MetricBand presentation", values: "default · compact", guidance: "Compact uses one full-width row per item below desktop and the configured number of columns on desktop; details and values wrap without individual card backgrounds." },
+      { name: "MetricBandItem value", values: "React node · loading skeleton · unavailable em dash", guidance: "Values can contain links. In compact presentation, an omitted value renders as unavailable instead of a misleading zero." },
+      { name: "emphasis", values: "primary · supporting", guidance: "Give primary metrics more visual weight without changing their semantic meaning." },
+    ],
   },
   "activity-and-attention": {
     whenToUse: "Use ActivityList for chronological records and AttentionList for persistent operational findings that require review.",
-    accessibility: "Attention tone needs an icon or severity label. These lists are not live alerts unless the application explicitly makes them so.",
-    options: [{ name: "layout", values: "default · compact", guidance: "Compact activity rows suit dense operational panels." }],
+    accessibility: "Use a real anchor in an ActivityItem title for direct navigation; do not make the whole row a link around other controls. Attention tone needs an icon or severity label. These lists are not live alerts unless the application explicitly makes them so.",
+    options: [
+      { name: "ActivityItem content", values: "React-node title · description · metadata · trailing/status", guidance: "Use an anchor in title for direct destinations, metadata for timestamps, description for optional counts, and trailing/status for the outcome badge." },
+      { name: "layout", values: "default · compact", guidance: "Compact activity rows suit dense operational panels." },
+    ],
   },
   "state-and-feedback": {
     whenToUse: "Use for empty, loading, error, confirmation, and command-oriented states that interrupt or replace normal content.",
@@ -126,8 +136,11 @@ const guidance: Record<string, ComponentGuidance> = {
   },
   "content-helpers": {
     whenToUse: "Use ProviderMark for compact provider identity and CodeBlock for copyable implementation examples.",
-    accessibility: "Provider abbreviations must have adjacent names; copy actions need a named success state.",
-    options: [{ name: "helper", values: "ProviderMark · CodeBlock", guidance: "Use these to improve documentation and resource identity, not as generic layout wrappers." }],
+    accessibility: "Provider abbreviations must have adjacent names. Give a CodeBlock selector a contextual accessible label when its choices are not code languages; the code body stays keyboard-scrollable and copy feedback is announced.",
+    options: [
+      { name: "CodeBlock", values: "snippets · defaultValue · selectorLabel (default: Code language) · copyLabel", guidance: "Use selectorLabel when the choices represent steps, examples, or formats rather than programming languages." },
+      { name: "ProviderMark", values: "name · shortName · description", guidance: "Show the provider name next to its short mark and use the description for current context." },
+    ],
   },
   "conscia-aliases": {
     whenToUse: "Use only while migrating pre-v1 consumers. New code should import the canonical component names.",

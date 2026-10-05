@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.0 - 2026-10-06
+
+- Keep CodeBlock tabs and copy reachable in narrow containers, with independent tab and code scrolling, contextual selector labels, and constrained-container regression coverage.
+- Add the optional `AppSidebar treatment="quiet"`, mapped to existing semantic surface and selection roles while preserving appearance variants and default styling.
+- Extend `MetricBand` with an opt-in compact presentation: full-width metric rows below desktop, configured horizontal columns at desktop, React-node values, loading skeletons, and an accessible unavailable value.
+- Correct `ActivityItem` prop types so its existing React-node title and metadata slots accept direct diagnostic links and timestamp content without changing row behavior.
+- Add a discoverable developer-overview example combining quiet navigation, compact metrics, attention, recent requests, loading/unavailable states, and an empty state; update component guidance and the agent guide.
+
 ## 1.2.2 - 2026-10-05
 
 - Make underline tabs quiet by default, removing the full-width rail from content and routed navigation tabs. Use `variant="divider"` on `Tabs` or `NavigationTabsList` to preserve the previous rail.

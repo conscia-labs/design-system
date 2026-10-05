@@ -6,7 +6,7 @@ function ActivityList({ className, ...props }: React.ComponentProps<"div">) {
   return <div data-slot="activity-list" className={cn("divide-y divide-border-subtle", className)} {...props} />;
 }
 
-type ActivityItemProps = React.ComponentProps<"div"> & {
+type ActivityItemProps = Omit<React.ComponentProps<"div">, "title" | "metadata"> & {
   leading?: React.ReactNode;
   icon?: React.ReactNode;
   title: React.ReactNode;

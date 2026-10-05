@@ -80,6 +80,9 @@ const checks = [
   ["large breakpoint", /@media ?\((?:min-width:|width>=)64rem\)/],
   ["dialog positioning", /position:fixed/],
   ["dark mode", /\.dark/],
+  ["quiet sidebar treatment", /--sidebar-active-background:var\(--selection-background\)/],
+  ["compact metric rows", /grid-template-columns:repeat\(1,minmax\(0,1fr\)\)/],
+  ["compact desktop metric columns", /grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/],
 ];
 
 for (const [name, pattern] of checks) {

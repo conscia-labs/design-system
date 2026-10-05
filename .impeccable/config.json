@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "border-accent-on-rounded",
+        "value": "*",
+        "files": [
+          "playground/src/app/page.tsx"
+        ],
+        "createdAt": "2026-10-05T23:12:54.744Z",
+        "reason": "Intentional brand accent on the Developer Overview hero: the top stripe is an explicit page-level visual treatment clipped to the rounded surface."
+      }
+    ]
+  }
+}
