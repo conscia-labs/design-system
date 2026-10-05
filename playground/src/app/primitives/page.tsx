@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import {
   Badge,
   Button,
@@ -25,6 +27,13 @@ import {
   FieldLabel,
   IconButton,
   Input,
+  NavigationTab,
+  NavigationTabs,
+  NavigationTabsList,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
   Select,
   SelectContent,
   SelectGroup,
@@ -48,7 +57,6 @@ import {
 } from "@conscia-labs/design-system";
 
 import { ExampleSection, PlaygroundPage } from "@/components/page";
-import { TabsShowcase } from "@/components/tabs-showcase";
 import { PrimitiveCoverage } from "@/components/primitive-coverage";
 
 export default function PrimitivesPage() {
@@ -131,7 +139,45 @@ export default function PrimitivesPage() {
             </div>
           </ExampleSection>
 
-          <TabsShowcase />
+          <ExampleSection title="Tabs" description="A basic example. Compare all styles on the dedicated Tabs page.">
+            <Link href="/components/tabs" className="text-sm text-link underline underline-offset-4">Explore all tab styles</Link>
+            <NavigationTabs aria-label="Resource sections">
+              <NavigationTabsList>
+                <NavigationTab href="#tabs" active>
+                  Overview
+                </NavigationTab>
+                <NavigationTab href="#tabs-configuration">Configuration</NavigationTab>
+                <NavigationTab href="#tabs-credentials">Credentials</NavigationTab>
+                <NavigationTab href="#tabs-organizations">Organizations</NavigationTab>
+                <NavigationTab href="#tabs-models">Models</NavigationTab>
+                <NavigationTab href="#tabs-health">Health</NavigationTab>
+                <NavigationTab href="#tabs-activity">Activity</NavigationTab>
+              </NavigationTabsList>
+            </NavigationTabs>
+            <p className="pt-3 text-sm text-text-supporting">
+              Routed resource navigation exposes the current page and keeps the full tab target interactive.
+            </p>
+            <Tabs defaultValue="overview" className="pt-4">
+              <TabsList aria-label="Layered content example">
+                <TabsTrigger value="overview">Overview</TabsTrigger>
+                <TabsTrigger value="usage">Usage</TabsTrigger>
+                <TabsTrigger value="activity">Activity</TabsTrigger>
+              </TabsList>
+              <TabsContent value="overview" className="pt-3 text-sm text-text-supporting">Shared tab behavior with stable selected state.</TabsContent>
+              <TabsContent value="usage" className="pt-3 text-sm text-text-supporting">Usage view placeholder.</TabsContent>
+              <TabsContent value="activity" className="pt-3 text-sm text-text-supporting">Activity view placeholder.</TabsContent>
+            </Tabs>
+            <Tabs variant="segmented" defaultValue="table" className="rounded-[var(--ds-radius-surface)] border bg-surface p-4">
+              <TabsList aria-label="Display mode example">
+                <TabsTrigger value="table">Table</TabsTrigger>
+                <TabsTrigger value="list">List</TabsTrigger>
+                <TabsTrigger value="compact">Compact</TabsTrigger>
+              </TabsList>
+              <TabsContent value="table" className="pt-3 text-sm text-text-supporting">Segmented tabs are reserved for compact mode switching.</TabsContent>
+              <TabsContent value="list" className="pt-3 text-sm text-text-supporting">List mode placeholder.</TabsContent>
+              <TabsContent value="compact" className="pt-3 text-sm text-text-supporting">Compact mode placeholder.</TabsContent>
+            </Tabs>
+          </ExampleSection>
 
           <ExampleSection title="Table">
             <div className="rounded-[var(--ds-radius-surface)] border bg-surface">
