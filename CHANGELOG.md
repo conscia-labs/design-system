@@ -9,6 +9,8 @@
 - Enable the playground search shortcut and match public export names as well as
   component families. Include the overflowing CodeBlock keyboard accessibility
   fix from PR #15 before publishing.
+- Keep CodeBlock tab rails keyboard reachable during hydration and at one-pixel
+  overflow boundaries, including browser-specific vertical overflow.
 
 - Keep CodeBlock tabs and copy reachable in narrow containers, with independent tab and code scrolling, contextual selector labels, and constrained-container regression coverage.
 - Add the optional `AppSidebar treatment="quiet"`, mapped to existing semantic surface and selection roles while preserving appearance variants and default styling.
