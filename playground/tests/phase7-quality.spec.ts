@@ -182,6 +182,76 @@ test.describe("Overview adoption guide", () => {
   });
 });
 
+test.describe("Playground navigation and discovery", () => {
+  test("header preferences remain reachable on mobile and persist across routes", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.setViewportSize({ width: 320, height: 740 });
+    await loadRoute(page, "/components", "Components", "light", "comfortable");
+    await installAxe(page);
+
+    const appearance = page.getByRole("button", { name: "Appearance: light", exact: true });
+    await appearance.click();
+    await expectNoAxeViolations(page, "mobile appearance controls");
+    await page.getByRole("button", { name: "dark", exact: true }).click();
+    await expect(page.locator("html")).toHaveAttribute("data-appearance", "dark");
+    await page.keyboard.press("Escape");
+    await expect(page.getByRole("button", { name: "Appearance: dark", exact: true })).toBeFocused();
+
+    await page.getByRole("button", { name: "Density: comfortable", exact: true }).click();
+    await expectNoAxeViolations(page, "mobile density controls");
+    await page.getByRole("button", { name: "compact", exact: true }).click();
+    await expect(page.locator("html")).toHaveAttribute("data-density", "compact");
+    await expectNoDocumentOverflow(page, "mobile density popover");
+    await page.keyboard.press("Escape");
+    await page.getByRole("link", { name: /Button Actions/ }).click();
+    await expect(page.getByRole("heading", { name: "Button", exact: true })).toBeVisible();
+    await expect(page.locator("html")).toHaveAttribute("data-appearance", "dark");
+    await expect(page.locator("html")).toHaveAttribute("data-density", "compact");
+  });
+
+  test("catalog filters public exports and recovers from an empty result", async ({ page }) => {
+    await loadRoute(page, "/components", "Components", "light", "comfortable");
+    const search = page.getByRole("searchbox", { name: "Find a component" });
+    await search.fill("LoadingButton");
+    await expect(page.getByRole("status")).toContainText("1 component family");
+    await expect(page.getByRole("link", { name: /Button Actions/ })).toBeVisible();
+    await page.getByRole("button", { name: "Patterns", exact: true }).click();
+    await expect(page.getByRole("heading", { name: "No components found" })).toBeVisible();
+    await page.getByRole("button", { name: "Clear filters" }).click();
+    await expect(search).toHaveValue("");
+    await expect(page.getByRole("button", { name: "All", exact: true })).toHaveAttribute("aria-pressed", "true");
+
+    await page.keyboard.press("ControlOrMeta+k");
+    const commands = page.getByRole("combobox", { name: "Search commands", exact: true });
+    await expect(commands).toBeVisible();
+    await commands.fill("LoadingButton");
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("Enter");
+    await expect(page).toHaveURL(/\/components\/button$/);
+  });
+
+  test("desktop navigation fits without scrolling and selects the current component catalog", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 800 });
+    await loadRoute(page, "/components/button", "Button", "light", "comfortable");
+    const sidebar = page.locator(".playground-navigation");
+    const dimensions = await sidebar.evaluate((element) => ({
+      available: element.clientHeight,
+      content: element.scrollHeight,
+      scrollbar: getComputedStyle(element).scrollbarWidth,
+    }));
+    expect(dimensions.content).toBeLessThanOrEqual(dimensions.available);
+    expect(dimensions.scrollbar).toBe("none");
+    await expect(page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "All components" })).toHaveAttribute("aria-current", "page");
+    await page.getByRole("button", { name: "Toggle navigation", exact: true }).click();
+    await expect(page.getByRole("button", { name: "Appearance: light", exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Density: comfortable", exact: true })).toBeVisible();
+    await page.getByRole("navigation", { name: "On this page" }).getByRole("link", { name: "Usage" }).click();
+    await expect(page).toHaveURL(/#usage$/);
+    await page.getByRole("navigation", { name: "Component browsing" }).getByRole("link", { name: "Card" }).click();
+    await expect(page.getByRole("heading", { name: "Card", exact: true })).toBeVisible();
+  });
+});
+
 test.describe("Phase 7 accessibility regression", () => {
   test("representative routes have no automatically detectable violations", async ({ page }) => {
     test.setTimeout(120_000);
@@ -381,8 +451,8 @@ test.describe("Phase 7 responsive regression", () => {
     await expectNoDocumentOverflow(page, "open mobile navigation");
     await expectNoAxeViolations(page, "open mobile navigation");
 
-    await navigation.getByRole("link", { name: "Button", exact: true }).click();
-    await expect(page).toHaveURL(/\/components\/button$/);
+    await navigation.getByRole("link", { name: "All components", exact: true }).click();
+    await expect(page).toHaveURL(/\/components$/);
     await expect(navigation).toBeHidden();
   });
 });

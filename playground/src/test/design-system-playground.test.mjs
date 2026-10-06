@@ -133,13 +133,12 @@ test("appearance and density are controlled through root attributes", () => {
   assert.match(styles, /--ds-display-title: clamp\(2rem, 4vw, 3\.5rem\);/);
 });
 
-test("playground footer controls do not clip in the collapsed desktop rail", () => {
+test("playground display controls live in the header", () => {
   const shell = read("../components/app-shell.tsx");
 
-  assert.match(
-    shell,
-    /DesignPreferenceControls className="group-data-\[sidebar-state=collapsed\]\/shell:hidden"/,
-  );
+  assert.match(shell, /<AppearanceControl /);
+  assert.match(shell, /<DensityControl /);
+  assert.doesNotMatch(shell, /<DesignPreferenceControls/);
 });
 
 test("page titles use comfortable defaults with an explicit compact option", () => {
@@ -717,10 +716,7 @@ test("shared sidebar navigation supports collapsed flyouts without owning routes
   assert.match(playgroundShell, /type: "group"/);
   assert.match(playgroundShell, /label: "Reference examples"/);
   assert.match(playgroundShell, /<AppSidebar\s+variant="auto"/);
-  assert.match(
-    playgroundShell,
-    /treatment=\{pathname === "\/developer-overview" \? "quiet" : undefined\}/,
-  );
+  assert.match(playgroundShell, /treatment="quiet"/);
 });
 
 test("app shell uses render composition and tracks sidebar overflow affordances", () => {

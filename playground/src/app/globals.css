@@ -11,6 +11,16 @@ body {
   isolation: isolate;
 }
 
+/* The compact navigation fits desktop heights. Short windows retain touch and
+   keyboard scrolling without adding a second visible scrollbar to the shell. */
+.playground-navigation {
+  scrollbar-width: none;
+}
+
+.playground-navigation::-webkit-scrollbar {
+  display: none;
+}
+
 @layer base {
   a {
     color: inherit;
