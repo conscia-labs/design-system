@@ -63,6 +63,7 @@ test("CodeBlock follows its container across appearances and densities", async (
 
       await expect(block).toHaveCSS("width", "248px");
       await expect(tabList.getByRole("tab")).toHaveCount(3);
+      await expect(tabList).toHaveAttribute("tabindex", "0");
       await expect(toolbar).toHaveCSS("flex-direction", "column");
       await expect(copyButton).toBeVisible();
       await expectContained(copyButton, toolbar);
@@ -83,6 +84,7 @@ test("CodeBlock follows its container across appearances and densities", async (
     exact: true,
   });
   await expect(expandedBlock).toHaveCSS("width", "500px");
+  await expect(expandedBlock.getByRole("tablist", { name: "Request example" })).not.toHaveAttribute("tabindex", "0");
   await expect(expandedToolbar).toHaveCSS("flex-direction", "row");
   await expectContained(expandedCopyButton, expandedToolbar);
   await expectNoDocumentOverflow(page);
