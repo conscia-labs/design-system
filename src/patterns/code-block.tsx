@@ -32,7 +32,9 @@ function CodeBlock({
   const [activeValue, setActiveValue] = React.useState(initialValue);
   const [copiedValue, setCopiedValue] = React.useState<string | null>(null);
   const [copyError, setCopyError] = React.useState(false);
-  const [hasScrollableTabs, setHasScrollableTabs] = React.useState(false);
+  // Keep the server-rendered rail keyboard reachable until its dimensions are
+  // measured. A cold hydration must not expose an inaccessible scroll region.
+  const [hasScrollableTabs, setHasScrollableTabs] = React.useState(true);
   const tabsListRef = React.useRef<HTMLDivElement>(null);
   const copyStatusId = React.useId();
   const activeSnippet =
@@ -56,12 +58,14 @@ function CodeBlock({
     }
   }, [selectedValue]);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     const tabsList = tabsListRef.current;
     if (!tabsList) return;
 
     const updateScrollableState = () => {
-      const nextHasScrollableTabs = tabsList.scrollWidth > tabsList.clientWidth + 1;
+      const nextHasScrollableTabs =
+        tabsList.scrollWidth > tabsList.clientWidth ||
+        tabsList.scrollHeight > tabsList.clientHeight;
       setHasScrollableTabs((current) =>
         current === nextHasScrollableTabs ? current : nextHasScrollableTabs,
       );
