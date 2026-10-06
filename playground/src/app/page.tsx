@@ -2,7 +2,6 @@ import Link from "next/link";
 import { Badge, Button, CodeBlock } from "@conscia-labs/design-system";
 
 import { componentInventory } from "@/components/component-inventory";
-import { DesignPreferences } from "@/components/design-preferences";
 import { ExampleSection, PlaygroundPage } from "@/components/page";
 import {
   designSystemPackageName,
@@ -97,8 +96,7 @@ export default function OverviewPage() {
       >
         <div className="grid gap-8 p-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end lg:p-8">
           <div className="max-w-3xl">
-            <Badge variant="information">Conscia product foundation</Badge>
-            <h2 className="ds-type-display-title mt-4 max-w-2xl">
+            <h2 className="ds-type-display-title max-w-2xl">
               Build consistent product experiences from shared decisions.
             </h2>
             <p className="ds-type-body mt-4 max-w-2xl text-text-supporting">
@@ -186,14 +184,13 @@ export default function OverviewPage() {
         description="Each layer builds on the one before it. Start at the highest layer that matches the problem."
       >
         <div className="grid gap-3 md:grid-cols-3">
-          {layers.map((layer, index) => (
+          {layers.map((layer) => (
             <Link
               key={layer.title}
               href={layer.href}
               className="group rounded-[var(--ds-radius-surface)] border border-border-subtle bg-surface p-5 outline-none transition-colors hover:bg-surface-muted focus-visible:ring-[3px] focus-visible:ring-focus/50"
             >
-              <div className="ds-type-metadata text-text-muted">0{index + 1}</div>
-              <h3 className="ds-type-section-title mt-3 group-hover:text-text-primary">{layer.title}</h3>
+              <h3 className="ds-type-section-title group-hover:text-text-primary">{layer.title}</h3>
               <p className="ds-type-ui mt-2 text-text-supporting">{layer.description}</p>
               <div className="ds-type-metadata mt-4 font-semibold text-text-primary">Open {layer.title.toLowerCase()} →</div>
             </Link>
@@ -263,7 +260,7 @@ export default function OverviewPage() {
           <p className="ds-type-ui mt-1 text-text-supporting">
             Appearance and density update shared root attributes across every example.
           </p>
-          <div className="mt-4"><DesignPreferences /></div>
+          <p className="ds-type-ui mt-3 text-text-supporting">Use the Appearance and Density controls in the header to compare every example.</p>
           <Button
             className="mt-5 w-full"
             variant="outline"

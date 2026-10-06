@@ -2,6 +2,14 @@
 
 ## 1.3.0 - 2026-10-06
 
+- Polish the playground with compact quiet navigation, header appearance and
+  density controls, searchable component catalogs, category filters, and useful
+  empty states. Component documentation adds section links and previous/next
+  navigation, with consistent spacing across desktop and mobile.
+- Enable the playground search shortcut and match public export names as well as
+  component families. Include the overflowing CodeBlock keyboard accessibility
+  fix from PR #15 before publishing.
+
 - Keep CodeBlock tabs and copy reachable in narrow containers, with independent tab and code scrolling, contextual selector labels, and constrained-container regression coverage.
 - Add the optional `AppSidebar treatment="quiet"`, mapped to existing semantic surface and selection roles while preserving appearance variants and default styling.
 - Extend `MetricBand` with an opt-in compact presentation: full-width metric rows below desktop, configured horizontal columns at desktop, React-node values, loading skeletons, and an accessible unavailable value.
