@@ -62,7 +62,7 @@ const guidance: Record<string, ComponentGuidance> = {
   disclosure: {
     whenToUse: "Use Collapsible for optional detail, Tabs for layered content, and NavigationTabs for routed peer pages.",
     accessibility: "Triggers must remain keyboard reachable and expose expanded or selected state. Tab panels need clear labels.",
-    options: [{ name: "pattern", values: "underline (default) · divider · pills · segmented", guidance: "Underline keeps the rail quiet; divider adds structural separation; pills suit small peer views; segmented is for mode switching. NavigationTabs also supports underline and divider." }],
+    options: [{ name: "pattern", values: "underline (default) · divider · pills · segmented", guidance: "Underline keeps the rail quiet; divider adds structural separation; pills suit small peer views; segmented is for mode switching. NavigationTabs also supports underline, divider, and pills; use NavigationTabsList variant=\"pills\" for pill-styled routed pages." }],
   },
   "menus-and-overlays": {
     whenToUse: "Use menus for action lists, popovers for lightweight supporting content, dialogs for focused tasks, and sheets for edge-aligned workflows.",

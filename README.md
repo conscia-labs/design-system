@@ -189,7 +189,9 @@ by the version-tag release workflow.
 Underline tabs are quiet by default in 1.2.2: the selected underline remains,
 while the full-width rail is removed. Use `<Tabs variant="divider">` or
 `<NavigationTabsList variant="divider">` to retain the previous divider.
-`<Tabs variant="pills">` offers a softer option for small peer views.
+`<Tabs variant="pills">` offers a softer option for small peer views, and
+`<NavigationTabsList variant="pills">` applies the same treatment to
+route-backed navigation.
 Segmented controls remain unchanged; compact sizing is supported through
 `size="compact"`.
 

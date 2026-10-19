@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Add `variant="pills"` to `NavigationTabsList`, sharing the `Tabs` pills
+  treatment so route-backed navigation can use pills while keeping link
+  semantics and `aria-current="page"`. Underline remains the default.
+
 ## 1.3.0 - 2026-10-06
 
 - Polish the playground with compact quiet navigation, header appearance and

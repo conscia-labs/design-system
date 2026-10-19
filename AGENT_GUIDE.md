@@ -107,9 +107,12 @@ playground route for each family.
 - Underline tabs are quiet by default (no full-width rail). Use `variant="divider"`
   for structural separation, `variant="pills"` for small peer views, and
   `variant="segmented"` for mode switching. `NavigationTabsList` supports
-  `variant="divider"` as well. Root variants inherit through lists and triggers.
+  `variant="divider"` and `variant="pills"` as well. Root variants inherit
+  through lists and triggers.
 - Use `Tabs` for layered content or mode switching. Use `NavigationTabs` for
-  route-backed destinations.
+  route-backed destinations, including pill-styled ones: use
+  `<NavigationTabsList variant="pills">` rather than `Tabs` or local restyling,
+  so links keep `aria-current="page"`.
 - Use `Select` for a short, familiar list. Use `SearchableSelect` for longer
   lists that users need to filter.
 - Use `LoadingButton` for asynchronous actions so layout, disabled state, and
