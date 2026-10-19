@@ -7,6 +7,7 @@ import { cn } from "./utils";
 
 type TabsVariant = "underline" | "divider" | "pills" | "segmented";
 type TabsSize = "default" | "compact";
+type NavigationTabsVariant = Extract<TabsVariant, "underline" | "divider" | "pills">;
 type ScrollPosition = "none" | "start" | "middle" | "end";
 
 type TabsVisualContextValue = {
@@ -21,12 +22,17 @@ const defaultTabsVisualContext: TabsVisualContextValue = {
 
 const TabsRootVisualContext = React.createContext(defaultTabsVisualContext);
 const TabsListVisualContext = React.createContext(defaultTabsVisualContext);
+const NavigationTabsListVisualContext =
+  React.createContext<NavigationTabsVariant>("underline");
 
 const tabRailClasses =
   "flex min-w-0 items-stretch overflow-x-auto overscroll-x-contain scroll-px-2 snap-x [scrollbar-width:none] [&::-webkit-scrollbar]:hidden";
 
 const navigationTabClasses =
   "relative inline-flex h-full shrink-0 snap-start items-center justify-center gap-2 whitespace-nowrap rounded-t-[var(--ds-radius-control)] px-[var(--ds-tab-padding-x)] text-sm font-medium outline-none transition-[background-color,color,box-shadow] duration-150 after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-transparent after:transition-colors hover:bg-surface-muted focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus/60 data-[active=false]:text-text-supporting data-[active=false]:hover:text-text-primary data-[active=true]:bg-selection-background data-[active=true]:font-semibold data-[active=true]:text-selection-foreground data-[active=true]:after:bg-selection-indicator";
+
+const pillTabClasses =
+  "inline-flex h-full shrink-0 snap-start items-center justify-center gap-2 whitespace-nowrap rounded-full px-[var(--ds-tab-padding-x)] text-sm font-medium text-text-supporting outline-none transition-colors duration-150 hover:bg-surface-muted hover:text-text-primary focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus/60";
 
 function assignRef<T>(ref: React.Ref<T> | undefined, value: T | null) {
   if (typeof ref === "function") {
@@ -200,7 +206,10 @@ function TabsTrigger({
             "data-active:bg-selection-background data-active:font-semibold data-active:text-selection-foreground data-active:after:bg-selection-indicator",
           ),
         resolvedVariant === "pills" &&
-          "inline-flex h-full shrink-0 snap-start items-center justify-center gap-2 whitespace-nowrap rounded-full px-[var(--ds-tab-padding-x)] text-sm font-medium text-text-supporting outline-none transition-colors duration-150 hover:bg-surface-muted hover:text-text-primary focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus/60 data-active:bg-selection-background data-active:font-semibold data-active:text-selection-foreground",
+          cn(
+            pillTabClasses,
+            "data-active:bg-selection-background data-active:font-semibold data-active:text-selection-foreground",
+          ),
         resolvedVariant === "segmented" &&
           "inline-flex h-full items-center justify-center gap-2 whitespace-nowrap rounded-[calc(var(--ds-radius-control)-2px)] px-3 text-sm font-medium text-text-supporting outline-none transition-[background-color,color,box-shadow] hover:text-text-primary focus-visible:ring-2 focus-visible:ring-focus/60 data-active:bg-canvas data-active:text-text-primary data-active:shadow-xs",
         className,
@@ -244,9 +253,10 @@ function NavigationTabsList({
   variant = "underline",
   ref: externalRef,
   onScroll,
+  children,
   ...props
 }: React.ComponentProps<"div"> & {
-  variant?: "underline" | "divider";
+  variant?: NavigationTabsVariant;
 }) {
   const [scrollPosition, scrollRailRef, updateScrollPosition] =
     useHorizontalScrollRail<HTMLDivElement>(externalRef);
@@ -264,11 +274,16 @@ function NavigationTabsList({
       className={cn(
         tabRailClasses,
         variant === "divider" && "border-b border-border-subtle",
+        variant === "pills" && "gap-1",
         "h-[var(--ds-tab-rail-height)]",
         className,
       )}
       {...props}
-    />
+    >
+      <NavigationTabsListVisualContext.Provider value={variant}>
+        {children}
+      </NavigationTabsListVisualContext.Provider>
+    </div>
   );
 }
 
@@ -281,6 +296,7 @@ function NavigationTab({
   active?: boolean;
 }) {
   const Comp = "a";
+  const variant = React.useContext(NavigationTabsListVisualContext);
   const internalRef = React.useRef<HTMLAnchorElement | null>(null);
   const ref = React.useCallback(
     (node: HTMLAnchorElement | null) => {
@@ -303,11 +319,17 @@ function NavigationTab({
     <Comp
       {...props}
       data-slot="navigation-tab"
+      data-variant={variant}
       data-active={active ? "true" : "false"}
       aria-current={active ? "page" : undefined}
       ref={ref}
       className={cn(
-        navigationTabClasses,
+        variant === "pills"
+          ? cn(
+              pillTabClasses,
+              "data-[active=true]:bg-selection-background data-[active=true]:font-semibold data-[active=true]:text-selection-foreground",
+            )
+          : navigationTabClasses,
         className,
       )}
     />
@@ -323,4 +345,4 @@ export {
   TabsList,
   TabsTrigger,
 };
-export type { TabsSize, TabsVariant };
+export type { NavigationTabsVariant, TabsSize, TabsVariant };
