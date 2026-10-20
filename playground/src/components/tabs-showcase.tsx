@@ -26,11 +26,23 @@ export function TabsShowcase() {
               {([
                 { variant: "underline", title: "Quiet underline", description: "The default. Selection stays clear without a full-width divider." },
                 { variant: "divider", title: "Divider", description: "Use the rail when tabs need to separate navigation from the section below." },
-                { variant: "pills", title: "Pills", description: "A softer option for small groups of peer views without a surrounding track." },
+                { variant: "pills", title: "Pills", description: "A softer option for small groups of peer views without a surrounding track. Routed pages use NavigationTabsList with the same treatment; in-page views use Tabs." },
               ] as const).map(({ variant, title, description }) => (
                 <div key={variant} className="space-y-2">
                   <h3 className="text-sm font-semibold">{title}</h3>
                   <p className="text-sm text-text-supporting">{description}</p>
+                  {variant === "pills" ? (
+                    <NavigationTabs aria-label="Pills navigation example">
+                      <NavigationTabsList variant="pills">
+                        <NavigationTab href="#tabs" active>
+                          Overview
+                        </NavigationTab>
+                        <NavigationTab href="#tabs-business-units">Business units</NavigationTab>
+                        <NavigationTab href="#tabs-access">Access</NavigationTab>
+                        <NavigationTab href="#tabs-sign-in">Sign-in</NavigationTab>
+                      </NavigationTabsList>
+                    </NavigationTabs>
+                  ) : null}
                   <Tabs variant={variant} defaultValue="overview">
                     <TabsList aria-label={`${title} example`}>
                       <TabsTrigger value="overview">Overview</TabsTrigger>

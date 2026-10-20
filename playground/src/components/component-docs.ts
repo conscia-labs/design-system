@@ -68,7 +68,7 @@ const guidance: Record<string, ComponentGuidance> = {
     whenToUse: "Use Disclosure for optional detail behind a summary row, Tabs for layered content, and NavigationTabs for routed peer pages. Use Collapsible only when you need a custom trigger.",
     accessibility: "Triggers must remain keyboard reachable and expose expanded or selected state. Tab panels need clear labels.",
     options: [
-      { name: "pattern", values: "underline (default) · divider · pills · segmented · nested", guidance: "Underline keeps the rail quiet; divider adds structural separation; pills suit small peer views; segmented is for mode switching. NavigationTabs also supports underline and divider." },
+      { name: "pattern", values: "underline (default) · divider · pills · segmented · nested", guidance: "Underline keeps the rail quiet; divider adds structural separation; pills suit small peer views; segmented is for mode switching. NavigationTabs also supports underline, divider, and pills; use NavigationTabsList variant=\"pills\" for pill-styled routed pages." },
       { name: "nesting", values: "page tabs · nested", guidance: "Page-level tabs use NavigationTabs or the default Tabs. A tab group inside a section or another tab panel uses variant=\"nested\" so the hierarchy is visible." },
       { name: "Disclosure count", values: "omitted · number", guidance: "Show a count when the summary hides a list, such as the rows of a daily data table." },
     ],

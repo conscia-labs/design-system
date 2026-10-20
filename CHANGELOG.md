@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Add `variant="pills"` to `NavigationTabsList`, sharing the `Tabs` pills
+  treatment so route-backed navigation can use pills while keeping link
+  semantics and `aria-current="page"`. Underline remains the default.
+
 Admin UI design-system handoff (DS-08 to DS-23).
 
 - `Table` scrolls wide content horizontally by default instead of clipping it,
