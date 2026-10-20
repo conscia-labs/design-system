@@ -5,6 +5,17 @@ import { IconButton } from "../primitives/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../primitives/select";
 import { cn } from "../primitives/utils";
 
+/**
+ * Documented page sizes. Use `inventory` for full-page resource lists and
+ * `detail` for tables embedded in a detail page; `options` is the default set
+ * offered by the Rows control.
+ */
+const paginationPageSizes = {
+  inventory: 25,
+  detail: 10,
+  options: [10, 25, 50],
+} as const;
+
 type PaginationControlsProps = React.ComponentProps<"div"> & {
   currentPage: number;
   pageCount: number;
@@ -25,7 +36,7 @@ function PaginationControls({
   onNext,
   onPageChange,
   pageSize,
-  pageSizeOptions = [10, 25, 50],
+  pageSizeOptions = [...paginationPageSizes.options],
   onPageSizeChange,
   className,
   ...props
@@ -49,13 +60,13 @@ function PaginationControls({
         ) : null}
       </div>
       <div className="flex items-center gap-1">
-        <IconButton type="button" variant="outline" size="sm" className="size-8" aria-label="Previous page" onClick={onPrevious ?? (() => onPageChange?.(currentPage - 1))} disabled={currentPage <= 1}><ChevronLeft /></IconButton>
+        <IconButton type="button" variant="outline" size="sm" aria-label="Previous page" onClick={onPrevious ?? (() => onPageChange?.(currentPage - 1))} disabled={currentPage <= 1}><ChevronLeft /></IconButton>
         {onPageChange ? pageItems(currentPage, pageCount).map((item, index) => item === "ellipsis" ? (
-          <span key={`ellipsis-${index}`} className="flex size-8 items-center justify-center text-text-supporting" aria-hidden="true">…</span>
+          <span key={`ellipsis-${index}`} className="flex size-[var(--ds-control-height-sm)] items-center justify-center text-text-supporting" aria-hidden="true">…</span>
         ) : (
-          <IconButton type="button" key={item} variant={item === currentPage ? "secondary" : "ghost"} size="sm" className="size-8" aria-label={`Page ${item}`} aria-current={item === currentPage ? "page" : undefined} onClick={() => onPageChange(item)}>{item}</IconButton>
+          <IconButton type="button" key={item} variant="ghost" size="sm" className={cn("text-text-supporting", item === currentPage && "bg-selection-background font-semibold text-selection-foreground hover:bg-selection-background hover:text-selection-foreground")} aria-label={`Page ${item}`} aria-current={item === currentPage ? "page" : undefined} onClick={() => onPageChange(item)}>{item}</IconButton>
         )) : <span className="px-2 text-[var(--ds-metadata)]">Page {currentPage} of {pageCount}</span>}
-        <IconButton type="button" variant="outline" size="sm" className="size-8" aria-label="Next page" onClick={onNext ?? (() => onPageChange?.(currentPage + 1))} disabled={currentPage >= pageCount}><ChevronRight /></IconButton>
+        <IconButton type="button" variant="outline" size="sm" aria-label="Next page" onClick={onNext ?? (() => onPageChange?.(currentPage + 1))} disabled={currentPage >= pageCount}><ChevronRight /></IconButton>
       </div>
     </div>
   );
@@ -73,5 +84,5 @@ function pageItems(currentPage: number, pageCount: number): Array<number | "elli
   return result;
 }
 
-export { PaginationControls };
+export { PaginationControls, paginationPageSizes };
 export type { PaginationControlsProps };

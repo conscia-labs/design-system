@@ -133,6 +133,7 @@
         "FieldError",
         "FieldGroup",
         "FieldLabel",
+        "DateTimeField",
         "FormSelect",
         "Input",
         "Label",
@@ -156,12 +157,13 @@
       "category": "Primitive",
       "family": "Disclosure",
       "slug": "disclosure",
-      "description": "Collapsible regions and tabbed interfaces.",
+      "description": "Disclosures, collapsible regions, and tabbed interfaces.",
       "route": "/components/disclosure",
       "exports": [
         "Collapsible",
         "CollapsibleContent",
         "CollapsibleTrigger",
+        "Disclosure",
         "NavigationTab",
         "NavigationTabs",
         "NavigationTabsList",
@@ -224,6 +226,16 @@
         "TooltipContent",
         "TooltipProvider",
         "TooltipTrigger"
+      ]
+    },
+    {
+      "category": "Primitive",
+      "family": "Stepper",
+      "slug": "stepper",
+      "description": "Progress through wizards and multi-step dialogs.",
+      "route": "/components/stepper",
+      "exports": [
+        "Stepper"
       ]
     },
     {
@@ -338,16 +350,18 @@
         "InventoryDesktop",
         "InventoryMobile",
         "InventorySurface",
-        "PaginationControls"
+        "PaginationControls",
+        "paginationPageSizes"
       ]
     },
     {
       "category": "Pattern",
       "family": "Metrics and data panels",
       "slug": "metrics-and-data-panels",
-      "description": "Operational summaries, responsive compact metric bands, trends, charts, and panel anatomy.",
+      "description": "Operational summaries, responsive compact metric bands, daily-volume charts, trends, and panel anatomy.",
       "route": "/components/metrics-and-data-panels",
       "exports": [
+        "DailyVolumeChart",
         "DataPanel",
         "DataPanelContent",
         "DataPanelFooter",

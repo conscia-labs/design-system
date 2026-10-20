@@ -25,7 +25,14 @@ function LoadingButton({
   return (
     <Button
       {...props}
-      className={cn(pending && "disabled:opacity-100", className)}
+      className={cn(
+        pending && "disabled:opacity-100",
+        // A pending primary action keeps its filled style rather than the disabled one.
+        pending &&
+          (props.variant ?? "default") === "default" &&
+          "aria-busy:disabled:bg-action aria-busy:disabled:text-action-foreground aria-busy:disabled:shadow-xs",
+        className,
+      )}
       disabled={disabled || pending}
       aria-busy={pending || undefined}
     >

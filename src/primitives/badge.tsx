@@ -4,9 +4,16 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "./utils";
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded-md border px-1.5 py-0.5 text-[var(--ds-metadata)] font-medium leading-4 transition-colors",
+  "inline-flex w-fit max-w-full items-center justify-self-start rounded-md border px-1.5 py-0.5 text-[var(--ds-metadata)] font-medium leading-4 transition-colors",
   {
     variants: {
+      /**
+       * Tone meanings: `neutral` for lifecycle states (Active, Enabled,
+       * Published); `success` only for positive evidence (Healthy, Ready,
+       * Verified); `information` for pending or in-progress work; `warning`
+       * for problems that need action; `danger` for failures. `accent` and
+       * `outline` are for taxonomy, not status.
+       */
       variant: {
         default: "border-action bg-action text-action-foreground",
         accent: "border-selection-border bg-selection-background text-selection-foreground",

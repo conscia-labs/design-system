@@ -5,11 +5,17 @@ import * as React from "react";
 import { cn } from "./utils";
 
 type TableProps = React.ComponentProps<"table"> & {
-  /** Tracks horizontal overflow so the wrapper only enters the tab order when needed. */
+  /**
+   * Scrolls wide tables horizontally (the default). Pass `false` only when
+   * the caller renders an alternate stacked layout at narrow widths, such as
+   * DataTable's `mobileRow`; the table then clips at its container edge.
+   */
   scrollable?: boolean;
   /** Accessible name announced when the table requires horizontal scrolling. */
   scrollableLabel?: string;
 };
+
+type TableScrollPosition = "none" | "start" | "middle" | "end";
 
 function Table({
   className,
@@ -18,26 +24,42 @@ function Table({
   ...props
 }: TableProps) {
   const containerRef = React.useRef<HTMLDivElement | null>(null);
-  const [isOverflowing, setIsOverflowing] = React.useState(false);
+  const [scrollPosition, setScrollPosition] =
+    React.useState<TableScrollPosition>("none");
+  const isOverflowing = scrollPosition !== "none";
+
+  const updateScrollPosition = React.useCallback(() => {
+    const element = containerRef.current;
+    if (!element || !scrollable) {
+      setScrollPosition("none");
+      return;
+    }
+
+    const maximumScroll = element.scrollWidth - element.clientWidth;
+    const nextPosition: TableScrollPosition =
+      maximumScroll <= 1
+        ? "none"
+        : element.scrollLeft <= 1
+          ? "start"
+          : element.scrollLeft >= maximumScroll - 1
+            ? "end"
+            : "middle";
+
+    setScrollPosition((current) =>
+      current === nextPosition ? current : nextPosition,
+    );
+  }, [scrollable]);
 
   React.useEffect(() => {
     const element = containerRef.current;
 
-    if (!element || !scrollable) {
-      setIsOverflowing(false);
-      return;
-    }
-
-    const updateOverflow = () => {
-      setIsOverflowing(element.scrollWidth > element.clientWidth + 1);
-    };
-
-    updateOverflow();
+    updateScrollPosition();
+    if (!element || !scrollable) return;
 
     const resizeObserver =
       typeof ResizeObserver === "undefined"
         ? null
-        : new ResizeObserver(updateOverflow);
+        : new ResizeObserver(updateScrollPosition);
     resizeObserver?.observe(element);
 
     const table = element.querySelector("table");
@@ -48,30 +70,34 @@ function Table({
     const mutationObserver =
       typeof MutationObserver === "undefined"
         ? null
-        : new MutationObserver(updateOverflow);
+        : new MutationObserver(updateScrollPosition);
     mutationObserver?.observe(element, {
       characterData: true,
       childList: true,
       subtree: true,
     });
 
+    element.addEventListener("scroll", updateScrollPosition, { passive: true });
+
     return () => {
       resizeObserver?.disconnect();
       mutationObserver?.disconnect();
+      element.removeEventListener("scroll", updateScrollPosition);
     };
-  }, [scrollable]);
+  }, [scrollable, updateScrollPosition]);
 
   return (
     <div
       ref={containerRef}
       data-slot="table-container"
       data-overflowing={isOverflowing ? "true" : "false"}
+      data-scroll-position={scrollable ? scrollPosition : undefined}
       role={isOverflowing ? "region" : undefined}
       aria-label={isOverflowing ? scrollableLabel : undefined}
       tabIndex={isOverflowing ? 0 : undefined}
       className={cn(
         "relative w-full outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-inset",
-        isOverflowing ? "overflow-x-auto" : "overflow-x-clip",
+        scrollable ? "overflow-x-auto overflow-y-hidden overscroll-x-contain" : "overflow-x-clip",
       )}
     >
       <table data-slot="table" className={cn("w-full caption-bottom ds-type-ui", className)} {...props} />

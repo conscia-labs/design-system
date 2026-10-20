@@ -89,7 +89,7 @@ test("component documentation is registry-driven and gives every family its own 
   const componentEntries = [...inventory.matchAll(/category: "(Primitive|Pattern|Compatibility)", family: "([^"]+)", slug: "([^"]+)"/g)];
   const slugs = componentEntries.map((entry) => entry[3]);
 
-  assert.equal(slugs.length, 23);
+  assert.equal(slugs.length, 24);
   assert.equal(new Set(slugs).size, slugs.length);
   for (const slug of slugs) assert.match(inventory, new RegExp(`route: "/components/${slug}"`));
   assert.match(docs, /if \(!details\) throw new Error/);
@@ -227,8 +227,24 @@ test("official Conscia colors map to distinct primary, accent, and supporting br
   assert.match(darkTheme, /--brand-foreground: #ffffff;/);
   assert.match(darkTheme, /--brand-accent: #6b7cff;/);
   assert.match(darkTheme, /--brand-supporting: #a3d6cf;/);
-  assert.match(darkTheme, /--chart-series-1: var\(--brand-accent\);/);
   assert.ok(contrastRatio("1e0721", "ffffff") >= 4.5);
+
+  const darkToken = (name) => {
+    const raw = darkTheme.match(new RegExp(`--${name}: ([^;]+);`))?.[1];
+    assert.ok(raw, `dark theme should define --${name}`);
+    const reference = raw.match(/^var\(--([a-z0-9-]+)\)$/)?.[1];
+    return reference ? darkToken(reference) : raw.replace("#", "");
+  };
+  for (const series of [1, 2, 3, 4, 5]) {
+    for (const surface of ["canvas", "surface", "surface-raised", "surface-muted"]) {
+      assert.ok(
+        contrastRatio(darkToken(`chart-series-${series}`), darkToken(surface)) >= 3,
+        `dark chart-series-${series} needs 3:1 against ${surface}`,
+      );
+    }
+  }
+  assert.ok(contrastRatio(darkToken("danger-foreground"), darkToken("danger-background")) >= 7);
+  assert.ok(contrastRatio(darkToken("danger"), darkToken("danger-background")) >= 4.5);
 
   assert.match(foundation, /Burgundy · primary identity surface/);
   assert.match(foundation, /Electric blue · brand accent/);

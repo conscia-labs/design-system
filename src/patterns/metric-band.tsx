@@ -53,7 +53,22 @@ type MetricBandItemProps = React.ComponentProps<"div"> & {
   icon?: React.ReactNode;
   iconClassName?: string;
   loading?: boolean;
+  /**
+   * Shown in a quiet style when the value is missing, such as "Never" or "Not
+   * reported". Defaults to an em dash announced as "Unavailable". Pass
+   * `value={null}` to mark a value missing in the default presentation, where
+   * an omitted value still renders 0.
+   */
+  emptyValue?: React.ReactNode;
 };
+
+function MetricBandEmptyValue({ children }: { children?: React.ReactNode }) {
+  return (
+    <span data-slot="metric-band-empty-value" className="ds-type-ui font-medium text-text-muted">
+      {children ?? <span aria-label="Unavailable">—</span>}
+    </span>
+  );
+}
 
 function MetricBandItem({
   label,
@@ -62,9 +77,11 @@ function MetricBandItem({
   icon,
   iconClassName,
   loading = false,
+  emptyValue,
   className,
   ...props
 }: MetricBandItemProps) {
+  const isEmpty = value === null || value === undefined;
   const presentation = React.useContext(MetricBandPresentationContext);
 
   if (presentation === "compact") {
@@ -96,14 +113,16 @@ function MetricBandItem({
               <div className="ds-type-metadata mt-0.5 break-words text-text-supporting">
                 {detail}
               </div>
-            ) : null}
+            ) : (
+              <div aria-hidden="true" className="ds-type-metadata mt-0.5 hidden min-h-[1lh] lg:block" />
+            )}
           </div>
         </div>
         {loading ? (
           <Skeleton className="h-6 w-14 justify-self-end lg:justify-self-start" />
         ) : (
-          <div className="min-w-0 max-w-full break-words text-right text-xl font-semibold leading-tight tracking-tight text-text-primary lg:text-left">
-            {value ?? <span aria-label="Unavailable">—</span>}
+          <div className="flex min-h-[1.5625rem] min-w-0 max-w-full items-center justify-end break-words text-right text-xl font-semibold leading-tight tracking-tight text-text-primary lg:justify-start lg:text-left">
+            {isEmpty ? <MetricBandEmptyValue>{emptyValue}</MetricBandEmptyValue> : value}
           </div>
         )}
       </div>
@@ -135,15 +154,19 @@ function MetricBandItem({
         {loading ? (
           <Skeleton className="h-7 w-14" />
         ) : (
-          <div className="text-2xl font-semibold tracking-tight">
-            {value ?? 0}
+          <div className="flex min-h-8 items-center text-2xl font-semibold tracking-tight">
+            {/* An omitted value keeps the 1.x zero fallback; null or emptyValue marks it missing. */}
+            {value === undefined && emptyValue === undefined
+              ? 0
+              : isEmpty
+                ? <MetricBandEmptyValue>{emptyValue}</MetricBandEmptyValue>
+                : value}
           </div>
         )}
-        {detail ? (
-          <div className="ds-type-metadata text-text-supporting">
-            {detail}
-          </div>
-        ) : null}
+        {/* The detail line is reserved so values share a baseline across items. */}
+        <div aria-hidden={detail ? undefined : true} className="ds-type-metadata min-h-[1lh] text-text-supporting">
+          {detail}
+        </div>
       </div>
     </div>
   );

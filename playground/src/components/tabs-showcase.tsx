@@ -45,6 +45,20 @@ export function TabsShowcase() {
                 </div>
               ))}
               <div className="space-y-2">
+                <h3 className="text-sm font-semibold">Nested</h3>
+                <p className="text-sm text-text-supporting">Use for a tab group inside a section or another tab panel, so it stays subordinate to page tabs.</p>
+                <Tabs variant="nested" defaultValue="rules">
+                  <TabsList aria-label="Nested example">
+                    <TabsTrigger value="rules">Rules</TabsTrigger>
+                    <TabsTrigger value="simulator">Simulator</TabsTrigger>
+                    <TabsTrigger value="history">History</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="rules" className="pt-3 text-sm text-text-supporting">Policy rules for this section.</TabsContent>
+                  <TabsContent value="simulator" className="pt-3 text-sm text-text-supporting">Simulator details.</TabsContent>
+                  <TabsContent value="history" className="pt-3 text-sm text-text-supporting">Rule history.</TabsContent>
+                </Tabs>
+              </div>
+              <div className="space-y-2">
                 <h3 className="text-sm font-semibold">Compact underline</h3>
                 <p className="text-sm text-text-supporting">Use the existing compact size for tabs inside dense sections.</p>
                 <Tabs size="compact" defaultValue="details">
