@@ -167,8 +167,14 @@ test.describe("interaction baseline", () => {
     });
     await page.reload();
 
+    await page.getByRole("button", { name: /^Appearance: / }).click();
     await page.getByRole("button", { name: "dark", exact: true }).click();
+    await expect(page.getByRole("button", { name: "dark", exact: true })).toHaveAttribute("aria-pressed", "true");
+    await page.keyboard.press("Escape");
+    await page.getByRole("button", { name: /^Density: / }).click();
     await page.getByRole("button", { name: "compact", exact: true }).click();
+    await expect(page.getByRole("button", { name: "compact", exact: true })).toHaveAttribute("aria-pressed", "true");
+    await page.keyboard.press("Escape");
     await expect(page.locator("html")).toHaveAttribute("data-appearance", "dark");
     await expect(page.locator("html")).toHaveAttribute("data-density", "compact");
     await expect(page.locator("html")).toHaveClass(/dark/);
@@ -261,8 +267,11 @@ test.describe("interaction baseline", () => {
       page.locator('[data-slot="app-sidebar"]').getByText("Foundation", { exact: true }),
     ).toBeHidden();
 
-    await page.getByRole("link", { name: "Button", exact: true }).click();
-    await expect(page).toHaveURL(/\/components\/button$/);
+    await page
+      .locator('[data-slot="app-sidebar"]')
+      .getByRole("link", { name: "All components", exact: true })
+      .click();
+    await expect(page).toHaveURL(/\/components$/);
 
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(routes[0].path);
@@ -277,8 +286,8 @@ test.describe("interaction baseline", () => {
 
     const mobileNavigation = page.getByRole("dialog", { name: "Application navigation" });
     await expect(mobileNavigation).toBeVisible();
-    await mobileNavigation.getByRole("link", { name: "Button", exact: true }).click();
-    await expect(page).toHaveURL(/\/components\/button$/);
+    await mobileNavigation.getByRole("link", { name: "All components", exact: true }).click();
+    await expect(page).toHaveURL(/\/components$/);
     await expect(mobileNavigation).toBeHidden();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   });
