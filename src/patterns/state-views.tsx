@@ -7,21 +7,50 @@ type StateViewProps = React.ComponentProps<"div"> & {
   description?: React.ReactNode;
   action?: React.ReactNode;
   icon?: React.ReactNode;
+  /**
+   * `compact` suits empty states inside a section, panel, or tab; `default`
+   * suits a state that replaces a page's primary content.
+   */
+  size?: "default" | "compact";
+  /** Adds a bottom divider, for a state that replaces rows inside a table body. */
+  divider?: boolean;
 };
 
-function StateView({ title, description, action, icon, className, ...props }: StateViewProps) {
+function StateView({
+  title,
+  description,
+  action,
+  icon,
+  size = "default",
+  divider = false,
+  className,
+  ...props
+}: StateViewProps) {
+  const compact = size === "compact";
+
   return (
     <div
       data-slot="state-view"
-      className={cn("flex min-h-72 flex-col items-center justify-center gap-3 border-b px-6 py-12 text-center", className)}
+      data-size={size}
+      className={cn(
+        "flex flex-col items-center justify-center text-center",
+        compact ? "gap-2 px-4 py-8" : "min-h-72 gap-3 px-6 py-12",
+        divider && "border-b border-border-subtle",
+        className,
+      )}
       {...props}
     >
       {icon ? (
-        <div className="flex size-10 items-center justify-center rounded-md bg-neutral-background text-neutral-foreground [&_svg]:size-5">
+        <div
+          className={cn(
+            "flex items-center justify-center rounded-md bg-neutral-background text-neutral-foreground",
+            compact ? "size-8 [&_svg]:size-4" : "size-10 [&_svg]:size-5",
+          )}
+        >
           {icon}
         </div>
       ) : null}
-      <h2 className="ds-type-section-title">{title}</h2>
+      <h2 className={compact ? "ds-type-card-title" : "ds-type-section-title"}>{title}</h2>
       {description ? <p className="ds-type-ui max-w-md text-text-supporting">{description}</p> : null}
       {action ? <div className="mt-1">{action}</div> : null}
     </div>

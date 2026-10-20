@@ -888,7 +888,7 @@ function PageFrame({
       data-slot="page-frame"
       data-width={width}
       className={cn(
-        "min-w-0 w-full flex-1 px-3 py-[var(--ds-space-section)] md:px-[var(--ds-space-page)]",
+        "min-w-0 w-full flex-1 px-[var(--ds-frame-padding-x)] py-[var(--ds-space-section)] [--ds-frame-content-inset:0px]",
         width === "wide" && "mx-auto w-full max-w-[86rem]",
         width === "focused" && "mx-auto w-full max-w-[64rem]",
         width === "reading" && "mx-auto w-full max-w-[48rem]",

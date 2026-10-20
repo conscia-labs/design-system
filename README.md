@@ -192,6 +192,7 @@ while the full-width rail is removed. Use `<Tabs variant="divider">` or
 `<Tabs variant="pills">` offers a softer option for small peer views, and
 `<NavigationTabsList variant="pills">` applies the same treatment to
 route-backed navigation.
+`<Tabs variant="nested">` marks a tab group inside a section or tab panel.
 Segmented controls remain unchanged; compact sizing is supported through
 `size="compact"`.
 

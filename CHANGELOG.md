@@ -6,6 +6,32 @@
   treatment so route-backed navigation can use pills while keeping link
   semantics and `aria-current="page"`. Underline remains the default.
 
+Admin UI design-system handoff (DS-08 to DS-23).
+
+- `Table` scrolls wide content horizontally by default instead of clipping it,
+  and fades the edge that has more columns while scrolled. `scrollable={false}`
+  is an explicit opt-out for callers that render a stacked layout.
+- `StateView` and `ErrorState` no longer draw a bottom border. Add `divider` for
+  states inside a table body, and `size="compact"` for empty states inside
+  sections.
+- `FormSelect` treats an empty value as no selection and never shows its
+  internal sentinel.
+- `PaginationControls` shows the current page with the selected-tab treatment
+  in both themes, and page buttons share the Rows control height. New
+  `paginationPageSizes` documents 25 rows for inventories and 10 for detail
+  tables. Sortable `DataTable` headers use the table header type style.
+- New `Disclosure`, `DateTimeField`, and `Stepper` primitives, a
+  `DailyVolumeChart` pattern, and a `nested` Tabs variant.
+- `PageFrame`, `PageHeader`, `PageToolbar`, and `DetailBackLink` share one left
+  edge through the new `--ds-frame-padding-x` token. Empty `PageToolbar` slots
+  collapse.
+- `MetricBandItem` reserves its detail line so values share a baseline, and
+  renders missing values quietly, with an optional `emptyValue`.
+- Dark mode: a quieter `--danger-background` with higher text contrast, and a
+  lighter `--chart-series-1` (at least 3:1 against every dark surface).
+- Disabled primary buttons keep a tinted action surface with readable text.
+- `Badge` sizes to its content by default; tone meanings are documented.
+
 ## 1.3.0 - 2026-10-06
 
 - Polish the playground with compact quiet navigation, header appearance and

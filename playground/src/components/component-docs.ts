@@ -31,7 +31,10 @@ const guidance: Record<string, ComponentGuidance> = {
   badge: {
     whenToUse: "Use for short status, category, or count labels that support nearby content.",
     accessibility: "Badge text must state the meaning directly; color is supporting information only.",
-    options: [{ name: "variant", values: "accent · outline · information · success · warning · danger · neutral", guidance: "Use semantic variants for states and neutral/outline for taxonomy." }],
+    options: [
+      { name: "variant", values: "neutral · success · information · warning · danger · accent · outline", guidance: "Neutral is for lifecycle states (Active, Enabled, Published); success only for positive evidence (Healthy, Ready, Verified); information for pending work; warning for problems that need action; danger for failures. Accent and outline are for taxonomy." },
+      { name: "width", values: "content-sized", guidance: "Badges size to their text, even inside grid cells and stretched flex columns." },
+    ],
   },
   brand: {
     whenToUse: "Use the icon where horizontal space is limited and the wordmark when the full Conscia identity should be visible.",
@@ -44,6 +47,7 @@ const guidance: Record<string, ComponentGuidance> = {
     options: [
       { name: "variant", values: "default · secondary · outline · ghost · link · destructive", guidance: "Use one primary action per local decision area." },
       { name: "size", values: "sm · default · lg · icon", guidance: "Match the surrounding density; use IconButton for icon-only actions." },
+      { name: "disabled", values: "readable primary", guidance: "A disabled primary button keeps a tinted action surface with readable text; a pending LoadingButton keeps its filled style." },
     ],
   },
   card: {
@@ -55,14 +59,19 @@ const guidance: Record<string, ComponentGuidance> = {
     whenToUse: "Use the Field anatomy to keep labels, descriptions, errors, and controls in a consistent reading order.",
     accessibility: "Every control needs a visible label or equivalent accessible name. Connect errors and help text to the relevant control.",
     options: [
-      { name: "control", values: "Input · Textarea · Select · SearchableSelect · Checkbox · Switch", guidance: "Choose from the type and number of values users must provide." },
+      { name: "control", values: "Input · Textarea · Select · SearchableSelect · DateTimeField · Checkbox · Switch", guidance: "Choose from the type and number of values users must provide. Use DateTimeField instead of a native datetime-local input so the time zone is stated." },
+      { name: "FormSelect empty value", values: "placeholder · nothing", guidance: "An empty value with no matching option is no selection: the placeholder shows, or nothing. Do not add a disabled prompt option." },
       { name: "state", values: "default · disabled · invalid · required", guidance: "Expose state through native attributes as well as styling." },
     ],
   },
   disclosure: {
-    whenToUse: "Use Collapsible for optional detail, Tabs for layered content, and NavigationTabs for routed peer pages.",
+    whenToUse: "Use Disclosure for optional detail behind a summary row, Tabs for layered content, and NavigationTabs for routed peer pages. Use Collapsible only when you need a custom trigger.",
     accessibility: "Triggers must remain keyboard reachable and expose expanded or selected state. Tab panels need clear labels.",
-    options: [{ name: "pattern", values: "underline (default) · divider · pills · segmented", guidance: "Underline keeps the rail quiet; divider adds structural separation; pills suit small peer views; segmented is for mode switching. NavigationTabs also supports underline, divider, and pills; use NavigationTabsList variant=\"pills\" for pill-styled routed pages." }],
+    options: [
+      { name: "pattern", values: "underline (default) · divider · pills · segmented · nested", guidance: "Underline keeps the rail quiet; divider adds structural separation; pills suit small peer views; segmented is for mode switching. NavigationTabs also supports underline, divider, and pills; use NavigationTabsList variant=\"pills\" for pill-styled routed pages." },
+      { name: "nesting", values: "page tabs · nested", guidance: "Page-level tabs use NavigationTabs or the default Tabs. A tab group inside a section or another tab panel uses variant=\"nested\" so the hierarchy is visible." },
+      { name: "Disclosure count", values: "omitted · number", guidance: "Show a count when the summary hides a list, such as the rows of a daily data table." },
+    ],
   },
   "menus-and-overlays": {
     whenToUse: "Use menus for action lists, popovers for lightweight supporting content, dialogs for focused tasks, and sheets for edge-aligned workflows.",
@@ -72,7 +81,19 @@ const guidance: Record<string, ComponentGuidance> = {
   table: {
     whenToUse: "Use for a bounded dataset where users need to compare values across columns.",
     accessibility: "Provide a caption or nearby heading, use header cells, and expose sort direction with aria-sort when sorting is interactive.",
-    options: [{ name: "row state", values: "default · selected · disabled", guidance: "State remains available through data attributes without changing table semantics." }],
+    options: [
+      { name: "row state", values: "default · selected · disabled", guidance: "State remains available through data attributes without changing table semantics." },
+      { name: "scrollable", values: "true (default) · false", guidance: "Wide tables scroll horizontally and fade the edge that has more columns. Pass false only when you render a stacked layout at narrow widths." },
+      { name: "headers", values: "uppercase table-head style", guidance: "Table and DataTable share one header style, including sortable headers. Do not restyle header cells per page." },
+    ],
+  },
+  stepper: {
+    whenToUse: "Use to show progress through a wizard or multi-step dialog, such as creating an API key or editing pricing.",
+    accessibility: "Label the list with aria-label. The current step exposes aria-current=\"step\", and every step announces whether it is completed, current, or upcoming.",
+    options: [
+      { name: "orientation", values: "horizontal (default) · vertical", guidance: "Horizontal suits dialogs and short flows; on narrow screens only the current label stays visible. Use vertical for longer flows with descriptions." },
+      { name: "currentStep", values: "0 … steps.length", guidance: "Zero-based. Pass steps.length once every step is complete." },
+    ],
   },
   "supporting-primitives": {
     whenToUse: "Use these focused helpers for progress, loading placeholders, applied filters, keyboard hints, separators, and transient feedback.",
@@ -95,19 +116,26 @@ const guidance: Record<string, ComponentGuidance> = {
   "page-composition": {
     whenToUse: "Use to establish predictable page titles, actions, toolbars, detail sections, and key-value summaries.",
     accessibility: "Keep one page-level heading, preserve heading order, and label toolbars when more than one appears.",
-    options: [{ name: "composition", values: "PageHeader · PageToolbar · DetailSections · ResourceSummary", guidance: "Compose only the regions the page needs." }],
+    options: [
+      { name: "composition", values: "PageHeader · PageToolbar · DetailSections · ResourceSummary", guidance: "Compose only the regions the page needs. Empty PageToolbar slots collapse, and a toolbar with no content renders nothing." },
+      { name: "inset", values: "--ds-frame-padding-x · --ds-frame-content-inset", guidance: "PageFrame, PageHeader, PageToolbar, and DetailBackLink share one left edge at every breakpoint. Inside PageFrame the header adds no inset of its own; a surface can set --ds-frame-content-inset for headers it contains." },
+    ],
   },
   "inventory-and-tables": {
     whenToUse: "Use for sortable, filterable, selectable datasets and responsive resource inventories.",
     accessibility: "Keep selection status announced, label bulk actions, and provide a meaningful mobile row rather than forcing horizontal table scrolling.",
-    options: [{ name: "presentation", values: "DataTable · EntityTable · InventorySurface", guidance: "DataTable owns interaction; InventorySurface owns responsive presentation." }],
+    options: [
+      { name: "presentation", values: "DataTable · EntityTable · InventorySurface", guidance: "DataTable owns interaction; InventorySurface owns responsive presentation." },
+      { name: "page size", values: "paginationPageSizes.inventory (25) · paginationPageSizes.detail (10)", guidance: "Use 25 rows for full-page inventories and 10 for tables inside detail pages. The Rows control and page buttons share the small control height." },
+    ],
   },
   "metrics-and-data-panels": {
     whenToUse: "Use for operational metrics, chart-adjacent summaries, divided data regions, and compact trend communication.",
     accessibility: "Every visualization slot needs a textual summary. Direction and sentiment must be expressed in text, not color alone.",
     options: [
       { name: "MetricBand presentation", values: "default · compact", guidance: "Compact uses one full-width row per item below desktop and the configured number of columns on desktop; details and values wrap without individual card backgrounds." },
-      { name: "MetricBandItem value", values: "React node · loading skeleton · unavailable em dash", guidance: "Values can contain links. In compact presentation, an omitted value renders as unavailable instead of a misleading zero." },
+      { name: "MetricBandItem value", values: "React node · loading skeleton · emptyValue", guidance: "Values can contain links. A missing value (null, or omitted in compact presentation) renders quietly as an em dash or as emptyValue, such as \"Never\". Detail lines are reserved so values share a baseline." },
+      { name: "DailyVolumeChart", values: "total · stacked not-successful segment", guidance: "Use for every per-day measure: calendar-true days, a stated scale, first, middle, and last date labels, and an exact-values table." },
       { name: "emphasis", values: "primary · supporting", guidance: "Give primary metrics more visual weight without changing their semantic meaning." },
     ],
   },
@@ -122,7 +150,11 @@ const guidance: Record<string, ComponentGuidance> = {
   "state-and-feedback": {
     whenToUse: "Use for empty, loading, error, confirmation, and command-oriented states that interrupt or replace normal content.",
     accessibility: "Name the state, explain the recovery path, and move or announce focus only when the state appears dynamically.",
-    options: [{ name: "state", values: "empty · loading · error · confirmation · command", guidance: "Choose the narrowest pattern for the user’s current task." }],
+    options: [
+      { name: "state", values: "empty · loading · error · confirmation · command", guidance: "Choose the narrowest pattern for the user’s current task." },
+      { name: "StateView size", values: "default · compact", guidance: "Default replaces a page's primary content; compact fits inside sections, panels, and tabs." },
+      { name: "divider", values: "false (default) · true", guidance: "Add the bottom divider only when the state replaces rows inside a table body." },
+    ],
   },
   "filters-and-preferences": {
     whenToUse: "Use FilterBar for removable applied criteria and preference controls for design-system-wide appearance and density.",

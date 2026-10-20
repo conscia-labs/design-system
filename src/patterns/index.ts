@@ -1,6 +1,7 @@
 export * from "./entity-table";
 export * from "./command-palette";
 export * from "./data-panel";
+export * from "./daily-volume-chart";
 export * from "./data-table";
 export * from "./detail-back-link";
 export * from "./filter-bar";

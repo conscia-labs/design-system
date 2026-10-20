@@ -113,6 +113,26 @@ playground route for each family.
   route-backed destinations, including pill-styled ones: use
   `<NavigationTabsList variant="pills">` rather than `Tabs` or local restyling,
   so links keep `aria-current="page"`.
+- Use `variant="nested"` for a tab group inside a section or another tab panel
+  so it stays visibly subordinate to page-level tabs.
+- `Table` scrolls wide content horizontally by default and fades the edge with
+  more columns. Pass `scrollable={false}` only when you render a stacked layout
+  at narrow widths. Use `paginationPageSizes.inventory` (25) for full-page
+  inventories and `paginationPageSizes.detail` (10) for tables in detail pages.
+- `StateView` and `ErrorState` have no border by default. Use `size="compact"`
+  inside sections, panels, and tabs, and `divider` only when the state replaces
+  table rows.
+- Badge tones carry meaning: `neutral` for lifecycle states (Active, Enabled,
+  Published), `success` only for positive evidence (Healthy, Ready, Verified),
+  `information` for pending work, `warning` for problems that need action, and
+  `danger` for failures. Badges size to their content; do not add `w-fit`.
+- Use `Disclosure` instead of native `<details>`, `DateTimeField` instead of a
+  native `datetime-local` input, `Stepper` for wizard progress, and
+  `DailyVolumeChart` for per-day measures.
+- `PageFrame`, `PageHeader`, `PageToolbar`, and `DetailBackLink` share one left
+  edge through `--ds-frame-padding-x`. Do not wrap them in extra padding.
+- For a missing `MetricBandItem` value, pass `value={null}` or an `emptyValue`
+  such as "Never" rather than a display-size word.
 - Use `Select` for a short, familiar list. Use `SearchableSelect` for longer
   lists that users need to filter.
 - Use `LoadingButton` for asynchronous actions so layout, disabled state, and

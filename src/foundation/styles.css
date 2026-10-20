@@ -189,6 +189,8 @@
   --ds-space-group: 1.25rem;
   --ds-space-section: 2rem;
   --ds-space-page: 2.5rem;
+  /* Horizontal inset shared by PageFrame, PageHeader, PageToolbar, and DetailBackLink. */
+  --ds-frame-padding-x: 0.75rem;
   --ds-tab-padding-x: 0.875rem;
   --ds-tab-rail-height: 2.75rem;
   --ds-tab-rail-height-compact: 2.5rem;
@@ -357,6 +359,13 @@
   --ds-table-head-tracking: 0.06em;
 }
 
+@media (min-width: 48rem) {
+  :root,
+  [data-appearance-scope="light"] {
+    --ds-frame-padding-x: var(--ds-space-page);
+  }
+}
+
 :root.dark,
 :root[data-appearance="dark"] {
   color-scheme: dark;
@@ -416,14 +425,16 @@
   --warning-border: #8a650f;
   --warning-foreground: #fff4d8;
   --danger: #ffa1a8;
-  --danger-background: #55212a;
+  /* A quiet tint rather than a saturated block; text contrast stays above 11:1. */
+  --danger-background: #3e2a2f;
   --danger-border: #9d3c48;
   --danger-foreground: #ffe8e9;
   --neutral: #a7a9b3;
   --neutral-background: #282b31;
   --neutral-border: rgb(255 255 255 / 12%);
   --neutral-foreground: #e5e8ed;
-  --chart-series-1: var(--brand-accent);
+  /* At least 3:1 against canvas, surface, raised, and muted dark surfaces. */
+  --chart-series-1: #8f9bff;
   --chart-series-2: var(--information);
   --chart-series-3: var(--success);
   --chart-series-4: var(--warning);
@@ -1112,6 +1123,39 @@
     [data-slot="workbench-rail"][data-variant="secondary"] {
       transition: none;
     }
+  }
+
+  /* Wide tables fade the edge that has more columns to scroll to. */
+  [data-slot="table-container"][data-scroll-position="start"] {
+    mask-image: linear-gradient(
+      to right,
+      #000 0,
+      #000 calc(100% - 2rem),
+      transparent 100%
+    );
+  }
+
+  [data-slot="table-container"][data-scroll-position="middle"] {
+    mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 2rem,
+      #000 calc(100% - 2rem),
+      transparent 100%
+    );
+  }
+
+  [data-slot="table-container"][data-scroll-position="end"] {
+    mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 2rem,
+      #000 100%
+    );
+  }
+
+  [data-slot="table-container"][data-scroll-position]:focus-visible {
+    mask-image: none;
   }
 
   [data-slot="tabs-list"][data-scroll-position="start"],

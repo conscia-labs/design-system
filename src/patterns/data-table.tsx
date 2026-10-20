@@ -205,7 +205,7 @@ function DataTable<TData>({
                           type="button"
                           variant="ghost"
                           size="sm"
-                          className="-ml-2 h-8 gap-1.5 px-2 text-[var(--ds-metadata)] font-semibold uppercase text-text-supporting hover:text-text-primary"
+                          className="ds-type-table-head -ml-2 h-8 gap-1.5 px-2 uppercase text-text-supporting hover:text-text-primary"
                           onClick={header.column.getToggleSortingHandler()}
                           aria-label={`Sort by ${meta?.label ?? header.column.id}`}
                         >

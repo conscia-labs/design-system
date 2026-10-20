@@ -74,6 +74,10 @@ function FormSelect({
 }: FormSelectProps) {
   const [internalValue, setInternalValue] = React.useState(defaultValue ?? "");
   const currentValue = value ?? internalValue;
+  // An empty value is "no selection" unless an option explicitly uses "".
+  const hasEmptyOption = options.some((option) => option.value === "");
+  const selectValue =
+    currentValue === "" && !hasEmptyOption ? null : toSelectValue(currentValue);
 
   function handleValueChange(nextValue: string) {
     const actualValue = fromSelectValue(nextValue);
@@ -89,7 +93,7 @@ function FormSelect({
     <div className={cn("min-w-0", className)} onClick={onClick}>
       <Select
         name={name}
-        value={toSelectValue(currentValue)}
+        value={selectValue}
         required={required}
         disabled={disabled}
         modal={modal}

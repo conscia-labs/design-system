@@ -5,7 +5,11 @@ import { Tabs as BaseTabs } from "@base-ui/react/tabs";
 
 import { cn } from "./utils";
 
-type TabsVariant = "underline" | "divider" | "pills" | "segmented";
+/**
+ * `nested` is for a tab group inside a section or another tab panel: a quiet
+ * text rail that stays visually subordinate to page-level tabs.
+ */
+type TabsVariant = "underline" | "divider" | "pills" | "segmented" | "nested";
 type TabsSize = "default" | "compact";
 type NavigationTabsVariant = Extract<TabsVariant, "underline" | "divider" | "pills">;
 type ScrollPosition = "none" | "start" | "middle" | "end";
@@ -161,8 +165,9 @@ function TabsList({
         resolvedVariant !== "segmented" && tabRailClasses,
         resolvedVariant === "divider" && "border-b border-border-subtle",
         resolvedVariant === "pills" && "gap-1",
+        resolvedVariant === "nested" && "gap-5 border-b border-border-subtle",
         resolvedVariant !== "segmented" &&
-          (resolvedSize === "compact"
+          (resolvedSize === "compact" || resolvedVariant === "nested"
             ? "h-[var(--ds-tab-rail-height-compact)]"
             : "h-[var(--ds-tab-rail-height)]"),
         resolvedVariant === "segmented" &&
@@ -210,6 +215,8 @@ function TabsTrigger({
             pillTabClasses,
             "data-active:bg-selection-background data-active:font-semibold data-active:text-selection-foreground",
           ),
+        resolvedVariant === "nested" &&
+          "relative inline-flex h-full shrink-0 snap-start items-center justify-center gap-1.5 whitespace-nowrap px-0.5 text-sm font-medium text-text-supporting outline-none transition-colors duration-150 after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:rounded-full after:bg-transparent hover:text-text-primary focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus/60 data-active:text-text-primary data-active:after:bg-text-primary",
         resolvedVariant === "segmented" &&
           "inline-flex h-full items-center justify-center gap-2 whitespace-nowrap rounded-[calc(var(--ds-radius-control)-2px)] px-3 text-sm font-medium text-text-supporting outline-none transition-[background-color,color,box-shadow] hover:text-text-primary focus-visible:ring-2 focus-visible:ring-focus/60 data-active:bg-canvas data-active:text-text-primary data-active:shadow-xs",
         className,

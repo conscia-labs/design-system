@@ -151,7 +151,7 @@ export function AppShell({ children, version }: { children: ReactNode; version: 
           </Button>
         </AppSidebarFooter>
       </AppSidebar>
-      <MainRegion><PageFrame width="full" className="p-0 md:p-0">{children}</PageFrame></MainRegion>
+      <MainRegion><PageFrame width="full" className="p-0 md:p-0 [--ds-frame-content-inset:var(--ds-surface-padding)]">{children}</PageFrame></MainRegion>
     </DesignAppShell>
   );
 }
