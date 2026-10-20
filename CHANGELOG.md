@@ -1,12 +1,12 @@
 # Changelog
 
-## Unreleased
+## 1.4.0 - 2026-10-20
 
 - Add `variant="pills"` to `NavigationTabsList`, sharing the `Tabs` pills
   treatment so route-backed navigation can use pills while keeping link
   semantics and `aria-current="page"`. Underline remains the default.
 
-Admin UI design-system handoff (DS-08 to DS-23).
+Admin UI design-system handoff (DS-08 to DS-23):
 
 - `Table` scrolls wide content horizontally by default instead of clipping it,
   and fades the edge that has more columns while scrolled. `scrollable={false}`
@@ -31,6 +31,9 @@ Admin UI design-system handoff (DS-08 to DS-23).
   lighter `--chart-series-1` (at least 3:1 against every dark surface).
 - Disabled primary buttons keep a tinted action surface with readable text.
 - `Badge` sizes to its content by default; tone meanings are documented.
+
+- Refresh the playground visual baselines and update the interaction specs for
+  the redesigned playground header and navigation.
 
 ## 1.3.0 - 2026-10-06
 
