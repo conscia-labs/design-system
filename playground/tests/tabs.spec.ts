@@ -47,13 +47,13 @@ for (const [appearance, density] of [["light", "comfortable"], ["dark", "comfort
 
     const contentPills = page.getByRole("tablist", { name: "Pills example", exact: true });
     const selectedPill = contentPills.getByRole("tab", { selected: true });
-    for (const property of ["background-color", "color", "font-weight", "border-radius", "height", "padding-left"]) {
+    for (const property of ["background-color", "color", "font-weight", "border-radius", "height", "padding-left", "box-shadow"]) {
       const expected = await selectedPill.evaluate((element, name) => getComputedStyle(element).getPropertyValue(name), property);
       await expect(active).toHaveCSS(property, expected);
     }
     await expect(list).toHaveCSS("column-gap", await contentPills.evaluate((element) => getComputedStyle(element).columnGap));
     await expect(list).toHaveCSS("height", await contentPills.evaluate((element) => getComputedStyle(element).height));
-    await expect(active).toHaveCSS("box-shadow", "none");
+    await expect(active).not.toHaveCSS("box-shadow", "none");
 
     await active.focus();
     await page.keyboard.press("Tab");

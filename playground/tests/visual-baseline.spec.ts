@@ -22,6 +22,7 @@ const routes = [
   { id: "developer-overview", path: "/developer-overview", heading: "Developer overview example" },
   { id: "components", path: "/components", heading: "Components" },
   { id: "component-button", path: "/components/button", heading: "Button" },
+  { id: "component-tabs", path: "/components/tabs", heading: "Tabs" },
   { id: "typography", path: "/typography", heading: "Typography" },
 ] as const;
 

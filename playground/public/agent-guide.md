@@ -128,7 +128,10 @@ playground route for each family.
   `danger` for failures. Badges size to their content; do not add `w-fit`.
 - Use `Disclosure` instead of native `<details>`, `DateTimeField` instead of a
   native `datetime-local` input, `Stepper` for wizard progress, and
-  `DailyVolumeChart` for per-day measures.
+  `DailyVolumeChart` for per-day measures. Its successful series uses the
+  `success` token by default so it matches outcome badges and trends nearby;
+  pass `successfulTone="accent"` for a measure with no outcome, and
+  `successfulTone` / `unsuccessfulTone` to choose other semantic tones.
 - `PageFrame`, `PageHeader`, `PageToolbar`, and `DetailBackLink` share one left
   edge through `--ds-frame-padding-x`. Do not wrap them in extra padding.
 - For a missing `MetricBandItem` value, pass `value={null}` or an `emptyValue`

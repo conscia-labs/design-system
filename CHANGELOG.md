@@ -1,6 +1,35 @@
 # Changelog
 
-## Unreleased
+## 1.5.1 - 2026-10-26
+
+A patch release: the active option in segmented and pill tabs is now clearly
+visible in light mode, and tables get distinct header and footer bands.
+Consumers upgrade without code changes.
+
+Tabs:
+
+- Segmented tabs sit on a new `surface-track` band and the active option is a
+  raised `surface-track-selected` chip with `shadow-raised` and a
+  `border-subtle` ring. The selected fill reaches 1.33:1 against the track in
+  light mode and 1.39:1 in dark mode (previously about 1.01:1 in light mode).
+- Pill tabs, including `NavigationTabsList variant="pills"`, fill the active
+  pill with the new `selection-background-strong` token and add a
+  `selection-border` ring. The fill reaches 1.31:1 against the canvas and
+  1.44:1 against white surfaces in light mode, 1.57:1 and 1.46:1 in dark mode
+  (previously about 1.06:1 against white). Text colours, focus rings, hover
+  states, layout and sizes are unchanged.
+- The Tabs playground page shows both variants on the canvas and inside a
+  `DataPanelHeader`, and joins the visual baseline routes.
+
+Charts:
+
+- `DailyVolumeChart` colours its successful series with the `success` token
+  instead of the first chart series blue, so "Successful" matches outcome
+  badges and breakdowns on the same page. New `successfulTone` and
+  `unsuccessfulTone` props (`success`, `danger`, `warning`, `information`,
+  `accent`) choose the series colours, and `successfulLabel` names the main
+  series in the legend. Pass `successfulTone="accent"` to keep the previous
+  blue for a measure with no outcome.
 
 Tables:
 

@@ -171,7 +171,7 @@ function TabsList({
             ? "h-[var(--ds-tab-rail-height-compact)]"
             : "h-[var(--ds-tab-rail-height)]"),
         resolvedVariant === "segmented" &&
-          "inline-flex h-[var(--ds-control-height)] items-center gap-1 self-start rounded-md bg-surface-muted p-1",
+          "inline-flex h-[var(--ds-control-height)] items-center gap-1 self-start rounded-md bg-surface-track p-1",
         className,
       )}
       {...props}
@@ -213,12 +213,12 @@ function TabsTrigger({
         resolvedVariant === "pills" &&
           cn(
             pillTabClasses,
-            "data-active:bg-selection-background data-active:font-semibold data-active:text-selection-foreground",
+            "data-active:bg-selection-background-strong data-active:font-semibold data-active:text-selection-foreground data-active:ring-1 data-active:ring-inset data-active:ring-selection-border/60",
           ),
         resolvedVariant === "nested" &&
           "relative inline-flex h-full shrink-0 snap-start items-center justify-center gap-1.5 whitespace-nowrap px-0.5 text-sm font-medium text-text-supporting outline-none transition-colors duration-150 after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:rounded-full after:bg-transparent hover:text-text-primary focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus/60 data-active:text-brand-supporting data-active:after:bg-brand-supporting",
         resolvedVariant === "segmented" &&
-          "inline-flex h-full items-center justify-center gap-2 whitespace-nowrap rounded-[calc(var(--ds-radius-control)-2px)] px-3 text-sm font-medium text-text-supporting outline-none transition-[background-color,color,box-shadow] hover:text-text-primary focus-visible:ring-2 focus-visible:ring-focus/60 data-active:bg-canvas data-active:text-text-primary data-active:shadow-xs",
+          "inline-flex h-full items-center justify-center gap-2 whitespace-nowrap rounded-[calc(var(--ds-radius-control)-2px)] px-3 text-sm font-medium text-text-supporting outline-none transition-[background-color,color,box-shadow] hover:text-text-primary focus-visible:ring-2 focus-visible:ring-focus/60 data-active:bg-surface-track-selected data-active:text-text-primary data-active:shadow-raised data-active:ring-1 data-active:ring-inset data-active:ring-border-subtle",
         className,
       )}
       {...props}
@@ -334,7 +334,7 @@ function NavigationTab({
         variant === "pills"
           ? cn(
               pillTabClasses,
-              "data-[active=true]:bg-selection-background data-[active=true]:font-semibold data-[active=true]:text-selection-foreground",
+              "data-[active=true]:bg-selection-background-strong data-[active=true]:font-semibold data-[active=true]:text-selection-foreground data-[active=true]:ring-1 data-[active=true]:ring-inset data-[active=true]:ring-selection-border/60",
             )
           : navigationTabClasses,
         className,
