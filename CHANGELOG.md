@@ -1,5 +1,65 @@
 # Changelog
 
+## 1.5.0 - 2026-10-26
+
+A livelier visual layer that keeps the existing principles: semantic tokens,
+density, and accessible contrast.
+
+Foundation:
+
+- Neutrals carry a faint Conscia burgundy cast in both themes, and the light
+  canvas sits a step below white so surfaces lift. Muted text contrast on
+  canvas improves from 4.43:1 to 5.02:1. Several light and dark neutral token
+  values change.
+- New three-tier elevation scale: `--ds-shadow-raised`, `--ds-shadow-floating`,
+  and `--ds-shadow-overlay`, with dark-mode edge highlights and matching
+  `shadow-raised`, `shadow-floating`, and `shadow-overlay` utilities. `Card`
+  now rests on the raised tier by default. `Select` uses floating, and
+  `Dialog`, `AlertDialog`, and `Sheet` use overlay.
+- Stronger type hierarchy: heavier, tighter page titles (`--ds-page-title` is
+  now 1.875rem comfortable and 1.625rem compact), separate
+  `--ds-display-*` and `--ds-section-title-tracking` tokens, and a
+  `ds-type-metric-value` utility for metric readouts. Bare `h1`–`h4` take the
+  section title weight and tracking.
+- New `brand-emphasis` color role, a mid-tone burgundy for identity accents,
+  used on the primary `MetricCard` edge and state-view spots. Blue stays
+  reserved for actions and selection.
+- Motion tokens (`--ds-duration-*`, `--ds-ease-*`, `ease-standard`,
+  `ease-enter`, `ease-exit`). Dialogs, alert dialogs, sheets, popovers, menus,
+  selects, tooltips, and toasts now animate in and out; the
+  `animate-in`/`animate-out` classes they carried had no backing utilities and
+  are removed. Viewers who prefer reduced motion see overlays appear and
+  disappear at once.
+- `ds-texture-wash` (used by `PageHeader`) and `ds-texture-brand` utilities, the
+  latter with a faint Conscia mark watermark, plus a soft glow behind the
+  sidebar header. Textures are for chrome and brand moments, never behind data.
+
+Charts and metrics:
+
+- The chart series palette no longer reuses status colors. Series 1–5 are
+  electric blue, plum, green, copper, and violet, validated per theme for
+  color-vision separation and 3:1 contrast. `DailyVolumeChart` marks
+  unsuccessful volume with the danger status color. New
+  `--chart-area-opacity-start` and `--chart-area-opacity-end` tokens.
+- `MetricCard` gains an opt-in `countUp` for numeric values, with `format`,
+  `locale`, and `durationMs` options. Screen readers hear only the final value.
+- `MetricTrend` renders as a tinted badge. Positive trends use Conscia green
+  (`--trend-positive` now maps to `--brand-supporting`), with new
+  `--trend-*-background` tokens.
+- `ValueMeter` adds a `brand` tone, now the default, filled with a blue-to-
+  burgundy blend. Pass `tone="neutral"` for the previous appearance.
+
+Components:
+
+- `Button` presses down slightly when active. `Card` adds `interactive` for
+  cards that are links or entry points. `Skeleton` shimmers instead of pulsing.
+- `TableRow` adds `interactive`, a pointer plus an action-colored edge rail on
+  hover and focus. `DataTable` sets it for clickable rows.
+- `StateView` renders its icon in a duotone spot and adds `tone` (`brand`
+  default, `neutral`, `success`); `ErrorState` uses `danger`.
+- The `nested` Tabs variant uses the Conscia green indicator.
+- Refresh the playground visual baselines for the new foundation.
+
 ## 1.4.0 - 2026-10-20
 
 - Add `variant="pills"` to `NavigationTabsList`, sharing the `Tabs` pills
