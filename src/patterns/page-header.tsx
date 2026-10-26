@@ -49,7 +49,14 @@ function PageHeader({
   return (
     <header
       data-slot="page-header"
-      className={cn("flex flex-col gap-3 ds-texture-wash border-b border-border-subtle bg-canvas px-[var(--ds-frame-content-inset,var(--ds-frame-padding-x))] py-4 lg:flex-row lg:items-start lg:justify-between", className)}
+      className={cn(
+        // On the page the header shares the frame's left edge. Inside a Card
+        // or InventorySurface it sits on the card surface with the surface's
+        // own inset and no page texture, so consumers add no padding of their own.
+        "flex flex-col gap-3 ds-texture-wash border-b border-border-subtle bg-canvas px-[var(--ds-frame-content-inset,var(--ds-frame-padding-x))] py-4 lg:flex-row lg:items-start lg:justify-between",
+        "in-data-[slot=card]:bg-transparent in-data-[slot=card]:px-[var(--ds-surface-padding)] in-data-[slot=card]:bg-none in-data-[slot=inventory-surface]:bg-transparent in-data-[slot=inventory-surface]:px-[var(--ds-surface-padding)] in-data-[slot=inventory-surface]:bg-none",
+        className,
+      )}
       {...props}
     >
       <div className="min-w-0">

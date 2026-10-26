@@ -134,10 +134,11 @@ playground route for each family.
   `successfulTone` / `unsuccessfulTone` to choose other semantic tones.
 - `PageFrame`, `PageHeader`, `PageToolbar`, and `DetailBackLink` share one left
   edge through `--ds-frame-padding-x`. Do not wrap them in extra padding.
-- A `PageToolbar` inside a `Card` or `InventorySurface` takes the surface's
-  own inset (`--ds-surface-padding`), a bottom border, and the card surface,
-  while the table below keeps its tinted header band. Do not add padding,
-  border, or background classes to it, and do not restyle it from global CSS.
+- A `PageHeader` or `PageToolbar` inside a `Card` or `InventorySurface` takes
+  the surface's own inset (`--ds-surface-padding`), a bottom border, and the
+  card surface, while the table below keeps its tinted header band. Do not add
+  padding, border, or background classes to them, and do not restyle them from
+  global CSS.
 - One header type per table: every `DataTable` header cell uses the
   table-head type whether or not it sorts. The sort control is the header text
   plus its icon, not a button-sized label. Do not pass `Button` type classes

@@ -27,6 +27,9 @@ Tables and toolbars:
   uppercase) like plain headers. The sort control is now a plain button
   carrying `ds-type-table-head`, so a `Button`'s `ds-type-button` size no longer
   wins in a table that mixes sortable and static columns.
+- A `PageHeader` inside a `Card` or `InventorySurface` takes the surface inset
+  and the card surface without the page wash texture, matching the toolbar
+  below it. Standalone page headers are unchanged.
 - A `PageToolbar` inside a `Card` or `InventorySurface` takes the surface inset
   (`--ds-surface-padding`) and keeps its bottom border on the card surface, so
   the search field and trailing actions no longer touch the card edges inside a

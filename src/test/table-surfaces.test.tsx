@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { DataTable } from "../patterns/data-table";
+import { PageHeader } from "../patterns/page-header";
 import { PageToolbar } from "../patterns/page-toolbar";
 import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "../primitives/table";
 
@@ -85,6 +86,18 @@ describe("Table surfaces", () => {
       <Table><TableCaption visible>Environments</TableCaption><TableBody><TableRow><TableCell>Prod</TableCell></TableRow></TableBody></Table>,
     );
     expect(primitive.querySelector("caption")!.className).not.toContain("sr-only");
+  });
+
+  it("insets the page header with the surface padding inside cards and keeps the frame edge on the page", () => {
+    const { container } = render(<PageHeader title="Connections" />);
+    const className = container.querySelector('[data-slot="page-header"]')!.className;
+    expect(className).toContain("px-[var(--ds-frame-content-inset,var(--ds-frame-padding-x))]");
+    expect(className).toContain("bg-canvas");
+    expect(className).toContain("border-b");
+    for (const slot of ["card", "inventory-surface"]) {
+      expect(className).toContain(`in-data-[slot=${slot}]:px-[var(--ds-surface-padding)]`);
+      expect(className).toContain(`in-data-[slot=${slot}]:bg-transparent`);
+    }
   });
 
   it("sizes sortable headers with the small control height", () => {
