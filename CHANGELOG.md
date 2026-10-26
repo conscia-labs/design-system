@@ -1,5 +1,26 @@
 # Changelog
 
+## Unreleased
+
+Tables:
+
+- Column headers and the `DataTable` pagination footer sit on a new
+  `surface-table-header` band, darker than both the rows and the card, with a
+  `border-default` divider. `TableFooter` uses the same band. Header labels
+  keep 5.26:1 contrast in light mode and 7.20:1 in dark mode.
+- Inside a `Card` or `InventorySurface`, `DataTable` rows and `PageToolbar`
+  take the card surface instead of painting the canvas. Products can drop
+  rules that forced in-card toolbars onto the card surface.
+- `TableCaption` is now screen-reader-only by default, and `Table` places
+  visible captions above the table. Pass `visible` to show one, or
+  `showCaption` on `DataTable` and `EntityTable`. A caption no longer renders
+  between the last row and the pagination.
+- On a coarse primary pointer, `--ds-control-height`, `-sm` and `-lg` rise to
+  at least 44px in every density. Pagination buttons, the Rows control and
+  sortable headers reach touch size without product overrides, so remove
+  blanket `[&_button]:min-h-11` rules. Sortable header buttons now follow
+  `--ds-control-height-sm` instead of a fixed 32px.
+
 ## 1.5.0 - 2026-10-26
 
 A livelier visual layer that keeps the existing principles: semantic tokens,

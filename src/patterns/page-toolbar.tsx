@@ -27,7 +27,8 @@ function PageToolbar({
     <div
       data-slot="page-toolbar"
       className={cn(
-        "grid gap-2 border-b border-border-subtle bg-canvas px-[var(--ds-frame-content-inset,var(--ds-frame-padding-x))] py-3",
+        // Inside a Card or InventorySurface the toolbar sits on the card surface.
+        "grid gap-2 border-b border-border-subtle bg-canvas in-data-[slot=card]:bg-transparent in-data-[slot=inventory-surface]:bg-transparent px-[var(--ds-frame-content-inset,var(--ds-frame-padding-x))] py-3",
         hasStart && hasEnd && "lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center",
         className,
       )}

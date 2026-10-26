@@ -51,7 +51,10 @@ type DataTableProps<TData> = {
   pageSizeOptions?: number[];
   totalLabel?: React.ReactNode;
   mobileRow?: (item: TData) => React.ReactNode;
+  /** Names the table for assistive technology. Hidden unless `showCaption` is set. */
   caption?: React.ReactNode;
+  /** Shows `caption` as visible text above the table. */
+  showCaption?: boolean;
   empty?: React.ReactNode;
   className?: string;
 };
@@ -78,6 +81,7 @@ function DataTable<TData>({
   totalLabel,
   mobileRow,
   caption,
+  showCaption = false,
   empty,
   className,
 }: DataTableProps<TData>) {
@@ -175,10 +179,10 @@ function DataTable<TData>({
   const showPagination = Boolean(pagination && onPaginationChange);
 
   return (
-    <div data-slot="data-table" className={cn("bg-canvas", className)}>
+    <div data-slot="data-table" className={cn("bg-canvas in-data-[slot=card]:bg-transparent in-data-[slot=inventory-surface]:bg-transparent", className)}>
       <div className={mobileRow ? "hidden md:block" : undefined}>
         <Table>
-          {caption ? <TableCaption>{caption}</TableCaption> : null}
+          {caption ? <TableCaption visible={showCaption}>{caption}</TableCaption> : null}
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -205,7 +209,7 @@ function DataTable<TData>({
                           type="button"
                           variant="ghost"
                           size="sm"
-                          className="ds-type-table-head -ml-2 h-8 gap-1.5 px-2 uppercase text-text-supporting hover:text-text-primary"
+                          className="ds-type-table-head -ml-2 h-[var(--ds-control-height-sm)] gap-1.5 px-2 uppercase text-text-supporting hover:text-text-primary"
                           onClick={header.column.getToggleSortingHandler()}
                           aria-label={`Sort by ${meta?.label ?? header.column.id}`}
                         >
@@ -266,6 +270,7 @@ function DataTable<TData>({
           totalLabel={totalLabel}
           onPageChange={(nextPage) => table.setPageIndex(nextPage - 1)}
           onPageSizeChange={(nextSize) => table.setPageSize(nextSize)}
+          className="border-border-default bg-surface-table-header"
         />
       ) : null}
     </div>
