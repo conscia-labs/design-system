@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 
 import { AppShell, AppSidebar, AppSidebarContent } from "../patterns/app-shell";
 import { MetricBand, MetricBandItem } from "../patterns/metric-band";
+import { PageHeader } from "../patterns/page-header";
 
 describe("optional quiet AppSidebar treatment", () => {
   it("keeps the existing appearance default and omits treatment by default", () => {
@@ -74,5 +75,19 @@ describe("MetricBand presentations", () => {
     expect(screen.getByRole("link", { name: "6" }).getAttribute("href")).toBe("/models");
     expect(container.querySelector('[data-slot="skeleton"]')).toBeTruthy();
     expect(screen.getByLabelText("Unavailable").textContent).toBe("—");
+  });
+});
+
+describe("PageHeader brand wash", () => {
+  it("leaves the wash to the workspace by default and turns it off on request", () => {
+    const { rerender } = render(<PageHeader title="Connections" />);
+    const header = () => screen.getByRole("banner");
+    expect(header().getAttribute("data-texture")).toBe("wash");
+    expect(header().className).not.toContain("ds-texture-wash");
+    expect(header().className).not.toContain("bg-canvas");
+
+    rerender(<PageHeader title="Connections" texture={false} />);
+    expect(header().getAttribute("data-texture")).toBe("none");
+    expect(header().className).toContain("bg-canvas");
   });
 });

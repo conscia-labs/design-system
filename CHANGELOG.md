@@ -1,5 +1,19 @@
 # Changelog
 
+## Unreleased
+
+- Fix the `PageHeader` brand wash drawing a visible box when the header is
+  inset by `PageFrame`. The wash now starts from the workspace corner, where
+  the top bar and sidebar meet: `MainRegion` paints it from its content box,
+  a `PageFrame` outside an app shell paints it from its own corner, and a
+  header outside both gets a contained wash that fades out before every edge.
+  It works with any `PageFrame` width and with a `DetailBackLink` above the
+  header.
+- Add `PageHeader texture={false}` to turn the wash off. The header keeps an
+  opaque canvas background when the wash is off.
+- `ds-texture-wash` is documented as suitable only for elements whose
+  top-left corner touches the workspace edges.
+
 ## 1.5.0 - 2026-10-26
 
 A livelier visual layer that keeps the existing principles: semantic tokens,
