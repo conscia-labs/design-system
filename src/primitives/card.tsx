@@ -8,25 +8,35 @@ const cardVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-surface shadow-none",
+        default: "bg-surface shadow-[var(--ds-shadow-raised)]",
         muted: "bg-surface-muted shadow-none",
         elevated: "border-transparent bg-surface-raised shadow-[var(--ds-shadow-floating)]",
+      },
+      /**
+       * Lifts on hover and keyboard focus. Use for cards that are themselves a
+       * link or an entry point, never for static content.
+       */
+      interactive: {
+        true: "transition-[box-shadow,transform,border-color] duration-[var(--ds-duration-base)] ease-standard hover:-translate-y-px hover:border-border-strong hover:shadow-[var(--ds-shadow-floating)] focus-within:border-border-strong focus-within:shadow-[var(--ds-shadow-floating)]",
+        false: "",
       },
     },
     defaultVariants: {
       variant: "default",
+      interactive: false,
     },
   },
 );
 
 type CardProps = React.ComponentProps<"div"> & VariantProps<typeof cardVariants>;
 
-function Card({ className, variant, ...props }: CardProps) {
+function Card({ className, variant, interactive, ...props }: CardProps) {
   return (
     <div
       data-slot="card"
       data-variant={variant ?? "default"}
-      className={cn(cardVariants({ variant, className }))}
+      data-interactive={interactive ? "true" : undefined}
+      className={cn(cardVariants({ variant, interactive, className }))}
       {...props}
     />
   );

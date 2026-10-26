@@ -229,9 +229,10 @@ function DataTable<TData>({
                   key={row.id}
                   data-selected={row.getIsSelected() ? "true" : undefined}
                   aria-selected={row.getIsSelected() ? "true" : undefined}
+                  interactive={rowClickable}
                   tabIndex={rowClickable ? 0 : undefined}
                   aria-label={rowClickable ? getRowLabel?.(row.original) ?? row.id : undefined}
-                  className={cn(rowClickable && "cursor-pointer outline-none focus-visible:ring-[3px] focus-visible:ring-focus/45")}
+                  className={cn(rowClickable && "outline-none focus-visible:ring-[3px] focus-visible:ring-focus/45")}
                   onClick={() => {
                     if (rowClickable) onRowClick?.(row.original);
                   }}

@@ -119,7 +119,7 @@ function DailyVolumeChart({
             Successful
           </span>
           <span className="inline-flex items-center gap-1.5">
-            <span className="size-2.5 rounded-sm bg-chart-series-5" />
+            <span className="size-2.5 rounded-sm bg-danger" />
             {unsuccessfulLabel}
           </span>
         </div>
@@ -145,7 +145,7 @@ function DailyVolumeChart({
                   style={{ height: `${(day.value / scaleMaximum) * 100}%` }}
                 >
                   {unsuccessful ? (
-                    <div className="bg-chart-series-5" style={{ height: `${(unsuccessful / day.value) * 100}%` }} />
+                    <div className="bg-danger" style={{ height: `${(unsuccessful / day.value) * 100}%` }} />
                   ) : null}
                   <div className="flex-1 bg-chart-series-1" />
                 </div>

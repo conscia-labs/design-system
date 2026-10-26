@@ -7,7 +7,7 @@ function Skeleton({ "aria-hidden": ariaHidden, className, ...props }: React.Comp
     <div
       data-slot="skeleton"
       aria-hidden={ariaHidden ?? true}
-      className={cn("animate-pulse rounded-md bg-surface-muted", className)}
+      className={cn("ds-skeleton rounded-md", className)}
       {...props}
     />
   );

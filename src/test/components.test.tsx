@@ -177,6 +177,7 @@ describe("ValueMeter", () => {
     expect(meter.getAttribute("aria-valuenow")).toBe("100");
     expect(screen.getByText("100 of 100")).toBeTruthy();
     expect((meter.firstElementChild as HTMLElement).style.width).toBe("100%");
+    expect((meter.firstElementChild as HTMLElement).className).toContain("from-brand-accent");
 
     const results = await axe.run(container);
     expect(results.violations).toEqual([]);
@@ -735,6 +736,30 @@ describe("dashboard patterns", () => {
     expect(trend?.getAttribute("data-sentiment")).toBe("positive");
     expect(screen.getByText("Lead time trends downward.")).toBeTruthy();
     expect((await axe.run(container)).violations).toEqual([]);
+  });
+
+  it("counts numeric metric values up while announcing only the final value", async () => {
+    const { container, rerender } = render(<MetricCard label="Deploys" value={4.4} countUp />);
+    expect(container.querySelector(".sr-only")?.textContent).toBe("4.4");
+    await waitFor(() => {
+      expect(container.querySelector('[aria-hidden="true"]')?.textContent).toBe("4.4");
+    });
+
+    rerender(<MetricCard label="Deploys" value={12480} countUp={{ format: { maximumFractionDigits: 0 } }} />);
+    expect(container.querySelector(".sr-only")?.textContent).toBe("12,480");
+
+    rerender(<MetricCard label="Deploys" value="n/a" countUp />);
+    expect(screen.getByText("n/a")).toBeTruthy();
+    expect(container.querySelector(".sr-only")).toBeNull();
+  });
+
+  it("renders trends as tinted badges with readable negative text", () => {
+    const { container, rerender } = render(<MetricTrend direction="up" sentiment="positive" value="4%" accessibleLabel="Up 4 percent" />);
+    const trend = () => container.querySelector('[data-slot="metric-trend"]')!;
+    expect(trend().className).toContain("bg-trend-positive-background");
+    rerender(<MetricTrend direction="up" sentiment="negative" value="4%" accessibleLabel="Up 4 percent, a negative change" />);
+    expect(trend().className).toContain("bg-trend-negative-background");
+    expect(trend().className).toContain("text-danger-foreground");
   });
 
   it("provides flush and padded data panel anatomy", () => {

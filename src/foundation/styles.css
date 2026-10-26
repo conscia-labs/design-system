@@ -83,9 +83,14 @@
 [data-appearance-scope="light"] {
   color-scheme: light;
   --radius: 0.5rem;
-  --canvas: #f9f9fa;
+  /*
+   * Neutrals carry a faint burgundy cast (OKLCH hue ~323deg, chroma <= 0.016)
+   * so greys read as Conscia rather than default. Canvas sits a step below
+   * white so surfaces lift off it without relying on borders alone.
+   */
+  --canvas: #f6f3f6;
   --surface: #ffffff;
-  --surface-muted: #f3f4f5;
+  --surface-muted: #f3eff3;
   --surface-raised: #ffffff;
   --surface-floating: #ffffff;
   --surface-overlay: #ffffff;
@@ -93,11 +98,11 @@
   --surface-control-hover: var(--surface-raised);
   --surface-inverse: var(--palette-burgundy);
   --text-primary: #140c15;
-  --text-secondary: #373b4a;
-  --text-supporting: #5f6270;
-  --text-muted: #707481;
-  --control-indicator: #707481;
-  --text-disabled: #a7a9b3;
+  --text-secondary: #403941;
+  --text-supporting: #645d65;
+  --text-muted: #6e686e;
+  --control-indicator: #6e686e;
+  --text-disabled: #ada8ad;
   --text-inverse: #ffffff;
   --text-link: #3f4da8;
   --brand: var(--palette-burgundy);
@@ -112,6 +117,16 @@
   --brand-secondary-foreground: var(--brand-supporting-foreground);
   --brand-secondary-background: var(--brand-supporting-background);
   --brand-secondary-border: var(--brand-supporting-border);
+  /*
+   * Brand emphasis is a mid-tone of the Conscia burgundy hue. The official
+   * burgundy is near-black on light surfaces, so identity accents (underline
+   * tab indicators, the primary metric, state-view spots) use this tone.
+   * Blue stays reserved for actions and selection.
+   */
+  --brand-emphasis: #752870;
+  --brand-emphasis-foreground: #752870;
+  --brand-emphasis-background: #faf0f9;
+  --brand-emphasis-border: #e5c6e1;
   --action: #3f55df;
   --action-foreground: #ffffff;
   --action-hover: #3344c7;
@@ -121,11 +136,11 @@
   --selection-border: #aeb6e3;
   --selection-indicator: #6672dc;
   --selection-foreground: #242a44;
-  --control-border: #e4e5e5;
+  --control-border: #e7e3e8;
   --focus: #6371d9;
-  --border-subtle: #ececed;
-  --border-default: #d9dadd;
-  --border-strong: #babdc5;
+  --border-subtle: #ede9ed;
+  --border-default: #dcd7dc;
+  --border-strong: #c1bbc1;
   --information: #28758a;
   --information-background: #eaf5f7;
   --information-border: #b8dce3;
@@ -142,21 +157,36 @@
   --danger-background: #ffe8e9;
   --danger-border: #ffa1a8;
   --danger-foreground: #822c35;
-  --neutral: #5f6270;
-  --neutral-background: #f3f4f5;
-  --neutral-border: #d9dadd;
-  --neutral-foreground: #373b4a;
+  --neutral: #645d65;
+  --neutral-background: var(--surface-muted);
+  --neutral-border: var(--border-default);
+  --neutral-foreground: #403941;
+  /*
+   * Categorical series lead with the brand hues (electric blue, burgundy
+   * plum, Conscia green) and never reuse status colors, so "series 4" can't
+   * be read as a warning. Assign in order, never cycle. Validated for
+   * lightness band, chroma floor, protan/deutan separation (worst adjacent
+   * dE 12.7), normal-vision separation, and 3:1 against canvas and surface.
+   * Series that mean good or bad use the status or trend tokens instead.
+   */
   --chart-series-1: var(--brand-accent);
-  --chart-series-2: var(--information);
-  --chart-series-3: var(--success);
-  --chart-series-4: var(--warning);
-  --chart-series-5: var(--danger);
+  --chart-series-2: #9c2892;
+  --chart-series-3: #11957c;
+  --chart-series-4: #cf5604;
+  --chart-series-5: #733fbf;
   --chart-grid: var(--border-subtle);
   --chart-axis: var(--text-muted);
   --chart-annotation: var(--action-background);
-  --trend-positive: var(--success);
+  /* Area fills fade from the series color to transparent toward the baseline. */
+  --chart-area-opacity-start: 0.2;
+  --chart-area-opacity-end: 0;
+  --trend-positive: var(--brand-supporting);
   --trend-negative: var(--danger);
   --trend-neutral: var(--text-supporting);
+  /* Trend badges: Conscia green for positive change, danger tint for negative. */
+  --trend-positive-background: var(--brand-supporting-background);
+  --trend-negative-background: var(--danger-background);
+  --trend-neutral-background: var(--neutral-background);
   --sidebar-canvas: #19141a;
   --sidebar-header: #19141a;
   --sidebar-content: #19141a;
@@ -174,6 +204,10 @@
   --sidebar-group-label: color-mix(in oklab, #ffffff 72%, transparent);
   --sidebar-group-count: color-mix(in oklab, #ffffff 62%, transparent);
   --sidebar-focus-ring: var(--focus);
+  --sidebar-glow: color-mix(in oklab, #b0549f 26%, transparent);
+  /* Faint brand wash for chrome backgrounds (page header, onboarding canvases). Never behind data. */
+  --ds-texture-tint: color-mix(in oklab, var(--brand-emphasis) 7%, transparent);
+  --ds-texture-mark: color-mix(in oklab, var(--brand-emphasis) 8%, transparent);
   --font-sans: "Source Sans 3 Variable", "Source Sans 3", "Source Sans", "Aptos", "Segoe UI", Arial, sans-serif;
   --ds-space-inline: 0.5rem;
   --ds-space-control: 0.625rem;
@@ -217,17 +251,30 @@
   --ds-surface-padding: 1.25rem;
   --ds-table-header-height: 2.25rem;
   --ds-row-height: 2.75rem;
-  --ds-page-title: 1.75rem;
+  --ds-page-title: 1.875rem;
   --ds-display-title: clamp(2rem, 4vw, 3.5rem);
   --ds-section-title: 1.0625rem;
   --ds-body: 0.9375rem;
   --ds-metadata: 0.8125rem;
   --ds-body-line-height: 1.5;
-  --ds-title-weight: 600;
-  --ds-title-tracking: 0;
-  --ds-title-line-height: 1.25;
+  /*
+   * Hierarchy comes from weight and tracking as well as size: page and
+   * display titles are heavier and tighter, section titles stay at 600 so
+   * the step between them is visible.
+   */
+  --ds-title-weight: 650;
+  --ds-title-tracking: -0.022em;
+  --ds-title-line-height: 1.15;
+  --ds-display-weight: 700;
+  --ds-display-tracking: -0.035em;
+  --ds-display-line-height: 1.05;
   --ds-section-title-weight: 600;
+  --ds-section-title-tracking: -0.01em;
   --ds-section-title-line-height: 1.25;
+  --ds-metric-value: 1.625rem;
+  --ds-metric-value-primary: 2.5rem;
+  --ds-metric-value-weight: 550;
+  --ds-metric-value-tracking: -0.03em;
   --ds-ui-text-size: 0.875rem;
   --ds-ui-line-height: 1.25rem;
   --ds-navigation-label-size: 0.875rem;
@@ -254,8 +301,28 @@
   --ds-table-head-tracking: 0;
   --ds-radius-control: 0.375rem;
   --ds-radius-surface: 0.5rem;
-  --ds-shadow-raised: 0 1px 2px rgb(20 12 21 / 6%);
-  --ds-shadow-floating: 0 12px 28px rgb(20 12 21 / 10%);
+  /*
+   * Elevation scale. Each tier pairs a tight contact shadow with a soft
+   * ambient one, tinted with the burgundy ink. Raised is for resting
+   * surfaces (cards, panels), floating for anchored layers (menus,
+   * popovers, toasts), and overlay for modal layers (dialogs, sheets).
+   * Dense data surfaces such as tables stay flat.
+   */
+  --ds-shadow-raised: 0 1px 2px rgb(30 7 33 / 5%), 0 2px 6px -1px rgb(30 7 33 / 6%);
+  --ds-shadow-floating: 0 2px 6px rgb(30 7 33 / 6%), 0 12px 28px -4px rgb(30 7 33 / 14%);
+  --ds-shadow-overlay: 0 4px 12px rgb(30 7 33 / 7%), 0 24px 56px -8px rgb(30 7 33 / 22%);
+  /*
+   * Motion. Fast for hover and press feedback, base for anchored layers,
+   * slow for modal layers. Enter decelerates, exit accelerates. The
+   * reduced-motion rule below collapses every duration.
+   */
+  --ds-duration-fast: 120ms;
+  --ds-duration-base: 180ms;
+  --ds-duration-slow: 240ms;
+  --ds-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ds-ease-enter: cubic-bezier(0, 0, 0, 1);
+  --ds-ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ds-skeleton-highlight: rgb(255 255 255 / 75%);
   --ds-focus-ring: 0 0 0 3px color-mix(in oklab, var(--focus) 26%, transparent);
   --ds-workbench-global-rail-width: 4.5rem;
   --ds-workbench-secondary-rail-width: 18.375rem;
@@ -293,8 +360,10 @@
   --ds-table-header-height: 2rem;
   --ds-row-height: 2.5rem;
   --ds-field-gap: 1rem;
-  --ds-page-title: 1.5rem;
+  --ds-page-title: 1.625rem;
   --ds-display-title: clamp(1.875rem, 4vw, 3rem);
+  --ds-metric-value: 1.375rem;
+  --ds-metric-value-primary: 2rem;
   --ds-section-title: 0.9375rem;
   --ds-body: 0.875rem;
   --ds-metadata: 0.75rem;
@@ -334,6 +403,10 @@
   --ds-title-weight: 650;
   --ds-title-tracking: -0.04em;
   --ds-title-line-height: 1.08;
+  --ds-display-tracking: -0.04em;
+  --ds-section-title-tracking: -0.04em;
+  --ds-metric-value: 1.375rem;
+  --ds-metric-value-primary: 2rem;
   --ds-section-title-weight: 650;
   --ds-section-title-line-height: 1.12;
   --ds-ui-text-size: 0.8125rem;
@@ -369,22 +442,22 @@
 :root.dark,
 :root[data-appearance="dark"] {
   color-scheme: dark;
-  --canvas: #17191c;
-  --surface: #1d2024;
-  --surface-muted: #282b31;
-  --surface-raised: #24272c;
-  --surface-floating: #2c2f36;
-  --surface-overlay: #31343a;
+  --canvas: #1a171a;
+  --surface: #221e22;
+  --surface-muted: #2d2a2e;
+  --surface-raised: #2a262a;
+  --surface-floating: #312e32;
+  --surface-overlay: #363237;
   --surface-control: var(--surface-raised);
   --surface-control-hover: var(--surface-muted);
-  --surface-inverse: #f3f4f5;
-  --text-primary: #eff1f4;
-  --text-secondary: #d4d8df;
-  --text-supporting: #b3bac5;
-  --text-muted: #929aa7;
-  --control-indicator: #929aa7;
-  --text-disabled: #747b87;
-  --text-inverse: #17191c;
+  --surface-inverse: #f6f3f6;
+  --text-primary: #f3f0f3;
+  --text-secondary: #dad6db;
+  --text-supporting: #bdb7bd;
+  --text-muted: #9d979d;
+  --control-indicator: #9d979d;
+  --text-disabled: #7e797e;
+  --text-inverse: #1a171a;
   --text-link: #aeb6ef;
   --brand: var(--palette-burgundy);
   --brand-foreground: #ffffff;
@@ -398,6 +471,10 @@
   --brand-secondary-foreground: var(--brand-supporting-foreground);
   --brand-secondary-background: var(--brand-supporting-background);
   --brand-secondary-border: var(--brand-supporting-border);
+  --brand-emphasis: #d58ecf;
+  --brand-emphasis-foreground: #ebcce7;
+  --brand-emphasis-background: #332331;
+  --brand-emphasis-border: #633f5f;
   --action: #5965cc;
   --action-foreground: #ffffff;
   --action-hover: #5f6bd2;
@@ -429,22 +506,30 @@
   --danger-background: #3e2a2f;
   --danger-border: #9d3c48;
   --danger-foreground: #ffe8e9;
-  --neutral: #a7a9b3;
-  --neutral-background: #282b31;
+  --neutral: #ada8ad;
+  --neutral-background: var(--surface-muted);
   --neutral-border: rgb(255 255 255 / 12%);
-  --neutral-foreground: #e5e8ed;
-  /* At least 3:1 against canvas, surface, raised, and muted dark surfaces. */
-  --chart-series-1: #8f9bff;
-  --chart-series-2: var(--information);
-  --chart-series-3: var(--success);
-  --chart-series-4: var(--warning);
-  --chart-series-5: var(--danger);
+  --neutral-foreground: #eae7ea;
+  /*
+   * Dark steps of the same hues and order, validated separately against the
+   * dark band (worst adjacent dE 9.7) and at least 3:1 against canvas,
+   * surface, raised, and muted dark surfaces.
+   */
+  --chart-series-1: #5074f0;
+  --chart-series-2: #be4bb1;
+  --chart-series-3: #19aa8e;
+  --chart-series-4: #cf5604;
+  --chart-series-5: #905fe1;
+  --chart-area-opacity-start: 0.3;
   --chart-grid: var(--border-subtle);
   --chart-axis: var(--text-muted);
   --chart-annotation: var(--action-background);
-  --trend-positive: var(--success);
+  --trend-positive: var(--brand-supporting);
   --trend-negative: var(--danger);
   --trend-neutral: var(--text-supporting);
+  --trend-positive-background: var(--brand-supporting-background);
+  --trend-negative-background: var(--danger-background);
+  --trend-neutral-background: var(--neutral-background);
   --sidebar-canvas: #151116;
   --sidebar-header: #151116;
   --sidebar-content: #151116;
@@ -462,8 +547,17 @@
   --sidebar-group-label: color-mix(in oklab, #ffffff 72%, transparent);
   --sidebar-group-count: color-mix(in oklab, #ffffff 62%, transparent);
   --sidebar-focus-ring: var(--focus);
-  --ds-shadow-raised: 0 1px 2px rgb(0 0 0 / 24%);
-  --ds-shadow-floating: 0 16px 32px rgb(0 0 0 / 30%);
+  --sidebar-glow: color-mix(in oklab, #b0549f 24%, transparent);
+  --ds-texture-tint: color-mix(in oklab, var(--brand-emphasis) 9%, transparent);
+  --ds-texture-mark: color-mix(in oklab, var(--brand-emphasis) 11%, transparent);
+  --ds-skeleton-highlight: rgb(255 255 255 / 5%);
+  /*
+   * Shadows read weakly on dark canvases, so each tier adds a faint top
+   * highlight that catches the edge of the lifted surface.
+   */
+  --ds-shadow-raised: inset 0 1px 0 rgb(255 255 255 / 4%), 0 1px 2px rgb(0 0 0 / 28%);
+  --ds-shadow-floating: inset 0 1px 0 rgb(255 255 255 / 5%), 0 4px 10px rgb(0 0 0 / 24%), 0 16px 32px rgb(0 0 0 / 32%);
+  --ds-shadow-overlay: inset 0 1px 0 rgb(255 255 255 / 6%), 0 8px 16px rgb(0 0 0 / 28%), 0 28px 64px rgb(0 0 0 / 44%);
 }
 
 /*
@@ -491,6 +585,7 @@
   --sidebar-group-label: var(--text-secondary);
   --sidebar-group-count: var(--text-supporting);
   --sidebar-focus-ring: var(--focus);
+  --sidebar-glow: var(--ds-texture-tint);
 }
 
 /*
@@ -519,6 +614,7 @@
   --sidebar-group-label: var(--text-secondary);
   --sidebar-group-count: var(--text-supporting);
   --sidebar-focus-ring: var(--focus);
+  --sidebar-glow: transparent;
 }
 
 @theme inline {
@@ -555,6 +651,10 @@
   --color-brand-secondary-foreground: var(--brand-secondary-foreground);
   --color-brand-secondary-background: var(--brand-secondary-background);
   --color-brand-secondary-border: var(--brand-secondary-border);
+  --color-brand-emphasis: var(--brand-emphasis);
+  --color-brand-emphasis-foreground: var(--brand-emphasis-foreground);
+  --color-brand-emphasis-background: var(--brand-emphasis-background);
+  --color-brand-emphasis-border: var(--brand-emphasis-border);
   --color-action: var(--action);
   --color-action-foreground: var(--action-foreground);
   --color-action-hover: var(--action-hover);
@@ -595,6 +695,9 @@
   --color-trend-positive: var(--trend-positive);
   --color-trend-negative: var(--trend-negative);
   --color-trend-neutral: var(--trend-neutral);
+  --color-trend-positive-background: var(--trend-positive-background);
+  --color-trend-negative-background: var(--trend-negative-background);
+  --color-trend-neutral-background: var(--trend-neutral-background);
   --color-control-border: var(--control-border);
   --color-focus: var(--focus);
   --color-border-subtle: var(--border-subtle);
@@ -617,6 +720,12 @@
   --color-sidebar-focus-ring: var(--sidebar-focus-ring);
   --color-sidebar-border: var(--sidebar-border);
   --font-sans: var(--font-sans);
+  --shadow-raised: var(--ds-shadow-raised);
+  --shadow-floating: var(--ds-shadow-floating);
+  --shadow-overlay: var(--ds-shadow-overlay);
+  --ease-standard: var(--ds-ease-standard);
+  --ease-enter: var(--ds-ease-enter);
+  --ease-exit: var(--ds-ease-exit);
 }
 
 @utility ds-type-body {
@@ -647,9 +756,9 @@
 
 @utility ds-type-display-title {
   font-size: var(--ds-display-title);
-  font-weight: var(--ds-title-weight);
-  letter-spacing: var(--ds-title-tracking);
-  line-height: var(--ds-title-line-height);
+  font-weight: var(--ds-display-weight);
+  letter-spacing: var(--ds-display-tracking);
+  line-height: var(--ds-display-line-height);
 }
 
 @utility ds-type-page-title {
@@ -662,7 +771,7 @@
 @utility ds-type-section-title {
   font-size: var(--ds-section-title);
   font-weight: var(--ds-section-title-weight);
-  letter-spacing: var(--ds-title-tracking);
+  letter-spacing: var(--ds-section-title-tracking);
   line-height: var(--ds-section-title-line-height);
 }
 
@@ -700,6 +809,260 @@
   line-height: var(--ds-card-title-line-height);
 }
 
+/*
+ * Overlay motion. Base UI marks popups and backdrops with
+ * data-starting-style while entering and data-ending-style while leaving,
+ * and waits for these transitions before unmounting. Anchored layers scale
+ * from their trigger; modal layers rise slightly; sheets slide from their
+ * edge. Components layer, so consumer utilities still win.
+ */
+@layer components {
+  /* Swipe-to-dismiss follows the finger in every motion preference. */
+  [data-slot="sheet-content"] {
+    transform: translate(var(--drawer-swipe-movement-x, 0px), var(--drawer-swipe-movement-y, 0px));
+  }
+
+  /*
+   * Enter and exit motion only runs when the viewer has not asked for
+   * reduced motion; otherwise overlays appear and disappear at once.
+   */
+  @media (prefers-reduced-motion: no-preference) {
+    [data-slot="dialog-overlay"],
+    [data-slot="alert-dialog-overlay"],
+    [data-slot="sheet-overlay"] {
+      transition: opacity var(--ds-duration-slow) var(--ds-ease-standard);
+    }
+
+    [data-slot="dialog-overlay"]:is([data-starting-style], [data-ending-style]),
+    [data-slot="alert-dialog-overlay"]:is([data-starting-style], [data-ending-style]),
+    [data-slot="sheet-overlay"]:is([data-starting-style], [data-ending-style]) {
+      opacity: 0;
+    }
+
+    [data-slot="dialog-content"],
+    [data-slot="alert-dialog-content"] {
+      transition-property: opacity, transform;
+      transition-duration: var(--ds-duration-slow);
+      transition-timing-function: var(--ds-ease-enter);
+    }
+
+    [data-slot="dialog-content"][data-starting-style],
+    [data-slot="alert-dialog-content"][data-starting-style] {
+      opacity: 0;
+      transform: translateY(0.5rem) scale(0.98);
+    }
+
+    [data-slot="dialog-content"][data-ending-style],
+    [data-slot="alert-dialog-content"][data-ending-style] {
+      opacity: 0;
+      transform: scale(0.98);
+      transition-duration: var(--ds-duration-base);
+      transition-timing-function: var(--ds-ease-exit);
+    }
+
+    [data-slot="sheet-content"] {
+      transition: transform var(--ds-duration-slow) var(--ds-ease-enter);
+    }
+
+    [data-slot="sheet-content"][data-swiping] {
+      transition-duration: 0ms;
+    }
+
+    [data-slot="sheet-content"][data-ending-style] {
+      transition-duration: var(--ds-duration-base);
+      transition-timing-function: var(--ds-ease-exit);
+    }
+
+    [data-slot="sheet-content"][data-swipe-direction="right"]:is([data-starting-style], [data-ending-style]) {
+      transform: translateX(100%);
+    }
+
+    [data-slot="sheet-content"][data-swipe-direction="left"]:is([data-starting-style], [data-ending-style]) {
+      transform: translateX(-100%);
+    }
+
+    [data-slot="sheet-content"][data-swipe-direction="up"]:is([data-starting-style], [data-ending-style]) {
+      transform: translateY(-100%);
+    }
+
+    [data-slot="sheet-content"][data-swipe-direction="down"]:is([data-starting-style], [data-ending-style]) {
+      transform: translateY(100%);
+    }
+
+    :is(
+      [data-slot="popover-content"],
+      [data-slot="dropdown-menu-content"],
+      [data-slot="dropdown-menu-sub-content"],
+      [data-slot="select-content"],
+      [data-slot="searchable-select-content"],
+      [data-slot="tooltip-content"]
+    ) {
+      transform-origin: var(--transform-origin, center);
+      transition-property: opacity, transform;
+      transition-duration: var(--ds-duration-base);
+      transition-timing-function: var(--ds-ease-enter);
+    }
+
+    :is(
+      [data-slot="popover-content"],
+      [data-slot="dropdown-menu-content"],
+      [data-slot="dropdown-menu-sub-content"],
+      [data-slot="select-content"],
+      [data-slot="searchable-select-content"],
+      [data-slot="tooltip-content"]
+    ):is([data-starting-style], [data-ending-style]) {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+
+    :is(
+      [data-slot="popover-content"],
+      [data-slot="dropdown-menu-content"],
+      [data-slot="dropdown-menu-sub-content"],
+      [data-slot="select-content"],
+      [data-slot="searchable-select-content"],
+      [data-slot="tooltip-content"]
+    )[data-ending-style] {
+      transition-duration: var(--ds-duration-fast);
+      transition-timing-function: var(--ds-ease-exit);
+    }
+
+    [data-slot="toast"] {
+      transition-property: opacity, transform;
+      transition-duration: var(--ds-duration-base);
+      transition-timing-function: var(--ds-ease-enter);
+    }
+
+    [data-slot="toast"]:is([data-starting-style], [data-ending-style]) {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
+  }
+
+  /*
+   * State-view spot: a duotone treatment for empty, error, and success
+   * states. The icon's closed shapes take a light fill of their stroke
+   * color; the default size adds two orbit rings.
+   */
+  [data-slot="state-view-spot"] {
+    --spot-foreground: var(--brand-emphasis-foreground);
+    --spot-background: var(--brand-emphasis-background);
+    --spot-ring: var(--brand-emphasis-border);
+    position: relative;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    color: var(--spot-foreground);
+    background: var(--spot-background);
+    box-shadow: 0 0 0 1px var(--spot-ring);
+  }
+
+  [data-slot="state-view-spot"][data-tone="neutral"] {
+    --spot-foreground: var(--neutral-foreground);
+    --spot-background: var(--neutral-background);
+    --spot-ring: var(--neutral-border);
+  }
+
+  [data-slot="state-view-spot"][data-tone="success"] {
+    --spot-foreground: var(--success-foreground);
+    --spot-background: var(--success-background);
+    --spot-ring: var(--success-border);
+  }
+
+  [data-slot="state-view-spot"][data-tone="danger"] {
+    --spot-foreground: var(--danger-foreground);
+    --spot-background: var(--surface);
+    --spot-ring: var(--danger-border);
+  }
+
+  [data-slot="state-view-spot"] svg {
+    fill: color-mix(in oklab, currentColor 16%, transparent);
+  }
+
+  [data-slot="state-view-spot"][data-size="default"]::before,
+  [data-slot="state-view-spot"][data-size="default"]::after {
+    position: absolute;
+    border-radius: inherit;
+    pointer-events: none;
+    content: "";
+  }
+
+  [data-slot="state-view-spot"][data-size="default"]::before {
+    inset: -0.5rem;
+    border: 1px solid color-mix(in oklab, var(--spot-ring) 70%, transparent);
+  }
+
+  [data-slot="state-view-spot"][data-size="default"]::after {
+    inset: -1.125rem;
+    border: 1px dashed color-mix(in oklab, var(--spot-ring) 45%, transparent);
+  }
+
+  /* The sidebar header carries the brand mark; a soft glow sits behind it. */
+  [data-slot="app-sidebar-header"] {
+    background-image: radial-gradient(120% 180% at 0% 0%, var(--sidebar-glow, transparent), transparent 72%);
+  }
+}
+
+@keyframes ds-skeleton-shimmer {
+  from {
+    background-position: 300% 0;
+  }
+
+  to {
+    background-position: -100% 0;
+  }
+}
+
+@utility ds-skeleton {
+  background-color: var(--surface-muted);
+  background-image: linear-gradient(90deg, transparent 0%, var(--ds-skeleton-highlight) 50%, transparent 100%);
+  background-repeat: no-repeat;
+  background-size: 50% 100%;
+  animation: ds-skeleton-shimmer 1.6s var(--ds-ease-standard) infinite;
+}
+
+/* Faint brand wash for chrome such as the page header. Never behind data. */
+@utility ds-texture-wash {
+  background-image: radial-gradient(60% 180% at 0% 0%, var(--ds-texture-tint), transparent 70%);
+}
+
+/*
+ * Expressive texture for large brand moments: sign-in, onboarding, and
+ * empty workspaces. Two brand glows plus a large, faint Conscia mark
+ * bleeding off the bottom-right corner. The element becomes a positioning
+ * context; the mark sits behind its content. Never behind data.
+ */
+@utility ds-texture-brand {
+  position: relative;
+  isolation: isolate;
+  background-image:
+    radial-gradient(60% 55% at 0% 0%, color-mix(in oklab, var(--brand-emphasis) 16%, transparent), transparent 70%),
+    radial-gradient(55% 50% at 100% 100%, color-mix(in oklab, var(--brand-accent) 12%, transparent), transparent 70%);
+
+  &::before {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    border-radius: inherit;
+    background-color: var(--ds-texture-mark);
+    content: "";
+    pointer-events: none;
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'%3E%3Cpath d='M171.225 63.8139L173.637 66.1116L203.794 34.4551L201.382 32.1575L171.225 63.8139Z M184.012 78.9693L185.769 81.8487L223.091 59.076L221.334 56.1966L184.012 78.9693Z M192.436 96.8858L193.417 100.222L235.362 87.8847L234.381 84.5488L192.436 96.8858Z M195.949 116.334L196.037 119.987L239.746 118.926L239.657 115.273L195.949 116.334Z M194.341 135.989L193.42 139.796L235.913 150.084L236.835 146.277L194.341 135.989Z M187.759 154.526L185.708 158.285L224.091 179.221L226.142 175.461L187.759 154.526Z M176.683 170.712L173.394 174.165L205.05 204.322L208.34 200.868L176.683 170.712Z M161.899 183.49L157.288 186.304L180.06 223.626L184.672 220.812L161.899 183.49Z M144.425 192.058L138.472 193.809L150.809 235.754L156.762 234.003L144.425 192.058Z M125.438 195.913L118.244 196.088L119.305 239.796L126.499 239.622L125.438 195.913Z M106.176 194.873L98.0421 192.903L87.754 235.397L95.8882 237.366L106.176 194.873Z M87.8408 189.056L79.3505 184.425L58.4147 222.808L66.905 227.439L87.8408 189.056Z M71.5444 178.838L63.5819 171.253L33.4252 202.91L41.3878 210.495L71.5444 178.838Z M58.2896 164.821L51.9185 154.379L14.5961 177.152L20.9672 187.593L58.2896 164.821Z M48.9443 147.836L45.1912 135.075L3.24659 147.412L6.99972 160.173L48.9443 147.836Z M44.1724 128.938L43.8283 114.759L0.119827 115.82L0.463868 129.998L44.1724 128.938Z M44.3613 109.352L47.8648 94.8809L5.37116 84.5928L1.86766 99.0635L44.3613 109.352Z M49.563 90.3812L56.9571 76.825L18.5742 55.8893L11.18 69.4455L49.563 90.3812Z M59.4839 73.314L70.4267 61.8269L38.7702 31.6703L27.8274 43.1574L59.4839 73.314Z M73.4951 59.3251L87.307 50.8976L64.5343 13.5752L50.7224 22.0027L73.4951 59.3251Z M90.6772 49.3891L106.414 44.7604L94.0775 2.81575L78.3402 7.44453L90.6772 49.3891Z M109.88 44.2086L126.426 43.8071L125.366 0.098614L108.82 0.500089L109.88 44.2086Z M129.802 44.1632L145.967 48.0768L156.255 5.58318L140.09 1.66954L129.802 44.1632Z M149.087 49.2798L163.709 57.2553L184.645 18.8723L170.023 10.8969L149.087 49.2798Z M152.448 160.384L141.06 167.332L154.089 188.685L165.477 181.736L152.448 160.384Z M140.881 167.41L128.103 171.168L135.161 195.165L147.939 191.407L140.881 167.41Z M127.834 171.202L114.653 171.522L115.26 196.528L128.441 196.209L127.834 171.202Z M114.192 171.456L101.624 168.413L95.738 192.724L108.306 195.767L114.192 171.456Z M100.907 168.109L89.889 162.1L77.9114 184.059L88.9296 190.069L100.907 168.109Z M88.9224 161.353L80.2035 153.047L62.9505 171.158L71.6694 179.464L88.9224 161.353Z M79.1143 151.631L73.1721 141.893L51.8195 154.921L57.7617 164.66L79.1143 151.631Z M72.2163 139.615L69.2075 129.385L45.2105 136.444L48.2193 146.673L72.2163 139.615Z M68.7593 126.163L68.5209 116.339L43.5147 116.946L43.7531 126.77L68.7593 126.163Z M69.0161 112.256L71.1176 103.576L46.8064 97.6899L44.7049 106.37L69.0161 112.256Z M72.979 98.9209L76.8146 91.8888L54.8552 79.9112L51.0196 86.9432L72.979 98.9209Z M80.3506 87.1414L85.2494 81.999L67.1383 64.746L62.2395 69.8884L80.3506 87.1414Z M90.5762 77.7753L95.9023 74.5255L82.8738 53.1729L77.5476 56.4227L90.5762 77.7753Z M102.889 71.4875L108.114 69.9508L101.056 45.9537L95.831 47.4905L102.889 71.4875Z M116.381 68.7043L121.119 68.5894L120.513 43.5832L115.775 43.6981L116.381 68.7043Z M130.08 69.5886L134.092 70.56L139.978 46.2488L135.966 45.2775L130.08 69.5886Z M143.01 74.0389L146.183 75.7697L158.161 53.8103L154.988 52.0795L143.01 74.0389Z M154.273 81.705L156.588 83.9108L173.841 65.7997L171.526 63.5939L154.273 81.705Z M163.102 92.0197L164.599 94.4735L185.952 81.445L184.455 78.9911L163.102 92.0197Z M168.91 104.243L169.655 106.775L193.652 99.7164L192.907 97.1844L168.91 104.243Z M171.325 117.515L171.386 120.001L196.392 119.394L196.331 116.909L171.325 117.515Z M170.21 130.922L169.644 133.264L193.955 139.15L194.522 136.808L170.21 130.922Z M165.673 143.549L164.523 145.658L186.482 157.636L187.633 155.527L165.673 143.549Z M158.032 154.558L156.355 156.318L174.467 173.571L176.143 171.811L158.032 154.558Z'/%3E%3C/svg%3E");
+    mask-position: right -4rem bottom -6rem;
+    mask-repeat: no-repeat;
+    mask-size: min(28rem, 85%) auto;
+  }
+}
+
+/* Weight, tracking, and figures for numeric readouts. Size is set per use. */
+@utility ds-type-metric-value {
+  font-weight: var(--ds-metric-value-weight);
+  letter-spacing: var(--ds-metric-value-tracking);
+  font-variant-numeric: tabular-nums;
+}
+
 @utility ds-type-table-head {
   font-size: var(--ds-table-head-size);
   font-weight: var(--ds-table-head-weight);
@@ -733,8 +1096,9 @@
   h3,
   h4 {
     color: var(--text-primary);
-    font-weight: var(--ds-title-weight);
-    letter-spacing: var(--ds-title-tracking);
+    /* Bare headings take the section step; page titles opt in via ds-type-page-title. */
+    font-weight: var(--ds-section-title-weight);
+    letter-spacing: var(--ds-section-title-tracking);
   }
 
   button,

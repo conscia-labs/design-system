@@ -10,6 +10,8 @@ test.describe("Phase 7 mobile drawer gesture regression", () => {
     await toggle.click();
     const navigation = page.getByRole("dialog", { name: "Application navigation" });
     await expect(navigation).toBeVisible();
+    // The drawer slides in from its edge; measure it once the opening motion settles.
+    await expect.poll(() => navigation.evaluate((element) => element.getAnimations().length)).toBe(0);
 
     const box = await navigation.boundingBox();
     expect(box).not.toBeNull();

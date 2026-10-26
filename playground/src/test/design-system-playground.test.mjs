@@ -145,10 +145,10 @@ test("page titles use comfortable defaults with an explicit compact option", () 
   const styles = read("../../../src/foundation/styles.css");
   const pageHeader = read("../../../src/patterns/page-header.tsx");
 
-  assert.match(styles, /--ds-page-title: 1\.75rem;/);
+  assert.match(styles, /--ds-page-title: 1\.875rem;/);
   assert.match(
     styles,
-    /\[data-density="compact"\][\s\S]*--ds-page-title: 1\.5rem;/,
+    /\[data-density="compact"\][\s\S]*--ds-page-title: 1\.625rem;/,
   );
   assert.match(pageHeader, /ds-type-page-title/);
 });
@@ -160,12 +160,16 @@ test("operational density exposes a token-backed Workspace-like type scale", () 
 
   assert.match(preferences, /ConsciaDensity = "compact" \| "comfortable" \| "operational"/);
   assert.match(styles, /--ds-body: 0\.9375rem;/);
-  assert.match(styles, /--ds-title-weight: 600;/);
-  assert.match(styles, /--ds-title-tracking: 0;/);
+  assert.match(styles, /--ds-title-weight: 650;/);
+  assert.match(styles, /--ds-title-tracking: -0\.022em;/);
+  assert.match(styles, /--ds-section-title-weight: 600;/);
+  assert.match(styles, /--ds-section-title-tracking: -0\.01em;/);
+  assert.match(styles, /--ds-display-tracking: -0\.035em;/);
   assert.match(styles, /--ds-button-text-size: 0\.875rem;/);
   assert.match(styles, /--ds-body: 0\.8125rem;/);
   assert.match(styles, /--ds-title-weight: 650;/);
   assert.match(styles, /--ds-title-tracking: -0\.04em;/);
+  assert.match(styles, /--ds-section-title-tracking: -0\.04em;/);
   assert.match(styles, /--ds-title-line-height: 1\.08;/);
   assert.match(styles, /--ds-section-title: 1rem;/);
   assert.match(styles, /--ds-button-text-size: 0\.8125rem;/);
@@ -173,6 +177,7 @@ test("operational density exposes a token-backed Workspace-like type scale", () 
   assert.match(styles, /@utility ds-type-section-title/);
   assert.match(styles, /@utility ds-type-control/);
   assert.match(styles, /@utility ds-type-eyebrow/);
+  assert.match(styles, /@utility ds-type-metric-value/);
   assert.match(foundation, /data-density="operational"/);
   assert.match(foundation, /ds-type-page-title/);
   assert.match(foundation, /ds-type-eyebrow/);
@@ -431,27 +436,29 @@ test("dark foundation uses a calm, distinguishable surface and text hierarchy", 
   const darkTheme = styles.match(/:root\.dark,[\s\S]*?(?=\/\*\n \* Light sidebars)/)?.[0];
 
   assert.ok(darkTheme, "dark theme token block should be present");
-  assert.match(darkTheme, /--canvas: #17191c;/);
-  assert.match(darkTheme, /--surface: #1d2024;/);
-  assert.match(darkTheme, /--surface-raised: #24272c;/);
-  assert.match(darkTheme, /--surface-muted: #282b31;/);
-  assert.match(darkTheme, /--surface-floating: #2c2f36;/);
-  assert.match(darkTheme, /--surface-overlay: #31343a;/);
-  assert.match(darkTheme, /--text-primary: #eff1f4;/);
-  assert.match(darkTheme, /--text-secondary: #d4d8df;/);
-  assert.match(darkTheme, /--text-supporting: #b3bac5;/);
-  assert.match(darkTheme, /--text-muted: #929aa7;/);
+  assert.match(darkTheme, /--canvas: #1a171a;/);
+  assert.match(darkTheme, /--surface: #221e22;/);
+  assert.match(darkTheme, /--surface-raised: #2a262a;/);
+  assert.match(darkTheme, /--surface-muted: #2d2a2e;/);
+  assert.match(darkTheme, /--surface-floating: #312e32;/);
+  assert.match(darkTheme, /--surface-overlay: #363237;/);
+  assert.match(darkTheme, /--text-primary: #f3f0f3;/);
+  assert.match(darkTheme, /--text-secondary: #dad6db;/);
+  assert.match(darkTheme, /--text-supporting: #bdb7bd;/);
+  assert.match(darkTheme, /--text-muted: #9d979d;/);
   assert.match(darkTheme, /--border-subtle: rgb\(255 255 255 \/ 7%\);/);
-  assert.match(darkTheme, /--ds-shadow-floating: 0 16px 32px rgb\(0 0 0 \/ 30%\);/);
+  for (const tier of ["raised", "floating", "overlay"]) {
+    assert.match(darkTheme, new RegExp(`--ds-shadow-${tier}: inset 0 1px 0 rgb\\(255 255 255`));
+  }
   assert.doesNotMatch(darkTheme, /--canvas: #000000;/);
   for (const legacyToken of ["--background:", "--card:", "--foreground:", "--primary:", "--secondary:", "--muted:", "--accent:", "--input:", "--ring:"]) {
     assert.doesNotMatch(styles, new RegExp(legacyToken));
   }
 
   for (const lightValue of [
-    "--canvas: #f9f9fa;",
+    "--canvas: #f6f3f6;",
     "--surface: #ffffff;",
-    "--surface-muted: #f3f4f5;",
+    "--surface-muted: #f3eff3;",
     "--surface-raised: #ffffff;",
   ]) {
     assert.match(styles, new RegExp(`:root,[\\s\\S]*${lightValue}`));
@@ -466,6 +473,51 @@ test("dark reading fixture consumes semantic text and surface utilities", () => 
   assert.match(foundation, /bg-surface-muted/);
   assert.match(foundation, /text-text-secondary/);
   assert.match(foundation, /text-text-supporting/);
+});
+
+test("elevation scale routes resting, anchored, and modal layers through tokens", () => {
+  const styles = read("../../../src/foundation/styles.css");
+  const card = read("../../../src/primitives/card.tsx");
+
+  for (const tier of ["raised", "floating", "overlay"]) {
+    assert.match(styles, new RegExp(`--ds-shadow-${tier}:`));
+    assert.match(styles, new RegExp(`--shadow-${tier}: var\\(--ds-shadow-${tier}\\);`));
+  }
+  assert.match(card, /default: "bg-surface shadow-\[var\(--ds-shadow-raised\)\]"/);
+  for (const file of ["dialog", "alert-dialog", "sheet"]) {
+    const source = read(`../../../src/primitives/${file}.tsx`);
+    assert.match(source, /shadow-\[var\(--ds-shadow-overlay\)\]/);
+    assert.doesNotMatch(source, /shadow-lg/);
+  }
+  assert.match(read("../../../src/primitives/select.tsx"), /shadow-\[var\(--ds-shadow-floating\)\]/);
+});
+
+test("expressive layer keeps brand, motion, chart, and texture roles token-backed", () => {
+  const styles = read("../../../src/foundation/styles.css");
+  const stateViews = read("../../../src/patterns/state-views.tsx");
+  const dailyVolume = read("../../../src/patterns/daily-volume-chart.tsx");
+
+  for (const role of ["brand-emphasis", "brand-emphasis-foreground", "brand-emphasis-background", "brand-emphasis-border"]) {
+    assert.match(styles, new RegExp(`--color-${role}: var\\(--${role}\\);`));
+  }
+  for (const series of [1, 2, 3, 4, 5]) {
+    assert.doesNotMatch(styles, new RegExp(`--chart-series-${series}: var\\(--(success|warning|danger|information)\\)`));
+  }
+  assert.doesNotMatch(dailyVolume, /bg-chart-series-5/);
+  for (const token of ["--ds-duration-fast", "--ds-duration-base", "--ds-duration-slow", "--ds-ease-enter", "--ds-ease-exit"]) {
+    assert.match(styles, new RegExp(`${token}:`));
+  }
+  assert.match(styles, /\[data-slot="dialog-content"\]\[data-starting-style\]/);
+  assert.match(styles, /\[data-slot="sheet-content"\]\[data-swipe-direction="right"\]/);
+  assert.match(styles, /prefers-reduced-motion: reduce/);
+  assert.match(styles, /@utility ds-skeleton/);
+  assert.match(styles, /@utility ds-texture-wash/);
+  assert.match(styles, /@utility ds-texture-brand/);
+  assert.match(styles, /mask-image: url\("data:image\/svg\+xml/);
+  assert.match(styles, /--ds-texture-mark:/);
+  assert.match(styles, /--trend-positive: var\(--brand-supporting\);/);
+  assert.match(stateViews, /data-slot="state-view-spot"/);
+  assert.match(stateViews, /tone = "danger"/);
 });
 
 test("tabs separate routed navigation from layered content and mode switching", () => {

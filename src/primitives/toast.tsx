@@ -151,7 +151,7 @@ function Toast({
       data-slot="toast"
       data-variant={variant}
       className={cn(
-        "pointer-events-auto relative grid w-full grid-cols-[minmax(0,1fr)_auto] gap-3 rounded-[var(--ds-radius-surface)] border bg-surface p-4 text-sm text-text-primary shadow-[var(--ds-shadow-floating)] outline-none data-ending:animate-out data-starting:animate-in data-[variant=error]:border-danger-border data-[variant=error]:bg-danger-background data-[variant=error]:text-danger-foreground data-[variant=information]:border-information-border data-[variant=information]:bg-information-background data-[variant=information]:text-information-foreground data-[variant=success]:border-success-border data-[variant=success]:bg-success-background data-[variant=success]:text-success-foreground data-[variant=warning]:border-warning-border data-[variant=warning]:bg-warning-background data-[variant=warning]:text-warning-foreground",
+        "pointer-events-auto relative grid w-full grid-cols-[minmax(0,1fr)_auto] gap-3 rounded-[var(--ds-radius-surface)] border bg-surface p-4 text-sm text-text-primary shadow-[var(--ds-shadow-floating)] outline-none data-[variant=error]:border-danger-border data-[variant=error]:bg-danger-background data-[variant=error]:text-danger-foreground data-[variant=information]:border-information-border data-[variant=information]:bg-information-background data-[variant=information]:text-information-foreground data-[variant=success]:border-success-border data-[variant=success]:bg-success-background data-[variant=success]:text-success-foreground data-[variant=warning]:border-warning-border data-[variant=warning]:bg-warning-background data-[variant=warning]:text-warning-foreground",
         className,
       )}
       {...props}

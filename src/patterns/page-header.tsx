@@ -49,7 +49,7 @@ function PageHeader({
   return (
     <header
       data-slot="page-header"
-      className={cn("flex flex-col gap-3 border-b border-border-subtle bg-canvas px-[var(--ds-frame-content-inset,var(--ds-frame-padding-x))] py-4 lg:flex-row lg:items-start lg:justify-between", className)}
+      className={cn("flex flex-col gap-3 ds-texture-wash border-b border-border-subtle bg-canvas px-[var(--ds-frame-content-inset,var(--ds-frame-padding-x))] py-4 lg:flex-row lg:items-start lg:justify-between", className)}
       {...props}
     >
       <div className="min-w-0">
