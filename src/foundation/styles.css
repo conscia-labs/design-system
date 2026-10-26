@@ -83,9 +83,14 @@
 [data-appearance-scope="light"] {
   color-scheme: light;
   --radius: 0.5rem;
-  --canvas: #f9f9fa;
+  /*
+   * Neutrals carry a faint burgundy cast (OKLCH hue ~323deg, chroma <= 0.016)
+   * so greys read as Conscia rather than default. Canvas sits a step below
+   * white so surfaces lift off it without relying on borders alone.
+   */
+  --canvas: #f6f3f6;
   --surface: #ffffff;
-  --surface-muted: #f3f4f5;
+  --surface-muted: #f3eff3;
   --surface-raised: #ffffff;
   --surface-floating: #ffffff;
   --surface-overlay: #ffffff;
@@ -93,11 +98,11 @@
   --surface-control-hover: var(--surface-raised);
   --surface-inverse: var(--palette-burgundy);
   --text-primary: #140c15;
-  --text-secondary: #373b4a;
-  --text-supporting: #5f6270;
-  --text-muted: #707481;
-  --control-indicator: #707481;
-  --text-disabled: #a7a9b3;
+  --text-secondary: #403941;
+  --text-supporting: #645d65;
+  --text-muted: #6e686e;
+  --control-indicator: #6e686e;
+  --text-disabled: #ada8ad;
   --text-inverse: #ffffff;
   --text-link: #3f4da8;
   --brand: var(--palette-burgundy);
@@ -121,11 +126,11 @@
   --selection-border: #aeb6e3;
   --selection-indicator: #6672dc;
   --selection-foreground: #242a44;
-  --control-border: #e4e5e5;
+  --control-border: #e7e3e8;
   --focus: #6371d9;
-  --border-subtle: #ececed;
-  --border-default: #d9dadd;
-  --border-strong: #babdc5;
+  --border-subtle: #ede9ed;
+  --border-default: #dcd7dc;
+  --border-strong: #c1bbc1;
   --information: #28758a;
   --information-background: #eaf5f7;
   --information-border: #b8dce3;
@@ -142,10 +147,10 @@
   --danger-background: #ffe8e9;
   --danger-border: #ffa1a8;
   --danger-foreground: #822c35;
-  --neutral: #5f6270;
-  --neutral-background: #f3f4f5;
-  --neutral-border: #d9dadd;
-  --neutral-foreground: #373b4a;
+  --neutral: #645d65;
+  --neutral-background: var(--surface-muted);
+  --neutral-border: var(--border-default);
+  --neutral-foreground: #403941;
   --chart-series-1: var(--brand-accent);
   --chart-series-2: var(--information);
   --chart-series-3: var(--success);
@@ -217,17 +222,30 @@
   --ds-surface-padding: 1.25rem;
   --ds-table-header-height: 2.25rem;
   --ds-row-height: 2.75rem;
-  --ds-page-title: 1.75rem;
+  --ds-page-title: 1.875rem;
   --ds-display-title: clamp(2rem, 4vw, 3.5rem);
   --ds-section-title: 1.0625rem;
   --ds-body: 0.9375rem;
   --ds-metadata: 0.8125rem;
   --ds-body-line-height: 1.5;
-  --ds-title-weight: 600;
-  --ds-title-tracking: 0;
-  --ds-title-line-height: 1.25;
+  /*
+   * Hierarchy comes from weight and tracking as well as size: page and
+   * display titles are heavier and tighter, section titles stay at 600 so
+   * the step between them is visible.
+   */
+  --ds-title-weight: 650;
+  --ds-title-tracking: -0.022em;
+  --ds-title-line-height: 1.15;
+  --ds-display-weight: 700;
+  --ds-display-tracking: -0.035em;
+  --ds-display-line-height: 1.05;
   --ds-section-title-weight: 600;
+  --ds-section-title-tracking: -0.01em;
   --ds-section-title-line-height: 1.25;
+  --ds-metric-value: 1.625rem;
+  --ds-metric-value-primary: 2.5rem;
+  --ds-metric-value-weight: 550;
+  --ds-metric-value-tracking: -0.03em;
   --ds-ui-text-size: 0.875rem;
   --ds-ui-line-height: 1.25rem;
   --ds-navigation-label-size: 0.875rem;
@@ -254,8 +272,16 @@
   --ds-table-head-tracking: 0;
   --ds-radius-control: 0.375rem;
   --ds-radius-surface: 0.5rem;
-  --ds-shadow-raised: 0 1px 2px rgb(20 12 21 / 6%);
-  --ds-shadow-floating: 0 12px 28px rgb(20 12 21 / 10%);
+  /*
+   * Elevation scale. Each tier pairs a tight contact shadow with a soft
+   * ambient one, tinted with the burgundy ink. Raised is for resting
+   * surfaces (cards, panels), floating for anchored layers (menus,
+   * popovers, toasts), and overlay for modal layers (dialogs, sheets).
+   * Dense data surfaces such as tables stay flat.
+   */
+  --ds-shadow-raised: 0 1px 2px rgb(30 7 33 / 5%), 0 2px 6px -1px rgb(30 7 33 / 6%);
+  --ds-shadow-floating: 0 2px 6px rgb(30 7 33 / 6%), 0 12px 28px -4px rgb(30 7 33 / 14%);
+  --ds-shadow-overlay: 0 4px 12px rgb(30 7 33 / 7%), 0 24px 56px -8px rgb(30 7 33 / 22%);
   --ds-focus-ring: 0 0 0 3px color-mix(in oklab, var(--focus) 26%, transparent);
   --ds-workbench-global-rail-width: 4.5rem;
   --ds-workbench-secondary-rail-width: 18.375rem;
@@ -293,8 +319,10 @@
   --ds-table-header-height: 2rem;
   --ds-row-height: 2.5rem;
   --ds-field-gap: 1rem;
-  --ds-page-title: 1.5rem;
+  --ds-page-title: 1.625rem;
   --ds-display-title: clamp(1.875rem, 4vw, 3rem);
+  --ds-metric-value: 1.375rem;
+  --ds-metric-value-primary: 2rem;
   --ds-section-title: 0.9375rem;
   --ds-body: 0.875rem;
   --ds-metadata: 0.75rem;
@@ -334,6 +362,10 @@
   --ds-title-weight: 650;
   --ds-title-tracking: -0.04em;
   --ds-title-line-height: 1.08;
+  --ds-display-tracking: -0.04em;
+  --ds-section-title-tracking: -0.04em;
+  --ds-metric-value: 1.375rem;
+  --ds-metric-value-primary: 2rem;
   --ds-section-title-weight: 650;
   --ds-section-title-line-height: 1.12;
   --ds-ui-text-size: 0.8125rem;
@@ -369,22 +401,22 @@
 :root.dark,
 :root[data-appearance="dark"] {
   color-scheme: dark;
-  --canvas: #17191c;
-  --surface: #1d2024;
-  --surface-muted: #282b31;
-  --surface-raised: #24272c;
-  --surface-floating: #2c2f36;
-  --surface-overlay: #31343a;
+  --canvas: #1a171a;
+  --surface: #221e22;
+  --surface-muted: #2d2a2e;
+  --surface-raised: #2a262a;
+  --surface-floating: #312e32;
+  --surface-overlay: #363237;
   --surface-control: var(--surface-raised);
   --surface-control-hover: var(--surface-muted);
-  --surface-inverse: #f3f4f5;
-  --text-primary: #eff1f4;
-  --text-secondary: #d4d8df;
-  --text-supporting: #b3bac5;
-  --text-muted: #929aa7;
-  --control-indicator: #929aa7;
-  --text-disabled: #747b87;
-  --text-inverse: #17191c;
+  --surface-inverse: #f6f3f6;
+  --text-primary: #f3f0f3;
+  --text-secondary: #dad6db;
+  --text-supporting: #bdb7bd;
+  --text-muted: #9d979d;
+  --control-indicator: #9d979d;
+  --text-disabled: #7e797e;
+  --text-inverse: #1a171a;
   --text-link: #aeb6ef;
   --brand: var(--palette-burgundy);
   --brand-foreground: #ffffff;
@@ -429,10 +461,10 @@
   --danger-background: #3e2a2f;
   --danger-border: #9d3c48;
   --danger-foreground: #ffe8e9;
-  --neutral: #a7a9b3;
-  --neutral-background: #282b31;
+  --neutral: #ada8ad;
+  --neutral-background: var(--surface-muted);
   --neutral-border: rgb(255 255 255 / 12%);
-  --neutral-foreground: #e5e8ed;
+  --neutral-foreground: #eae7ea;
   /* At least 3:1 against canvas, surface, raised, and muted dark surfaces. */
   --chart-series-1: #8f9bff;
   --chart-series-2: var(--information);
@@ -462,8 +494,13 @@
   --sidebar-group-label: color-mix(in oklab, #ffffff 72%, transparent);
   --sidebar-group-count: color-mix(in oklab, #ffffff 62%, transparent);
   --sidebar-focus-ring: var(--focus);
-  --ds-shadow-raised: 0 1px 2px rgb(0 0 0 / 24%);
-  --ds-shadow-floating: 0 16px 32px rgb(0 0 0 / 30%);
+  /*
+   * Shadows read weakly on dark canvases, so each tier adds a faint top
+   * highlight that catches the edge of the lifted surface.
+   */
+  --ds-shadow-raised: inset 0 1px 0 rgb(255 255 255 / 4%), 0 1px 2px rgb(0 0 0 / 28%);
+  --ds-shadow-floating: inset 0 1px 0 rgb(255 255 255 / 5%), 0 4px 10px rgb(0 0 0 / 24%), 0 16px 32px rgb(0 0 0 / 32%);
+  --ds-shadow-overlay: inset 0 1px 0 rgb(255 255 255 / 6%), 0 8px 16px rgb(0 0 0 / 28%), 0 28px 64px rgb(0 0 0 / 44%);
 }
 
 /*
@@ -617,6 +654,9 @@
   --color-sidebar-focus-ring: var(--sidebar-focus-ring);
   --color-sidebar-border: var(--sidebar-border);
   --font-sans: var(--font-sans);
+  --shadow-raised: var(--ds-shadow-raised);
+  --shadow-floating: var(--ds-shadow-floating);
+  --shadow-overlay: var(--ds-shadow-overlay);
 }
 
 @utility ds-type-body {
@@ -647,9 +687,9 @@
 
 @utility ds-type-display-title {
   font-size: var(--ds-display-title);
-  font-weight: var(--ds-title-weight);
-  letter-spacing: var(--ds-title-tracking);
-  line-height: var(--ds-title-line-height);
+  font-weight: var(--ds-display-weight);
+  letter-spacing: var(--ds-display-tracking);
+  line-height: var(--ds-display-line-height);
 }
 
 @utility ds-type-page-title {
@@ -662,7 +702,7 @@
 @utility ds-type-section-title {
   font-size: var(--ds-section-title);
   font-weight: var(--ds-section-title-weight);
-  letter-spacing: var(--ds-title-tracking);
+  letter-spacing: var(--ds-section-title-tracking);
   line-height: var(--ds-section-title-line-height);
 }
 
@@ -700,6 +740,13 @@
   line-height: var(--ds-card-title-line-height);
 }
 
+/* Weight, tracking, and figures for numeric readouts. Size is set per use. */
+@utility ds-type-metric-value {
+  font-weight: var(--ds-metric-value-weight);
+  letter-spacing: var(--ds-metric-value-tracking);
+  font-variant-numeric: tabular-nums;
+}
+
 @utility ds-type-table-head {
   font-size: var(--ds-table-head-size);
   font-weight: var(--ds-table-head-weight);
@@ -733,8 +780,9 @@
   h3,
   h4 {
     color: var(--text-primary);
-    font-weight: var(--ds-title-weight);
-    letter-spacing: var(--ds-title-tracking);
+    /* Bare headings take the section step; page titles opt in via ds-type-page-title. */
+    font-weight: var(--ds-section-title-weight);
+    letter-spacing: var(--ds-section-title-tracking);
   }
 
   button,

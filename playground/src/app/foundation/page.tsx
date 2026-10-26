@@ -21,7 +21,7 @@ export default function FoundationPage() {
             <Surface label="Surface" className="bg-surface" />
             <Surface label="Raised surface" className="bg-surface-raised shadow-[var(--ds-shadow-raised)]" />
             <Surface label="Floating surface" className="bg-surface-floating shadow-[var(--ds-shadow-floating)]" />
-            <Surface label="Overlay surface" className="bg-surface-overlay shadow-[var(--ds-shadow-floating)]" />
+            <Surface label="Overlay surface" className="bg-surface-overlay shadow-[var(--ds-shadow-overlay)]" />
           </div>
         </ExampleSection>
 
@@ -52,10 +52,11 @@ export default function FoundationPage() {
         </ExampleSection>
 
         <ExampleSection title="Border, radius, and elevation">
-          <div className="grid gap-3 md:grid-cols-3">
+          <div className="grid gap-3 md:grid-cols-4">
             <div className="rounded-[var(--ds-radius-control)] border bg-surface p-4 text-sm">Control radius</div>
             <div className="rounded-[var(--ds-radius-surface)] border bg-surface-raised p-4 text-sm shadow-[var(--ds-shadow-raised)]">Raised</div>
             <div className="rounded-[var(--ds-radius-surface)] border bg-surface-floating p-4 text-sm shadow-[var(--ds-shadow-floating)]">Floating</div>
+            <div className="rounded-[var(--ds-radius-surface)] border bg-surface-overlay p-4 text-sm shadow-[var(--ds-shadow-overlay)]">Overlay</div>
           </div>
         </ExampleSection>
 

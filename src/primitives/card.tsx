@@ -8,7 +8,7 @@ const cardVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-surface shadow-none",
+        default: "bg-surface shadow-[var(--ds-shadow-raised)]",
         muted: "bg-surface-muted shadow-none",
         elevated: "border-transparent bg-surface-raised shadow-[var(--ds-shadow-floating)]",
       },

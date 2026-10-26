@@ -121,7 +121,7 @@ function MetricBandItem({
         {loading ? (
           <Skeleton className="h-6 w-14 justify-self-end lg:justify-self-start" />
         ) : (
-          <div className="flex min-h-[1.5625rem] min-w-0 max-w-full items-center justify-end break-words text-right text-xl font-semibold leading-tight tracking-tight text-text-primary lg:justify-start lg:text-left">
+          <div className="flex min-h-[1.5625rem] min-w-0 max-w-full items-center justify-end break-words text-right ds-type-metric-value text-xl leading-tight text-text-primary lg:justify-start lg:text-left">
             {isEmpty ? <MetricBandEmptyValue>{emptyValue}</MetricBandEmptyValue> : value}
           </div>
         )}
@@ -154,7 +154,7 @@ function MetricBandItem({
         {loading ? (
           <Skeleton className="h-7 w-14" />
         ) : (
-          <div className="flex min-h-8 items-center text-2xl font-semibold tracking-tight">
+          <div className="ds-type-metric-value flex min-h-8 items-center text-2xl">
             {/* An omitted value keeps the 1.x zero fallback; null or emptyValue marks it missing. */}
             {value === undefined && emptyValue === undefined
               ? 0

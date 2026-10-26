@@ -99,7 +99,7 @@ function MetricCard({
           <Skeleton className={cn("h-8", emphasis === "primary" ? "w-24" : "w-16")} />
         ) : (
           <>
-            <span className={cn("font-semibold tabular-nums tracking-tight", emphasis === "primary" ? "text-4xl" : "text-2xl")}>
+            <span className={cn("ds-type-metric-value leading-none", emphasis === "primary" ? "text-[length:var(--ds-metric-value-primary)]" : "text-[length:var(--ds-metric-value)]")}>
               {value ?? 0}
             </span>
             {unit ? <span className="ds-type-ui text-text-supporting">{unit}</span> : null}
