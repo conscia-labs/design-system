@@ -117,6 +117,16 @@
   --brand-secondary-foreground: var(--brand-supporting-foreground);
   --brand-secondary-background: var(--brand-supporting-background);
   --brand-secondary-border: var(--brand-supporting-border);
+  /*
+   * Brand emphasis is a mid-tone of the Conscia burgundy hue. The official
+   * burgundy is near-black on light surfaces, so identity accents (underline
+   * tab indicators, the primary metric, state-view spots) use this tone.
+   * Blue stays reserved for actions and selection.
+   */
+  --brand-emphasis: #752870;
+  --brand-emphasis-foreground: #752870;
+  --brand-emphasis-background: #faf0f9;
+  --brand-emphasis-border: #e5c6e1;
   --action: #3f55df;
   --action-foreground: #ffffff;
   --action-hover: #3344c7;
@@ -151,14 +161,25 @@
   --neutral-background: var(--surface-muted);
   --neutral-border: var(--border-default);
   --neutral-foreground: #403941;
+  /*
+   * Categorical series lead with the brand hues (electric blue, burgundy
+   * plum, Conscia green) and never reuse status colors, so "series 4" can't
+   * be read as a warning. Assign in order, never cycle. Validated for
+   * lightness band, chroma floor, protan/deutan separation (worst adjacent
+   * dE 12.7), normal-vision separation, and 3:1 against canvas and surface.
+   * Series that mean good or bad use the status or trend tokens instead.
+   */
   --chart-series-1: var(--brand-accent);
-  --chart-series-2: var(--information);
-  --chart-series-3: var(--success);
-  --chart-series-4: var(--warning);
-  --chart-series-5: var(--danger);
+  --chart-series-2: #9c2892;
+  --chart-series-3: #11957c;
+  --chart-series-4: #cf5604;
+  --chart-series-5: #733fbf;
   --chart-grid: var(--border-subtle);
   --chart-axis: var(--text-muted);
   --chart-annotation: var(--action-background);
+  /* Area fills fade from the series color to transparent toward the baseline. */
+  --chart-area-opacity-start: 0.2;
+  --chart-area-opacity-end: 0;
   --trend-positive: var(--success);
   --trend-negative: var(--danger);
   --trend-neutral: var(--text-supporting);
@@ -179,6 +200,9 @@
   --sidebar-group-label: color-mix(in oklab, #ffffff 72%, transparent);
   --sidebar-group-count: color-mix(in oklab, #ffffff 62%, transparent);
   --sidebar-focus-ring: var(--focus);
+  --sidebar-glow: color-mix(in oklab, #b0549f 26%, transparent);
+  /* Faint brand wash for chrome backgrounds (page header, onboarding canvases). Never behind data. */
+  --ds-texture-tint: color-mix(in oklab, var(--brand-emphasis) 7%, transparent);
   --font-sans: "Source Sans 3 Variable", "Source Sans 3", "Source Sans", "Aptos", "Segoe UI", Arial, sans-serif;
   --ds-space-inline: 0.5rem;
   --ds-space-control: 0.625rem;
@@ -282,6 +306,18 @@
   --ds-shadow-raised: 0 1px 2px rgb(30 7 33 / 5%), 0 2px 6px -1px rgb(30 7 33 / 6%);
   --ds-shadow-floating: 0 2px 6px rgb(30 7 33 / 6%), 0 12px 28px -4px rgb(30 7 33 / 14%);
   --ds-shadow-overlay: 0 4px 12px rgb(30 7 33 / 7%), 0 24px 56px -8px rgb(30 7 33 / 22%);
+  /*
+   * Motion. Fast for hover and press feedback, base for anchored layers,
+   * slow for modal layers. Enter decelerates, exit accelerates. The
+   * reduced-motion rule below collapses every duration.
+   */
+  --ds-duration-fast: 120ms;
+  --ds-duration-base: 180ms;
+  --ds-duration-slow: 240ms;
+  --ds-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ds-ease-enter: cubic-bezier(0, 0, 0, 1);
+  --ds-ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ds-skeleton-highlight: rgb(255 255 255 / 75%);
   --ds-focus-ring: 0 0 0 3px color-mix(in oklab, var(--focus) 26%, transparent);
   --ds-workbench-global-rail-width: 4.5rem;
   --ds-workbench-secondary-rail-width: 18.375rem;
@@ -430,6 +466,10 @@
   --brand-secondary-foreground: var(--brand-supporting-foreground);
   --brand-secondary-background: var(--brand-supporting-background);
   --brand-secondary-border: var(--brand-supporting-border);
+  --brand-emphasis: #d58ecf;
+  --brand-emphasis-foreground: #ebcce7;
+  --brand-emphasis-background: #332331;
+  --brand-emphasis-border: #633f5f;
   --action: #5965cc;
   --action-foreground: #ffffff;
   --action-hover: #5f6bd2;
@@ -465,12 +505,17 @@
   --neutral-background: var(--surface-muted);
   --neutral-border: rgb(255 255 255 / 12%);
   --neutral-foreground: #eae7ea;
-  /* At least 3:1 against canvas, surface, raised, and muted dark surfaces. */
-  --chart-series-1: #8f9bff;
-  --chart-series-2: var(--information);
-  --chart-series-3: var(--success);
-  --chart-series-4: var(--warning);
-  --chart-series-5: var(--danger);
+  /*
+   * Dark steps of the same hues and order, validated separately against the
+   * dark band (worst adjacent dE 9.7) and at least 3:1 against canvas,
+   * surface, raised, and muted dark surfaces.
+   */
+  --chart-series-1: #5074f0;
+  --chart-series-2: #be4bb1;
+  --chart-series-3: #19aa8e;
+  --chart-series-4: #cf5604;
+  --chart-series-5: #905fe1;
+  --chart-area-opacity-start: 0.3;
   --chart-grid: var(--border-subtle);
   --chart-axis: var(--text-muted);
   --chart-annotation: var(--action-background);
@@ -494,6 +539,9 @@
   --sidebar-group-label: color-mix(in oklab, #ffffff 72%, transparent);
   --sidebar-group-count: color-mix(in oklab, #ffffff 62%, transparent);
   --sidebar-focus-ring: var(--focus);
+  --sidebar-glow: color-mix(in oklab, #b0549f 24%, transparent);
+  --ds-texture-tint: color-mix(in oklab, var(--brand-emphasis) 9%, transparent);
+  --ds-skeleton-highlight: rgb(255 255 255 / 5%);
   /*
    * Shadows read weakly on dark canvases, so each tier adds a faint top
    * highlight that catches the edge of the lifted surface.
@@ -528,6 +576,7 @@
   --sidebar-group-label: var(--text-secondary);
   --sidebar-group-count: var(--text-supporting);
   --sidebar-focus-ring: var(--focus);
+  --sidebar-glow: var(--ds-texture-tint);
 }
 
 /*
@@ -556,6 +605,7 @@
   --sidebar-group-label: var(--text-secondary);
   --sidebar-group-count: var(--text-supporting);
   --sidebar-focus-ring: var(--focus);
+  --sidebar-glow: transparent;
 }
 
 @theme inline {
@@ -592,6 +642,10 @@
   --color-brand-secondary-foreground: var(--brand-secondary-foreground);
   --color-brand-secondary-background: var(--brand-secondary-background);
   --color-brand-secondary-border: var(--brand-secondary-border);
+  --color-brand-emphasis: var(--brand-emphasis);
+  --color-brand-emphasis-foreground: var(--brand-emphasis-foreground);
+  --color-brand-emphasis-background: var(--brand-emphasis-background);
+  --color-brand-emphasis-border: var(--brand-emphasis-border);
   --color-action: var(--action);
   --color-action-foreground: var(--action-foreground);
   --color-action-hover: var(--action-hover);
@@ -657,6 +711,9 @@
   --shadow-raised: var(--ds-shadow-raised);
   --shadow-floating: var(--ds-shadow-floating);
   --shadow-overlay: var(--ds-shadow-overlay);
+  --ease-standard: var(--ds-ease-standard);
+  --ease-enter: var(--ds-ease-enter);
+  --ease-exit: var(--ds-ease-exit);
 }
 
 @utility ds-type-body {
@@ -738,6 +795,227 @@
   font-size: var(--ds-card-title-size);
   font-weight: var(--ds-card-title-weight);
   line-height: var(--ds-card-title-line-height);
+}
+
+/*
+ * Overlay motion. Base UI marks popups and backdrops with
+ * data-starting-style while entering and data-ending-style while leaving,
+ * and waits for these transitions before unmounting. Anchored layers scale
+ * from their trigger; modal layers rise slightly; sheets slide from their
+ * edge. Components layer, so consumer utilities still win.
+ */
+@layer components {
+  [data-slot="dialog-overlay"],
+  [data-slot="alert-dialog-overlay"],
+  [data-slot="sheet-overlay"] {
+    transition: opacity var(--ds-duration-slow) var(--ds-ease-standard);
+  }
+
+  [data-slot="dialog-overlay"]:is([data-starting-style], [data-ending-style]),
+  [data-slot="alert-dialog-overlay"]:is([data-starting-style], [data-ending-style]),
+  [data-slot="sheet-overlay"]:is([data-starting-style], [data-ending-style]) {
+    opacity: 0;
+  }
+
+  [data-slot="dialog-content"],
+  [data-slot="alert-dialog-content"] {
+    transition-property: opacity, transform;
+    transition-duration: var(--ds-duration-slow);
+    transition-timing-function: var(--ds-ease-enter);
+  }
+
+  [data-slot="dialog-content"][data-starting-style],
+  [data-slot="alert-dialog-content"][data-starting-style] {
+    opacity: 0;
+    transform: translateY(0.5rem) scale(0.98);
+  }
+
+  [data-slot="dialog-content"][data-ending-style],
+  [data-slot="alert-dialog-content"][data-ending-style] {
+    opacity: 0;
+    transform: scale(0.98);
+    transition-duration: var(--ds-duration-base);
+    transition-timing-function: var(--ds-ease-exit);
+  }
+
+  [data-slot="sheet-content"] {
+    transform: translate(var(--drawer-swipe-movement-x, 0px), var(--drawer-swipe-movement-y, 0px));
+    transition: transform var(--ds-duration-slow) var(--ds-ease-enter);
+  }
+
+  [data-slot="sheet-content"][data-swiping] {
+    transition-duration: 0ms;
+  }
+
+  [data-slot="sheet-content"][data-ending-style] {
+    transition-duration: var(--ds-duration-base);
+    transition-timing-function: var(--ds-ease-exit);
+  }
+
+  [data-slot="sheet-content"][data-swipe-direction="right"]:is([data-starting-style], [data-ending-style]) {
+    transform: translateX(100%);
+  }
+
+  [data-slot="sheet-content"][data-swipe-direction="left"]:is([data-starting-style], [data-ending-style]) {
+    transform: translateX(-100%);
+  }
+
+  [data-slot="sheet-content"][data-swipe-direction="up"]:is([data-starting-style], [data-ending-style]) {
+    transform: translateY(-100%);
+  }
+
+  [data-slot="sheet-content"][data-swipe-direction="down"]:is([data-starting-style], [data-ending-style]) {
+    transform: translateY(100%);
+  }
+
+  :is(
+    [data-slot="popover-content"],
+    [data-slot="dropdown-menu-content"],
+    [data-slot="dropdown-menu-sub-content"],
+    [data-slot="select-content"],
+    [data-slot="searchable-select-content"],
+    [data-slot="tooltip-content"]
+  ) {
+    transform-origin: var(--transform-origin, center);
+    transition-property: opacity, transform;
+    transition-duration: var(--ds-duration-base);
+    transition-timing-function: var(--ds-ease-enter);
+  }
+
+  :is(
+    [data-slot="popover-content"],
+    [data-slot="dropdown-menu-content"],
+    [data-slot="dropdown-menu-sub-content"],
+    [data-slot="select-content"],
+    [data-slot="searchable-select-content"],
+    [data-slot="tooltip-content"]
+  ):is([data-starting-style], [data-ending-style]) {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+
+  :is(
+    [data-slot="popover-content"],
+    [data-slot="dropdown-menu-content"],
+    [data-slot="dropdown-menu-sub-content"],
+    [data-slot="select-content"],
+    [data-slot="searchable-select-content"],
+    [data-slot="tooltip-content"]
+  )[data-ending-style] {
+    transition-duration: var(--ds-duration-fast);
+    transition-timing-function: var(--ds-ease-exit);
+  }
+
+  [data-slot="toast"] {
+    transition-property: opacity, transform;
+    transition-duration: var(--ds-duration-base);
+    transition-timing-function: var(--ds-ease-enter);
+  }
+
+  [data-slot="toast"]:is([data-starting-style], [data-ending-style]) {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+
+  /*
+   * State-view spot: a duotone treatment for empty, error, and success
+   * states. The icon's closed shapes take a light fill of their stroke
+   * color; the default size adds two orbit rings.
+   */
+  [data-slot="state-view-spot"] {
+    --spot-foreground: var(--brand-emphasis-foreground);
+    --spot-background: var(--brand-emphasis-background);
+    --spot-ring: var(--brand-emphasis-border);
+    position: relative;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    color: var(--spot-foreground);
+    background: var(--spot-background);
+    box-shadow: 0 0 0 1px var(--spot-ring);
+  }
+
+  [data-slot="state-view-spot"][data-tone="neutral"] {
+    --spot-foreground: var(--neutral-foreground);
+    --spot-background: var(--neutral-background);
+    --spot-ring: var(--neutral-border);
+  }
+
+  [data-slot="state-view-spot"][data-tone="success"] {
+    --spot-foreground: var(--success-foreground);
+    --spot-background: var(--success-background);
+    --spot-ring: var(--success-border);
+  }
+
+  [data-slot="state-view-spot"][data-tone="danger"] {
+    --spot-foreground: var(--danger-foreground);
+    --spot-background: var(--surface);
+    --spot-ring: var(--danger-border);
+  }
+
+  [data-slot="state-view-spot"] svg {
+    fill: color-mix(in oklab, currentColor 16%, transparent);
+  }
+
+  [data-slot="state-view-spot"][data-size="default"]::before,
+  [data-slot="state-view-spot"][data-size="default"]::after {
+    position: absolute;
+    border-radius: inherit;
+    pointer-events: none;
+    content: "";
+  }
+
+  [data-slot="state-view-spot"][data-size="default"]::before {
+    inset: -0.5rem;
+    border: 1px solid color-mix(in oklab, var(--spot-ring) 70%, transparent);
+  }
+
+  [data-slot="state-view-spot"][data-size="default"]::after {
+    inset: -1.125rem;
+    border: 1px dashed color-mix(in oklab, var(--spot-ring) 45%, transparent);
+  }
+
+  /* The sidebar header carries the brand mark; a soft glow sits behind it. */
+  [data-slot="app-sidebar-header"] {
+    background-image: radial-gradient(120% 180% at 0% 0%, var(--sidebar-glow, transparent), transparent 72%);
+  }
+}
+
+@keyframes ds-skeleton-shimmer {
+  from {
+    background-position: 300% 0;
+  }
+
+  to {
+    background-position: -100% 0;
+  }
+}
+
+@utility ds-skeleton {
+  background-color: var(--surface-muted);
+  background-image: linear-gradient(90deg, transparent 0%, var(--ds-skeleton-highlight) 50%, transparent 100%);
+  background-repeat: no-repeat;
+  background-size: 50% 100%;
+  animation: ds-skeleton-shimmer 1.6s var(--ds-ease-standard) infinite;
+}
+
+/* Faint brand wash for chrome such as the page header. Never behind data. */
+@utility ds-texture-wash {
+  background-image: radial-gradient(60% 180% at 0% 0%, var(--ds-texture-tint), transparent 70%);
+}
+
+/*
+ * Expressive texture for large brand moments: sign-in, onboarding, and
+ * empty workspaces. Two brand glows over a faint dot grid. Never behind data.
+ */
+@utility ds-texture-brand {
+  background-image:
+    radial-gradient(60% 55% at 0% 0%, color-mix(in oklab, var(--brand-emphasis) 16%, transparent), transparent 70%),
+    radial-gradient(55% 50% at 100% 100%, color-mix(in oklab, var(--brand-accent) 12%, transparent), transparent 70%),
+    radial-gradient(circle at 1px 1px, color-mix(in oklab, var(--text-primary) 9%, transparent) 1px, transparent 0);
+  background-size: auto, auto, 1.25rem 1.25rem;
 }
 
 /* Weight, tracking, and figures for numeric readouts. Size is set per use. */

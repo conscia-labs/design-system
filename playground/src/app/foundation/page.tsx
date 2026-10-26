@@ -89,6 +89,44 @@ export default function FoundationPage() {
             <div className="rounded-[var(--ds-radius-control)] border border-brand-supporting-border bg-brand-supporting-background p-4 text-sm font-medium text-brand-supporting">
               Green · supporting brand expression
             </div>
+            <div className="rounded-[var(--ds-radius-control)] border border-brand-emphasis-border bg-brand-emphasis-background p-4 text-sm font-medium text-brand-emphasis-foreground">
+              Burgundy emphasis · identity accents
+            </div>
+          </div>
+        </ExampleSection>
+
+        <ExampleSection title="Chart series">
+          <div className="grid gap-3 rounded-[var(--ds-radius-surface)] border bg-surface p-4">
+            <p className="ds-type-ui text-text-supporting">Assign in order and never cycle. Series that mean good or bad use status tokens.</p>
+            <ol className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+              {[
+                ["1", "Electric blue", "bg-chart-series-1"],
+                ["2", "Plum", "bg-chart-series-2"],
+                ["3", "Green", "bg-chart-series-3"],
+                ["4", "Copper", "bg-chart-series-4"],
+                ["5", "Violet", "bg-chart-series-5"],
+              ].map(([slot, name, swatch]) => (
+                <li key={slot} className="grid gap-2">
+                  <span className={`h-10 rounded-[var(--ds-radius-control)] ${swatch}`} aria-hidden="true" />
+                  <span className="ds-type-metadata text-text-secondary">{slot} · {name}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </ExampleSection>
+
+        <ExampleSection title="Surface texture">
+          <div className="grid gap-3 md:grid-cols-2">
+            <div className="ds-texture-wash rounded-[var(--ds-radius-surface)] border bg-canvas p-4">
+              <div className="ds-type-section-title">Wash</div>
+              <p className="ds-type-ui mt-1 text-text-supporting">Page headers and other chrome. Never behind data.</p>
+            </div>
+            <div className="ds-texture-brand grid min-h-36 place-items-center rounded-[var(--ds-radius-surface)] border bg-canvas p-4 text-center">
+              <div>
+                <div className="ds-type-section-title">Brand</div>
+                <p className="ds-type-ui mt-1 text-text-supporting">Sign-in, onboarding, and empty workspaces.</p>
+              </div>
+            </div>
           </div>
         </ExampleSection>
 

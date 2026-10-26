@@ -103,7 +103,7 @@ function SearchableSelect({
         </Combobox.InputGroup>
         <Combobox.Portal>
           <Combobox.Positioner data-slot="searchable-select-positioner" className={cn(overlayLayers.popup, "w-[var(--anchor-width)]")}>
-            <Combobox.Popup className="mt-1 max-h-72 overflow-auto rounded-md border bg-surface-floating p-1 text-text-primary shadow-[var(--ds-shadow-floating)] outline-none">
+            <Combobox.Popup data-slot="searchable-select-content" className="mt-1 max-h-72 overflow-auto rounded-md border bg-surface-floating p-1 text-text-primary shadow-[var(--ds-shadow-floating)] outline-none">
               <Combobox.Empty className="px-2 py-3 text-sm text-text-supporting">{emptyMessage}</Combobox.Empty>
               <Combobox.List aria-label={optionsLabel ?? "Options"}>
                 {(optionValue: string) => {

@@ -6,7 +6,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "./utils";
 
 const buttonVariants = cva(
-  "ds-type-button inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md transition-colors disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-focus focus-visible:ring-focus/50 focus-visible:ring-[3px] aria-invalid:ring-danger/20 dark:aria-invalid:ring-danger/40 aria-invalid:border-danger",
+  "ds-type-button inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md transition-[color,background-color,border-color,box-shadow,transform] duration-[var(--ds-duration-fast)] ease-standard active:not-disabled:translate-y-px disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-focus focus-visible:ring-focus/50 focus-visible:ring-[3px] aria-invalid:ring-danger/20 dark:aria-invalid:ring-danger/40 aria-invalid:border-danger",
   {
     variants: {
       variant: {
@@ -18,7 +18,7 @@ const buttonVariants = cva(
           "border border-border-default bg-surface-control text-text-primary shadow-xs hover:bg-surface-control-hover hover:text-text-primary",
         secondary: "bg-surface-inverse text-text-inverse shadow-xs hover:bg-surface-inverse/80",
         ghost: "text-text-primary hover:bg-surface-muted hover:text-text-primary",
-        link: "text-text-link underline-offset-4 hover:underline"
+        link: "text-text-link underline-offset-4 hover:underline active:not-disabled:translate-y-0"
       },
       size: {
         default: "h-[var(--ds-control-height)] px-3 py-2 has-[>svg]:px-3",

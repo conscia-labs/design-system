@@ -492,6 +492,31 @@ test("elevation scale routes resting, anchored, and modal layers through tokens"
   assert.match(read("../../../src/primitives/select.tsx"), /shadow-\[var\(--ds-shadow-floating\)\]/);
 });
 
+test("expressive layer keeps brand, motion, chart, and texture roles token-backed", () => {
+  const styles = read("../../../src/foundation/styles.css");
+  const stateViews = read("../../../src/patterns/state-views.tsx");
+  const dailyVolume = read("../../../src/patterns/daily-volume-chart.tsx");
+
+  for (const role of ["brand-emphasis", "brand-emphasis-foreground", "brand-emphasis-background", "brand-emphasis-border"]) {
+    assert.match(styles, new RegExp(`--color-${role}: var\\(--${role}\\);`));
+  }
+  for (const series of [1, 2, 3, 4, 5]) {
+    assert.doesNotMatch(styles, new RegExp(`--chart-series-${series}: var\\(--(success|warning|danger|information)\\)`));
+  }
+  assert.doesNotMatch(dailyVolume, /bg-chart-series-5/);
+  for (const token of ["--ds-duration-fast", "--ds-duration-base", "--ds-duration-slow", "--ds-ease-enter", "--ds-ease-exit"]) {
+    assert.match(styles, new RegExp(`${token}:`));
+  }
+  assert.match(styles, /\[data-slot="dialog-content"\]\[data-starting-style\]/);
+  assert.match(styles, /\[data-slot="sheet-content"\]\[data-swipe-direction="right"\]/);
+  assert.match(styles, /prefers-reduced-motion: reduce/);
+  assert.match(styles, /@utility ds-skeleton/);
+  assert.match(styles, /@utility ds-texture-wash/);
+  assert.match(styles, /@utility ds-texture-brand/);
+  assert.match(stateViews, /data-slot="state-view-spot"/);
+  assert.match(stateViews, /tone = "danger"/);
+});
+
 test("tabs separate routed navigation from layered content and mode switching", () => {
   const tabs = read("../../../src/primitives/tabs.tsx");
   const foundation = read("../../../src/foundation/styles.css");

@@ -14,6 +14,12 @@ type StateViewProps = React.ComponentProps<"div"> & {
   size?: "default" | "compact";
   /** Adds a bottom divider, for a state that replaces rows inside a table body. */
   divider?: boolean;
+  /**
+   * Colors the icon spot. `brand` suits empty and first-run states,
+   * `success` a completed flow, `neutral` a quiet inline state, and `danger`
+   * is set by ErrorState.
+   */
+  tone?: "brand" | "neutral" | "success" | "danger";
 };
 
 function StateView({
@@ -23,6 +29,7 @@ function StateView({
   icon,
   size = "default",
   divider = false,
+  tone = "brand",
   className,
   ...props
 }: StateViewProps) {
@@ -42,10 +49,11 @@ function StateView({
     >
       {icon ? (
         <div
-          className={cn(
-            "flex items-center justify-center rounded-md bg-neutral-background text-neutral-foreground",
-            compact ? "size-8 [&_svg]:size-4" : "size-10 [&_svg]:size-5",
-          )}
+          data-slot="state-view-spot"
+          data-tone={tone}
+          data-size={size}
+          aria-hidden="true"
+          className={cn(compact ? "size-9 [&_svg]:size-4" : "my-[1.125rem] size-14 [&_svg]:size-6")}
         >
           {icon}
         </div>
@@ -87,12 +95,13 @@ function LoadingRows({
   );
 }
 
-function ErrorState({ title, description, action, className, ...props }: StateViewProps) {
+function ErrorState({ title, description, action, tone = "danger", className, ...props }: StateViewProps) {
   return (
     <StateView
       title={title}
       description={description}
       action={action}
+      tone={tone}
       className={cn("bg-danger-background/60", className)}
       role="alert"
       aria-live="assertive"
