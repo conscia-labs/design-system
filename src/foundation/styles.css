@@ -817,116 +817,126 @@
  * edge. Components layer, so consumer utilities still win.
  */
 @layer components {
-  [data-slot="dialog-overlay"],
-  [data-slot="alert-dialog-overlay"],
-  [data-slot="sheet-overlay"] {
-    transition: opacity var(--ds-duration-slow) var(--ds-ease-standard);
-  }
-
-  [data-slot="dialog-overlay"]:is([data-starting-style], [data-ending-style]),
-  [data-slot="alert-dialog-overlay"]:is([data-starting-style], [data-ending-style]),
-  [data-slot="sheet-overlay"]:is([data-starting-style], [data-ending-style]) {
-    opacity: 0;
-  }
-
-  [data-slot="dialog-content"],
-  [data-slot="alert-dialog-content"] {
-    transition-property: opacity, transform;
-    transition-duration: var(--ds-duration-slow);
-    transition-timing-function: var(--ds-ease-enter);
-  }
-
-  [data-slot="dialog-content"][data-starting-style],
-  [data-slot="alert-dialog-content"][data-starting-style] {
-    opacity: 0;
-    transform: translateY(0.5rem) scale(0.98);
-  }
-
-  [data-slot="dialog-content"][data-ending-style],
-  [data-slot="alert-dialog-content"][data-ending-style] {
-    opacity: 0;
-    transform: scale(0.98);
-    transition-duration: var(--ds-duration-base);
-    transition-timing-function: var(--ds-ease-exit);
-  }
-
+  /* Swipe-to-dismiss follows the finger in every motion preference. */
   [data-slot="sheet-content"] {
     transform: translate(var(--drawer-swipe-movement-x, 0px), var(--drawer-swipe-movement-y, 0px));
-    transition: transform var(--ds-duration-slow) var(--ds-ease-enter);
   }
 
-  [data-slot="sheet-content"][data-swiping] {
-    transition-duration: 0ms;
-  }
+  /*
+   * Enter and exit motion only runs when the viewer has not asked for
+   * reduced motion; otherwise overlays appear and disappear at once.
+   */
+  @media (prefers-reduced-motion: no-preference) {
+    [data-slot="dialog-overlay"],
+    [data-slot="alert-dialog-overlay"],
+    [data-slot="sheet-overlay"] {
+      transition: opacity var(--ds-duration-slow) var(--ds-ease-standard);
+    }
 
-  [data-slot="sheet-content"][data-ending-style] {
-    transition-duration: var(--ds-duration-base);
-    transition-timing-function: var(--ds-ease-exit);
-  }
+    [data-slot="dialog-overlay"]:is([data-starting-style], [data-ending-style]),
+    [data-slot="alert-dialog-overlay"]:is([data-starting-style], [data-ending-style]),
+    [data-slot="sheet-overlay"]:is([data-starting-style], [data-ending-style]) {
+      opacity: 0;
+    }
 
-  [data-slot="sheet-content"][data-swipe-direction="right"]:is([data-starting-style], [data-ending-style]) {
-    transform: translateX(100%);
-  }
+    [data-slot="dialog-content"],
+    [data-slot="alert-dialog-content"] {
+      transition-property: opacity, transform;
+      transition-duration: var(--ds-duration-slow);
+      transition-timing-function: var(--ds-ease-enter);
+    }
 
-  [data-slot="sheet-content"][data-swipe-direction="left"]:is([data-starting-style], [data-ending-style]) {
-    transform: translateX(-100%);
-  }
+    [data-slot="dialog-content"][data-starting-style],
+    [data-slot="alert-dialog-content"][data-starting-style] {
+      opacity: 0;
+      transform: translateY(0.5rem) scale(0.98);
+    }
 
-  [data-slot="sheet-content"][data-swipe-direction="up"]:is([data-starting-style], [data-ending-style]) {
-    transform: translateY(-100%);
-  }
+    [data-slot="dialog-content"][data-ending-style],
+    [data-slot="alert-dialog-content"][data-ending-style] {
+      opacity: 0;
+      transform: scale(0.98);
+      transition-duration: var(--ds-duration-base);
+      transition-timing-function: var(--ds-ease-exit);
+    }
 
-  [data-slot="sheet-content"][data-swipe-direction="down"]:is([data-starting-style], [data-ending-style]) {
-    transform: translateY(100%);
-  }
+    [data-slot="sheet-content"] {
+      transition: transform var(--ds-duration-slow) var(--ds-ease-enter);
+    }
 
-  :is(
-    [data-slot="popover-content"],
-    [data-slot="dropdown-menu-content"],
-    [data-slot="dropdown-menu-sub-content"],
-    [data-slot="select-content"],
-    [data-slot="searchable-select-content"],
-    [data-slot="tooltip-content"]
-  ) {
-    transform-origin: var(--transform-origin, center);
-    transition-property: opacity, transform;
-    transition-duration: var(--ds-duration-base);
-    transition-timing-function: var(--ds-ease-enter);
-  }
+    [data-slot="sheet-content"][data-swiping] {
+      transition-duration: 0ms;
+    }
 
-  :is(
-    [data-slot="popover-content"],
-    [data-slot="dropdown-menu-content"],
-    [data-slot="dropdown-menu-sub-content"],
-    [data-slot="select-content"],
-    [data-slot="searchable-select-content"],
-    [data-slot="tooltip-content"]
-  ):is([data-starting-style], [data-ending-style]) {
-    opacity: 0;
-    transform: scale(0.96);
-  }
+    [data-slot="sheet-content"][data-ending-style] {
+      transition-duration: var(--ds-duration-base);
+      transition-timing-function: var(--ds-ease-exit);
+    }
 
-  :is(
-    [data-slot="popover-content"],
-    [data-slot="dropdown-menu-content"],
-    [data-slot="dropdown-menu-sub-content"],
-    [data-slot="select-content"],
-    [data-slot="searchable-select-content"],
-    [data-slot="tooltip-content"]
-  )[data-ending-style] {
-    transition-duration: var(--ds-duration-fast);
-    transition-timing-function: var(--ds-ease-exit);
-  }
+    [data-slot="sheet-content"][data-swipe-direction="right"]:is([data-starting-style], [data-ending-style]) {
+      transform: translateX(100%);
+    }
 
-  [data-slot="toast"] {
-    transition-property: opacity, transform;
-    transition-duration: var(--ds-duration-base);
-    transition-timing-function: var(--ds-ease-enter);
-  }
+    [data-slot="sheet-content"][data-swipe-direction="left"]:is([data-starting-style], [data-ending-style]) {
+      transform: translateX(-100%);
+    }
 
-  [data-slot="toast"]:is([data-starting-style], [data-ending-style]) {
-    opacity: 0;
-    transform: translateY(0.5rem);
+    [data-slot="sheet-content"][data-swipe-direction="up"]:is([data-starting-style], [data-ending-style]) {
+      transform: translateY(-100%);
+    }
+
+    [data-slot="sheet-content"][data-swipe-direction="down"]:is([data-starting-style], [data-ending-style]) {
+      transform: translateY(100%);
+    }
+
+    :is(
+      [data-slot="popover-content"],
+      [data-slot="dropdown-menu-content"],
+      [data-slot="dropdown-menu-sub-content"],
+      [data-slot="select-content"],
+      [data-slot="searchable-select-content"],
+      [data-slot="tooltip-content"]
+    ) {
+      transform-origin: var(--transform-origin, center);
+      transition-property: opacity, transform;
+      transition-duration: var(--ds-duration-base);
+      transition-timing-function: var(--ds-ease-enter);
+    }
+
+    :is(
+      [data-slot="popover-content"],
+      [data-slot="dropdown-menu-content"],
+      [data-slot="dropdown-menu-sub-content"],
+      [data-slot="select-content"],
+      [data-slot="searchable-select-content"],
+      [data-slot="tooltip-content"]
+    ):is([data-starting-style], [data-ending-style]) {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+
+    :is(
+      [data-slot="popover-content"],
+      [data-slot="dropdown-menu-content"],
+      [data-slot="dropdown-menu-sub-content"],
+      [data-slot="select-content"],
+      [data-slot="searchable-select-content"],
+      [data-slot="tooltip-content"]
+    )[data-ending-style] {
+      transition-duration: var(--ds-duration-fast);
+      transition-timing-function: var(--ds-ease-exit);
+    }
+
+    [data-slot="toast"] {
+      transition-property: opacity, transform;
+      transition-duration: var(--ds-duration-base);
+      transition-timing-function: var(--ds-ease-enter);
+    }
+
+    [data-slot="toast"]:is([data-starting-style], [data-ending-style]) {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
   }
 
   /*

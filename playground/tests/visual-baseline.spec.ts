@@ -79,6 +79,9 @@ for (const route of routes) {
       for (const density of densities) {
         test(`visual baseline: ${route.id} / ${viewport.id} / ${appearance} / ${density}`, async ({ page }) => {
           await page.setViewportSize({ width: viewport.width, height: viewport.height });
+          // Reduced motion renders counted metrics in their final state, so a
+          // baseline never captures a frame mid-count.
+          await page.emulateMedia({ reducedMotion: "reduce" });
           await loadRoute(page, route, appearance, density);
 
           await expect(page).toHaveScreenshot(

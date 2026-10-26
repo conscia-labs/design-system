@@ -270,6 +270,9 @@ test.describe("Phase 7 accessibility regression", () => {
   });
 
   test("portaled and revealed component states have no automatically detectable violations", async ({ page }) => {
+    // Scan settled overlays: an exit fade would otherwise leave a closing popup
+    // at partial opacity while the next one is scanned.
+    await page.emulateMedia({ reducedMotion: "reduce" });
     await page.setViewportSize({ width: 1440, height: 1100 });
     await loadRoute(page, "/primitives", "Primitives", "light", "operational");
     await installAxe(page);
