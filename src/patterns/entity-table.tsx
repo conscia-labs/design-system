@@ -18,7 +18,10 @@ type EntityTableProps<T> = {
   onRowClick?: (item: T) => void;
   getRowLabel?: (item: T) => string;
   rowActions?: (item: T) => React.ReactNode;
+  /** Names the table for assistive technology. Hidden unless `showCaption` is set. */
   caption?: React.ReactNode;
+  /** Shows `caption` as visible text above the table. */
+  showCaption?: boolean;
   className?: string;
 };
 
@@ -32,6 +35,7 @@ function EntityTable<T>({
   getRowLabel,
   rowActions,
   caption,
+  showCaption,
   className
 }: EntityTableProps<T>) {
   return (
@@ -45,6 +49,7 @@ function EntityTable<T>({
       getRowLabel={getRowLabel}
       rowActions={rowActions}
       caption={caption}
+      showCaption={showCaption}
       className={className}
     />
   );

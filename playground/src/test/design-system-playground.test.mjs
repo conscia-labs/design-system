@@ -565,6 +565,20 @@ test("table states are stable for selected and hover rows", () => {
   assert.match(primitives, /data-selected="true"/);
 });
 
+test("tables separate header and footer bands and size controls for touch", () => {
+  const styles = read("../../../src/foundation/styles.css");
+  const table = read("../../../src/primitives/table.tsx");
+  const dataTable = read("../../../src/patterns/data-table.tsx");
+
+  assert.match(styles, /--surface-table-header: #ece8ec;/);
+  assert.match(styles, /--color-surface-table-header: var\(--surface-table-header\);/);
+  assert.match(styles, /@media \(pointer: coarse\) \{\s*:root,\s*\[data-density\] \{\s*--ds-control-height: 2\.75rem;\s*--ds-control-height-sm: 2\.75rem;/);
+  assert.match(table, /caption-top/);
+  assert.doesNotMatch(table, /caption-bottom/);
+  assert.match(table, /visible \? "ds-type-metadata[^"]*" : "sr-only"/);
+  assert.match(dataTable, /<TableCaption visible=\{showCaption\}>/);
+});
+
 test("Base UI state markers replace compatibility state markers", () => {
   const collapsible = read("../../../src/primitives/collapsible.tsx");
   const styles = read("../../../src/foundation/styles.css");

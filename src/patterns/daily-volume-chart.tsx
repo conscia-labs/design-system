@@ -13,6 +13,22 @@ type DailyVolumePoint = {
   unsuccessful?: number;
 };
 
+/**
+ * Semantic colour for a series. `success` and `danger` carry outcome meaning,
+ * so a successful series matches success badges and trends elsewhere on the
+ * page; `accent` is the neutral first chart series for measures with no
+ * outcome, such as plain volume.
+ */
+type DailyVolumeTone = "success" | "danger" | "warning" | "information" | "accent";
+
+const toneClassNames: Record<DailyVolumeTone, string> = {
+  success: "bg-success",
+  danger: "bg-danger",
+  warning: "bg-warning",
+  information: "bg-information",
+  accent: "bg-chart-series-1",
+};
+
 type DailyVolumeChartProps = Omit<React.ComponentProps<"figure">, "children" | "title"> & {
   title: React.ReactNode;
   /** Plain-text name used in the chart's accessible summary. */
@@ -24,8 +40,14 @@ type DailyVolumeChartProps = Omit<React.ComponentProps<"figure">, "children" | "
   end?: string;
   /** Plural unit stated with the scale and table, such as "requests". */
   unit: string;
+  /** Legend label for the main series. */
+  successfulLabel?: string;
   /** Legend and table label for the stacked segment. */
   unsuccessfulLabel?: string;
+  /** Colour of the main series. Defaults to the success token so "Successful" matches outcome colours nearby. */
+  successfulTone?: DailyVolumeTone;
+  /** Colour of the stacked segment. Defaults to the danger token. */
+  unsuccessfulTone?: DailyVolumeTone;
   formatValue?: (value: number) => string;
   formatDate?: (date: string) => string;
   tableLabel?: React.ReactNode;
@@ -84,7 +106,10 @@ function DailyVolumeChart({
   start,
   end,
   unit,
+  successfulLabel = "Successful",
   unsuccessfulLabel = "Not successful",
+  successfulTone = "success",
+  unsuccessfulTone = "danger",
   formatValue = (value) => defaultNumberFormat.format(value),
   formatDate = (date) => defaultDateFormat.format(new Date(parseDay(date))),
   tableLabel = "View daily data",
@@ -115,11 +140,11 @@ function DailyVolumeChart({
       {showUnsuccessful ? (
         <div data-slot="daily-volume-chart-legend" className="ds-type-metadata flex flex-wrap gap-4 text-text-supporting" aria-hidden="true">
           <span className="inline-flex items-center gap-1.5">
-            <span className="size-2.5 rounded-sm bg-chart-series-1" />
-            Successful
+            <span className={cn("size-2.5 rounded-sm", toneClassNames[successfulTone])} />
+            {successfulLabel}
           </span>
           <span className="inline-flex items-center gap-1.5">
-            <span className="size-2.5 rounded-sm bg-danger" />
+            <span className={cn("size-2.5 rounded-sm", toneClassNames[unsuccessfulTone])} />
             {unsuccessfulLabel}
           </span>
         </div>
@@ -145,9 +170,13 @@ function DailyVolumeChart({
                   style={{ height: `${(day.value / scaleMaximum) * 100}%` }}
                 >
                   {unsuccessful ? (
-                    <div className="bg-danger" style={{ height: `${(unsuccessful / day.value) * 100}%` }} />
+                    <div
+                      data-slot="daily-volume-chart-unsuccessful"
+                      className={toneClassNames[unsuccessfulTone]}
+                      style={{ height: `${(unsuccessful / day.value) * 100}%` }}
+                    />
                   ) : null}
-                  <div className="flex-1 bg-chart-series-1" />
+                  <div data-slot="daily-volume-chart-successful" className={cn("flex-1", toneClassNames[successfulTone])} />
                 </div>
               </div>
             );
@@ -194,4 +223,4 @@ function DailyVolumeChart({
 }
 
 export { DailyVolumeChart };
-export type { DailyVolumeChartProps, DailyVolumePoint };
+export type { DailyVolumeChartProps, DailyVolumePoint, DailyVolumeTone };

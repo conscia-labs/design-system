@@ -83,12 +83,13 @@ const guidance: Record<string, ComponentGuidance> = {
   },
   table: {
     whenToUse: "Use for a bounded dataset where users need to compare values across columns.",
-    accessibility: "Provide a caption or nearby heading, use header cells, and expose sort direction with aria-sort when sorting is interactive.",
+    accessibility: "Name every table with TableCaption (screen-reader-only by default) or a nearby heading, use header cells, and expose sort direction with aria-sort when sorting is interactive.",
     options: [
       { name: "row state", values: "default · selected · disabled", guidance: "State remains available through data attributes without changing table semantics." },
       { name: "TableRow interactive", values: "false (default) · true", guidance: "Clickable rows show a pointer and an action-colored edge rail on hover and focus. DataTable sets it for rows that accept onRowClick." },
       { name: "scrollable", values: "true (default) · false", guidance: "Wide tables scroll horizontally and fade the edge that has more columns. Pass false only when you render a stacked layout at narrow widths." },
-      { name: "headers", values: "uppercase table-head style", guidance: "Table and DataTable share one header style, including sortable headers. Do not restyle header cells per page." },
+      { name: "headers", values: "uppercase table-head style", guidance: "Table and DataTable share one header style, including sortable headers. Column headers and TableFooter sit on the surface-table-header band above a border-default divider. Do not restyle header cells per page." },
+      { name: "TableCaption visible", values: "false (default) · true", guidance: "A caption names the table for assistive technology and stays hidden by default. Set visible to show it as metadata text above the table; it never renders between the rows and pagination." },
     ],
   },
   stepper: {
@@ -132,6 +133,9 @@ const guidance: Record<string, ComponentGuidance> = {
     options: [
       { name: "presentation", values: "DataTable · EntityTable · InventorySurface", guidance: "DataTable owns interaction; InventorySurface owns responsive presentation." },
       { name: "page size", values: "paginationPageSizes.inventory (25) · paginationPageSizes.detail (10)", guidance: "Use 25 rows for full-page inventories and 10 for tables inside detail pages. The Rows control and page buttons share the small control height." },
+      { name: "DataTable showCaption", values: "false (default) · true", guidance: "caption names the table for screen readers. Pass showCaption to render it as visible text above the header." },
+      { name: "surfaces", values: "canvas page · Card / InventorySurface", guidance: "On the page canvas, DataTable rows and PageToolbar paint the canvas. Inside a Card or InventorySurface they take the card surface. The column header and pagination footer always sit on the darker table-header band." },
+      { name: "touch sizing", values: "pointer: coarse", guidance: "On touch devices every control height, including pagination, the Rows control and sort headers, rises to 44px in all densities. Do not add min-height overrides on cards or tables." },
     ],
   },
   "metrics-and-data-panels": {
@@ -140,7 +144,7 @@ const guidance: Record<string, ComponentGuidance> = {
     options: [
       { name: "MetricBand presentation", values: "default · compact", guidance: "Compact uses one full-width row per item below desktop and the configured number of columns on desktop; details and values wrap without individual card backgrounds." },
       { name: "MetricBandItem value", values: "React node · loading skeleton · emptyValue", guidance: "Values can contain links. A missing value (null, or omitted in compact presentation) renders quietly as an em dash or as emptyValue, such as \"Never\". Detail lines are reserved so values share a baseline." },
-      { name: "DailyVolumeChart", values: "total · stacked not-successful segment", guidance: "Use for every per-day measure: calendar-true days, a stated scale, first, middle, and last date labels, and an exact-values table." },
+      { name: "DailyVolumeChart", values: "total · stacked not-successful segment · successfulTone / unsuccessfulTone: success (default) · danger (default for the segment) · warning · information · accent", guidance: "Use for every per-day measure: calendar-true days, a stated scale, first, middle, and last date labels, and an exact-values table. The successful series takes the success token so it matches outcome colours nearby; pass successfulTone=\"accent\" for a measure with no outcome, such as plain volume." },
       { name: "emphasis", values: "primary · supporting", guidance: "Give primary metrics more visual weight without changing their semantic meaning. The primary card carries the burgundy emphasis edge." },
       { name: "MetricCard countUp", values: "false (default) · true · { format, locale, durationMs }", guidance: "Counts a numeric value up on load and between updates. Screen readers hear only the final value, and reduced motion shows it immediately. Pass a pre-formatted node instead when the value is not a plain number." },
       { name: "MetricTrend sentiment", values: "positive · negative · neutral", guidance: "Trends render as tinted badges: Conscia green for positive, danger tint for negative. Always pair with an accessible label that states the direction and meaning." },

@@ -13,6 +13,67 @@
   opaque canvas background when the wash is off.
 - `ds-texture-wash` is documented as suitable only for elements whose
   top-left corner touches the workspace edges.
+## 1.5.1 - 2026-10-26
+
+A patch release: the active option in segmented and pill tabs is now clearly
+visible in light mode, and tables get distinct header and footer bands.
+Consumers upgrade without code changes.
+
+Tabs:
+
+- Segmented tabs sit on a new `surface-track` band and the active option is a
+  raised `surface-track-selected` chip with `shadow-raised` and a
+  `border-subtle` ring. The selected fill reaches 1.33:1 against the track in
+  light mode and 1.39:1 in dark mode (previously about 1.01:1 in light mode).
+- Pill tabs, including `NavigationTabsList variant="pills"`, fill the active
+  pill with the new `selection-background-strong` token and add a
+  `selection-border` ring. The fill reaches 1.31:1 against the canvas and
+  1.44:1 against white surfaces in light mode, 1.57:1 and 1.46:1 in dark mode
+  (previously about 1.06:1 against white). Text colours, focus rings, hover
+  states, layout and sizes are unchanged.
+- The Tabs playground page shows both variants on the canvas and inside a
+  `DataPanelHeader`, and joins the visual baseline routes.
+
+Tables and toolbars:
+
+- Sortable `DataTable` headers use the table-head type (size, weight, tracking,
+  uppercase) like plain headers. The sort control is now a plain button
+  carrying `ds-type-table-head`, so a `Button`'s `ds-type-button` size no longer
+  wins in a table that mixes sortable and static columns.
+- A `PageToolbar` inside a `Card` or `InventorySurface` takes the surface inset
+  (`--ds-surface-padding`) and keeps its bottom border on the card surface, so
+  the search field and trailing actions no longer touch the card edges inside a
+  `PageFrame`. Standalone toolbars on the page canvas are unchanged. Products
+  can remove hand-added toolbar padding and global toolbar overrides.
+
+Charts:
+
+- `DailyVolumeChart` colours its successful series with the `success` token
+  instead of the first chart series blue, so "Successful" matches outcome
+  badges and breakdowns on the same page. New `successfulTone` and
+  `unsuccessfulTone` props (`success`, `danger`, `warning`, `information`,
+  `accent`) choose the series colours, and `successfulLabel` names the main
+  series in the legend. Pass `successfulTone="accent"` to keep the previous
+  blue for a measure with no outcome.
+
+Tables:
+
+- Column headers and the `DataTable` pagination footer sit on a new
+  `surface-table-header` band, darker than both the rows and the card, with a
+  `border-default` divider. `TableFooter` uses the same band. Header labels
+  keep 5.26:1 contrast in light mode and 7.20:1 in dark mode.
+- Inside a `Card` or `InventorySurface`, `DataTable` rows and `PageToolbar`
+  take the card surface instead of painting the canvas. Products can drop
+  rules that forced in-card toolbars onto the card surface.
+- `TableCaption` is now screen-reader-only by default, and `Table` places
+  visible captions above the table. Pass `visible` to show one, or
+  `showCaption` on `DataTable` and `EntityTable`. A caption no longer renders
+  between the last row and the pagination.
+- On a coarse primary pointer, `--ds-control-height`, `-sm` and `-lg` rise to
+  at least 44px in every density. Pagination buttons, the Rows control and
+  sortable headers reach touch size without product overrides, so remove
+  blanket `[&_button]:min-h-11` rules. Sortable header buttons now follow
+  `--ds-control-height-sm` instead of a fixed 32px.
 
 ## 1.5.0 - 2026-10-26
 
