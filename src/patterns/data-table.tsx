@@ -15,7 +15,6 @@ import {
 } from "@tanstack/react-table";
 import { ArrowDown, ArrowUp, ChevronsUpDown } from "lucide-react";
 
-import { Button } from "../primitives/button";
 import { Checkbox } from "../primitives/checkbox";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "../primitives/table";
 import { cn } from "../primitives/utils";
@@ -51,7 +50,10 @@ type DataTableProps<TData> = {
   pageSizeOptions?: number[];
   totalLabel?: React.ReactNode;
   mobileRow?: (item: TData) => React.ReactNode;
+  /** Names the table for assistive technology. Hidden unless `showCaption` is set. */
   caption?: React.ReactNode;
+  /** Shows `caption` as visible text above the table. */
+  showCaption?: boolean;
   empty?: React.ReactNode;
   className?: string;
 };
@@ -78,6 +80,7 @@ function DataTable<TData>({
   totalLabel,
   mobileRow,
   caption,
+  showCaption = false,
   empty,
   className,
 }: DataTableProps<TData>) {
@@ -175,10 +178,10 @@ function DataTable<TData>({
   const showPagination = Boolean(pagination && onPaginationChange);
 
   return (
-    <div data-slot="data-table" className={cn("bg-canvas", className)}>
+    <div data-slot="data-table" className={cn("bg-canvas in-data-[slot=card]:bg-transparent in-data-[slot=inventory-surface]:bg-transparent", className)}>
       <div className={mobileRow ? "hidden md:block" : undefined}>
         <Table>
-          {caption ? <TableCaption>{caption}</TableCaption> : null}
+          {caption ? <TableCaption visible={showCaption}>{caption}</TableCaption> : null}
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -201,17 +204,18 @@ function DataTable<TData>({
                       }
                     >
                       {header.isPlaceholder ? null : canSort ? (
-                        <Button
+                        // A plain button, not `Button`: every header cell keeps the
+                        // table-head type, so sortable and plain headers match.
+                        <button
                           type="button"
-                          variant="ghost"
-                          size="sm"
-                          className="ds-type-table-head -ml-2 h-8 gap-1.5 px-2 uppercase text-text-supporting hover:text-text-primary"
+                          data-slot="data-table-sort"
+                          className="ds-type-table-head -ml-2 inline-flex h-[var(--ds-control-height-sm)] items-center gap-1.5 whitespace-nowrap rounded-md px-2 uppercase text-text-supporting outline-none transition-[color,background-color] duration-[var(--ds-duration-fast)] hover:bg-surface-muted hover:text-text-primary focus-visible:ring-[3px] focus-visible:ring-focus/50 [&_svg]:shrink-0"
                           onClick={header.column.getToggleSortingHandler()}
                           aria-label={`Sort by ${meta?.label ?? header.column.id}`}
                         >
                           {flexRender(header.column.columnDef.header, header.getContext())}
                           {sorted === "asc" ? <ArrowUp className="size-3.5" /> : sorted === "desc" ? <ArrowDown className="size-3.5" /> : <ChevronsUpDown className="size-3.5 opacity-60" />}
-                        </Button>
+                        </button>
                       ) : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
                   );
@@ -266,6 +270,7 @@ function DataTable<TData>({
           totalLabel={totalLabel}
           onPageChange={(nextPage) => table.setPageIndex(nextPage - 1)}
           onPageSizeChange={(nextSize) => table.setPageSize(nextSize)}
+          className="border-border-default bg-surface-table-header"
         />
       ) : null}
     </div>

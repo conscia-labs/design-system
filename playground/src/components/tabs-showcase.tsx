@@ -1,11 +1,31 @@
 "use client";
 
-import { NavigationTab, NavigationTabs, NavigationTabsList, Tabs, TabsContent, TabsList, TabsTrigger } from "@conscia-labs/design-system";
+import { DataPanel, DataPanelContent, DataPanelHeader, NavigationTab, NavigationTabs, NavigationTabsList, Tabs, TabsContent, TabsList, TabsTrigger } from "@conscia-labs/design-system";
 import { ExampleSection } from "@/components/page";
+
+function SelectionSamples({ suffix, compact = false }: { suffix: string; compact?: boolean }) {
+  return (
+    <div className={compact ? "flex flex-wrap items-center gap-3" : "flex flex-wrap items-center gap-4"}>
+      <Tabs variant="segmented" defaultValue="chart">
+        <TabsList aria-label={`Segmented on ${suffix}`}>
+          <TabsTrigger value="chart">Chart</TabsTrigger>
+          <TabsTrigger value="table">Table</TabsTrigger>
+        </TabsList>
+      </Tabs>
+      <Tabs variant="pills" defaultValue="overview" size={compact ? "compact" : "default"}>
+        <TabsList aria-label={`Pills on ${suffix}`}>
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="requests">Requests</TabsTrigger>
+          <TabsTrigger value="limits">Limits</TabsTrigger>
+        </TabsList>
+      </Tabs>
+    </div>
+  );
+}
 
 export function TabsShowcase() {
   return (
-          <ExampleSection title="Tabs">
+          <ExampleSection title="Tab styles">
             <NavigationTabs aria-label="Resource sections">
               <NavigationTabsList>
                 <NavigationTab href="#tabs" active>
@@ -93,6 +113,23 @@ export function TabsShowcase() {
               <TabsContent value="list" className="pt-3 text-sm text-text-supporting">List mode placeholder.</TabsContent>
               <TabsContent value="compact" className="pt-3 text-sm text-text-supporting">Compact mode placeholder.</TabsContent>
             </Tabs>
+            <div className="space-y-2 pt-4">
+              <h3 className="text-sm font-semibold">Selection on canvas and on a white surface</h3>
+              <p className="text-sm text-text-supporting">The active option reads on the page canvas and inside a DataPanel header in both appearances: a raised option on the segmented track, and a filled, outlined pill. Switch the appearance to compare.</p>
+              <div className="space-y-4 rounded-[var(--ds-radius-surface)] bg-canvas p-4">
+                <SelectionSamples suffix="canvas" />
+                <DataPanel>
+                  <DataPanelHeader
+                    title="Usage by model"
+                    description="Panel surface"
+                    actions={<SelectionSamples suffix="surface" compact />}
+                  />
+                  <DataPanelContent padded>
+                    <p className="text-sm text-text-supporting">Panel content.</p>
+                  </DataPanelContent>
+                </DataPanel>
+              </div>
+            </div>
           </ExampleSection>
   );
 }

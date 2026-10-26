@@ -100,13 +100,23 @@ function Table({
         scrollable ? "overflow-x-auto overflow-y-hidden overscroll-x-contain" : "overflow-x-clip",
       )}
     >
-      <table data-slot="table" className={cn("w-full caption-bottom ds-type-ui", className)} {...props} />
+      <table data-slot="table" className={cn("w-full caption-top ds-type-ui", className)} {...props} />
     </div>
   );
 }
 
+/**
+ * Column headers sit on their own band, darker than both the rows and the
+ * card around the table, above a stronger divider.
+ */
 function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
-  return <thead data-slot="table-header" className={cn("[&_tr]:border-b [&_tr]:border-border-subtle", className)} {...props} />;
+  return (
+    <thead
+      data-slot="table-header"
+      className={cn("bg-surface-table-header [&_tr]:border-b [&_tr]:border-border-default [&_tr]:hover:bg-transparent", className)}
+      {...props}
+    />
+  );
 }
 
 function TableBody({ className, ...props }: React.ComponentProps<"tbody">) {
@@ -114,7 +124,7 @@ function TableBody({ className, ...props }: React.ComponentProps<"tbody">) {
 }
 
 function TableFooter({ className, ...props }: React.ComponentProps<"tfoot">) {
-  return <tfoot data-slot="table-footer" className={cn("border-t border-border-subtle bg-surface-muted/40 font-medium", className)} {...props} />;
+  return <tfoot data-slot="table-footer" className={cn("border-t border-border-default bg-surface-table-header font-medium [&_tr]:hover:bg-transparent", className)} {...props} />;
 }
 
 type TableRowProps = React.ComponentProps<"tr"> & {
@@ -150,8 +160,24 @@ function TableCell({ className, ...props }: React.ComponentProps<"td">) {
   return <td data-slot="table-cell" className={cn("ds-type-ui whitespace-nowrap px-3 py-2 align-middle", className)} {...props} />;
 }
 
-function TableCaption({ className, ...props }: React.ComponentProps<"caption">) {
-  return <caption data-slot="table-caption" className={cn("ds-type-metadata mt-2 text-left text-text-supporting", className)} {...props} />;
+type TableCaptionProps = React.ComponentProps<"caption"> & {
+  /**
+   * Shows the caption above the table. By default it only names the table
+   * for assistive technology, so it never sits between the rows and a
+   * pagination footer.
+   */
+  visible?: boolean;
+};
+
+function TableCaption({ className, visible = false, ...props }: TableCaptionProps) {
+  return (
+    <caption
+      data-slot="table-caption"
+      data-visible={visible ? "true" : "false"}
+      className={cn(visible ? "ds-type-metadata px-3 pb-2 text-left text-text-supporting" : "sr-only", className)}
+      {...props}
+    />
+  );
 }
 
 export {
@@ -165,4 +191,4 @@ export {
   TableRow
 };
 
-export type { TableProps, TableRowProps };
+export type { TableCaptionProps, TableProps, TableRowProps };

@@ -210,4 +210,37 @@ describe("Admin UI handoff", () => {
     expect(rows).toHaveLength(6);
     expect(within(rows[2]!).getAllByRole("cell").map((cell) => cell.textContent)).toEqual(["Oct 2", "0", "0"]);
   });
+
+  it("DS-09: colours the successful series with the success token and accepts series tones", () => {
+    const data = [
+      { date: "2026-10-01", value: 120, unsuccessful: 10 },
+      { date: "2026-10-02", value: 80 },
+    ];
+    const { container, rerender } = render(
+      <DailyVolumeChart title="Daily requests" summaryLabel="Daily requests" unit="requests" data={data} />,
+    );
+    const successful = () => container.querySelector('[data-slot="daily-volume-chart-successful"]')!;
+    const unsuccessful = () => container.querySelector('[data-slot="daily-volume-chart-unsuccessful"]')!;
+    expect(successful().className).toContain("bg-success");
+    expect(successful().className).not.toContain("bg-chart-series-1");
+    expect(unsuccessful().className).toContain("bg-danger");
+    expect(screen.getByText("Successful")).toBeTruthy();
+
+    rerender(
+      <DailyVolumeChart
+        title="Daily requests"
+        summaryLabel="Daily requests"
+        unit="requests"
+        data={data}
+        successfulTone="accent"
+        unsuccessfulTone="warning"
+        successfulLabel="Served"
+        unsuccessfulLabel="Throttled"
+      />,
+    );
+    expect(successful().className).toContain("bg-chart-series-1");
+    expect(unsuccessful().className).toContain("bg-warning");
+    expect(screen.getByText("Served")).toBeTruthy();
+    expect(screen.getByText("Throttled")).toBeTruthy();
+  });
 });
