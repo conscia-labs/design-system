@@ -5,6 +5,7 @@ import { Database, MoreHorizontal, Search } from "lucide-react";
 import {
   Badge,
   Button,
+  Card,
   Checkbox,
   CodeBlock,
   DataTable,
@@ -14,6 +15,7 @@ import {
   InventoryDesktop,
   InventoryMobile,
   InventorySurface,
+  PageToolbar,
   StateView,
   Table,
   TableBody,
@@ -130,17 +132,20 @@ export default function TablesPage() {
         description="Use DataTable for application-owned collections that need selection, sorting, pagination, row actions, and a compact mobile representation."
       >
         <InventorySurface>
-          <div className="flex flex-col gap-3 border-b border-border-subtle p-3 lg:flex-row lg:items-center lg:justify-between">
-            <div className="relative w-full lg:max-w-sm">
-              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-text-supporting" />
-              <Input
-                aria-label="Search connections"
-                className="pl-9"
-                placeholder="Search connections or providers"
-                value={query}
-                onChange={(event) => changeQuery(event.target.value)}
-              />
-            </div>
+          <PageToolbar
+            search={
+              <div className="relative">
+                <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-text-supporting" />
+                <Input
+                  aria-label="Search connections"
+                  className="pl-9"
+                  placeholder="Search connections or providers"
+                  value={query}
+                  onChange={(event) => changeQuery(event.target.value)}
+                />
+              </div>
+            }
+          >
             <div className="flex flex-wrap items-center gap-1" role="group" aria-label="Filter connections by status">
               {(["All", "Healthy", "Attention", "Paused"] as const).map((item) => (
                 <Button
@@ -154,7 +159,7 @@ export default function TablesPage() {
                 </Button>
               ))}
             </div>
-          </div>
+          </PageToolbar>
           <DataTable
             data={filteredConnections}
             columns={columns}
@@ -233,6 +238,24 @@ export default function TablesPage() {
           </div>
         </ExampleSection>
       </div>
+
+      <ExampleSection title="Toolbar inset" description="PageToolbar shares the frame edge on the page canvas. Inside a Card or InventorySurface it takes the surface inset and a bottom border on the card surface, with no consumer padding classes.">
+        <PageToolbar search={<Input aria-label="Search models on the canvas" placeholder="Search models" />} filters={<Button variant="outline" size="sm">All providers</Button>}>
+          <Button variant="ghost" size="sm">Export</Button>
+        </PageToolbar>
+        <Card className="gap-0 overflow-hidden py-0">
+          <PageToolbar search={<Input aria-label="Search models in a card" placeholder="Search models" />} filters={<Button variant="outline" size="sm">All providers</Button>}>
+            <Button variant="ghost" size="sm">Export</Button>
+          </PageToolbar>
+          <Table>
+            <TableHeader><TableRow><TableHead>Model</TableHead><TableHead>Provider</TableHead><TableHead className="text-right">Requests</TableHead></TableRow></TableHeader>
+            <TableBody>
+              <TableRow><TableCell className="font-medium">Claude Sonnet 4</TableCell><TableCell>Amazon Bedrock</TableCell><TableCell className="text-right">12,480</TableCell></TableRow>
+              <TableRow><TableCell className="font-medium">Nova Pro</TableCell><TableCell>Amazon Bedrock</TableCell><TableCell className="text-right">3,912</TableCell></TableRow>
+            </TableBody>
+          </Table>
+        </Card>
+      </ExampleSection>
 
       <ExampleSection title="EntityTable convenience wrapper" description="EntityTable keeps simple entity collections concise while preserving selection and row actions.">
         <div className="overflow-hidden rounded-[var(--ds-radius-surface)] border border-border-subtle bg-surface">

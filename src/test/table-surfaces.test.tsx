@@ -60,6 +60,15 @@ describe("Table surfaces", () => {
     }
   });
 
+  it("insets the toolbar with the surface padding inside cards and keeps the frame edge on the page", () => {
+    const { container } = render(<PageToolbar search={<input aria-label="Search" />} />);
+    const className = container.querySelector('[data-slot="page-toolbar"]')!.className;
+    expect(className).toContain("px-[var(--ds-frame-content-inset,var(--ds-frame-padding-x))]");
+    expect(className).toContain("border-b");
+    expect(className).toContain("in-data-[slot=card]:px-[var(--ds-surface-padding)]");
+    expect(className).toContain("in-data-[slot=inventory-surface]:px-[var(--ds-surface-padding)]");
+  });
+
   it("keeps captions screen-reader-only unless asked to show them above the table", () => {
     const { container, rerender } = render(<Example />);
     const caption = () => container.querySelector('[data-slot="table-caption"]')!;
@@ -83,5 +92,14 @@ describe("Table surfaces", () => {
     const sort = screen.getByRole("button", { name: "Sort by Name" });
     expect(sort.className).toContain("h-[var(--ds-control-height-sm)]");
     expect(sort.className).not.toMatch(/(^|\s)h-8(\s|$)/);
+  });
+
+  it("gives sortable headers the table-head type rather than button type", () => {
+    render(<Example />);
+    const sort = screen.getByRole("button", { name: "Sort by Name" });
+    expect(sort.className).toContain("ds-type-table-head");
+    expect(sort.className).toContain("uppercase");
+    expect(sort.className).not.toContain("ds-type-button");
+    expect(sort.closest("th")!.className).toContain("ds-type-table-head");
   });
 });

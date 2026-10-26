@@ -21,6 +21,18 @@ Tabs:
 - The Tabs playground page shows both variants on the canvas and inside a
   `DataPanelHeader`, and joins the visual baseline routes.
 
+Tables and toolbars:
+
+- Sortable `DataTable` headers use the table-head type (size, weight, tracking,
+  uppercase) like plain headers. The sort control is now a plain button
+  carrying `ds-type-table-head`, so a `Button`'s `ds-type-button` size no longer
+  wins in a table that mixes sortable and static columns.
+- A `PageToolbar` inside a `Card` or `InventorySurface` takes the surface inset
+  (`--ds-surface-padding`) and keeps its bottom border on the card surface, so
+  the search field and trailing actions no longer touch the card edges inside a
+  `PageFrame`. Standalone toolbars on the page canvas are unchanged. Products
+  can remove hand-added toolbar padding and global toolbar overrides.
+
 Charts:
 
 - `DailyVolumeChart` colours its successful series with the `success` token

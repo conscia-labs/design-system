@@ -134,6 +134,14 @@ playground route for each family.
   `successfulTone` / `unsuccessfulTone` to choose other semantic tones.
 - `PageFrame`, `PageHeader`, `PageToolbar`, and `DetailBackLink` share one left
   edge through `--ds-frame-padding-x`. Do not wrap them in extra padding.
+- A `PageToolbar` inside a `Card` or `InventorySurface` takes the surface's
+  own inset (`--ds-surface-padding`), a bottom border, and the card surface,
+  while the table below keeps its tinted header band. Do not add padding,
+  border, or background classes to it, and do not restyle it from global CSS.
+- One header type per table: every `DataTable` header cell uses the
+  table-head type whether or not it sorts. The sort control is the header text
+  plus its icon, not a button-sized label. Do not pass `Button` type classes
+  into column headers.
 - For a missing `MetricBandItem` value, pass `value={null}` or an `emptyValue`
   such as "Never" rather than a display-size word.
 - Use `Select` for a short, familiar list. Use `SearchableSelect` for longer
