@@ -3,6 +3,7 @@ import { ArrowDown, ArrowUp, Minus } from "lucide-react";
 
 import { Skeleton } from "../primitives/skeleton";
 import { cn } from "../primitives/utils";
+import { MetricCountUp, type MetricCountUpOptions } from "./metric-count-up";
 
 type MetricTrendProps = React.ComponentProps<"span"> & {
   direction: "up" | "down" | "flat";
@@ -29,9 +30,10 @@ function MetricTrend({
       role="img"
       aria-label={accessibleLabel}
       className={cn(
-        "inline-flex items-center gap-1 ds-type-metadata font-medium text-trend-neutral",
-        sentiment === "positive" && "text-trend-positive",
-        sentiment === "negative" && "text-trend-negative",
+        "inline-flex items-center gap-1 rounded-full bg-trend-neutral-background px-1.5 py-px ds-type-metadata font-medium text-trend-neutral",
+        sentiment === "positive" && "bg-trend-positive-background text-trend-positive",
+        // The darker foreground keeps small badge text above 4.5:1 on the danger tint.
+        sentiment === "negative" && "bg-trend-negative-background text-danger-foreground",
         className,
       )}
       {...props}
@@ -51,6 +53,11 @@ type MetricCardBaseProps = React.ComponentProps<"section"> & {
   status?: React.ReactNode;
   emphasis?: "primary" | "supporting";
   loading?: boolean;
+  /**
+   * Counts a numeric `value` up on first render and between updates. Pass
+   * options to format the number. Ignored when `value` is not a number.
+   */
+  countUp?: boolean | MetricCountUpOptions;
 };
 
 type MetricCardProps = MetricCardBaseProps &
@@ -68,6 +75,7 @@ function MetricCard({
   status,
   emphasis = "supporting",
   loading = false,
+  countUp = false,
   visualization,
   visualizationSummary,
   className,
@@ -100,7 +108,11 @@ function MetricCard({
         ) : (
           <>
             <span className={cn("ds-type-metric-value leading-none", emphasis === "primary" ? "text-[length:var(--ds-metric-value-primary)]" : "text-[length:var(--ds-metric-value)]")}>
-              {value ?? 0}
+              {countUp && typeof value === "number" ? (
+                <MetricCountUp value={value} options={countUp === true ? undefined : countUp} />
+              ) : (
+                value ?? 0
+              )}
             </span>
             {unit ? <span className="ds-type-ui text-text-supporting">{unit}</span> : null}
           </>
@@ -118,4 +130,4 @@ function MetricCard({
 }
 
 export { MetricCard, MetricTrend };
-export type { MetricCardProps, MetricTrendProps };
+export type { MetricCardProps, MetricCountUpOptions, MetricTrendProps };

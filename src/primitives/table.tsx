@@ -117,11 +117,20 @@ function TableFooter({ className, ...props }: React.ComponentProps<"tfoot">) {
   return <tfoot data-slot="table-footer" className={cn("border-t border-border-subtle bg-surface-muted/40 font-medium", className)} {...props} />;
 }
 
-function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
+type TableRowProps = React.ComponentProps<"tr"> & {
+  /**
+   * Marks a row that opens or selects something when clicked. It takes a
+   * pointer cursor and an action-colored edge rail on hover and focus.
+   */
+  interactive?: boolean;
+};
+
+function TableRow({ className, interactive = false, ...props }: TableRowProps) {
   return (
     <tr
       data-slot="table-row"
-      className={cn("h-[var(--ds-row-height)] border-b border-border-subtle transition-colors hover:bg-surface-muted/70 focus-within:bg-surface-muted/70 data-[selected=true]:bg-selection-background data-[disabled]:pointer-events-none data-[disabled]:opacity-50", className)}
+      data-interactive={interactive ? "true" : undefined}
+      className={cn("h-[var(--ds-row-height)] border-b border-border-subtle transition-colors duration-[var(--ds-duration-fast)] ease-standard hover:bg-surface-muted/70 focus-within:bg-surface-muted/70 data-[selected=true]:bg-selection-background data-[disabled]:pointer-events-none data-[disabled]:opacity-50", interactive && "cursor-pointer hover:bg-surface-muted [&>td:first-child]:transition-shadow [&>td:first-child]:duration-[var(--ds-duration-fast)] hover:[&>td:first-child]:shadow-[inset_2px_0_0_var(--selection-indicator)] focus-visible:[&>td:first-child]:shadow-[inset_2px_0_0_var(--selection-indicator)]", className)}
       {...props}
     />
   );
@@ -156,4 +165,4 @@ export {
   TableRow
 };
 
-export type { TableProps };
+export type { TableProps, TableRowProps };

@@ -41,7 +41,8 @@ export default function DeliveryMetricsPage() {
           emphasis="primary"
           label="Deployment frequency"
           description="Deploys reaching production, per week"
-          value="4.4"
+          value={4.4}
+          countUp
           unit="/ week"
           status={<Badge variant="information">Healthy</Badge>}
           trend={<MetricTrend direction="up" sentiment="positive" value="43%" accessibleLabel="Up 43 percent, a positive change" />}
@@ -51,7 +52,8 @@ export default function DeliveryMetricsPage() {
         <MetricCard
           label="Lead time for changes"
           description="First commit to production"
-          value="18.6"
+          value={18.6}
+          countUp
           unit="hrs"
           status={<Badge variant="success">High</Badge>}
           trend={<MetricTrend direction="down" sentiment="positive" value="22%" accessibleLabel="Down 22 percent, a positive change" />}
@@ -61,7 +63,8 @@ export default function DeliveryMetricsPage() {
         <MetricCard
           label="Change failure rate"
           description="Deploys that required a fix"
-          value="8.3"
+          value={8.3}
+          countUp
           unit="%"
           status={<Badge variant="success">High</Badge>}
           trend={<MetricTrend direction="down" sentiment="positive" value="24%" accessibleLabel="Down 24 percent, a positive change" />}
@@ -71,7 +74,8 @@ export default function DeliveryMetricsPage() {
         <MetricCard
           label="Mean time to recovery"
           description="Failure to restored service"
-          value="39"
+          value={39}
+          countUp
           unit="min"
           status={<Badge variant="information">Elite</Badge>}
           trend={<MetricTrend direction="down" sentiment="positive" value="33%" accessibleLabel="Down 33 percent, a positive change" />}

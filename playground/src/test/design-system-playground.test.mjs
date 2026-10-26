@@ -513,6 +513,9 @@ test("expressive layer keeps brand, motion, chart, and texture roles token-backe
   assert.match(styles, /@utility ds-skeleton/);
   assert.match(styles, /@utility ds-texture-wash/);
   assert.match(styles, /@utility ds-texture-brand/);
+  assert.match(styles, /mask-image: url\("data:image\/svg\+xml/);
+  assert.match(styles, /--ds-texture-mark:/);
+  assert.match(styles, /--trend-positive: var\(--brand-supporting\);/);
   assert.match(stateViews, /data-slot="state-view-spot"/);
   assert.match(stateViews, /tone = "danger"/);
 });

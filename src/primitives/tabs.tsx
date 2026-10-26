@@ -216,7 +216,7 @@ function TabsTrigger({
             "data-active:bg-selection-background data-active:font-semibold data-active:text-selection-foreground",
           ),
         resolvedVariant === "nested" &&
-          "relative inline-flex h-full shrink-0 snap-start items-center justify-center gap-1.5 whitespace-nowrap px-0.5 text-sm font-medium text-text-supporting outline-none transition-colors duration-150 after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:rounded-full after:bg-transparent hover:text-text-primary focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus/60 data-active:text-text-primary data-active:after:bg-brand-emphasis",
+          "relative inline-flex h-full shrink-0 snap-start items-center justify-center gap-1.5 whitespace-nowrap px-0.5 text-sm font-medium text-text-supporting outline-none transition-colors duration-150 after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:rounded-full after:bg-transparent hover:text-text-primary focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus/60 data-active:text-brand-supporting data-active:after:bg-brand-supporting",
         resolvedVariant === "segmented" &&
           "inline-flex h-full items-center justify-center gap-2 whitespace-nowrap rounded-[calc(var(--ds-radius-control)-2px)] px-3 text-sm font-medium text-text-supporting outline-none transition-[background-color,color,box-shadow] hover:text-text-primary focus-visible:ring-2 focus-visible:ring-focus/60 data-active:bg-canvas data-active:text-text-primary data-active:shadow-xs",
         className,

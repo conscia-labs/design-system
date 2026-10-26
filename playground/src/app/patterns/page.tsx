@@ -47,7 +47,7 @@ export default function PatternsPage() {
 
         <ExampleSection title="Activity and progress">
           <div className="rounded-[var(--ds-radius-surface)] border bg-surface p-4">
-            <ValueMeter label="Monthly request budget" value={68} maximum={100} valueLabel="68%" tone="success" detail="Resets in 12 days" />
+            <ValueMeter label="Monthly request budget" value={68} maximum={100} valueLabel="68%" detail="Resets in 12 days" />
             <ActivityList className="mt-4">
               <ActivityItem icon={<Database />} title="Catalog synchronized" description="14 models available" metadata="2 minutes ago" status={<Badge variant="success">Ready</Badge>} />
               <ActivityItem title="Policy updated" description="Developer access" metadata="1 hour ago" />

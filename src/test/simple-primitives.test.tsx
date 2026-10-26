@@ -21,6 +21,29 @@ import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, Tabl
 import { Textarea } from "../primitives/textarea";
 
 describe("Conscia simple primitives", () => {
+  it("marks interactive table rows and interactive cards without changing static ones", () => {
+    const { container } = render(
+      <>
+        <Card data-testid="static-card" />
+        <Card data-testid="link-card" interactive />
+        <Table>
+          <TableBody>
+            <TableRow data-testid="static-row"><TableCell>Static</TableCell></TableRow>
+            <TableRow data-testid="clickable-row" interactive><TableCell>Clickable</TableCell></TableRow>
+          </TableBody>
+        </Table>
+      </>,
+    );
+    expect(screen.getByTestId("static-card").hasAttribute("data-interactive")).toBe(false);
+    expect(screen.getByTestId("link-card").getAttribute("data-interactive")).toBe("true");
+    expect(screen.getByTestId("link-card").className).toContain("hover:-translate-y-px");
+    expect(screen.getByTestId("static-row").hasAttribute("data-interactive")).toBe(false);
+    expect(screen.getByTestId("static-row").className).not.toContain("cursor-pointer");
+    expect(screen.getByTestId("clickable-row").getAttribute("data-interactive")).toBe("true");
+    expect(screen.getByTestId("clickable-row").className).toContain("cursor-pointer");
+    expect(container.querySelector('[data-slot="table-row"]')).toBeTruthy();
+  });
+
   it("distinguishes partial checkbox selection and allows completing the selection", async () => {
     const user = userEvent.setup();
     function Selection() {

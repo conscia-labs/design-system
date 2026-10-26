@@ -176,7 +176,7 @@ describe("Admin UI handoff", () => {
     expect(list.getAttribute("data-variant")).toBe("nested");
     expect(list.className).toContain("h-[var(--ds-tab-rail-height-compact)]");
     const tab = screen.getByRole("tab", { name: "Rules" });
-    expect(tab.className).toContain("data-active:after:bg-brand-emphasis");
+    expect(tab.className).toContain("data-active:after:bg-brand-supporting");
     expect(tab.className).not.toContain("bg-selection-background");
   });
 

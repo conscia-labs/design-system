@@ -53,7 +53,10 @@ const guidance: Record<string, ComponentGuidance> = {
   card: {
     whenToUse: "Use for a bounded content unit that benefits from a title, supporting copy, and optional actions.",
     accessibility: "Cards do not add semantics by themselves; choose a heading level and landmark appropriate to the surrounding page.",
-    options: [{ name: "variant", values: "default · muted · elevated", guidance: "Prefer default. Use elevation only where layering is meaningful." }],
+    options: [
+      { name: "variant", values: "default · muted · elevated", guidance: "Prefer default. Use elevation only where layering is meaningful." },
+      { name: "interactive", values: "false (default) · true", guidance: "Set when the whole card is a link or entry point. The card lifts on hover and focus; static cards never move." },
+    ],
   },
   "form-controls": {
     whenToUse: "Use the Field anatomy to keep labels, descriptions, errors, and controls in a consistent reading order.",
@@ -69,7 +72,7 @@ const guidance: Record<string, ComponentGuidance> = {
     accessibility: "Triggers must remain keyboard reachable and expose expanded or selected state. Tab panels need clear labels.",
     options: [
       { name: "pattern", values: "underline (default) · divider · pills · segmented · nested", guidance: "Underline keeps the rail quiet; divider adds structural separation; pills suit small peer views; segmented is for mode switching. NavigationTabs also supports underline, divider, and pills; use NavigationTabsList variant=\"pills\" for pill-styled routed pages." },
-      { name: "nesting", values: "page tabs · nested", guidance: "Page-level tabs use NavigationTabs or the default Tabs. A tab group inside a section or another tab panel uses variant=\"nested\" so the hierarchy is visible." },
+      { name: "nesting", values: "page tabs · nested", guidance: "Page-level tabs use NavigationTabs or the default Tabs. A tab group inside a section or another tab panel uses variant=\"nested\" so the hierarchy is visible. Avoid nesting where a single tab level or separate sections will do. When nested tabs are unavoidable, the active one takes the Conscia green indicator so it never competes with page tabs." },
       { name: "Disclosure count", values: "omitted · number", guidance: "Show a count when the summary hides a list, such as the rows of a daily data table." },
     ],
   },
@@ -83,6 +86,7 @@ const guidance: Record<string, ComponentGuidance> = {
     accessibility: "Provide a caption or nearby heading, use header cells, and expose sort direction with aria-sort when sorting is interactive.",
     options: [
       { name: "row state", values: "default · selected · disabled", guidance: "State remains available through data attributes without changing table semantics." },
+      { name: "TableRow interactive", values: "false (default) · true", guidance: "Clickable rows show a pointer and an action-colored edge rail on hover and focus. DataTable sets it for rows that accept onRowClick." },
       { name: "scrollable", values: "true (default) · false", guidance: "Wide tables scroll horizontally and fade the edge that has more columns. Pass false only when you render a stacked layout at narrow widths." },
       { name: "headers", values: "uppercase table-head style", guidance: "Table and DataTable share one header style, including sortable headers. Do not restyle header cells per page." },
     ],
@@ -136,7 +140,10 @@ const guidance: Record<string, ComponentGuidance> = {
       { name: "MetricBand presentation", values: "default · compact", guidance: "Compact uses one full-width row per item below desktop and the configured number of columns on desktop; details and values wrap without individual card backgrounds." },
       { name: "MetricBandItem value", values: "React node · loading skeleton · emptyValue", guidance: "Values can contain links. A missing value (null, or omitted in compact presentation) renders quietly as an em dash or as emptyValue, such as \"Never\". Detail lines are reserved so values share a baseline." },
       { name: "DailyVolumeChart", values: "total · stacked not-successful segment", guidance: "Use for every per-day measure: calendar-true days, a stated scale, first, middle, and last date labels, and an exact-values table." },
-      { name: "emphasis", values: "primary · supporting", guidance: "Give primary metrics more visual weight without changing their semantic meaning." },
+      { name: "emphasis", values: "primary · supporting", guidance: "Give primary metrics more visual weight without changing their semantic meaning. The primary card carries the burgundy emphasis edge." },
+      { name: "MetricCard countUp", values: "false (default) · true · { format, locale, durationMs }", guidance: "Counts a numeric value up on load and between updates. Screen readers hear only the final value, and reduced motion shows it immediately. Pass a pre-formatted node instead when the value is not a plain number." },
+      { name: "MetricTrend sentiment", values: "positive · negative · neutral", guidance: "Trends render as tinted badges: Conscia green for positive, danger tint for negative. Always pair with an accessible label that states the direction and meaning." },
+      { name: "ValueMeter tone", values: "brand (default) · neutral · success · warning · danger", guidance: "Brand fills plain quantities with the blue-to-burgundy blend. Use a status tone only when the level itself means good, at risk, or bad." },
     ],
   },
   "activity-and-attention": {
@@ -152,6 +159,7 @@ const guidance: Record<string, ComponentGuidance> = {
     accessibility: "Name the state, explain the recovery path, and move or announce focus only when the state appears dynamically.",
     options: [
       { name: "state", values: "empty · loading · error · confirmation · command", guidance: "Choose the narrowest pattern for the user’s current task." },
+      { name: "StateView tone", values: "brand (default) · neutral · success · danger", guidance: "Colors the duotone icon spot. Brand suits empty and first-run states, success a completed flow, and neutral a quiet inline state. ErrorState uses danger." },
       { name: "StateView size", values: "default · compact", guidance: "Default replaces a page's primary content; compact fits inside sections, panels, and tabs." },
       { name: "divider", values: "false (default) · true", guidance: "Add the bottom divider only when the state replaces rows inside a table body." },
     ],

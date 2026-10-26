@@ -8,7 +8,12 @@ type ValueMeterProps = React.ComponentProps<"div"> & {
   maximum?: number | null;
   valueLabel?: React.ReactNode;
   detail?: React.ReactNode;
-  tone?: "neutral" | "success" | "warning" | "danger";
+  /**
+   * `brand` (default) fills with the electric-blue-to-burgundy brand blend
+   * for plain quantities. Use a status tone only when the level itself
+   * means good, at risk, or bad, and `neutral` for a quiet inline meter.
+   */
+  tone?: "brand" | "neutral" | "success" | "warning" | "danger";
 };
 
 function ValueMeter({
@@ -17,7 +22,7 @@ function ValueMeter({
   maximum,
   valueLabel,
   detail,
-  tone = "neutral",
+  tone = "brand",
   className,
   ...props
 }: ValueMeterProps) {
@@ -54,7 +59,9 @@ function ValueMeter({
         >
           <div
             className={cn(
-              "h-full rounded-full bg-neutral-foreground transition-[width]",
+              "h-full rounded-full transition-[width] duration-[var(--ds-duration-slow)] ease-standard",
+              tone === "brand" && "bg-linear-to-r from-brand-accent to-brand-emphasis",
+              tone === "neutral" && "bg-neutral-foreground",
               tone === "success" && "bg-success-foreground",
               tone === "warning" && "bg-warning-foreground",
               tone === "danger" && "bg-danger-foreground",
