@@ -22,25 +22,33 @@ const typeRoles = [
   { role: "Eyebrow", utility: "ds-type-eyebrow", token: "--ds-eyebrow-size", sample: "WORKSPACE", className: "ds-type-eyebrow" },
 ] as const;
 
-const fontStack = '"Source Sans 3 Variable", "Source Sans 3", "Source Sans", "Aptos", "Segoe UI", Arial, sans-serif';
+const fontStack = '"Saans", "Source Sans 3 Variable", "Source Sans 3", "Source Sans", "Aptos", "Segoe UI", Arial, sans-serif';
+
+const saansFontFace = `/* Only with a Saans licence. Host the files yourself. */
+@font-face {
+  font-family: "Saans";
+  src: url("/fonts/SaansVF.woff2") format("woff2-variations");
+  font-weight: 300 900;
+  font-display: swap;
+}`;
 
 export default function TypographyPage() {
   return (
     <PlaygroundPage
       title="Typography"
       description="Font loading, semantic type roles, hierarchy, density behavior, and practical usage guidance for Conscia products."
-      actions={<Badge variant="neutral">Source Sans 3 Variable</Badge>}
+      actions={<Badge variant="neutral">Saans · Source Sans 3 fallback</Badge>}
     >
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1.35fr)_minmax(20rem,0.65fr)]">
-        <ExampleSection title="Primary typeface" description="The design system loads Source Sans 3 from its published CSS entry points.">
+        <ExampleSection title="Primary typeface" description="Saans is the Conscia brand typeface. The package bundles Source Sans 3 as the fallback, because Saans is licensed.">
           <div className="grid overflow-hidden rounded-[var(--ds-radius-surface)] border bg-surface md:grid-cols-[14rem_minmax(0,1fr)]">
             <div className="flex min-h-56 items-center justify-center border-b bg-surface-muted md:border-r md:border-b-0">
               <span className="text-[7rem] font-semibold leading-none tracking-[-0.06em]" aria-hidden="true">Aa</span>
             </div>
             <div className="flex flex-col justify-center p-6">
-              <h2 className="ds-type-page-title">Source Sans 3</h2>
+              <h2 className="ds-type-page-title">Saans, with Source Sans 3</h2>
               <p className="ds-type-body mt-3 max-w-2xl text-text-secondary">
-                A highly legible variable sans serif for product interfaces, operational data, controls, and longer reading surfaces. Consumers should import the design-system CSS and avoid downloading a second copy.
+                The font stack puts Saans first. Products that hold a Saans licence self-host it under the family name &ldquo;Saans&rdquo; and it takes over everywhere. Without it, the bundled Source Sans 3 renders the same three brand weights.
               </p>
               <div className="mt-5 rounded-[var(--ds-radius-control)] bg-surface-muted p-3">
                 <div className="ds-type-eyebrow text-text-supporting">FONT STACK</div>
@@ -52,9 +60,9 @@ export default function TypographyPage() {
 
         <ExampleSection title="Weight ladder" description="Use a small, intentional range instead of arbitrary weights.">
           <div className="divide-y divide-border-subtle overflow-hidden rounded-[var(--ds-radius-surface)] border bg-surface">
-            <WeightRow weight={400} label="Regular" usage="Body copy and descriptions" />
-            <WeightRow weight={500} label="Medium" usage="Labels, controls, and emphasis" />
-            <WeightRow weight={600} label="Semibold" usage="Titles and active navigation" />
+            <WeightRow weight={380} label="Regular" usage="Body copy and descriptions" />
+            <WeightRow weight={570} label="Medium" usage="Labels, controls, eyebrows, and emphasis" />
+            <WeightRow weight={670} label="Semibold" usage="Titles, card titles, and active navigation" />
           </div>
         </ExampleSection>
       </div>
@@ -129,13 +137,14 @@ export default function TypographyPage() {
         <CodeBlock snippets={[
           { value: "tsx", label: "React", code: '<h1 className="ds-type-page-title">Provider connections</h1>\n<p className="ds-type-body text-text-secondary">Manage the providers available to this workspace.</p>\n<span className="ds-type-metadata text-text-supporting">Updated 2 minutes ago</span>' },
           { value: "css", label: "CSS", code: '@import "@conscia-labs/design-system/styles.css";\n\n/* Source Sans 3 and the semantic type tokens are included. */' },
+          { value: "saans", label: "Saans", code: saansFontFace },
         ]} />
       </ExampleSection>
     </PlaygroundPage>
   );
 }
 
-function WeightRow({ weight, label, usage }: { weight: 400 | 500 | 600; label: string; usage: string }) {
+function WeightRow({ weight, label, usage }: { weight: 380 | 570 | 670; label: string; usage: string }) {
   return (
     <div className="grid grid-cols-[4rem_minmax(0,1fr)] items-center gap-3 p-4">
       <div className="text-3xl leading-none" style={{ fontWeight: weight }}>{weight}</div>
