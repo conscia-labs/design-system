@@ -904,3 +904,21 @@ test("brand palette roles keep AA contrast in light mode", () => {
   // Danger must not reuse the brand peach, which belongs to highlight.
   assert.notEqual(lightToken("danger-background"), lightToken("highlight-background"));
 });
+
+test("brand chrome and supergraphic stay token-backed", () => {
+  const styles = read("../../../src/foundation/styles.css");
+  const chrome = styles.match(/\[data-chrome="brand"\] \{([^}]*)\}/)?.[1];
+  assert.ok(chrome, "brand chrome scope should exist");
+  for (const token of ["--canvas: var(--palette-burgundy);", "--text-primary: #ffffff;", "--focus: #7f8fff;", "--surface-control:"]) {
+    assert.ok(chrome.includes(token), `brand chrome should set ${token}`);
+  }
+  assert.match(styles, /\[data-sidebar-variant="brand"\] \{[^}]*--sidebar-canvas: var\(--palette-burgundy\);/);
+  const supergraphic = styles.match(/@utility ds-supergraphic \{([\s\S]*?)\n\}/)?.[1];
+  assert.ok(supergraphic, "ds-supergraphic utility should exist");
+  assert.match(supergraphic, /background-color: var\(--ds-supergraphic-color\);/);
+  // A raw "#" inside a data URI starts a fragment and silently breaks the mask.
+  const mask = supergraphic.match(/mask-image: url\("([^"]+)"\)/)?.[1];
+  assert.ok(mask?.startsWith("data:image/svg+xml,"));
+  assert.ok(!mask.includes("#"), "supergraphic data URI must not contain #");
+  assert.match(read("../app/shell-navigation/page.tsx"), /ds-supergraphic/);
+});

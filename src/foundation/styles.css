@@ -247,6 +247,8 @@
   /* Faint brand wash for chrome backgrounds (page header, onboarding canvases). Never behind data. */
   --ds-texture-tint: color-mix(in oklab, var(--palette-burgundy) 6%, transparent);
   --ds-texture-mark: color-mix(in oklab, var(--palette-burgundy) 7%, transparent);
+  /* Dot-ring supergraphic: faint burgundy on light surfaces. */
+  --ds-supergraphic-color: color-mix(in oklab, var(--palette-burgundy) 16%, transparent);
   /*
    * Saans is the Conscia brand typeface. It is licensed, so the package does
    * not bundle it: products with a licence self-host it under the family
@@ -623,6 +625,7 @@
   --sidebar-glow: color-mix(in oklab, var(--palette-electric-blue) 22%, transparent);
   --ds-texture-tint: color-mix(in oklab, var(--palette-electric-blue) 9%, transparent);
   --ds-texture-mark: color-mix(in oklab, var(--palette-electric-blue) 11%, transparent);
+  --ds-supergraphic-color: color-mix(in oklab, var(--palette-electric-blue) 55%, transparent);
   --ds-skeleton-highlight: rgb(255 255 255 / 5%);
   /*
    * Shadows read weakly on dark canvases, so each tier adds a faint top
@@ -688,6 +691,61 @@
   --sidebar-group-count: var(--text-supporting);
   --sidebar-focus-ring: var(--focus);
   --sidebar-glow: transparent;
+}
+
+/*
+ * Brand chrome: the burgundy app chrome of conscia.com. AppHeader
+ * tone="brand" and AppSidebar variant="brand" set data-chrome="brand", which
+ * re-points the surface, text, border, and control roles so every component
+ * inside reads light-on-burgundy in either appearance.
+ */
+[data-chrome="brand"] {
+  color-scheme: dark;
+  --canvas: var(--palette-burgundy);
+  --surface: var(--palette-burgundy-raised);
+  --surface-muted: rgb(255 255 255 / 8%);
+  --surface-raised: rgb(255 255 255 / 10%);
+  --surface-control: rgb(255 255 255 / 8%);
+  --surface-control-hover: rgb(255 255 255 / 12%);
+  --text-primary: #ffffff;
+  --text-secondary: color-mix(in oklab, #ffffff 86%, transparent);
+  --text-supporting: color-mix(in oklab, #ffffff 74%, transparent);
+  --text-muted: color-mix(in oklab, #ffffff 66%, transparent);
+  --control-indicator: var(--text-muted);
+  --border-subtle: rgb(255 255 255 / 9%);
+  --border-default: rgb(255 255 255 / 14%);
+  --border-strong: rgb(255 255 255 / 22%);
+  --control-border: rgb(255 255 255 / 14%);
+  --focus: #7f8fff;
+  --neutral-background: rgb(255 255 255 / 8%);
+  --neutral-border: rgb(255 255 255 / 16%);
+  --neutral-foreground: #ffffff;
+  --selection-background: rgb(255 255 255 / 10%);
+  --selection-foreground: #ffffff;
+  --selection-indicator: #7f8fff;
+  --action-background: rgb(255 255 255 / 10%);
+  --ds-supergraphic-color: var(--palette-electric-blue);
+}
+
+[data-sidebar-variant="brand"] {
+  --sidebar-canvas: var(--palette-burgundy);
+  --sidebar-header: var(--palette-burgundy);
+  --sidebar-content: var(--palette-burgundy);
+  --sidebar-footer: var(--palette-burgundy);
+  --sidebar-hover: rgb(255 255 255 / 6%);
+  --sidebar-active-background: rgb(255 255 255 / 10%);
+  --sidebar-active-foreground: #ffffff;
+  --sidebar-active-indicator: #7f8fff;
+  --sidebar-border: rgb(255 255 255 / 9%);
+  --sidebar-primary-text: #ffffff;
+  --sidebar-secondary-text: color-mix(in oklab, #ffffff 80%, transparent);
+  --sidebar-metadata-text: color-mix(in oklab, #ffffff 64%, transparent);
+  --sidebar-icon: color-mix(in oklab, #ffffff 74%, transparent);
+  --sidebar-search: rgb(255 255 255 / 8%);
+  --sidebar-group-label: color-mix(in oklab, #ffffff 74%, transparent);
+  --sidebar-group-count: color-mix(in oklab, #ffffff 64%, transparent);
+  --sidebar-focus-ring: #7f8fff;
+  --sidebar-glow: color-mix(in oklab, var(--palette-electric-blue) 22%, transparent);
 }
 
 @theme inline {
@@ -1113,6 +1171,32 @@
 /* Faint brand wash for chrome such as the page header. Never behind data. */
 @utility ds-texture-wash {
   background-image: radial-gradient(60% 180% at 0% 0%, var(--ds-texture-tint), transparent 70%);
+}
+
+/*
+ * The Conscia supergraphic: concentric rings of dots that echo the radiating
+ * mark, drawn behind an element's content from its right edge. It takes
+ * --ds-supergraphic-color: faint burgundy on light surfaces, electric blue
+ * inside brand chrome and dark mode. Use it on heroes, sign-in, empty
+ * workspaces, and brand cards. Never behind data.
+ */
+@utility ds-supergraphic {
+  position: relative;
+  isolation: isolate;
+
+  &::after {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    border-radius: inherit;
+    background-color: var(--ds-supergraphic-color);
+    content: "";
+    pointer-events: none;
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-200 -200 400 400'%3E%3Cg fill='none' stroke='black' stroke-linecap='round'%3E%3Ccircle r='34' stroke-width='3.2' stroke-dasharray='0 8.5 0 8.5 0 8.5 0 8.5 0 8.5 0 8.5 0 8.5 0 8.5 0 8.5 0 8.5 0 8.5 0 8.5 0 8.5 0 8.5 0 12.8' transform='rotate(202)'/%3E%3Ccircle r='49' stroke-width='3.45' stroke-dasharray='0 9.3 0 9.3 0 9.3 0 9.3 0 9.3 0 9.3 0 9.3 0 18.5' transform='rotate(274)'/%3E%3Ccircle r='65' stroke-width='3.7' stroke-dasharray='0 10.1 0 10.1 0 10.1 0 10.1 0 10.1 0 10.1 0 10.1 0 40.8' transform='rotate(298)'/%3E%3Ccircle r='83' stroke-width='3.95' stroke-dasharray='0 10.9 0 10.9 0 10.9 0 10.9 0 10.9 0 10.9 0 10.9 0 83.4' transform='rotate(109)'/%3E%3Ccircle r='102' stroke-width='4.2' stroke-dasharray='0 11.7 0 11.7 0 11.7 0 11.7 0 11.7 0 11.7 0 11.7 0 38.5' transform='rotate(222)'/%3E%3Ccircle r='123' stroke-width='4.45' stroke-dasharray='0 12.5 0 12.5 0 12.5 0 12.5 0 12.5 0 12.5 0 12.5 0 12.5 0 12.5 0 12.5 0 12.5 0 12.5 0 12.5 0 12.5 0 12.5 0 12.5 0 12.5 0 12.5 0 46.4' transform='rotate(123)'/%3E%3Ccircle r='145' stroke-width='4.7' stroke-dasharray='0 13.3 0 13.3 0 13.3 0 13.3 0 13.3 0 13.3 0 13.3 0 145.8' transform='rotate(217)'/%3E%3Ccircle r='168' stroke-width='4.95' stroke-dasharray='0 14.1 0 14.1 0 14.1 0 14.1 0 14.1 0 14.1 0 14.1 0 168.9' transform='rotate(63)'/%3E%3Ccircle r='193' stroke-width='5.2' stroke-dasharray='0 14.9 0 14.9 0 14.9 0 14.9 0 14.9 0 14.9 0 14.9 0 14.9 0 14.9 0 14.9 0 194.0' transform='rotate(321)'/%3E%3C/g%3E%3C/svg%3E");
+    mask-position: right -7rem center;
+    mask-repeat: no-repeat;
+    mask-size: auto max(100%, 18rem);
+  }
 }
 
 /*

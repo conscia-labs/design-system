@@ -1,5 +1,5 @@
 import { Boxes, FileText, LayoutDashboard, Settings } from "lucide-react";
-import { Badge, CodeBlock } from "@conscia-labs/design-system";
+import { Badge, BrandWordmark, Button, CodeBlock } from "@conscia-labs/design-system";
 
 import { ExampleSection, PlaygroundPage } from "@/components/page";
 
@@ -46,6 +46,42 @@ export default function ShellNavigationPage() {
           <div className="min-h-72 p-6">
             <div className="flex items-center gap-2"><h2 className="ds-type-page-title">Dashboard</h2><Badge variant="success">Healthy</Badge></div>
             <p className="ds-type-ui mt-2 max-w-lg text-text-supporting">Only the active destination receives a quiet surface. Section labels organize the information architecture without becoming controls.</p>
+          </div>
+        </div>
+      </ExampleSection>
+
+      <ExampleSection title="Brand chrome" description="AppHeader tone=&quot;brand&quot; and AppSidebar variant=&quot;brand&quot; paint the chrome Conscia burgundy, as on conscia.com, in both appearances. Controls inside switch to light-on-burgundy automatically.">
+        <div className="overflow-hidden rounded-[var(--ds-radius-surface)] border border-border-default bg-canvas shadow-[var(--ds-shadow-raised)]">
+          <div data-chrome="brand" className="flex h-12 items-center gap-3 border-b border-border-subtle bg-canvas px-4 text-text-primary">
+            <BrandWordmark aria-label="Conscia" className="w-24" />
+            <div className="ml-auto flex items-center gap-2">
+              <Badge variant="neutral">v1.6.0</Badge>
+              <Button variant="ghost" size="sm">Appearance</Button>
+              <Button variant="outline" size="sm">Contact</Button>
+            </div>
+          </div>
+          <div className="grid md:grid-cols-[13rem_minmax(0,1fr)]">
+            <aside data-sidebar-variant="brand" data-chrome="brand" className="border-r border-sidebar-border bg-sidebar-canvas p-3 text-sidebar-primary-text">
+              <NavGroup label="Delivery metrics" items={[["Dashboard", LayoutDashboard, true], ["Reporting", FileText, false]]} />
+              <NavGroup label="Product configuration" items={[["Pipeline", Boxes, false], ["Settings", Settings, false]]} />
+            </aside>
+            <div className="min-h-72 p-6">
+              <div className="flex items-center gap-2"><h2 className="ds-type-page-title">Dashboard</h2><Badge variant="success">Healthy</Badge></div>
+              <p className="ds-type-ui mt-2 max-w-lg text-text-supporting">Burgundy carries the chrome, as the brand&apos;s colour-usage guide intends. The workspace stays on the neutral canvas so data keeps its contrast.</p>
+            </div>
+          </div>
+        </div>
+      </ExampleSection>
+
+      <ExampleSection title="Supergraphic" description="ds-supergraphic draws the Conscia dot rings behind content: electric blue inside brand chrome, faint burgundy on light surfaces. Never behind data.">
+        <div className="grid gap-4 md:grid-cols-2">
+          <div data-chrome="brand" className="ds-supergraphic min-h-48 overflow-hidden rounded-[var(--ds-radius-surface)] bg-canvas p-6 text-text-primary">
+            <p className="ds-type-eyebrow text-text-supporting">Brand chrome</p>
+            <h3 className="ds-type-page-title mt-2 max-w-[14rem]">Secure progress</h3>
+          </div>
+          <div className="ds-supergraphic min-h-48 overflow-hidden rounded-[var(--ds-radius-surface)] border bg-surface p-6">
+            <p className="ds-type-eyebrow text-text-supporting">Light surface</p>
+            <h3 className="ds-type-page-title mt-2 max-w-[14rem]">Welcome back</h3>
           </div>
         </div>
       </ExampleSection>

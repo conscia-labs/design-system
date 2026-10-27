@@ -43,6 +43,19 @@ Brand alignment, part 2: typography.
 - Heading tracking follows the brand: `-0.0137em` for display, page titles
   and metric values, and `-0.0096em` for section titles, in every density.
 
+Brand alignment, part 3: burgundy chrome and the supergraphic.
+
+- `AppSidebar variant="brand"` and the new `AppHeader tone="brand"` paint the
+  app chrome Conscia burgundy in both appearances. Both set a
+  `data-chrome="brand"` scope that re-points surface, text, border, focus,
+  and control roles, so buttons, badges, and search inside read
+  light-on-burgundy without extra classes. Defaults are unchanged.
+- New `ds-supergraphic` utility draws the brand's dotted rings behind an
+  element's content: electric blue in brand chrome, faint burgundy on light
+  surfaces, and a softer blue in dark mode. It pairs with `ds-texture-brand`.
+- The playground shell page demonstrates both. `BrandIcon` and
+  `BrandWordmark` remain the logo components.
+
 ## 1.5.1 - 2026-10-26
 
 A patch release: the active option in segmented and pill tabs is now clearly
