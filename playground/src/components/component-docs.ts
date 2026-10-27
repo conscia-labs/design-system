@@ -127,6 +127,7 @@ const guidance: Record<string, ComponentGuidance> = {
     options: [
       { name: "composition", values: "PageHeader · PageToolbar · DetailSections · ResourceSummary", guidance: "Compose only the regions the page needs. Empty PageToolbar slots collapse, and a toolbar with no content renders nothing." },
       { name: "inset", values: "--ds-frame-padding-x · --ds-frame-content-inset", guidance: "PageFrame, PageHeader, PageToolbar, and DetailBackLink share one left edge at every breakpoint. Inside PageFrame the header adds no inset of its own; a surface can set --ds-frame-content-inset for headers it contains." },
+      { name: "PageHeader texture", values: "true (default) · false", guidance: "A faint brand wash starts from the workspace corner where the top bar and sidebar meet, painted by MainRegion (or PageFrame outside an app shell), so it never draws a box around an inset header. Set texture={false} to turn it off." },
     ],
   },
   "inventory-and-tables": {

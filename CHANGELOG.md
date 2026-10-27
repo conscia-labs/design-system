@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.6.1 - 2026-10-27
+
+Page header fixes.
+
+- Fix the `PageHeader` brand wash drawing a visible box when the header is
+  inset by `PageFrame`. The wash now starts from the workspace corner, where
+  the top bar and sidebar meet: `MainRegion` paints it from its content box,
+  a `PageFrame` outside an app shell paints it from its own corner, and a
+  header outside both gets a contained wash that fades out before every edge.
+  It works with any `PageFrame` width and with a `DetailBackLink` above the
+  header.
+- Add `PageHeader texture={false}` to turn the wash off. The header keeps an
+  opaque canvas background when the wash is off.
+- A `PageHeader` inside a `Card` or `InventorySurface` takes the surface inset
+  and the card surface without the wash, matching the toolbar below it, and
+  never starts the page wash. Page headers on the canvas are unchanged.
+- `ds-texture-wash` is documented as suitable only for elements whose
+  top-left corner touches the workspace edges.
+
 ## 1.6.0 - 2026-10-27
 
 Brand alignment with conscia.com: the brand palette, cool greys, electric

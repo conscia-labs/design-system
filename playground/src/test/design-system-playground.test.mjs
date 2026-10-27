@@ -524,6 +524,11 @@ test("expressive layer keeps brand, motion, chart, and texture roles token-backe
   assert.match(styles, /prefers-reduced-motion: reduce/);
   assert.match(styles, /@utility ds-skeleton/);
   assert.match(styles, /@utility ds-texture-wash/);
+  // The page header wash starts at the workspace corner, never on an inset header box.
+  assert.match(styles, /\[data-slot="main-region"\]:has\(\[data-slot="page-header"\]\[data-texture="wash"\]/);
+  assert.match(styles, /:is\(\[data-slot="main-region"\], \[data-slot="page-frame"\]\) \[data-slot="page-header"\]\[data-texture="wash"\] \{\s*background-color: transparent;/);
+  assert.match(styles, /radial-gradient\(closest-side at 30% 50%, var\(--ds-texture-tint\), transparent\)/);
+  assert.doesNotMatch(read("../../../src/patterns/page-header.tsx"), /ds-texture-wash/);
   assert.match(styles, /@utility ds-texture-brand/);
   assert.match(styles, /mask-image: url\("data:image\/svg\+xml/);
   assert.match(styles, /--ds-texture-mark:/);
@@ -921,4 +926,10 @@ test("brand chrome and supergraphic stay token-backed", () => {
   assert.ok(mask?.startsWith("data:image/svg+xml,"));
   assert.ok(!mask.includes("#"), "supergraphic data URI must not contain #");
   assert.match(read("../app/shell-navigation/page.tsx"), /ds-supergraphic/);
+});
+
+test("page headers inside cards never start the region wash", () => {
+  const styles = read("../../../src/foundation/styles.css");
+  const regionRule = styles.match(/\[data-slot="main-region"\]:has\(([^{]*)\{/)?.[1] ?? "";
+  assert.match(regionRule, /:not\(:is\(\[data-slot="card"\], \[data-slot="inventory-surface"\]\) \*\)/);
 });

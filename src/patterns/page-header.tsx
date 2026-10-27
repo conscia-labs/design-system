@@ -9,6 +9,11 @@ type PageHeaderProps = React.ComponentProps<"header"> & {
   metadata?: React.ReactNode;
   actions?: React.ReactNode;
   /**
+   * Draws the faint brand wash behind the header. Inside a PageFrame the wash
+   * starts from the workspace corner; set false to turn it off.
+   */
+  texture?: boolean;
+  /**
    * Temporary compatibility prop for migrated Admin UI pages.
    * New implementations should pass an explicit actions node.
    */
@@ -31,6 +36,7 @@ function PageHeader({
   actions,
   action,
   actionNode,
+  texture = true,
   className,
   ...props
 }: PageHeaderProps) {
@@ -49,7 +55,16 @@ function PageHeader({
   return (
     <header
       data-slot="page-header"
-      className={cn("flex flex-col gap-3 ds-texture-wash border-b border-border-subtle bg-canvas px-[var(--ds-frame-content-inset,var(--ds-frame-padding-x))] py-4 lg:flex-row lg:items-start lg:justify-between", className)}
+      data-texture={texture ? "wash" : "none"}
+      className={cn(
+        // On the page the header shares the frame's left edge. Inside a Card
+        // or InventorySurface it sits on the card surface with the surface's
+        // own inset and no wash, so consumers add no padding of their own.
+        "flex flex-col gap-3 border-b border-border-subtle px-[var(--ds-frame-content-inset,var(--ds-frame-padding-x))] py-4 lg:flex-row lg:items-start lg:justify-between",
+        !texture && "bg-canvas",
+        "in-data-[slot=card]:bg-transparent in-data-[slot=card]:bg-none in-data-[slot=card]:px-[var(--ds-surface-padding)] in-data-[slot=inventory-surface]:bg-transparent in-data-[slot=inventory-surface]:bg-none in-data-[slot=inventory-surface]:px-[var(--ds-surface-padding)]",
+        className,
+      )}
       {...props}
     >
       <div className="min-w-0">

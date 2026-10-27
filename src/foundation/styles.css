@@ -249,6 +249,8 @@
   --ds-texture-mark: color-mix(in oklab, var(--palette-burgundy) 7%, transparent);
   /* Dot-ring supergraphic: faint burgundy on light surfaces. */
   --ds-supergraphic-color: color-mix(in oklab, var(--palette-burgundy) 16%, transparent);
+  --ds-page-wash-width: 56rem;
+  --ds-page-wash-height: 12rem;
   /*
    * Saans is the Conscia brand typeface. It is licensed, so the package does
    * not bundle it: products with a licence self-host it under the family
@@ -1144,6 +1146,38 @@
     border: 1px dashed color-mix(in oklab, var(--spot-ring) 45%, transparent);
   }
 
+  /*
+   * Page header wash. It starts from the workspace corner, where the top bar
+   * and sidebar meet, and fades out within the header band, so it has no
+   * visible edge however the frame pads or centers its content (including a
+   * DetailBackLink above the header). MainRegion paints it from its content
+   * box; a PageFrame outside a MainRegion paints it from its own corner; a
+   * header outside both gets a contained ellipse that reaches zero before
+   * every edge. PageHeader texture={false} turns it off. Only the region
+   * nearest the header paints, so nesting never doubles it. A header inside
+   * a Card or InventorySurface sits on the card surface and never starts it.
+   */
+  [data-slot="page-header"][data-texture="wash"] {
+    background-color: var(--canvas);
+    background-image: radial-gradient(closest-side at 30% 50%, var(--ds-texture-tint), transparent);
+  }
+
+  [data-slot="main-region"]:has([data-slot="page-header"][data-texture="wash"]:not(:is([data-slot="card"], [data-slot="inventory-surface"]) *)):not(:has([data-slot="main-region"] [data-slot="page-header"][data-texture="wash"]:not(:is([data-slot="card"], [data-slot="inventory-surface"]) *))),
+  [data-slot="page-frame"]:not([data-slot="main-region"] *):has([data-slot="page-header"][data-texture="wash"]:not(:is([data-slot="card"], [data-slot="inventory-surface"]) *)):not(:has([data-slot="page-frame"] [data-slot="page-header"][data-texture="wash"]:not(:is([data-slot="card"], [data-slot="inventory-surface"]) *))) {
+    background-image: radial-gradient(var(--ds-page-wash-width) var(--ds-page-wash-height) at 0 0, var(--ds-texture-tint), transparent);
+    background-repeat: no-repeat;
+  }
+
+  /* MainRegion pads itself clear of the fixed top bar and sidebar; start inside that padding. */
+  [data-slot="main-region"]:has([data-slot="page-header"][data-texture="wash"]:not(:is([data-slot="card"], [data-slot="inventory-surface"]) *)) {
+    background-origin: content-box;
+  }
+
+  :is([data-slot="main-region"], [data-slot="page-frame"]) [data-slot="page-header"][data-texture="wash"] {
+    background-color: transparent;
+    background-image: none;
+  }
+
   /* The sidebar header carries the brand mark; a soft glow sits behind it. */
   [data-slot="app-sidebar-header"] {
     background-image: radial-gradient(120% 180% at 0% 0%, var(--sidebar-glow, transparent), transparent 72%);
@@ -1168,7 +1202,11 @@
   animation: ds-skeleton-shimmer 1.6s var(--ds-ease-standard) infinite;
 }
 
-/* Faint brand wash for chrome such as the page header. Never behind data. */
+/*
+ * Faint brand wash anchored at the element's top-left corner, where it is
+ * strongest. Use it only on an element whose top-left touches the edges of
+ * the workspace; on an inset element it draws a visible box. Never behind data.
+ */
 @utility ds-texture-wash {
   background-image: radial-gradient(60% 180% at 0% 0%, var(--ds-texture-tint), transparent 70%);
 }

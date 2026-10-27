@@ -29,6 +29,11 @@ export default function PatternsPage() {
             <MetricBandItem label="Requests" value="48k" detail="Last 24 hours" icon={<Activity />} />
           </MetricBand>
         </div>
+        <Card className="gap-0 overflow-hidden py-0">
+          <PageHeader title="Access requests" description="Inside a Card or InventorySurface the header takes the surface inset and the card surface, with no consumer padding." status={<Badge variant="information">4 pending</Badge>} actions={<Button size="sm">Review</Button>} />
+          <PageToolbar search={<Input aria-label="Search access requests" placeholder="Search requests" />} filters={<Button variant="outline" size="sm">All teams</Button>} />
+          <p className="ds-type-ui p-[var(--ds-surface-padding)] text-text-supporting">Card content.</p>
+        </Card>
       </ExampleSection>
 
       <div className="grid gap-6 xl:grid-cols-2">
