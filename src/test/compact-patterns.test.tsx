@@ -91,3 +91,17 @@ describe("PageHeader brand wash", () => {
     expect(header().className).toContain("bg-canvas");
   });
 });
+
+describe("PageHeader inside surfaces", () => {
+  it("takes the surface inset and card surface inside cards, and keeps the frame edge on the page", () => {
+    const { container } = render(<PageHeader title="Connections" />);
+    const className = container.querySelector('[data-slot="page-header"]')!.className;
+    expect(className).toContain("px-[var(--ds-frame-content-inset,var(--ds-frame-padding-x))]");
+    expect(className).toContain("border-b");
+    for (const slot of ["card", "inventory-surface"]) {
+      expect(className).toContain(`in-data-[slot=${slot}]:px-[var(--ds-surface-padding)]`);
+      expect(className).toContain(`in-data-[slot=${slot}]:bg-transparent`);
+      expect(className).toContain(`in-data-[slot=${slot}]:bg-none`);
+    }
+  });
+});

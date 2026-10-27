@@ -1154,21 +1154,22 @@
    * box; a PageFrame outside a MainRegion paints it from its own corner; a
    * header outside both gets a contained ellipse that reaches zero before
    * every edge. PageHeader texture={false} turns it off. Only the region
-   * nearest the header paints, so nesting never doubles it.
+   * nearest the header paints, so nesting never doubles it. A header inside
+   * a Card or InventorySurface sits on the card surface and never starts it.
    */
   [data-slot="page-header"][data-texture="wash"] {
     background-color: var(--canvas);
     background-image: radial-gradient(closest-side at 30% 50%, var(--ds-texture-tint), transparent);
   }
 
-  [data-slot="main-region"]:has([data-slot="page-header"][data-texture="wash"]):not(:has([data-slot="main-region"] [data-slot="page-header"][data-texture="wash"])),
-  [data-slot="page-frame"]:not([data-slot="main-region"] *):has([data-slot="page-header"][data-texture="wash"]):not(:has([data-slot="page-frame"] [data-slot="page-header"][data-texture="wash"])) {
+  [data-slot="main-region"]:has([data-slot="page-header"][data-texture="wash"]:not(:is([data-slot="card"], [data-slot="inventory-surface"]) *)):not(:has([data-slot="main-region"] [data-slot="page-header"][data-texture="wash"]:not(:is([data-slot="card"], [data-slot="inventory-surface"]) *))),
+  [data-slot="page-frame"]:not([data-slot="main-region"] *):has([data-slot="page-header"][data-texture="wash"]:not(:is([data-slot="card"], [data-slot="inventory-surface"]) *)):not(:has([data-slot="page-frame"] [data-slot="page-header"][data-texture="wash"]:not(:is([data-slot="card"], [data-slot="inventory-surface"]) *))) {
     background-image: radial-gradient(var(--ds-page-wash-width) var(--ds-page-wash-height) at 0 0, var(--ds-texture-tint), transparent);
     background-repeat: no-repeat;
   }
 
   /* MainRegion pads itself clear of the fixed top bar and sidebar; start inside that padding. */
-  [data-slot="main-region"]:has([data-slot="page-header"][data-texture="wash"]) {
+  [data-slot="main-region"]:has([data-slot="page-header"][data-texture="wash"]:not(:is([data-slot="card"], [data-slot="inventory-surface"]) *)) {
     background-origin: content-box;
   }
 
