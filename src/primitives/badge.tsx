@@ -26,10 +26,19 @@ const badgeVariants = cva(
         warning: "border-warning-border bg-warning-background text-warning-foreground",
         danger: "border-danger-border bg-danger-background text-danger-foreground",
         destructive: "border-danger-border bg-danger-background text-danger-foreground"
+      },
+      /**
+       * `pill` is the fully rounded category tag from conscia.com. Use it for
+       * taxonomy (service area, topic); status badges stay `rounded`.
+       */
+      shape: {
+        rounded: "",
+        pill: "rounded-full px-2",
       }
     },
     defaultVariants: {
-      variant: "neutral"
+      variant: "neutral",
+      shape: "rounded"
     }
   },
 );
@@ -37,9 +46,10 @@ const badgeVariants = cva(
 function Badge({
   className,
   variant,
+  shape,
   ...props
 }: React.ComponentProps<"span"> & VariantProps<typeof badgeVariants>) {
-  return <span data-slot="badge" className={cn(badgeVariants({ variant, className }))} {...props} />;
+  return <span data-slot="badge" data-shape={shape ?? "rounded"} className={cn(badgeVariants({ variant, shape, className }))} {...props} />;
 }
 
 export { Badge, badgeVariants };

@@ -257,6 +257,26 @@ the semantic brand roles above. Do not use `text-brand` as ordinary text on a
 dark canvas; burgundy is intentionally stable across appearances and is
 designed as an identity surface with `text-brand-foreground`.
 
+### Brand usage
+
+Follow the conscia.com colour-usage guide: burgundy covers the most area,
+then white and green, with electric blue as a small accent and the pale
+tints smaller still.
+
+- **Burgundy** is for large identity surfaces: `AppSidebar variant="brand"`
+  with `AppHeader tone="brand"`, heroes, and `Card tone="brand"` service
+  tiles. Never use it as a thin accent line.
+- **Electric blue** is for actions, focus, selection, and accents. Buttons
+  already use it.
+- **Green** is for supporting identity (`brand-supporting`, `Card
+  tone="supporting"`) and positive trends.
+- **Peach** is the `highlight` role (`Card tone="highlight"`) for case studies
+  and callouts. It is never a status; danger is an orange-red.
+- `ds-supergraphic` draws the dotted rings on heroes, sign-in, empty
+  workspaces, and brand cards. Never put it, or a toned card, behind data.
+- `brand-emphasis` is deprecated. Use `brand-accent`, `brand-supporting`, or
+  `highlight` instead.
+
 ### Typeface
 
 The font stack starts with `"Saans"`, the Conscia brand typeface, and falls

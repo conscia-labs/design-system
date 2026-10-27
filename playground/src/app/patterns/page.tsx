@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Activity, Box, CircleGauge, Database, Search } from "lucide-react";
 import {
-  ActivityItem, ActivityList, Badge, Button, CodeBlock, ConfirmationDialog,
+  ActivityItem, ActivityList, Badge, Button, Card, CodeBlock, ConfirmationDialog, Eyebrow,
   DetailSection, DetailSections, FilterBar, FilterChip, Input, KeyValueItem, KeyValueList,
   MetricBand, MetricBandItem, PageHeader, PageToolbar, PaginationControls, ProviderMark,
   ResourceRow, ResourceRowContent, ResourceRowDescription, ResourceRowIcon, ResourceRowMeta,
@@ -87,6 +87,29 @@ export default function PatternsPage() {
           <WorkbenchMain className="p-5"><h3 className="ds-type-section-title">Primary work area</h3><p className="ds-type-ui mt-2 text-text-supporting">Product-owned tools and content live here.</p></WorkbenchMain>
           <WorkbenchInspector className="border-l p-4"><WorkbenchInspectorSection label="Details"><ResourceRowDescription className="mt-2 block text-sm text-text-supporting">Contextual metadata and actions.</ResourceRowDescription></WorkbenchInspectorSection></WorkbenchInspector>
         </WorkbenchShell>
+      </ExampleSection>
+
+      <ExampleSection title="Brand surfaces" description="Card tones, pill tags, and the eyebrow line bring the conscia.com service tiles and case cards into products. Never put data tables or charts on a toned card.">
+        <div className="grid gap-4 md:grid-cols-3">
+          <Card tone="brand" className="ds-supergraphic min-h-52 overflow-hidden px-[var(--ds-surface-padding)]">
+            <Eyebrow category="Service" />
+            <h3 className="ds-type-page-title">Cybersecurity</h3>
+            <p className="ds-type-ui max-w-[16rem] text-text-secondary">Security embedded in every layer of the infrastructure.</p>
+          </Card>
+          <Card tone="supporting" className="min-h-52 px-[var(--ds-surface-padding)]">
+            <Eyebrow category="Service" />
+            <h3 className="ds-type-page-title">Hybrid cloud</h3>
+            <p className="ds-type-ui text-text-secondary">On-premises and cloud combined into one secure environment.</p>
+          </Card>
+          <Card tone="highlight" className="min-h-52 px-[var(--ds-surface-padding)]">
+            <Eyebrow category="Case" meta="October 8, 2026" dateTime="2026-10-08" />
+            <h3 className="ds-type-page-title">Vejle strengthens network visibility</h3>
+            <div className="mt-auto flex flex-wrap gap-2">
+              <Badge shape="pill" variant="outline">Cybersecurity</Badge>
+              <Badge shape="pill" variant="outline">Managed services</Badge>
+            </div>
+          </Card>
+        </div>
       </ExampleSection>
 
       <ExampleSection title="Content helpers" description="Catalog examples include copyable package imports and provider identity.">
