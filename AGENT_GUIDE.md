@@ -257,6 +257,27 @@ the semantic brand roles above. Do not use `text-brand` as ordinary text on a
 dark canvas; burgundy is intentionally stable across appearances and is
 designed as an identity surface with `text-brand-foreground`.
 
+### Typeface
+
+The font stack starts with `"Saans"`, the Conscia brand typeface, and falls
+back to the bundled Source Sans 3. Saans is licensed, so the package does not
+ship it. A product with a licence self-hosts the files under the family name
+`Saans`, and every type role picks it up:
+
+```css
+@font-face {
+  font-family: "Saans";
+  src: url("/fonts/SaansVF.woff2") format("woff2-variations");
+  font-weight: 300 900;
+  font-display: swap;
+}
+```
+
+Use only the three brand weights: regular 380, medium 570 and semibold 670.
+Tailwind's `font-normal`, `font-medium`, `font-semibold` and `font-bold` map to
+them. Saans sets wider than Source Sans 3, so check truncation in tables and
+navigation after enabling it.
+
 ## Accessibility ownership
 
 The package provides component-level keyboard behavior, focus management, and

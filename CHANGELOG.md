@@ -31,6 +31,18 @@ Brand alignment with conscia.com, part 1: palette and roles.
   and slate blue. The light set passes the colorblind and normal-vision
   separation checks across all pairs; the dark set passes on adjacent pairs.
 
+Brand alignment, part 2: typography.
+
+- `--font-sans` starts with `"Saans"`, the Conscia brand typeface. The
+  package does not bundle it because it is licensed; products with a licence
+  self-host it and it takes over. Everyone else keeps Source Sans 3.
+- Type uses the brand's three weights: regular 380, medium 570 and semibold
+  670, exposed as `--ds-font-weight-*`. Tailwind's `font-normal`,
+  `font-medium`, `font-semibold` and `font-bold` map to them, and no
+  hard-coded weights remain.
+- Heading tracking follows the brand: `-0.0137em` for display, page titles
+  and metric values, and `-0.0096em` for section titles, in every density.
+
 ## 1.5.1 - 2026-10-26
 
 A patch release: the active option in segmented and pill tabs is now clearly
