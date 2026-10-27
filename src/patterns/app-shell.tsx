@@ -295,8 +295,12 @@ function AppSidebar({
   ...props
 }: React.ComponentProps<"aside"> & {
   side?: "left" | "right";
-  /** Use the appearance-aware sidebar by default; explicit variants remain available. */
-  variant?: "light" | "dark" | "auto";
+  /**
+   * Use the appearance-aware sidebar by default; explicit variants remain
+   * available. `brand` paints the sidebar Conscia burgundy in both
+   * appearances, as on conscia.com.
+   */
+  variant?: "light" | "dark" | "auto" | "brand";
   /** Apply a low-chroma treatment while preserving the active appearance. */
   treatment?: "quiet";
   title?: string;
@@ -315,6 +319,7 @@ function AppSidebar({
           side={side}
           data-sidebar-variant={variant}
           data-sidebar-treatment={treatment}
+          data-chrome={variant === "brand" ? "brand" : undefined}
           className="w-[var(--ds-sidebar-width-mobile)] border-sidebar-border bg-sidebar-canvas p-0 text-sidebar-primary-text [&>[data-slot=sheet-close]]:right-3 [&>[data-slot=sheet-close]]:top-3 [&>[data-slot=sheet-close]]:text-sidebar-secondary-text [&>[data-slot=sheet-close]]:hover:text-sidebar-primary-text"
         >
           <SheetHeader className="sr-only">
@@ -330,6 +335,7 @@ function AppSidebar({
         data-side={side}
         data-sidebar-variant={variant}
         data-sidebar-treatment={treatment}
+        data-chrome={variant === "brand" ? "brand" : undefined}
         aria-label={ariaLabelledBy ? undefined : ariaLabel ?? title}
         aria-labelledby={ariaLabelledBy}
         className={cn(
@@ -795,13 +801,24 @@ function MainRegion({
   );
 }
 
+type AppHeaderProps = React.ComponentProps<"header"> & {
+  /**
+   * `brand` paints the header Conscia burgundy and switches the controls
+   * inside it to light-on-burgundy. Pair it with `AppSidebar variant="brand"`.
+   */
+  tone?: "default" | "brand";
+};
+
 function AppHeader({
   className,
+  tone = "default",
   ...props
-}: React.ComponentProps<"header">) {
+}: AppHeaderProps) {
   return (
     <header
       data-slot="app-header"
+      data-tone={tone}
+      data-chrome={tone === "brand" ? "brand" : undefined}
       className={cn(
         "fixed inset-x-0 top-0 z-30 flex h-[var(--ds-topbar-height)] min-h-[var(--ds-topbar-height)] items-center gap-2 border-b border-border-subtle bg-canvas/96 px-[var(--ds-topbar-padding-x)] backdrop-blur supports-[backdrop-filter]:bg-canvas/88 md:gap-3 md:px-[var(--ds-topbar-padding-x-wide)]",
         className,
@@ -972,6 +989,7 @@ export {
 };
 
 export type {
+  AppHeaderProps,
   AppHeaderSearchProps,
   AppShellProps,
   NavigationItemProps,
