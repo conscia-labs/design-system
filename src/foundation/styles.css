@@ -3,9 +3,29 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  /*
+   * The Conscia brand palette, as published on conscia.com. Roles below
+   * reference these primitives; the brand's colour-usage guide gives
+   * burgundy about 44% of the area, white 18%, green 13%, electric blue 8%,
+   * and the pale tints 2-4% each.
+   */
+  --palette-black: #140c15;
   --palette-burgundy: #1e0721;
+  --palette-burgundy-raised: #2a0c2e;
   --palette-electric-blue: #4962ff;
+  --palette-electric-blue-dark: #3344b2;
+  --palette-electric-blue-pale: #d9ddff;
   --palette-green: #1c4e51;
+  --palette-green-pale: #a3d6cf;
+  --palette-green-palest: #d8eeeb;
+  --palette-peach: #ffe8e9;
+  --palette-peach-dark: #ffa1a8;
+  --palette-peach-darkest: #c44a53;
+  --palette-grey-100: #f9f9fa;
+  --palette-grey-200: #f3f4f5;
+  --palette-grey-300: #e4e5e5;
+  --palette-grey-500: #838692;
+  --palette-grey-800: #373b4a;
 }
 
 @keyframes ds-sidebar-expand {
@@ -84,13 +104,13 @@
   color-scheme: light;
   --radius: 0.5rem;
   /*
-   * Neutrals carry a faint burgundy cast (OKLCH hue ~323deg, chroma <= 0.016)
-   * so greys read as Conscia rather than default. Canvas sits a step below
-   * white so surfaces lift off it without relying on borders alone.
+   * Neutrals follow the brand's cool greys. Canvas is the brand grey-200 a
+   * step below white, so surfaces lift off it without relying on borders.
+   * Text greys are darker than the brand's grey-500, which fails AA.
    */
-  --canvas: #f6f3f6;
+  --canvas: var(--palette-grey-200);
   --surface: #ffffff;
-  --surface-muted: #f3eff3;
+  --surface-muted: #ecedef;
   --surface-raised: #ffffff;
   --surface-floating: #ffffff;
   --surface-overlay: #ffffff;
@@ -98,56 +118,56 @@
   --surface-control-hover: var(--surface-raised);
   --surface-inverse: var(--palette-burgundy);
   /* Column header and pagination bands: darker than both rows (canvas) and the card surface. */
-  --surface-table-header: #ece8ec;
+  --surface-table-header: #e5e6e9;
   /* Segmented control track and its raised selected option: >= 1.3:1 apart in both themes. */
-  --surface-track: #e2dee2;
+  --surface-track: #e0e1e4;
   --surface-track-selected: #ffffff;
-  --text-primary: #140c15;
-  --text-secondary: #403941;
-  --text-supporting: #645d65;
-  --text-muted: #6e686e;
-  --control-indicator: #6e686e;
-  --text-disabled: #ada8ad;
+  --text-primary: var(--palette-black);
+  --text-secondary: var(--palette-grey-800);
+  --text-supporting: #575b69;
+  --text-muted: #5f6372;
+  --control-indicator: #5f6372;
+  --text-disabled: #a6a9b1;
   --text-inverse: #ffffff;
-  --text-link: #3f4da8;
+  --text-link: var(--palette-electric-blue-dark);
   --brand: var(--palette-burgundy);
   --brand-foreground: #ffffff;
   --brand-accent: var(--palette-electric-blue);
   --brand-accent-foreground: #ffffff;
   --brand-supporting: var(--palette-green);
   --brand-supporting-foreground: #ffffff;
-  --brand-supporting-background: #eaf3f1;
-  --brand-supporting-border: #b2d4cf;
+  --brand-supporting-background: var(--palette-green-palest);
+  --brand-supporting-border: var(--palette-green-pale);
   --brand-secondary: var(--brand-supporting);
   --brand-secondary-foreground: var(--brand-supporting-foreground);
   --brand-secondary-background: var(--brand-supporting-background);
   --brand-secondary-border: var(--brand-supporting-border);
   /*
-   * Brand emphasis is a mid-tone of the Conscia burgundy hue. The official
-   * burgundy is near-black on light surfaces, so identity accents (underline
-   * tab indicators, the primary metric, state-view spots) use this tone.
-   * Blue stays reserved for actions and selection.
+   * Deprecated: brand emphasis was a plum mid-tone that is not part of the
+   * Conscia palette. It now aliases the electric-blue accent roles and will
+   * be removed in 2.0. Use brand-accent, brand-supporting, or highlight.
    */
-  --brand-emphasis: #752870;
-  --brand-emphasis-foreground: #752870;
-  --brand-emphasis-background: #faf0f9;
-  --brand-emphasis-border: #e5c6e1;
-  --action: #3f55df;
+  --brand-emphasis: var(--brand-accent);
+  --brand-emphasis-foreground: var(--text-link);
+  --brand-emphasis-background: var(--action-background);
+  --brand-emphasis-border: var(--selection-border);
+  /* Actions use the brand electric blue: white text holds 4.69:1. */
+  --action: var(--palette-electric-blue);
   --action-foreground: #ffffff;
-  --action-hover: #3344c7;
-  --action-active: #293999;
-  --action-background: #eef0ff;
-  --selection-background: #f0f1f6;
+  --action-hover: var(--palette-electric-blue-dark);
+  --action-active: #28348c;
+  --action-background: #eceeff;
+  --selection-background: #eef0fd;
   /* Pill selection fill: >= 1.3:1 against both the canvas and white surfaces. */
-  --selection-background-strong: #d2d6ed;
-  --selection-border: #aeb6e3;
-  --selection-indicator: #6672dc;
-  --selection-foreground: #242a44;
-  --control-border: #e7e3e8;
-  --focus: #6371d9;
-  --border-subtle: #ede9ed;
-  --border-default: #dcd7dc;
-  --border-strong: #c1bbc1;
+  --selection-background-strong: #cdd3fd;
+  --selection-border: #aab4ff;
+  --selection-indicator: var(--palette-electric-blue);
+  --selection-foreground: #1f2547;
+  --control-border: #dfe0e3;
+  --focus: var(--palette-electric-blue);
+  --border-subtle: var(--palette-grey-300);
+  --border-default: #d4d6da;
+  --border-strong: #b8bbc2;
   --information: #28758a;
   --information-background: #eaf5f7;
   --information-border: #b8dce3;
@@ -160,27 +180,39 @@
   --warning-background: #fff4d8;
   --warning-border: #ffd083;
   --warning-foreground: #654000;
-  --danger: #c44a53;
-  --danger-background: #ffe8e9;
-  --danger-border: #ffa1a8;
-  --danger-foreground: #822c35;
-  --neutral: #645d65;
+  /*
+   * Danger sits on an orange-red hue so it never reads as the brand peach,
+   * which belongs to the highlight role.
+   */
+  --danger: #c03a1c;
+  --danger-background: #fdebe4;
+  --danger-border: #f5b39f;
+  --danger-foreground: #852313;
+  /* Highlight: the brand peach, for case cards and callouts. Never a status. */
+  --highlight-background: var(--palette-peach);
+  --highlight-border: var(--palette-peach-dark);
+  --highlight-foreground: var(--palette-burgundy);
+  --highlight-accent: var(--palette-peach-darkest);
+  --spot-brand-foreground: #7f8fff;
+  --spot-brand-background: var(--palette-burgundy);
+  --spot-brand-ring: var(--palette-burgundy-raised);
+  --neutral: #575b69;
   --neutral-background: var(--surface-muted);
   --neutral-border: var(--border-default);
-  --neutral-foreground: #403941;
+  --neutral-foreground: var(--palette-grey-800);
   /*
-   * Categorical series lead with the brand hues (electric blue, burgundy
-   * plum, Conscia green) and never reuse status colors, so "series 4" can't
-   * be read as a warning. Assign in order, never cycle. Validated for
-   * lightness band, chroma floor, protan/deutan separation (worst adjacent
-   * dE 12.7), normal-vision separation, and 3:1 against canvas and surface.
+   * Categorical series are steps of the brand hues: electric blue, Conscia
+   * teal, peach rose, green, and a slate blue. They never reuse status
+   * colors. Assign in order, never cycle. Validated for lightness band,
+   * chroma floor, protan/deutan separation (worst dE 9.4 across all pairs),
+   * normal-vision separation, and 3:1 against canvas and surface.
    * Series that mean good or bad use the status or trend tokens instead.
    */
   --chart-series-1: var(--brand-accent);
-  --chart-series-2: #9c2892;
-  --chart-series-3: #11957c;
-  --chart-series-4: #cf5604;
-  --chart-series-5: #733fbf;
+  --chart-series-2: #1d9999;
+  --chart-series-3: #be2f5a;
+  --chart-series-4: #0a6b1d;
+  --chart-series-5: #44509a;
   --chart-grid: var(--border-subtle);
   --chart-axis: var(--text-muted);
   --chart-annotation: var(--action-background);
@@ -211,10 +243,10 @@
   --sidebar-group-label: color-mix(in oklab, #ffffff 72%, transparent);
   --sidebar-group-count: color-mix(in oklab, #ffffff 62%, transparent);
   --sidebar-focus-ring: var(--focus);
-  --sidebar-glow: color-mix(in oklab, #b0549f 26%, transparent);
+  --sidebar-glow: color-mix(in oklab, var(--palette-electric-blue) 24%, transparent);
   /* Faint brand wash for chrome backgrounds (page header, onboarding canvases). Never behind data. */
-  --ds-texture-tint: color-mix(in oklab, var(--brand-emphasis) 7%, transparent);
-  --ds-texture-mark: color-mix(in oklab, var(--brand-emphasis) 8%, transparent);
+  --ds-texture-tint: color-mix(in oklab, var(--palette-burgundy) 6%, transparent);
+  --ds-texture-mark: color-mix(in oklab, var(--palette-burgundy) 7%, transparent);
   --font-sans: "Source Sans 3 Variable", "Source Sans 3", "Source Sans", "Aptos", "Segoe UI", Arial, sans-serif;
   --ds-space-inline: 0.5rem;
   --ds-space-control: 0.625rem;
@@ -482,7 +514,7 @@
   --control-indicator: #9d979d;
   --text-disabled: #7e797e;
   --text-inverse: #1a171a;
-  --text-link: #aeb6ef;
+  --text-link: #a9b4ff;
   --brand: var(--palette-burgundy);
   --brand-foreground: #ffffff;
   --brand-accent: #6b7cff;
@@ -495,22 +527,22 @@
   --brand-secondary-foreground: var(--brand-supporting-foreground);
   --brand-secondary-background: var(--brand-supporting-background);
   --brand-secondary-border: var(--brand-supporting-border);
-  --brand-emphasis: #d58ecf;
-  --brand-emphasis-foreground: #ebcce7;
-  --brand-emphasis-background: #332331;
-  --brand-emphasis-border: #633f5f;
-  --action: #5965cc;
+  --brand-emphasis: var(--brand-accent);
+  --brand-emphasis-foreground: var(--text-link);
+  --brand-emphasis-background: var(--action-background);
+  --brand-emphasis-border: var(--selection-border);
+  --action: var(--palette-electric-blue);
   --action-foreground: #ffffff;
-  --action-hover: #5f6bd2;
-  --action-active: #505bb8;
-  --action-background: #252a46;
-  --selection-background: #2a2e3b;
-  --selection-background-strong: #343a4d;
-  --selection-border: #5c669b;
-  --selection-indicator: #7c86df;
-  --selection-foreground: #edf0f7;
+  --action-hover: #5a71ff;
+  --action-active: #3f55e6;
+  --action-background: #23284a;
+  --selection-background: #262a3d;
+  --selection-background-strong: #323a5c;
+  --selection-border: #4f5ab0;
+  --selection-indicator: #7f8fff;
+  --selection-foreground: #edf0fb;
   --control-border: rgb(255 255 255 / 12%);
-  --focus: #7c86df;
+  --focus: #7f8fff;
   --border-subtle: rgb(255 255 255 / 7%);
   --border-default: rgb(255 255 255 / 11%);
   --border-strong: rgb(255 255 255 / 18%);
@@ -526,25 +558,32 @@
   --warning-background: #4b350c;
   --warning-border: #8a650f;
   --warning-foreground: #fff4d8;
-  --danger: #ffa1a8;
+  --danger: #ff9f85;
   /* A quiet tint rather than a saturated block; text contrast stays above 11:1. */
-  --danger-background: #3e2a2f;
-  --danger-border: #9d3c48;
-  --danger-foreground: #ffe8e9;
+  --danger-background: #3f2a24;
+  --danger-border: #9a4a33;
+  --danger-foreground: #ffe6dc;
+  --highlight-background: #3a1840;
+  --highlight-border: #6b3563;
+  --highlight-foreground: var(--palette-peach-dark);
+  --highlight-accent: var(--palette-peach-dark);
+  --spot-brand-foreground: #8f9cff;
+  --spot-brand-background: #3a1840;
+  --spot-brand-ring: #6b3563;
   --neutral: #ada8ad;
   --neutral-background: var(--surface-muted);
   --neutral-border: rgb(255 255 255 / 12%);
   --neutral-foreground: #eae7ea;
   /*
    * Dark steps of the same hues and order, validated separately against the
-   * dark band (worst adjacent dE 9.7) and at least 3:1 against canvas,
+   * dark band (worst adjacent dE 9.3) and at least 3:1 against canvas,
    * surface, raised, and muted dark surfaces.
    */
-  --chart-series-1: #5074f0;
-  --chart-series-2: #be4bb1;
-  --chart-series-3: #19aa8e;
-  --chart-series-4: #cf5604;
-  --chart-series-5: #905fe1;
+  --chart-series-1: #6574fc;
+  --chart-series-2: #2ca2a2;
+  --chart-series-3: #e75669;
+  --chart-series-4: #218b30;
+  --chart-series-5: #6474cf;
   --chart-area-opacity-start: 0.3;
   --chart-grid: var(--border-subtle);
   --chart-axis: var(--text-muted);
@@ -561,7 +600,7 @@
   --sidebar-hover: rgb(255 255 255 / 5%);
   --sidebar-active-background: rgb(255 255 255 / 9%);
   --sidebar-active-foreground: #ffffff;
-  --sidebar-active-indicator: #7c86df;
+  --sidebar-active-indicator: #7f8fff;
   --sidebar-border: rgb(255 255 255 / 8%);
   --sidebar-primary-text: #ffffff;
   --sidebar-secondary-text: color-mix(in oklab, #ffffff 78%, transparent);
@@ -572,9 +611,9 @@
   --sidebar-group-label: color-mix(in oklab, #ffffff 72%, transparent);
   --sidebar-group-count: color-mix(in oklab, #ffffff 62%, transparent);
   --sidebar-focus-ring: var(--focus);
-  --sidebar-glow: color-mix(in oklab, #b0549f 24%, transparent);
-  --ds-texture-tint: color-mix(in oklab, var(--brand-emphasis) 9%, transparent);
-  --ds-texture-mark: color-mix(in oklab, var(--brand-emphasis) 11%, transparent);
+  --sidebar-glow: color-mix(in oklab, var(--palette-electric-blue) 22%, transparent);
+  --ds-texture-tint: color-mix(in oklab, var(--palette-electric-blue) 9%, transparent);
+  --ds-texture-mark: color-mix(in oklab, var(--palette-electric-blue) 11%, transparent);
   --ds-skeleton-highlight: rgb(255 255 255 / 5%);
   /*
    * Shadows read weakly on dark canvases, so each tier adds a faint top
@@ -683,6 +722,10 @@
   --color-brand-emphasis-foreground: var(--brand-emphasis-foreground);
   --color-brand-emphasis-background: var(--brand-emphasis-background);
   --color-brand-emphasis-border: var(--brand-emphasis-border);
+  --color-highlight-background: var(--highlight-background);
+  --color-highlight-border: var(--highlight-border);
+  --color-highlight-foreground: var(--highlight-foreground);
+  --color-highlight-accent: var(--highlight-accent);
   --color-action: var(--action);
   --color-action-foreground: var(--action-foreground);
   --color-action-hover: var(--action-hover);
@@ -971,12 +1014,13 @@
   /*
    * State-view spot: a duotone treatment for empty, error, and success
    * states. The icon's closed shapes take a light fill of their stroke
-   * color; the default size adds two orbit rings.
+   * color; the default size adds two orbit rings. The brand spot is a
+   * burgundy disc with an electric-blue icon, as on conscia.com.
    */
   [data-slot="state-view-spot"] {
-    --spot-foreground: var(--brand-emphasis-foreground);
-    --spot-background: var(--brand-emphasis-background);
-    --spot-ring: var(--brand-emphasis-border);
+    --spot-foreground: var(--spot-brand-foreground);
+    --spot-background: var(--spot-brand-background);
+    --spot-ring: var(--spot-brand-ring);
     position: relative;
     display: flex;
     flex-shrink: 0;
@@ -1067,7 +1111,7 @@
   position: relative;
   isolation: isolate;
   background-image:
-    radial-gradient(60% 55% at 0% 0%, color-mix(in oklab, var(--brand-emphasis) 16%, transparent), transparent 70%),
+    radial-gradient(60% 55% at 0% 0%, color-mix(in oklab, var(--brand) 12%, transparent), transparent 70%),
     radial-gradient(55% 50% at 100% 100%, color-mix(in oklab, var(--brand-accent) 12%, transparent), transparent 70%);
 
   &::before {

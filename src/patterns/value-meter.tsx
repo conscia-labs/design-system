@@ -60,7 +60,7 @@ function ValueMeter({
           <div
             className={cn(
               "h-full rounded-full transition-[width] duration-[var(--ds-duration-slow)] ease-standard",
-              tone === "brand" && "bg-linear-to-r from-brand-accent to-brand-emphasis",
+              tone === "brand" && "bg-linear-to-r from-brand-accent to-brand-supporting",
               tone === "neutral" && "bg-neutral-foreground",
               tone === "success" && "bg-success-foreground",
               tone === "warning" && "bg-warning-foreground",
