@@ -89,8 +89,8 @@ export default function FoundationPage() {
             <div className="rounded-[var(--ds-radius-control)] border border-brand-supporting-border bg-brand-supporting-background p-4 text-sm font-medium text-brand-supporting">
               Green · supporting brand expression
             </div>
-            <div className="rounded-[var(--ds-radius-control)] border border-brand-emphasis-border bg-brand-emphasis-background p-4 text-sm font-medium text-brand-emphasis-foreground">
-              Burgundy emphasis · identity accents
+            <div className="rounded-[var(--ds-radius-control)] border border-highlight-border bg-highlight-background p-4 text-sm font-medium text-highlight-foreground">
+              Peach · highlight surfaces, never status
             </div>
           </div>
         </ExampleSection>
@@ -101,10 +101,10 @@ export default function FoundationPage() {
             <ol className="grid grid-cols-2 gap-3 sm:grid-cols-5">
               {[
                 ["1", "Electric blue", "bg-chart-series-1"],
-                ["2", "Plum", "bg-chart-series-2"],
-                ["3", "Green", "bg-chart-series-3"],
-                ["4", "Copper", "bg-chart-series-4"],
-                ["5", "Violet", "bg-chart-series-5"],
+                ["2", "Teal", "bg-chart-series-2"],
+                ["3", "Rose", "bg-chart-series-3"],
+                ["4", "Green", "bg-chart-series-4"],
+                ["5", "Slate blue", "bg-chart-series-5"],
               ].map(([slot, name, swatch]) => (
                 <li key={slot} className="grid gap-2">
                   <span className={`h-10 rounded-[var(--ds-radius-control)] ${swatch}`} aria-hidden="true" />

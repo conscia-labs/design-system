@@ -1,5 +1,36 @@
 # Changelog
 
+## Unreleased
+
+Brand alignment with conscia.com, part 1: palette and roles.
+
+- The full Conscia palette ships as `--palette-*` primitives: black,
+  burgundy and burgundy-raised, electric blue with dark and pale steps, green
+  with pale and palest steps, peach with dark and darkest steps, and the
+  brand's cool greys. Roles reference these primitives.
+- Light neutrals follow the brand's cool greys instead of the 1.5.0 burgundy
+  cast. Canvas is `grey-200` (`#f3f4f5`), and surface, border, track, and
+  table-header greys shift to match. Muted and supporting text stay darker
+  than the brand's `grey-500`, keeping at least 4.5:1 on canvas.
+- Actions use the brand electric blue `#4962ff` (4.69:1 with white text),
+  hovering to the brand's dark step. Links, focus, and selection derive from
+  the same hue in both themes.
+- Supporting green backgrounds and borders use the brand's palest and pale
+  greens.
+- `brand-emphasis` is deprecated. Its plum values are gone; the tokens now
+  alias the electric-blue accent roles and will be removed in 2.0. The
+  primary `MetricCard` edge uses `brand-accent`, the brand `ValueMeter` runs
+  from electric blue to green, and the brand state-view spot is a burgundy
+  disc with an electric-blue icon. Textures tint with burgundy in light mode
+  and electric blue in dark mode.
+- Danger moves to an orange-red hue so it never reads as the brand peach.
+  A new `highlight` role (`bg-highlight-background`, `border-highlight-border`,
+  `text-highlight-foreground`, `text-highlight-accent`) carries the peach for
+  case cards and callouts.
+- Chart series are rebuilt from brand hues: electric blue, teal, rose, green,
+  and slate blue. The light set passes the colorblind and normal-vision
+  separation checks across all pairs; the dark set passes on adjacent pairs.
+
 ## 1.5.1 - 2026-10-26
 
 A patch release: the active option in segmented and pill tabs is now clearly
