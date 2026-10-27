@@ -4,6 +4,7 @@ export * from "./data-panel";
 export * from "./daily-volume-chart";
 export * from "./data-table";
 export * from "./detail-back-link";
+export * from "./eyebrow";
 export * from "./filter-bar";
 export * from "./app-shell";
 export * from "./activity-list";

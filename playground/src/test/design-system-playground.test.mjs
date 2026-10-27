@@ -109,7 +109,7 @@ test("appearance and density are controlled through root attributes", () => {
   const styles = read("../../../src/foundation/styles.css");
 
   assert.match(styles, /@import "@fontsource-variable\/source-sans-3\/index\.css";/);
-  assert.match(styles, /--font-sans: "Source Sans 3 Variable"/);
+  assert.match(styles, /--font-sans: "Saans", "Source Sans 3 Variable"/);
   assert.match(preferences, /DesignPreferenceControls/);
   assert.match(sharedControls, /document\.documentElement/);
   assert.match(sharedPreferences, /dataset/);
@@ -160,16 +160,19 @@ test("operational density exposes a token-backed Workspace-like type scale", () 
 
   assert.match(preferences, /ConsciaDensity = "compact" \| "comfortable" \| "operational"/);
   assert.match(styles, /--ds-body: 0\.9375rem;/);
-  assert.match(styles, /--ds-title-weight: 650;/);
-  assert.match(styles, /--ds-title-tracking: -0\.022em;/);
-  assert.match(styles, /--ds-section-title-weight: 600;/);
-  assert.match(styles, /--ds-section-title-tracking: -0\.01em;/);
-  assert.match(styles, /--ds-display-tracking: -0\.035em;/);
+  // Brand weights (380/570/670) and the brand's heading tracking.
+  assert.match(styles, /--ds-font-weight-regular: 380;/);
+  assert.match(styles, /--ds-font-weight-medium: 570;/);
+  assert.match(styles, /--ds-font-weight-semibold: 670;/);
+  assert.match(styles, /--font-weight-semibold: var\(--ds-font-weight-semibold\);/);
+  assert.match(styles, /--ds-title-weight: var\(--ds-font-weight-semibold\);/);
+  assert.match(styles, /--ds-title-tracking: -0\.0137em;/);
+  assert.match(styles, /--ds-section-title-tracking: -0\.0096em;/);
+  assert.match(styles, /--ds-display-tracking: -0\.0137em;/);
+  assert.doesNotMatch(styles, /font-weight: [0-9]{3};/);
   assert.match(styles, /--ds-button-text-size: 0\.875rem;/);
   assert.match(styles, /--ds-body: 0\.8125rem;/);
-  assert.match(styles, /--ds-title-weight: 650;/);
-  assert.match(styles, /--ds-title-tracking: -0\.04em;/);
-  assert.match(styles, /--ds-section-title-tracking: -0\.04em;/);
+
   assert.match(styles, /--ds-title-line-height: 1\.08;/);
   assert.match(styles, /--ds-section-title: 1rem;/);
   assert.match(styles, /--ds-button-text-size: 0\.8125rem;/);
@@ -235,7 +238,8 @@ test("official Conscia colors map to distinct primary, accent, and supporting br
   assert.ok(contrastRatio("1e0721", "ffffff") >= 4.5);
 
   const darkToken = (name) => {
-    const raw = darkTheme.match(new RegExp(`--${name}: ([^;]+);`))?.[1];
+    // Palette primitives are theme-independent and live in the first :root block.
+    const raw = (darkTheme.match(new RegExp(`--${name}: ([^;]+);`)) ?? styles.match(new RegExp(`--${name}: ([^;]+);`)))?.[1];
     assert.ok(raw, `dark theme should define --${name}`);
     const reference = raw.match(/^var\(--([a-z0-9-]+)\)$/)?.[1];
     return reference ? darkToken(reference) : raw.replace("#", "");
@@ -250,6 +254,8 @@ test("official Conscia colors map to distinct primary, accent, and supporting br
   }
   assert.ok(contrastRatio(darkToken("danger-foreground"), darkToken("danger-background")) >= 7);
   assert.ok(contrastRatio(darkToken("danger"), darkToken("danger-background")) >= 4.5);
+  assert.ok(contrastRatio(darkToken("highlight-foreground"), darkToken("highlight-background")) >= 7);
+  assert.ok(contrastRatio("ffffff", darkToken("action")) >= 4.5);
 
   assert.match(foundation, /Burgundy · primary identity surface/);
   assert.match(foundation, /Electric blue · brand accent/);
@@ -456,9 +462,9 @@ test("dark foundation uses a calm, distinguishable surface and text hierarchy", 
   }
 
   for (const lightValue of [
-    "--canvas: #f6f3f6;",
+    "--canvas: var\\(--palette-grey-200\\);",
     "--surface: #ffffff;",
-    "--surface-muted: #f3eff3;",
+    "--surface-muted: #ecedef;",
     "--surface-raised: #ffffff;",
   ]) {
     assert.match(styles, new RegExp(`:root,[\\s\\S]*${lightValue}`));
@@ -498,6 +504,12 @@ test("expressive layer keeps brand, motion, chart, and texture roles token-backe
   const dailyVolume = read("../../../src/patterns/daily-volume-chart.tsx");
 
   for (const role of ["brand-emphasis", "brand-emphasis-foreground", "brand-emphasis-background", "brand-emphasis-border"]) {
+    assert.match(styles, new RegExp(`--color-${role}: var\\(--${role}\\);`));
+  }
+  // Brand emphasis is a deprecated alias; no plum value remains.
+  assert.match(styles, /--brand-emphasis: var\(--brand-accent\);/);
+  assert.doesNotMatch(styles, /#752870|#d58ecf|#b0549f|#9c2892|#be4bb1/);
+  for (const role of ["highlight-background", "highlight-border", "highlight-foreground", "highlight-accent"]) {
     assert.match(styles, new RegExp(`--color-${role}: var\\(--${role}\\);`));
   }
   for (const series of [1, 2, 3, 4, 5]) {
@@ -570,7 +582,7 @@ test("tables separate header and footer bands and size controls for touch", () =
   const table = read("../../../src/primitives/table.tsx");
   const dataTable = read("../../../src/patterns/data-table.tsx");
 
-  assert.match(styles, /--surface-table-header: #ece8ec;/);
+  assert.match(styles, /--surface-table-header: #e5e6e9;/);
   assert.match(styles, /--color-surface-table-header: var\(--surface-table-header\);/);
   assert.match(styles, /@media \(pointer: coarse\) \{\s*:root,\s*\[data-density\] \{\s*--ds-control-height: 2\.75rem;\s*--ds-control-height-sm: 2\.75rem;/);
   assert.match(table, /caption-top/);
@@ -850,4 +862,68 @@ test("shared package keeps canonical primitives clean and quarantines compatibil
   assert.match(compat, /ConsciaButton/);
   assert.match(primitiveIndex, /\.\/compat/);
   assert.doesNotMatch(readme, /ConsciaButton|ConsciaCard|ConsciaFormSelect/);
+});
+
+test("brand palette roles keep AA contrast in light mode", () => {
+  const styles = read("../../../src/foundation/styles.css");
+  const light = styles.slice(0, styles.indexOf(':root.dark,\n:root[data-appearance="dark"]'));
+  const lightToken = (name) => {
+    const matches = [...light.matchAll(new RegExp(`--${name}: ([^;]+);`, "g"))];
+    const raw = matches.at(-1)?.[1];
+    assert.ok(raw, `light theme should define --${name}`);
+    const reference = raw.match(/^var\(--([a-z0-9-]+)\)$/)?.[1];
+    return reference ? lightToken(reference) : raw.replace("#", "");
+  };
+
+  for (const [name, hex] of Object.entries({
+    burgundy: "1e0721", "electric-blue": "4962ff", green: "1c4e51", peach: "ffe8e9", "grey-200": "f3f4f5",
+  })) {
+    assert.equal(lightToken(`palette-${name}`), hex);
+  }
+  assert.equal(lightToken("action"), "4962ff");
+  assert.equal(lightToken("canvas"), "f3f4f5");
+
+  const pairs = [
+    ["ffffff", "action", 4.5],
+    ["ffffff", "action-hover", 4.5],
+    ["text-link", "canvas", 4.5],
+    ["text-supporting", "canvas", 4.5],
+    ["text-supporting", "surface-table-header", 4.5],
+    ["text-muted", "canvas", 4.5],
+    ["text-muted", "surface-muted", 4.5],
+    ["ffffff", "danger", 4.5],
+    ["danger", "danger-background", 4.5],
+    ["danger-foreground", "danger-background", 7],
+    ["highlight-foreground", "highlight-background", 7],
+    ["highlight-accent", "highlight-background", 3],
+    ["brand-supporting", "brand-supporting-background", 4.5],
+    ["selection-foreground", "selection-background-strong", 7],
+    ["selection-background-strong", "canvas", 1.3],
+    ["focus", "canvas", 3],
+  ];
+  const resolve = (value) => (/^[0-9a-f]{6}$/.test(value) ? value : lightToken(value));
+  for (const [foreground, background, minimum] of pairs) {
+    const ratio = contrastRatio(resolve(foreground), resolve(background));
+    assert.ok(ratio >= minimum, `${foreground} on ${background} is ${ratio.toFixed(2)}:1, needs ${minimum}:1`);
+  }
+  // Danger must not reuse the brand peach, which belongs to highlight.
+  assert.notEqual(lightToken("danger-background"), lightToken("highlight-background"));
+});
+
+test("brand chrome and supergraphic stay token-backed", () => {
+  const styles = read("../../../src/foundation/styles.css");
+  const chrome = styles.match(/\[data-chrome="brand"\] \{([^}]*)\}/)?.[1];
+  assert.ok(chrome, "brand chrome scope should exist");
+  for (const token of ["--canvas: var(--palette-burgundy);", "--text-primary: #ffffff;", "--focus: #7f8fff;", "--surface-control:"]) {
+    assert.ok(chrome.includes(token), `brand chrome should set ${token}`);
+  }
+  assert.match(styles, /\[data-sidebar-variant="brand"\] \{[^}]*--sidebar-canvas: var\(--palette-burgundy\);/);
+  const supergraphic = styles.match(/@utility ds-supergraphic \{([\s\S]*?)\n\}/)?.[1];
+  assert.ok(supergraphic, "ds-supergraphic utility should exist");
+  assert.match(supergraphic, /background-color: var\(--ds-supergraphic-color\);/);
+  // A raw "#" inside a data URI starts a fragment and silently breaks the mask.
+  const mask = supergraphic.match(/mask-image: url\("([^"]+)"\)/)?.[1];
+  assert.ok(mask?.startsWith("data:image/svg+xml,"));
+  assert.ok(!mask.includes("#"), "supergraphic data URI must not contain #");
+  assert.match(read("../app/shell-navigation/page.tsx"), /ds-supergraphic/);
 });

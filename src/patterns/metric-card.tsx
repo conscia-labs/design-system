@@ -90,7 +90,7 @@ function MetricCard({
       aria-labelledby={labelId}
       className={cn(
         "flex min-w-0 flex-col overflow-hidden rounded-[var(--ds-radius-surface)] border border-border-default bg-surface text-text-primary shadow-[var(--ds-shadow-raised)]",
-        emphasis === "primary" ? "min-h-80 border-t-2 border-t-brand-emphasis" : "min-h-40",
+        emphasis === "primary" ? "min-h-80 border-t-2 border-t-brand-accent" : "min-h-40",
         className,
       )}
       {...props}

@@ -8,6 +8,28 @@ import {
 
 import { ExampleSection, PlaygroundPage } from "@/components/page";
 
+const brandUsage = [
+  ["Burgundy", 44, "bg-[var(--palette-burgundy)]"],
+  ["White", 18, "bg-white"],
+  ["Green", 13, "bg-[var(--palette-green)]"],
+  ["Electric blue", 8, "bg-[var(--palette-electric-blue)]"],
+  ["Black", 8, "bg-[var(--palette-black)]"],
+  ["Peach", 4, "bg-[var(--palette-peach)]"],
+  ["Pale green", 3, "bg-[var(--palette-green-pale)]"],
+  ["Pale blue", 2, "bg-[var(--palette-electric-blue-pale)]"],
+] as const;
+
+const brandPrimitives = [
+  ["Burgundy", "--palette-burgundy", "bg-[var(--palette-burgundy)]"],
+  ["Electric blue", "--palette-electric-blue", "bg-[var(--palette-electric-blue)]"],
+  ["Green", "--palette-green", "bg-[var(--palette-green)]"],
+  ["Peach", "--palette-peach", "bg-[var(--palette-peach)]"],
+  ["Black", "--palette-black", "bg-[var(--palette-black)]"],
+  ["Blue pale", "--palette-electric-blue-pale", "bg-[var(--palette-electric-blue-pale)]"],
+  ["Green pale", "--palette-green-pale", "bg-[var(--palette-green-pale)]"],
+  ["Peach dark", "--palette-peach-dark", "bg-[var(--palette-peach-dark)]"],
+] as const;
+
 export default function FoundationPage() {
   return (
     <PlaygroundPage
@@ -71,6 +93,26 @@ export default function FoundationPage() {
           </div>
         </ExampleSection>
 
+        <ExampleSection title="Brand palette">
+          <div className="grid gap-4 rounded-[var(--ds-radius-surface)] border bg-surface p-4">
+            <p className="ds-type-ui text-text-supporting">The brand&apos;s colour-usage guide, by share of area: burgundy leads, white and green follow, electric blue accents, and the pale tints stay small.</p>
+            <div className="flex h-10 overflow-hidden rounded-[var(--ds-radius-control)] border" role="img" aria-label="Brand colour usage: burgundy 44%, white 18%, green 13%, electric blue 8%, black 8%, peach 4%, pale green 4%, pale blue 2%">
+              {brandUsage.map(([name, share, swatch]) => (
+                <div key={name} className={swatch} style={{ width: `${share}%` }} />
+              ))}
+            </div>
+            <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4 xl:grid-cols-8">
+              {brandPrimitives.map(([name, token, swatch]) => (
+                <li key={token} className="grid gap-1.5">
+                  <span className={`h-10 rounded-[var(--ds-radius-control)] border ${swatch}`} />
+                  <span className="ds-type-metadata font-medium text-text-primary">{name}</span>
+                  <code className="ds-type-metadata text-text-supporting">{token}</code>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </ExampleSection>
+
         <ExampleSection title="Brand roles">
           <div className="grid gap-3 rounded-[var(--ds-radius-surface)] border bg-surface p-4 md:grid-cols-2 xl:grid-cols-3">
             <div className="flex items-center gap-3 rounded-[var(--ds-radius-control)] bg-surface-muted p-4">
@@ -89,8 +131,8 @@ export default function FoundationPage() {
             <div className="rounded-[var(--ds-radius-control)] border border-brand-supporting-border bg-brand-supporting-background p-4 text-sm font-medium text-brand-supporting">
               Green · supporting brand expression
             </div>
-            <div className="rounded-[var(--ds-radius-control)] border border-brand-emphasis-border bg-brand-emphasis-background p-4 text-sm font-medium text-brand-emphasis-foreground">
-              Burgundy emphasis · identity accents
+            <div className="rounded-[var(--ds-radius-control)] border border-highlight-border bg-highlight-background p-4 text-sm font-medium text-highlight-foreground">
+              Peach · highlight surfaces, never status
             </div>
           </div>
         </ExampleSection>
@@ -101,10 +143,10 @@ export default function FoundationPage() {
             <ol className="grid grid-cols-2 gap-3 sm:grid-cols-5">
               {[
                 ["1", "Electric blue", "bg-chart-series-1"],
-                ["2", "Plum", "bg-chart-series-2"],
-                ["3", "Green", "bg-chart-series-3"],
-                ["4", "Copper", "bg-chart-series-4"],
-                ["5", "Violet", "bg-chart-series-5"],
+                ["2", "Teal", "bg-chart-series-2"],
+                ["3", "Rose", "bg-chart-series-3"],
+                ["4", "Green", "bg-chart-series-4"],
+                ["5", "Slate blue", "bg-chart-series-5"],
               ].map(([slot, name, swatch]) => (
                 <li key={slot} className="grid gap-2">
                   <span className={`h-10 rounded-[var(--ds-radius-control)] ${swatch}`} aria-hidden="true" />

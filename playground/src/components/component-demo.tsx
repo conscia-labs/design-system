@@ -8,7 +8,7 @@ import {
   ActivityItem, ActivityList, Alert, AlertDescription, AlertDialog, AlertDialogAction,
   AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
   AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, AlertTitle, AppearanceControl,
-  AttentionItem, AttentionList, Avatar, AvatarFallback, AvatarGroup, Badge, BrandIcon,
+  AttentionItem, AttentionList, Avatar, AvatarFallback, AvatarGroup, Badge, BrandIcon, Eyebrow,
   BrandWordmark, Button, Card, CardContent, CardDescription, CardFooter, CardHeader,
   CardTitle, Checkbox, CodeBlock, Collapsible, CollapsibleContent, CollapsibleTrigger,
   ConsciaButton, DailyVolumeChart, DataPanel, DataPanelContent, DataPanelFooter, DataPanelHeader, DataTable,
@@ -121,6 +121,10 @@ function ComponentDemo({ slug }: { slug: string }) {
                 shortName="AB"
                 description="Connected and ready"
               />
+              <div className="mt-4 border-t border-border-subtle pt-4">
+                <Eyebrow category="Press release" meta="October 8, 2026" dateTime="2026-10-08" />
+                <p className="ds-type-card-title mt-1">Conscia appoints a new managing director</p>
+              </div>
             </div>
             <CodeBlock
               snippets={[

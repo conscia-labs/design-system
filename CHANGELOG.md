@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## 1.6.1 - 2026-10-27
+
+Page header fixes.
 
 - Fix the `PageHeader` brand wash drawing a visible box when the header is
   inset by `PageFrame`. The wash now starts from the workspace corner, where
@@ -11,8 +13,86 @@
   header.
 - Add `PageHeader texture={false}` to turn the wash off. The header keeps an
   opaque canvas background when the wash is off.
+- A `PageHeader` inside a `Card` or `InventorySurface` takes the surface inset
+  and the card surface without the wash, matching the toolbar below it, and
+  never starts the page wash. Page headers on the canvas are unchanged.
 - `ds-texture-wash` is documented as suitable only for elements whose
   top-left corner touches the workspace edges.
+
+## 1.6.0 - 2026-10-27
+
+Brand alignment with conscia.com: the brand palette, cool greys, electric
+blue actions, Saans-first type, burgundy chrome, the dotted supergraphic, and
+brand card tones. Token values change across the board, so review screenshots
+of consuming products. `brand-emphasis` is deprecated.
+
+Brand alignment, part 1: palette and roles.
+
+- The full Conscia palette ships as `--palette-*` primitives: black,
+  burgundy and burgundy-raised, electric blue with dark and pale steps, green
+  with pale and palest steps, peach with dark and darkest steps, and the
+  brand's cool greys. Roles reference these primitives.
+- Light neutrals follow the brand's cool greys instead of the 1.5.0 burgundy
+  cast. Canvas is `grey-200` (`#f3f4f5`), and surface, border, track, and
+  table-header greys shift to match. Muted and supporting text stay darker
+  than the brand's `grey-500`, keeping at least 4.5:1 on canvas.
+- Actions use the brand electric blue `#4962ff` (4.69:1 with white text),
+  hovering to the brand's dark step. Links, focus, and selection derive from
+  the same hue in both themes.
+- Supporting green backgrounds and borders use the brand's palest and pale
+  greens.
+- `brand-emphasis` is deprecated. Its plum values are gone; the tokens now
+  alias the electric-blue accent roles and will be removed in 2.0. The
+  primary `MetricCard` edge uses `brand-accent`, the brand `ValueMeter` runs
+  from electric blue to green, and the brand state-view spot is a burgundy
+  disc with an electric-blue icon. Textures tint with burgundy in light mode
+  and electric blue in dark mode.
+- Danger moves to an orange-red hue so it never reads as the brand peach.
+  A new `highlight` role (`bg-highlight-background`, `border-highlight-border`,
+  `text-highlight-foreground`, `text-highlight-accent`) carries the peach for
+  case cards and callouts.
+- Chart series are rebuilt from brand hues: electric blue, teal, rose, green,
+  and slate blue. The light set passes the colorblind and normal-vision
+  separation checks across all pairs; the dark set passes on adjacent pairs.
+
+Brand alignment, part 2: typography.
+
+- `--font-sans` starts with `"Saans"`, the Conscia brand typeface. The
+  package does not bundle it because it is licensed; products with a licence
+  self-host it and it takes over. Everyone else keeps Source Sans 3.
+- Type uses the brand's three weights: regular 380, medium 570 and semibold
+  670, exposed as `--ds-font-weight-*`. Tailwind's `font-normal`,
+  `font-medium`, `font-semibold` and `font-bold` map to them, and no
+  hard-coded weights remain.
+- Heading tracking follows the brand: `-0.0137em` for display, page titles
+  and metric values, and `-0.0096em` for section titles, in every density.
+
+Brand alignment, part 3: burgundy chrome and the supergraphic.
+
+- `AppSidebar variant="brand"` and the new `AppHeader tone="brand"` paint the
+  app chrome Conscia burgundy in both appearances. Both set a
+  `data-chrome="brand"` scope that re-points surface, text, border, focus,
+  and control roles, so buttons, badges, and search inside read
+  light-on-burgundy without extra classes. Defaults are unchanged.
+- New `ds-supergraphic` utility draws the brand's dotted rings behind an
+  element's content: electric blue in brand chrome, faint burgundy on light
+  surfaces, and a softer blue in dark mode. It pairs with `ds-texture-brand`.
+- The playground shell page demonstrates both. `BrandIcon` and
+  `BrandWordmark` remain the logo components.
+
+Brand alignment, part 4: brand components.
+
+- `Card tone="brand" | "supporting" | "highlight"` brings the conscia.com
+  service tiles and case cards into products. Brand and supporting cards use
+  the light-on-dark chrome scope; highlight uses the peach role.
+- `Badge shape="pill"` renders fully rounded category tags. Status badges
+  stay rounded.
+- New `Eyebrow` pattern renders the "CASE — OCTOBER 8, 2026" metadata line,
+  with a `<time>` element when `dateTime` is set.
+- The foundation page shows the brand palette and its usage ratio, the
+  patterns page shows brand surfaces, and the agent guide gains a brand
+  usage section.
+
 ## 1.5.1 - 2026-10-26
 
 A patch release: the active option in segmented and pill tabs is now clearly

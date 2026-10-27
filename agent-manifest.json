@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "package": "@conscia-labs/design-system",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "guide": "./AGENT_GUIDE.md",
   "playground": "https://conscia-labs.github.io/design-system/",
   "componentFamilies": [
@@ -445,10 +445,11 @@
       "category": "Pattern",
       "family": "Content helpers",
       "slug": "content-helpers",
-      "description": "Provider identity and copyable code examples.",
+      "description": "Provider identity, copyable code examples, and the eyebrow metadata line.",
       "route": "/components/content-helpers",
       "exports": [
         "CodeBlock",
+        "Eyebrow",
         "ProviderMark"
       ]
     },

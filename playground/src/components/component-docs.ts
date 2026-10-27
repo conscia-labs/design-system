@@ -34,12 +34,13 @@ const guidance: Record<string, ComponentGuidance> = {
     options: [
       { name: "variant", values: "neutral · success · information · warning · danger · accent · outline", guidance: "Neutral is for lifecycle states (Active, Enabled, Published); success only for positive evidence (Healthy, Ready, Verified); information for pending work; warning for problems that need action; danger for failures. Accent and outline are for taxonomy." },
       { name: "width", values: "content-sized", guidance: "Badges size to their text, even inside grid cells and stretched flex columns." },
+      { name: "shape", values: "rounded (default) · pill", guidance: "Pill is the conscia.com category tag. Use it for taxonomy such as service area or topic; status badges stay rounded." },
     ],
   },
   brand: {
     whenToUse: "Use the icon where horizontal space is limited and the wordmark when the full Conscia identity should be visible.",
     accessibility: "Add an accessible name when the mark is a link; otherwise hide decorative marks from assistive technology.",
-    options: [{ name: "mark", values: "BrandIcon · BrandWordmark", guidance: "Both inherit currentColor. Use burgundy on light identity surfaces and white on dark identity surfaces." }],
+    options: [{ name: "mark", values: "BrandIcon · BrandWordmark", guidance: "Both inherit currentColor. Use burgundy on light identity surfaces and white on dark identity surfaces, including brand chrome and brand cards (text-text-primary inside them)." }],
   },
   button: {
     whenToUse: "Use buttons for actions. Use link composition for navigation that should retain button styling.",
@@ -56,6 +57,7 @@ const guidance: Record<string, ComponentGuidance> = {
     options: [
       { name: "variant", values: "default · muted · elevated", guidance: "Prefer default. Use elevation only where layering is meaningful." },
       { name: "interactive", values: "false (default) · true", guidance: "Set when the whole card is a link or entry point. The card lifts on hover and focus; static cards never move." },
+      { name: "tone", values: "default · brand · supporting · highlight", guidance: "Brand (burgundy) and supporting (green) are light-on-dark service tiles; highlight (peach) is for case studies and callouts. Add ds-supergraphic for the dotted rings. Never put a table or chart on a toned card." },
     ],
   },
   "form-controls": {
@@ -111,6 +113,7 @@ const guidance: Record<string, ComponentGuidance> = {
     options: [
       { name: "headerLayout", values: "integrated · split", guidance: "Integrated is canonical; split remains available for compatibility." },
       { name: "AppSidebar treatment", values: "omitted (default) · quiet", guidance: "Quiet maps existing sidebar variables to semantic surfaces and selection roles while variant continues to control appearance." },
+      { name: "brand chrome", values: "AppSidebar variant=\"brand\" · AppHeader tone=\"brand\"", guidance: "Paints the chrome Conscia burgundy in both appearances, as on conscia.com. Use them together. Controls inside switch to light-on-burgundy; the workspace stays on the neutral canvas." },
     ],
   },
   "sidebar-navigation": {
@@ -185,6 +188,7 @@ const guidance: Record<string, ComponentGuidance> = {
     options: [
       { name: "CodeBlock", values: "snippets · defaultValue · selectorLabel (default: Code language) · copyLabel", guidance: "Use selectorLabel when the choices represent steps, examples, or formats rather than programming languages." },
       { name: "ProviderMark", values: "name · shortName · description", guidance: "Show the provider name next to its short mark and use the description for current context." },
+      { name: "Eyebrow", values: "category · meta · dateTime", guidance: "The conscia.com metadata line, \"CASE — OCTOBER 8, 2026\", above a card or article title. Pass dateTime when meta is a date." },
     ],
   },
   "conscia-aliases": {
