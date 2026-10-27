@@ -20,23 +20,39 @@ const cardVariants = cva(
         true: "transition-[box-shadow,transform,border-color] duration-[var(--ds-duration-base)] ease-standard hover:-translate-y-px hover:border-border-strong hover:shadow-[var(--ds-shadow-floating)] focus-within:border-border-strong focus-within:shadow-[var(--ds-shadow-floating)]",
         false: "",
       },
+      /**
+       * Brand colour fills for service tiles, case studies, and callouts, as
+       * on conscia.com. `brand` is Conscia burgundy and `supporting` Conscia
+       * green, both light-on-dark in either appearance; `highlight` is the
+       * brand peach. Add `ds-supergraphic` for the dotted rings. Never put a
+       * data table or chart on a toned card.
+       */
+      tone: {
+        default: "",
+        brand: "border-transparent bg-[var(--palette-burgundy)] shadow-none",
+        supporting: "border-transparent bg-[var(--palette-green)] shadow-none",
+        highlight: "border-highlight-border bg-highlight-background text-highlight-foreground shadow-none",
+      },
     },
     defaultVariants: {
       variant: "default",
       interactive: false,
+      tone: "default",
     },
   },
 );
 
 type CardProps = React.ComponentProps<"div"> & VariantProps<typeof cardVariants>;
 
-function Card({ className, variant, interactive, ...props }: CardProps) {
+function Card({ className, variant, interactive, tone, ...props }: CardProps) {
   return (
     <div
       data-slot="card"
       data-variant={variant ?? "default"}
+      data-tone={tone ?? "default"}
+      data-chrome={tone === "brand" || tone === "supporting" ? "brand" : undefined}
       data-interactive={interactive ? "true" : undefined}
-      className={cn(cardVariants({ variant, interactive, className }))}
+      className={cn(cardVariants({ variant, interactive, tone, className }))}
       {...props}
     />
   );

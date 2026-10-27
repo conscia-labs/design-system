@@ -1,6 +1,6 @@
 # Conscia Design System
 
-> Agent-oriented index for @conscia-labs/design-system 1.5.1.
+> Agent-oriented index for @conscia-labs/design-system 1.6.0.
 
 - Live playground: https://conscia-labs.github.io/design-system/
 - Agent guide: https://conscia-labs.github.io/design-system/agent-guide.md
@@ -38,5 +38,5 @@ in the application.
 - State and feedback (Pattern): Empty, loading, error, confirmation, and command states. https://conscia-labs.github.io/design-system/components/state-and-feedback/ Exports: CommandPalette, ConfirmationDialog, ErrorState, LoadingRows, StateView.
 - Filters and preferences (Pattern): Applied filters and shared display preferences. https://conscia-labs.github.io/design-system/components/filters-and-preferences/ Exports: AppearanceControl, DensityControl, DesignPreferenceControls, DesignSystemPreferenceScript, DesignSystemPreferenceSync, FilterBar, useConsciaPreferences.
 - Workbench (Pattern): Multi-rail operational workspaces and resource rows. https://conscia-labs.github.io/design-system/components/workbench/ Exports: IdentityRow, ResourceRow, ResourceRowContent, ResourceRowDescription, ResourceRowIcon, ResourceRowMeta, ResourceRowTitle, WorkbenchBackdrop, WorkbenchInspector, WorkbenchInspectorSection, WorkbenchMain, WorkbenchMobileToolbar, WorkbenchRail, WorkbenchSection, WorkbenchSectionHeader, WorkbenchShell.
-- Content helpers (Pattern): Provider identity and copyable code examples. https://conscia-labs.github.io/design-system/components/content-helpers/ Exports: CodeBlock, ProviderMark.
+- Content helpers (Pattern): Provider identity, copyable code examples, and the eyebrow metadata line. https://conscia-labs.github.io/design-system/components/content-helpers/ Exports: CodeBlock, Eyebrow, ProviderMark.
 - Conscia aliases (Compatibility): Deprecated pre-v1 aliases retained for migration only. https://conscia-labs.github.io/design-system/components/conscia-aliases/ Exports: ConsciaButton, ConsciaCard, ConsciaCardContent, ConsciaCardDescription, ConsciaCardFooter, ConsciaCardHeader, ConsciaCardTitle, ConsciaCheckbox, ConsciaFormSelect, ConsciaIconButton, ConsciaInput, ConsciaSelect, ConsciaSelectContent, ConsciaSelectGroup, ConsciaSelectItem, ConsciaSelectTrigger, ConsciaSelectValue, ConsciaSwitch, ConsciaTable, ConsciaTableBody, ConsciaTableCell, ConsciaTableHead, ConsciaTableHeader, ConsciaTableRow, ConsciaTextarea.

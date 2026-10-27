@@ -1,8 +1,13 @@
 # Changelog
 
-## Unreleased
+## 1.6.0 - 2026-10-27
 
-Brand alignment with conscia.com, part 1: palette and roles.
+Brand alignment with conscia.com: the brand palette, cool greys, electric
+blue actions, Saans-first type, burgundy chrome, the dotted supergraphic, and
+brand card tones. Token values change across the board, so review screenshots
+of consuming products. `brand-emphasis` is deprecated.
+
+Brand alignment, part 1: palette and roles.
 
 - The full Conscia palette ships as `--palette-*` primitives: black,
   burgundy and burgundy-raised, electric blue with dark and pale steps, green
@@ -55,6 +60,19 @@ Brand alignment, part 3: burgundy chrome and the supergraphic.
   surfaces, and a softer blue in dark mode. It pairs with `ds-texture-brand`.
 - The playground shell page demonstrates both. `BrandIcon` and
   `BrandWordmark` remain the logo components.
+
+Brand alignment, part 4: brand components.
+
+- `Card tone="brand" | "supporting" | "highlight"` brings the conscia.com
+  service tiles and case cards into products. Brand and supporting cards use
+  the light-on-dark chrome scope; highlight uses the peach role.
+- `Badge shape="pill"` renders fully rounded category tags. Status badges
+  stay rounded.
+- New `Eyebrow` pattern renders the "CASE — OCTOBER 8, 2026" metadata line,
+  with a `<time>` element when `dateTime` is set.
+- The foundation page shows the brand palette and its usage ratio, the
+  patterns page shows brand surfaces, and the agent guide gains a brand
+  usage section.
 
 ## 1.5.1 - 2026-10-26
 
