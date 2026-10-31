@@ -40,6 +40,8 @@ const routes = [
   { path: "/components/conscia-aliases", heading: "Conscia aliases" },
   { path: "/foundation", heading: "Foundation" },
   { path: "/typography", heading: "Typography" },
+  { path: "/moods", heading: "Moods" },
+  { path: "/examples/floating-workspace", heading: "Good morning, Kent" },
   { path: "/primitives", heading: "Primitives" },
   { path: "/tables", heading: "Tables and data tables" },
   { path: "/reference-patterns", heading: "AI Models" },

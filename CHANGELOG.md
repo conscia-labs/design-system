@@ -1,5 +1,197 @@
 # Changelog
 
+## 1.7.0 - 2026-10-31
+
+Moods: an opt-in, more open look for the same components, plus sidebar
+options that let each application choose its own sidebar. Without a
+`data-mood` attribute and with default props, products render as in 1.6.1,
+apart from the two changes under "Upgrading from 1.6".
+
+### Upgrading from 1.6
+
+No code changes are required. Two changes reach products that do not adopt a
+mood:
+
+- `ds-supergraphic` now draws its dotted rings from the element's right edge,
+  as documented. Its three-value `mask-position` was invalid in Chromium, so
+  the rings were drawing from the top-left corner. Review screens that use
+  the utility, such as brand cards, sign-in, and empty states.
+- The light and quiet `AppSidebar` color rules wrap their root condition in
+  `:where()`. They match the same elements and produce the same colors, but
+  with lower specificity. If your application overrides `--sidebar-*`
+  variables in its own CSS, those overrides now win more easily; check that
+  the sidebar still looks as intended.
+
+### Choosing a mood
+
+Density sets how much fits on a screen; mood sets how open it feels. There
+are three moods:
+
+| Mood | Attribute | Use it for |
+| --- | --- | --- |
+| Current | none | Dense, operational screens: the workbench, logs, long tables. |
+| Balanced | `data-mood="balanced"` | An app-wide default for products that should feel less boxed in. |
+| Airy | `data-mood="airy"` | Overview and home pages, onboarding, empty states, short settings pages. |
+
+- **Balanced** drops card, metric card, and data panel borders and shadows;
+  rounds surfaces to 14px and controls to 10px; makes badges and trends
+  pills; sets eyebrows and table headings in sentence case; removes the table
+  header band; and enlarges page titles (2.375rem), section titles
+  (1.125rem), and metric values (2.25rem, regular weight). Rows grow to
+  3.25rem.
+- **Airy** goes further: 24px surfaces, pill buttons and nav items, filled
+  fields with no border until focus, a peach pill eyebrow, 2.875rem page
+  titles and metric values, 3.625rem rows, and 3.5rem between sections.
+- Both moods use a lighter canvas in light mode (dark mode keeps the dark
+  canvas) and add a small overshoot to button and interactive card hover,
+  which reduced motion turns off.
+
+### Adopting a mood
+
+Set the mood app-wide on the document root, next to appearance and density.
+Put it on the root rather than a wrapper so the sidebar and the mobile
+navigation drawer, which renders in a portal, follow it:
+
+```tsx
+<html
+  lang="en"
+  data-appearance="system"
+  data-density="comfortable"
+  data-mood="balanced"
+  suppressHydrationWarning
+>
+```
+
+To use a different mood on one part of a page, set it on a wrapper that also
+paints the canvas, so the mood's background applies there:
+
+```tsx
+<section data-mood="airy" className="bg-canvas">
+  {/* onboarding, an overview, an empty state */}
+</section>
+```
+
+`moodProps(mood)` returns the attribute for a `ConsciaMood` value
+(`"current" | "balanced" | "airy"`) and returns nothing for `current`;
+`moodOptions` lists the values:
+
+```tsx
+import { moodProps, type ConsciaMood } from "@conscia-labs/design-system";
+
+<main {...moodProps(mood)} className="bg-canvas">
+```
+
+Unlike appearance and density, a mood is a product decision per surface, not
+a user preference, so it is not stored or exposed in `DesignPreferenceControls`.
+
+Things to know when adopting a mood:
+
+- A mood sets spacing and type sizes, so it wins over a density preset on the
+  same element. Keep `operational` density without a mood on dense screens.
+- Mood styles reach components through their `data-slot` attributes. The
+  rules that remove borders or uppercase are unlayered CSS, so inside a mood
+  they take precedence over a `className` that sets the same property on
+  `Card`, `MetricCard`, `DataPanel`, `Badge`, `Eyebrow`, `TableHead`,
+  `Button`, `Input`, `Textarea`, `SelectTrigger`, or `DateTimeField`.
+- Without borders, focus rings and hover fills show what is interactive.
+  Do not remove them in product CSS.
+- Airy's filled fields cover `Input`, `Textarea`, `SelectTrigger`, and
+  `DateTimeField`. The search input inside `SearchableSelect` keeps its
+  border.
+
+### Sidebar options
+
+Under a mood the shell sidebar changes too, through three independent
+options. Each follows the mood while it is `auto`; set one explicitly and it
+holds in every mood. Different applications can therefore build different
+sidebars on the same mood.
+
+| Option | Prop | Values | `auto` without a mood | `auto` under balanced | `auto` under airy |
+| --- | --- | --- | --- | --- | --- |
+| Layout | `AppShell sidebarLayout` | `auto`, `flush`, `floating` | Flush | Floating, 8px in, 16px corners | Floating, 12px in, 22px corners |
+| Color | `AppSidebar variant` | `auto`, `light`, `dark`, `brand` | Appearance-aware | Burgundy | Burgundy |
+| Active item | `AppSidebar activeStyle` (new) | `auto`, `tint`, `solid` | Variant fill | Brighter fill | Solid pill |
+
+```tsx
+// Airy page content with a flush, light sidebar and a solid active item.
+<AppShell sidebarLayout="flush">
+  <AppSidebar variant="light" activeStyle="solid">…</AppSidebar>
+  <MainRegion>…</MainRegion>
+</AppShell>
+```
+
+- `variant="auto"` turns burgundy under a mood even with `treatment="quiet"`.
+  Pass `light` or `dark` to keep those colors.
+- `activeStyle="solid"` inverts the sidebar: its text color becomes the pill
+  and its canvas the pill's text, so it reads in every variant and mood.
+  `tint` keeps the variant's soft fill.
+- `floating` works without a mood too. `data-sidebar-layout="flush"` or
+  `"floating"` on the root does the same as the prop.
+- Navigation group labels drop uppercase under a mood.
+
+### Floating workspace
+
+A floating sidebar looks best when nothing spans the top of the window. Use
+the split shell: the brand moves into `AppSidebarHeader`, and the page has
+no header or a borderless one with the new `TopBar variant="plain"`:
+
+```tsx
+<AppShell headerLayout="split" sidebarLayout="floating">
+  <AppSidebar>
+    <AppSidebarHeader>
+      <ProductIdentity icon={<BrandIcon />} label="Conscia" description="Production" />
+    </AppSidebarHeader>
+    <AppSidebarContent>{/* SidebarNavigation */}</AppSidebarContent>
+    <AppSidebarFooter>{/* account */}</AppSidebarFooter>
+  </AppSidebar>
+  <MainRegion>
+    <TopBar variant="plain">{/* SidebarTrigger, search, account */}</TopBar>
+    <PageFrame>{/* page */}</PageFrame>
+  </MainRegion>
+</AppShell>
+```
+
+`TopBar variant="plain"` has no border or blur and lines up with the page
+frame; `bar`, the default, is unchanged. With no header at all, keep a
+`<TopBar variant="plain" className="lg:hidden">` holding a `SidebarTrigger` so
+the mobile drawer stays reachable, and put the desktop trigger beside the
+page title. `docs/shell-navigation.md` covers the pattern, and the playground
+example at `/examples/floating-workspace` switches between no header, a plain
+header, and the bar.
+
+### Toned metric tiles
+
+`MetricCard` takes a new `tone` prop for headline tiles on overview pages:
+`highlight` (brand peach), `supporting` (pale green), `accent` (pale electric
+blue), and `muted`. Toned tiles drop their border and shadow, and the prop
+works with or without a mood. Use at most one row of toned tiles, keep status
+in badges and trends, and never put charts or tables on a tint.
+
+```tsx
+<MetricCard tone="highlight" label="Requests this week" value="3.1" unit="M" />
+```
+
+### New API and tokens
+
+- Types and helpers: `ConsciaMood`, `moodOptions`, `moodProps`, `TopBarProps`.
+- Props: `AppShell sidebarLayout`, `AppSidebar activeStyle`,
+  `TopBar variant`, `MetricCard tone`. Every default keeps 1.6.1 behavior.
+- Attributes: `data-mood`, `data-sidebar-layout`; components also render
+  `data-sidebar-layout`, `data-sidebar-active`, `data-variant` (TopBar), and
+  `data-tone` (MetricCard).
+- Tokens: `--tint-accent` (with the `bg-tint-accent` utility),
+  `--ds-ease-playful`, `--ds-app-sidebar-inset`, `--ds-app-sidebar-radius`,
+  `--ds-sidebar-float-inset`, and `--ds-sidebar-float-radius`. The inset and
+  radius are 0 unless a mood or floating layout sets them.
+
+### Playground
+
+- A Moods page switches the whole playground between moods and sidebar
+  options and shows the same screen under each.
+- A full-screen Floating workspace reference example. Routes under
+  `/examples/` render without the playground shell so they can show complete
+  applications.
+
 ## 1.6.1 - 2026-10-27
 
 Page header fixes.

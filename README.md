@@ -8,7 +8,7 @@ primitives, and product patterns for operational applications.
 
 > **Package:** available publicly as [`@conscia-labs/design-system`](https://www.npmjs.com/package/@conscia-labs/design-system).
 >
-> **Current release:** `1.6.1` is the latest stable v1 release.
+> **Current release:** `1.7.0` is the latest stable v1 release.
 >
 > **Documentation:** browse the [live design system](https://conscia-labs.github.io/design-system/)
 > for the complete component reference, examples, and usage guidance.
@@ -84,6 +84,34 @@ Set shared appearance and density preferences on the document root:
 
 Appearance values are `light`, `dark`, and `system`. Density values are
 `comfortable`, `compact`, and `operational`.
+
+Set `data-mood` to make a page feel more open. Density sets how much fits;
+mood sets the spacing, corners, borders, and type around it. With no
+attribute you get the current bordered look. `balanced` drops card borders
+and shadows, rounds corners, and enlarges titles and metric values; it works
+as an app-wide default. `airy` goes further, with pill buttons, filled fields,
+and taller rows, for overview pages, onboarding, empty states, and short
+settings pages. Put it on the root, or on a subtree that also sets
+`bg-canvas`:
+
+```tsx
+<main data-mood="airy" className="bg-canvas">
+```
+
+A mood wins over a density preset on the same element. Keep the current look
+with `operational` density for the workbench, logs, and long tables.
+
+On the root, a mood also restyles the `AppShell` sidebar, through three
+options that each follow the mood while left at `auto`:
+
+```tsx
+<AppShell sidebarLayout="auto">            {/* auto | flush | floating */}
+  <AppSidebar variant="auto" activeStyle="auto"> {/* variant: auto | light | dark | brand; activeStyle: auto | tint | solid */}
+```
+
+Under a mood, `auto` floats the sidebar, turns it burgundy, and gives the
+active item a brighter fill (balanced) or a solid pill (airy). Set any option
+explicitly to keep it the same in every mood.
 
 Use semantic Conscia tokens and utilities rather than copying palette values
 into an application. See the [foundation documentation](https://conscia-labs.github.io/design-system/foundation/)

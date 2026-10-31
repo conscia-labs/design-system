@@ -104,6 +104,12 @@ type AppShellContextValue = {
 type AppShellProps = React.ComponentProps<"div"> & {
   defaultSidebarOpen?: boolean;
   headerLayout?: "split" | "integrated";
+  /**
+   * `auto` follows the mood: flush without one, a floating rounded panel
+   * under balanced or airy. `flush` and `floating` hold in every mood, so
+   * each application can pick its own sidebar shape.
+   */
+  sidebarLayout?: "auto" | "flush" | "floating";
 };
 
 const AppShellContext = React.createContext<AppShellContextValue | null>(null);
@@ -187,6 +193,7 @@ function useSidebarOverflow() {
 function AppShell({
   defaultSidebarOpen = true,
   headerLayout = "split",
+  sidebarLayout = "auto",
   children,
   className,
   style,
@@ -266,6 +273,7 @@ function AppShell({
           data-sidebar-state={sidebarOpen ? "expanded" : "collapsed"}
           data-sidebar-side={sidebarSide}
           data-header-layout={headerLayout}
+          data-sidebar-layout={sidebarLayout}
           suppressHydrationWarning
           className={cn(
             "group/shell min-h-svh bg-canvas text-text-primary",
@@ -286,6 +294,7 @@ function AppSidebar({
   side = "left",
   variant = "auto",
   treatment,
+  activeStyle = "auto",
   className,
   children,
   title = "Application navigation",
@@ -303,6 +312,12 @@ function AppSidebar({
   variant?: "light" | "dark" | "auto" | "brand";
   /** Apply a low-chroma treatment while preserving the active appearance. */
   treatment?: "quiet";
+  /**
+   * How the active item stands out. `auto` follows the mood; `tint` is the
+   * variant's soft fill in every mood; `solid` inverts the sidebar colors
+   * into a pill, in any variant and mood.
+   */
+  activeStyle?: "auto" | "tint" | "solid";
   title?: string;
   description?: string;
 }) {
@@ -319,6 +334,7 @@ function AppSidebar({
           side={side}
           data-sidebar-variant={variant}
           data-sidebar-treatment={treatment}
+          data-sidebar-active={activeStyle}
           data-chrome={variant === "brand" ? "brand" : undefined}
           className="w-[var(--ds-sidebar-width-mobile)] border-sidebar-border bg-sidebar-canvas p-0 text-sidebar-primary-text [&>[data-slot=sheet-close]]:right-3 [&>[data-slot=sheet-close]]:top-3 [&>[data-slot=sheet-close]]:text-sidebar-secondary-text [&>[data-slot=sheet-close]]:hover:text-sidebar-primary-text"
         >
@@ -335,14 +351,16 @@ function AppSidebar({
         data-side={side}
         data-sidebar-variant={variant}
         data-sidebar-treatment={treatment}
+        data-sidebar-active={activeStyle}
         data-chrome={variant === "brand" ? "brand" : undefined}
         aria-label={ariaLabelledBy ? undefined : ariaLabel ?? title}
         aria-labelledby={ariaLabelledBy}
         className={cn(
-          "fixed inset-y-0 z-20 hidden w-[var(--ds-app-sidebar-width)] shrink-0 flex-col border-sidebar-border bg-sidebar-canvas text-sidebar-primary-text transition-[width] duration-200 ease-linear lg:flex",
-          side === "left" ? "left-0 border-r" : "right-0 border-l",
+          // --ds-app-sidebar-inset and -radius are 0 by default; a mood floats the sidebar as a rounded panel.
+          "fixed inset-y-[var(--ds-app-sidebar-inset)] z-20 hidden w-[var(--ds-app-sidebar-width)] shrink-0 flex-col rounded-[var(--ds-app-sidebar-radius)] border-sidebar-border bg-sidebar-canvas text-sidebar-primary-text transition-[width] duration-200 ease-linear lg:flex",
+          side === "left" ? "left-[var(--ds-app-sidebar-inset)] border-r" : "right-[var(--ds-app-sidebar-inset)] border-l",
           "group-data-[sidebar-state=collapsed]/shell:w-[var(--ds-app-sidebar-width)]",
-          "group-data-[header-layout=integrated]/shell:top-[var(--ds-topbar-height)]",
+          "group-data-[header-layout=integrated]/shell:top-[calc(var(--ds-topbar-height)+var(--ds-app-sidebar-inset))]",
           className,
         )}
         {...props}
@@ -792,7 +810,7 @@ function MainRegion({
       data-slot="main-region"
       className={cn(
         "flex min-h-svh min-w-0 w-full flex-1 flex-col transition-[padding] duration-200 ease-linear",
-        "group-data-[sidebar-side=left]/shell:lg:pl-[var(--ds-app-sidebar-width)] group-data-[sidebar-side=right]/shell:lg:pr-[var(--ds-app-sidebar-width)]",
+        "group-data-[sidebar-side=left]/shell:lg:pl-[calc(var(--ds-app-sidebar-width)+var(--ds-app-sidebar-inset))] group-data-[sidebar-side=right]/shell:lg:pr-[calc(var(--ds-app-sidebar-width)+var(--ds-app-sidebar-inset))]",
         "group-data-[header-layout=integrated]/shell:pt-[var(--ds-topbar-height)]",
         className,
       )}
@@ -876,16 +894,29 @@ function AppHeaderActions({
   );
 }
 
+type TopBarProps = React.ComponentProps<"header"> & {
+  /**
+   * `bar` is the bordered, frosted strip. `plain` drops the border and blur
+   * so the bar sits on the canvas, for split shells whose brand lives in the
+   * sidebar header, such as beside a floating sidebar.
+   */
+  variant?: "bar" | "plain";
+};
+
 function TopBar({
+  variant = "bar",
   className,
   ...props
-}: React.ComponentProps<"header">) {
+}: TopBarProps) {
   return (
     <header
       data-slot="top-bar"
+      data-variant={variant}
       className={cn(
-        "sticky top-0 z-10 flex h-[var(--ds-topbar-height)] min-h-[var(--ds-topbar-height)] shrink-0 items-center justify-between gap-3 border-b border-border-subtle bg-canvas/96 px-[var(--ds-topbar-padding-x)] backdrop-blur md:px-[var(--ds-topbar-padding-x-wide)]",
-        "supports-[backdrop-filter]:bg-canvas/88",
+        "sticky top-0 z-10 flex h-[var(--ds-topbar-height)] min-h-[var(--ds-topbar-height)] shrink-0 items-center justify-between gap-3",
+        variant === "bar" && "border-b border-border-subtle bg-canvas/96 px-[var(--ds-topbar-padding-x)] backdrop-blur supports-[backdrop-filter]:bg-canvas/88 md:px-[var(--ds-topbar-padding-x-wide)]",
+        // With no edge to mark it, the plain bar lines up with the page frame instead.
+        variant === "plain" && "bg-canvas px-[var(--ds-frame-padding-x)]",
         className,
       )}
       {...props}
@@ -994,4 +1025,5 @@ export type {
   AppShellProps,
   NavigationItemProps,
   NavigationSubItemProps,
+  TopBarProps,
 };

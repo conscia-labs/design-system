@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { BarChart3, BookOpen, Boxes, Component, ExternalLink, Gauge, LayoutDashboard, Monitor, Moon, PanelLeft, Rows3, Search, Shapes, Sun, Type } from "lucide-react";
+import { BarChart3, BookOpen, Boxes, Component, ExternalLink, Gauge, LayoutDashboard, Monitor, Moon, PanelLeft, PanelsLeftBottom, Rows3, Search, Shapes, Sparkles, Sun, Type } from "lucide-react";
 
 import {
   AppHeader, AppHeaderActions, AppHeaderSearch, AppHeaderStart,
@@ -16,6 +16,7 @@ import {
 } from "@conscia-labs/design-system";
 
 import { componentDocs } from "@/components/component-docs";
+import { useSidebarOptions } from "@/components/sidebar-options";
 
 const navEntries = [
   { type: "group", id: "explore", label: "Explore", items: [
@@ -26,6 +27,7 @@ const navEntries = [
   { type: "group", id: "foundation", label: "Foundation", items: [
     { id: "/foundation", label: "Tokens and principles", icon: <Shapes /> },
     { id: "/typography", label: "Typography", icon: <Type /> },
+    { id: "/moods", label: "Moods", icon: <Sparkles /> },
   ] },
   { type: "group", id: "examples", label: "Reference examples", items: [
     { id: "/developer-overview", label: "Developer overview", icon: <Gauge /> },
@@ -33,6 +35,7 @@ const navEntries = [
     { id: "/tables", label: "Tables showcase", icon: <BarChart3 /> },
     { id: "/reference-patterns", label: "AI Models", icon: <BookOpen /> },
     { id: "/delivery-metrics", label: "Delivery metrics", icon: <BarChart3 /> },
+    { id: "/examples/floating-workspace", label: "Floating workspace", icon: <PanelsLeftBottom /> },
   ] },
 ] satisfies SidebarNavigationEntry[];
 
@@ -56,6 +59,7 @@ export function AppShell({ children, version }: { children: ReactNode; version: 
   const router = useRouter();
   const [commandOpen, setCommandOpen] = useState(false);
   const { appearance, density } = useConsciaPreferences();
+  const sidebar = useSidebarOptions();
   const AppearanceIcon = appearance === "dark" ? Moon : appearance === "light" ? Sun : Monitor;
   useEffect(() => {
     const handleSearchShortcut = (event: KeyboardEvent) => {
@@ -82,8 +86,11 @@ export function AppShell({ children, version }: { children: ReactNode; version: 
     [],
   );
 
+  // Full-screen examples bring their own shell.
+  if (pathname.startsWith("/examples/")) return <>{children}</>;
+
   return (
-    <DesignAppShell headerLayout="integrated">
+    <DesignAppShell headerLayout="integrated" sidebarLayout={sidebar.layout}>
       <DesignSystemPreferenceSync />
       <AppHeader>
         <AppHeaderStart>
@@ -139,8 +146,9 @@ export function AppShell({ children, version }: { children: ReactNode; version: 
         onSelect={(item) => router.push(item.id)}
       />
       <AppSidebar
-        variant="auto"
-        treatment="quiet"
+        variant={sidebar.variant}
+        treatment={sidebar.variant === "auto" ? "quiet" : undefined}
+        activeStyle={sidebar.activeStyle}
       >
         <AppSidebarContent className="playground-navigation">
           <SidebarNavigation entries={entries} renderLink={renderNavigationLink} />

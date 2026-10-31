@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "package": "@conscia-labs/design-system",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "guide": "./AGENT_GUIDE.md",
   "playground": "https://conscia-labs.github.io/design-system/",
   "componentFamilies": [
@@ -19,6 +19,17 @@
         "densityOptions",
         "densityStorageKey",
         "getConsciaPreferenceBootstrapScript"
+      ]
+    },
+    {
+      "category": "Foundation",
+      "family": "Moods",
+      "slug": "moods",
+      "description": "Balanced and airy presets that open up spacing, corners, and type for overview and onboarding screens.",
+      "route": "/moods",
+      "exports": [
+        "moodOptions",
+        "moodProps"
       ]
     },
     {

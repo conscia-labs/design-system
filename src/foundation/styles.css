@@ -193,6 +193,8 @@
   --highlight-border: var(--palette-peach-dark);
   --highlight-foreground: var(--palette-burgundy);
   --highlight-accent: var(--palette-peach-darkest);
+  /* Pale electric blue for toned metric tiles, beside the highlight peach and supporting green tints. */
+  --tint-accent: var(--palette-electric-blue-pale);
   --spot-brand-foreground: #7f8fff;
   --spot-brand-background: var(--palette-burgundy);
   --spot-brand-ring: var(--palette-burgundy-raised);
@@ -288,6 +290,15 @@
   --ds-topbar-padding-x: 0.75rem;
   --ds-topbar-padding-x-wide: 1rem;
   --ds-sidebar-width: 16rem;
+  /*
+   * The desktop sidebar's gap from the window edges and its corner radius.
+   * Flush by default; a mood or AppShell sidebarLayout="floating" switches
+   * them to the floating values, which each mood can resize.
+   */
+  --ds-app-sidebar-inset: 0px;
+  --ds-app-sidebar-radius: 0px;
+  --ds-sidebar-float-inset: 0.5rem;
+  --ds-sidebar-float-radius: 1rem;
   --ds-sidebar-width-mobile: 18rem;
   --ds-sidebar-item-height: 2.25rem;
   --ds-sidebar-item-height-touch: 2.75rem;
@@ -374,6 +385,8 @@
   --ds-ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --ds-ease-enter: cubic-bezier(0, 0, 0, 1);
   --ds-ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  /* Overshoot for hover lift and switches. The balanced and airy moods give it a bounce. */
+  --ds-ease-playful: cubic-bezier(0.2, 0, 0, 1);
   --ds-skeleton-highlight: rgb(255 255 255 / 75%);
   --ds-focus-ring: 0 0 0 3px color-mix(in oklab, var(--focus) 26%, transparent);
   --ds-workbench-global-rail-width: 4.5rem;
@@ -500,7 +513,8 @@
 
 @media (min-width: 48rem) {
   :root,
-  [data-appearance-scope="light"] {
+  [data-appearance-scope="light"],
+  [data-mood] {
     --ds-frame-padding-x: var(--ds-space-page);
   }
 }
@@ -580,6 +594,7 @@
   --highlight-border: #6b3563;
   --highlight-foreground: var(--palette-peach-dark);
   --highlight-accent: var(--palette-peach-dark);
+  --tint-accent: #262d55;
   --spot-brand-foreground: #8f9cff;
   --spot-brand-background: #3a1840;
   --spot-brand-ring: #6b3563;
@@ -644,7 +659,7 @@
  * keep an explicitly dark sidebar or follow the appearance-aware default.
  */
 [data-sidebar-variant="light"],
-:root:not(.dark):not([data-appearance="dark"])
+:where(:root:not(.dark):not([data-appearance="dark"]))
   [data-sidebar-variant="auto"] {
   --sidebar-canvas: var(--surface-muted);
   --sidebar-header: var(--surface);
@@ -673,7 +688,7 @@
  */
 [data-sidebar-variant="light"][data-sidebar-treatment="quiet"],
 [data-sidebar-variant="auto"][data-sidebar-treatment="quiet"],
-:root:not(.dark):not([data-appearance="dark"])
+:where(:root:not(.dark):not([data-appearance="dark"]))
   [data-sidebar-variant="auto"][data-sidebar-treatment="quiet"] {
   --sidebar-canvas: var(--surface-muted);
   --sidebar-header: var(--surface-muted);
@@ -701,7 +716,8 @@
  * re-points the surface, text, border, and control roles so every component
  * inside reads light-on-burgundy in either appearance.
  */
-[data-chrome="brand"] {
+[data-chrome="brand"],
+:is(:root[data-mood="balanced"], :root[data-mood="airy"], [data-mood="balanced"], [data-mood="airy"]) [data-sidebar-variant="auto"] {
   color-scheme: dark;
   --canvas: var(--palette-burgundy);
   --surface: var(--palette-burgundy-raised);
@@ -729,7 +745,8 @@
   --ds-supergraphic-color: var(--palette-electric-blue);
 }
 
-[data-sidebar-variant="brand"] {
+[data-sidebar-variant="brand"],
+:is(:root[data-mood="balanced"], :root[data-mood="airy"], [data-mood="balanced"], [data-mood="airy"]) [data-sidebar-variant="auto"] {
   --sidebar-canvas: var(--palette-burgundy);
   --sidebar-header: var(--palette-burgundy);
   --sidebar-content: var(--palette-burgundy);
@@ -748,6 +765,237 @@
   --sidebar-group-count: color-mix(in oklab, #ffffff 64%, transparent);
   --sidebar-focus-ring: #7f8fff;
   --sidebar-glow: color-mix(in oklab, var(--palette-electric-blue) 22%, transparent);
+}
+
+/*
+ * Moods. Density sets how much fits; mood sets how open the page feels.
+ * Current (no attribute) is the bordered, boxed look. Balanced drops card
+ * borders and shadows, rounds corners, pills the badges, and enlarges
+ * titles and metric values. Airy goes further: pill controls, filled
+ * fields, taller rows, and more space between sections. Put data-mood on
+ * the root, or on a subtree that also sets bg-canvas. A mood sets spacing
+ * and type sizes, so it wins over a density preset on the same element.
+ * Keep operational density for the workbench, logs, and long tables.
+ */
+[data-mood="balanced"] {
+  --canvas: #f6f5f8;
+  --radius: 0.75rem;
+  --ds-radius-surface: 0.875rem;
+  --ds-radius-control: 0.625rem;
+  --ds-field-control-radius: 0.625rem;
+  --ds-shadow-raised: none;
+  --surface-table-header: transparent;
+  --ds-surface-padding: 1.5rem;
+  --ds-space-group: 1.5rem;
+  --ds-space-section: 2.75rem;
+  --ds-space-page: 3rem;
+  --ds-page-title: 2.375rem;
+  --ds-title-weight: var(--ds-font-weight-medium);
+  --ds-title-tracking: -0.02em;
+  --ds-section-title: 1.125rem;
+  --ds-section-title-weight: var(--ds-font-weight-medium);
+  --ds-card-title-size: 0.9375rem;
+  --ds-card-title-weight: var(--ds-font-weight-medium);
+  --ds-metric-value: 2.25rem;
+  --ds-metric-value-primary: 3rem;
+  --ds-metric-value-weight: var(--ds-font-weight-regular);
+  --ds-metric-value-tracking: -0.025em;
+  --ds-eyebrow-size: 0.8125rem;
+  --ds-eyebrow-tracking: 0;
+  --ds-table-head-size: 0.8125rem;
+  --ds-table-head-weight: var(--ds-font-weight-regular);
+  --ds-table-head-tracking: 0;
+  --ds-table-header-height: 2.5rem;
+  --ds-row-height: 3.25rem;
+  --ds-ease-playful: cubic-bezier(0.3, 1.3, 0.6, 1);
+  --ds-app-sidebar-inset: var(--ds-sidebar-float-inset);
+  --ds-app-sidebar-radius: var(--ds-sidebar-float-radius);
+}
+
+[data-mood="airy"] {
+  --canvas: #fcfbfd;
+  --radius: 1rem;
+  --ds-radius-surface: 1.5rem;
+  --ds-radius-control: 999px;
+  --ds-field-control-radius: 1rem;
+  --ds-field-control-height: 3rem;
+  --ds-field-control-padding-x: 1.125rem;
+  --ds-shadow-raised: none;
+  --surface-table-header: transparent;
+  --ds-surface-padding: 1.75rem;
+  --ds-space-group: 1.75rem;
+  --ds-space-section: 3.5rem;
+  --ds-space-page: 3.5rem;
+  --ds-field-gap: 1.5rem;
+  --ds-page-title: 2.875rem;
+  --ds-title-weight: var(--ds-font-weight-medium);
+  --ds-title-tracking: -0.02em;
+  --ds-section-title: 1.3125rem;
+  --ds-section-title-weight: var(--ds-font-weight-medium);
+  --ds-card-title-size: 1rem;
+  --ds-card-title-weight: var(--ds-font-weight-medium);
+  --ds-metric-value: 2.875rem;
+  --ds-metric-value-primary: 3.75rem;
+  --ds-metric-value-weight: var(--ds-font-weight-regular);
+  --ds-metric-value-tracking: -0.025em;
+  --ds-eyebrow-size: 0.8125rem;
+  --ds-eyebrow-tracking: 0;
+  --ds-table-head-size: 0.8125rem;
+  --ds-table-head-weight: var(--ds-font-weight-regular);
+  --ds-table-head-tracking: 0;
+  --ds-table-header-height: 2.5rem;
+  --ds-row-height: 3.625rem;
+  --ds-control-padding-x: 1.25rem;
+  --ds-ease-playful: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ds-sidebar-float-inset: 0.75rem;
+  --ds-sidebar-float-radius: 1.375rem;
+  --ds-app-sidebar-inset: var(--ds-sidebar-float-inset);
+  --ds-app-sidebar-radius: var(--ds-sidebar-float-radius);
+}
+
+/*
+ * Sidebar layout, set with AppShell sidebarLayout or on the root. auto
+ * follows the mood (flush without one); flush and floating hold in every
+ * mood. Floating takes the mood's float size.
+ */
+[data-sidebar-layout="flush"] {
+  --ds-app-sidebar-inset: 0px;
+  --ds-app-sidebar-radius: 0px;
+}
+
+[data-sidebar-layout="floating"] {
+  --ds-app-sidebar-inset: var(--ds-sidebar-float-inset);
+  --ds-app-sidebar-radius: var(--ds-sidebar-float-radius);
+}
+
+[data-sidebar-layout="floating"] [data-slot="app-sidebar"] {
+  border-color: transparent;
+}
+
+/* Rounded sidebars clip their header and footer to the corners. Without a mood or floating layout nothing changes. */
+:is([data-mood="balanced"], [data-mood="airy"], [data-sidebar-layout="floating"]) [data-slot="app-sidebar"] {
+  overflow: hidden;
+}
+
+/*
+ * Mood sidebars. Each sidebar option follows the mood only while it is
+ * left at auto: AppSidebar variant="auto" turns Conscia burgundy (see the
+ * brand blocks above), AppShell sidebarLayout="auto" floats it, and
+ * AppSidebar activeStyle="auto" brightens the active fill in balanced and
+ * makes it a solid pill in airy. Set any of them explicitly to opt out.
+ * Put the mood on the root so the mobile drawer follows it. The light and
+ * quiet sidebar rules wrap their root condition in :where() so the mood
+ * colors outrank them.
+ */
+:is([data-mood="balanced"], [data-mood="airy"]) [data-slot="app-sidebar"] {
+  border-color: transparent;
+}
+
+:is([data-mood="balanced"], [data-mood="airy"]) [data-slot="navigation-group-label"] {
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/*
+ * Active item styles are set on the items themselves, so they win over the
+ * variant's tokens on the sidebar without a specificity contest. solid
+ * inverts the sidebar: its text color becomes the fill and its canvas the
+ * text, which reads in every variant.
+ */
+:is([data-mood="balanced"], [data-mood="airy"]) [data-sidebar-active="auto"]:is([data-sidebar-variant="brand"], [data-sidebar-variant="auto"]) {
+  --sidebar-hover: rgb(255 255 255 / 8%);
+}
+
+[data-mood="balanced"] [data-sidebar-active="auto"]:is([data-sidebar-variant="brand"], [data-sidebar-variant="auto"]) :is([data-slot="navigation-item"], [data-slot="navigation-sub-item"]) {
+  --sidebar-active-background: rgb(255 255 255 / 14%);
+}
+
+[data-mood="airy"] [data-sidebar-active="auto"] :is([data-slot="navigation-item"], [data-slot="navigation-sub-item"]),
+[data-sidebar-active="solid"] :is([data-slot="navigation-item"], [data-slot="navigation-sub-item"]) {
+  --sidebar-active-background: var(--sidebar-primary-text);
+  --sidebar-active-foreground: var(--sidebar-canvas);
+}
+
+/*
+ * Mood surfaces in dark mode keep the dark canvas; the light canvases
+ * above would otherwise win on a scoped subtree.
+ */
+:root.dark [data-mood],
+:root.dark[data-mood],
+:root[data-appearance="dark"] [data-mood],
+:root[data-appearance="dark"][data-mood] {
+  --canvas: #1a171a;
+}
+
+/*
+ * Mood component rules, for the few looks a token cannot reach: borders
+ * that components set as utilities, and uppercase labels. Whitespace and
+ * fills separate content instead of borders, so focus rings and hover
+ * fills must stay visible.
+ */
+:is([data-mood="balanced"], [data-mood="airy"]) :is([data-slot="card"][data-tone="default"], [data-slot="metric-card"], [data-slot="data-panel"]) {
+  border-color: transparent;
+}
+
+:is([data-mood="balanced"], [data-mood="airy"]) [data-slot="metric-card"][data-emphasis="primary"] {
+  border-top-color: var(--brand-accent);
+}
+
+:is([data-mood="balanced"], [data-mood="airy"]) :is([data-slot="badge"], [data-slot="metric-trend"]) {
+  border-radius: 999px;
+  padding-inline: 0.625rem;
+}
+
+:is([data-mood="balanced"], [data-mood="airy"]) :is([data-slot="eyebrow"], [data-slot="table-head"]) {
+  text-transform: none;
+}
+
+:is([data-mood="balanced"], [data-mood="airy"]) [data-slot="table-header"] tr {
+  border-bottom-color: var(--border-subtle);
+}
+
+:is([data-mood="balanced"], [data-mood="airy"]) [data-slot="button"] {
+  transition-timing-function: var(--ds-ease-playful);
+}
+
+:is([data-mood="balanced"], [data-mood="airy"]) [data-slot="card"][data-interactive="true"] {
+  transition-property: box-shadow, transform, translate, border-color;
+  transition-timing-function: var(--ds-ease-playful);
+}
+
+[data-mood="airy"] [data-slot="button"] {
+  border-radius: 999px;
+  padding-inline: var(--ds-control-padding-x);
+}
+
+[data-mood="airy"] [data-slot="eyebrow"] {
+  width: fit-content;
+  padding: 0.125rem 0.75rem;
+  border-radius: 999px;
+  background: var(--highlight-background);
+  color: var(--highlight-foreground);
+}
+
+/* Airy fields are tinted fills with no border until focus. */
+[data-mood="airy"] :is([data-slot="input"], [data-slot="textarea"], [data-slot="select-trigger"], [data-slot="date-time-field"]) {
+  border-color: transparent;
+  background-color: color-mix(in oklab, var(--surface-muted) 70%, var(--surface));
+}
+
+[data-mood="airy"] :is([data-slot="input"], [data-slot="textarea"], [data-slot="select-trigger"]):focus-visible,
+[data-mood="airy"] [data-slot="date-time-field"]:focus-within {
+  border-color: var(--focus);
+  background-color: var(--surface);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :is([data-mood="balanced"], [data-mood="airy"]) [data-slot="card"][data-interactive="true"]:hover {
+    translate: 0 -2px;
+  }
+
+  [data-mood="airy"] [data-slot="button"]:not(:disabled):hover {
+    transform: translateY(-1px);
+  }
 }
 
 @theme inline {
@@ -792,6 +1040,7 @@
   --color-brand-emphasis-background: var(--brand-emphasis-background);
   --color-brand-emphasis-border: var(--brand-emphasis-border);
   --color-highlight-background: var(--highlight-background);
+  --color-tint-accent: var(--tint-accent);
   --color-highlight-border: var(--highlight-border);
   --color-highlight-foreground: var(--highlight-foreground);
   --color-highlight-accent: var(--highlight-accent);
@@ -1231,7 +1480,7 @@
     content: "";
     pointer-events: none;
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-200 -200 400 400'%3E%3Cg fill='none' stroke='black' stroke-linecap='round'%3E%3Ccircle r='34' stroke-width='3.2' stroke-dasharray='0 8.5 0 8.5 0 8.5 0 8.5 0 8.5 0 8.5 0 8.5 0 8.5 0 8.5 0 8.5 0 8.5 0 8.5 0 8.5 0 8.5 0 12.8' transform='rotate(202)'/%3E%3Ccircle r='49' stroke-width='3.45' stroke-dasharray='0 9.3 0 9.3 0 9.3 0 9.3 0 9.3 0 9.3 0 9.3 0 18.5' transform='rotate(274)'/%3E%3Ccircle r='65' stroke-width='3.7' stroke-dasharray='0 10.1 0 10.1 0 10.1 0 10.1 0 10.1 0 10.1 0 10.1 0 40.8' transform='rotate(298)'/%3E%3Ccircle r='83' stroke-width='3.95' stroke-dasharray='0 10.9 0 10.9 0 10.9 0 10.9 0 10.9 0 10.9 0 10.9 0 83.4' transform='rotate(109)'/%3E%3Ccircle r='102' stroke-width='4.2' stroke-dasharray='0 11.7 0 11.7 0 11.7 0 11.7 0 11.7 0 11.7 0 11.7 0 38.5' transform='rotate(222)'/%3E%3Ccircle r='123' stroke-width='4.45' stroke-dasharray='0 12.5 0 12.5 0 12.5 0 12.5 0 12.5 0 12.5 0 12.5 0 12.5 0 12.5 0 12.5 0 12.5 0 12.5 0 12.5 0 12.5 0 12.5 0 12.5 0 12.5 0 12.5 0 46.4' transform='rotate(123)'/%3E%3Ccircle r='145' stroke-width='4.7' stroke-dasharray='0 13.3 0 13.3 0 13.3 0 13.3 0 13.3 0 13.3 0 13.3 0 145.8' transform='rotate(217)'/%3E%3Ccircle r='168' stroke-width='4.95' stroke-dasharray='0 14.1 0 14.1 0 14.1 0 14.1 0 14.1 0 14.1 0 14.1 0 168.9' transform='rotate(63)'/%3E%3Ccircle r='193' stroke-width='5.2' stroke-dasharray='0 14.9 0 14.9 0 14.9 0 14.9 0 14.9 0 14.9 0 14.9 0 14.9 0 14.9 0 14.9 0 194.0' transform='rotate(321)'/%3E%3C/g%3E%3C/svg%3E");
-    mask-position: right -7rem center;
+    mask-position: right -7rem top 50%;
     mask-repeat: no-repeat;
     mask-size: auto max(100%, 18rem);
   }

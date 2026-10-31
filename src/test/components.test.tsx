@@ -397,8 +397,45 @@ describe("shared sidebar", () => {
 
     expect(container.querySelector('[data-slot="app-shell"]')?.getAttribute("data-header-layout")).toBe("integrated");
     expect(container.querySelector('[data-slot="app-header"]')?.className).toContain("fixed");
-    expect(container.querySelector('[data-slot="app-sidebar"]')?.className).toContain("group-data-[header-layout=integrated]/shell:top-[var(--ds-topbar-height)]");
+    expect(container.querySelector('[data-slot="app-sidebar"]')?.className).toContain("group-data-[header-layout=integrated]/shell:top-[calc(var(--ds-topbar-height)+var(--ds-app-sidebar-inset))]");
     expect(screen.getByRole("button", { name: "Mobile search" })).toBeTruthy();
+  });
+
+  it("offers a plain top bar for split shells whose brand lives in the sidebar", () => {
+    const { container, rerender } = render(<AppShell><TopBar>Bar</TopBar></AppShell>);
+    const bar = () => container.querySelector('[data-slot="top-bar"]');
+
+    expect(bar()?.getAttribute("data-variant")).toBe("bar");
+    expect(bar()?.className).toContain("border-b");
+
+    rerender(<AppShell><TopBar variant="plain">Bar</TopBar></AppShell>);
+    expect(bar()?.getAttribute("data-variant")).toBe("plain");
+    expect(bar()?.className).not.toContain("border-b");
+    expect(bar()?.className).not.toContain("backdrop-blur");
+    expect(bar()?.className).toContain("px-[var(--ds-frame-padding-x)]");
+  });
+
+  it("lets each application set sidebar layout and active style independently of the mood", () => {
+    const { container, rerender } = render(
+      <AppShell>
+        <AppSidebar><AppSidebarContent>Navigation</AppSidebarContent></AppSidebar>
+      </AppShell>,
+    );
+    const shell = () => container.querySelector('[data-slot="app-shell"]');
+    const sidebar = () => container.querySelector('[data-slot="app-sidebar"]');
+
+    expect(shell()?.getAttribute("data-sidebar-layout")).toBe("auto");
+    expect(sidebar()?.getAttribute("data-sidebar-active")).toBe("auto");
+    expect(sidebar()?.className).toContain("rounded-[var(--ds-app-sidebar-radius)]");
+
+    rerender(
+      <AppShell sidebarLayout="floating">
+        <AppSidebar variant="light" activeStyle="solid"><AppSidebarContent>Navigation</AppSidebarContent></AppSidebar>
+      </AppShell>,
+    );
+    expect(shell()?.getAttribute("data-sidebar-layout")).toBe("floating");
+    expect(sidebar()?.getAttribute("data-sidebar-variant")).toBe("light");
+    expect(sidebar()?.getAttribute("data-sidebar-active")).toBe("solid");
   });
 
   it("renders explicit static groups as accessible flat destinations", () => {
