@@ -40,8 +40,9 @@ const routes = [
   { path: "/components/conscia-aliases", heading: "Conscia aliases" },
   { path: "/foundation", heading: "Foundation" },
   { path: "/typography", heading: "Typography" },
-  { path: "/moods", heading: "Moods" },
-  { path: "/examples/floating-workspace", heading: "Good morning, Kent" },
+  // These pages set data-mood after hydration; scan only once it has landed.
+  { path: "/moods", heading: "Moods", ready: 'html[data-mood="airy"]' },
+  { path: "/examples/floating-workspace", heading: "Good morning, Kent", ready: 'html[data-mood="airy"]' },
   { path: "/primitives", heading: "Primitives" },
   { path: "/tables", heading: "Tables and data tables" },
   { path: "/reference-patterns", heading: "AI Models" },
@@ -56,6 +57,7 @@ async function loadRoute(
   heading: string,
   appearance: Appearance,
   density: Density,
+  ready?: string,
 ) {
   await page.addInitScript(
     ({ nextAppearance, nextDensity }) => {
@@ -69,6 +71,7 @@ async function loadRoute(
   await page.emulateMedia({ colorScheme: appearance });
   await page.goto(path, { timeout: 60_000 });
   await expect(page.getByRole("heading", { name: heading, exact: true })).toBeVisible();
+  if (ready) await expect(page.locator(ready)).toBeAttached();
   await page.addStyleTag({
     content: "nextjs-portal { display: none !important; }",
   });
@@ -261,7 +264,7 @@ test.describe("Phase 7 accessibility regression", () => {
 
     for (const appearance of ["light", "dark"] as const) {
       for (const route of routes) {
-        await loadRoute(page, route.path, route.heading, appearance, "comfortable");
+        await loadRoute(page, route.path, route.heading, appearance, "comfortable", "ready" in route ? route.ready : undefined);
         await installAxe(page);
         await expectNoAxeViolations(
           page,
@@ -438,7 +441,7 @@ test.describe("Phase 7 responsive regression", () => {
       await page.setViewportSize({ width: 390, height: 844 });
 
       for (const route of routes) {
-        await loadRoute(page, route.path, route.heading, "light", density);
+        await loadRoute(page, route.path, route.heading, "light", density, "ready" in route ? route.ready : undefined);
         await expectNoDocumentOverflow(page, `${route.path} / mobile / ${density}`);
       }
     });
