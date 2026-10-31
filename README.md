@@ -8,7 +8,7 @@ primitives, and product patterns for operational applications.
 
 > **Package:** available publicly as [`@conscia-labs/design-system`](https://www.npmjs.com/package/@conscia-labs/design-system).
 >
-> **Current release:** `1.7.1` is the latest stable v1 release.
+> **Current release:** `1.7.2` is the latest stable v1 release.
 >
 > **Documentation:** browse the [live design system](https://conscia-labs.github.io/design-system/)
 > for the complete component reference, examples, and usage guidance.
@@ -112,6 +112,12 @@ options that each follow the mood while left at `auto`:
 Under a mood, `auto` floats the sidebar, turns it burgundy, and gives the
 active item a brighter fill (balanced) or a solid pill (airy). Set any option
 explicitly to keep it the same in every mood.
+
+`AppShell headerLayout="auto"` lets the header follow the mood too. Without a
+mood the header runs across the top (integrated); under balanced or airy the
+sidebar runs the full height with the brand at its top, and the header turns
+transparent in the content column until the page scrolls (split). See
+[Shell and navigation](docs/shell-navigation.md#a-header-that-follows-the-mood).
 
 Use semantic Conscia tokens and utilities rather than copying palette values
 into an application. See the [foundation documentation](https://conscia-labs.github.io/design-system/foundation/)

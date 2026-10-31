@@ -6,8 +6,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { BarChart3, BookOpen, Boxes, Component, ExternalLink, Gauge, LayoutDashboard, Monitor, Moon, PanelLeft, PanelsLeftBottom, Rows3, Search, Shapes, Sparkles, Sun, Type } from "lucide-react";
 
 import {
-  AppHeader, AppHeaderActions, AppHeaderSearch, AppHeaderStart,
-  AppShell as DesignAppShell, AppSidebar, AppSidebarContent, AppSidebarFooter,
+  AppHeader, AppHeaderActions, AppHeaderBrand, AppHeaderSearch, AppHeaderStart,
+  AppShell as DesignAppShell, AppSidebar, AppSidebarContent, AppSidebarFooter, AppSidebarHeader,
   AppearanceControl, Badge, BrandIcon, Button, CommandPalette,
   DensityControl, DesignSystemPreferenceSync, useConsciaPreferences,
   Popover, PopoverContent, PopoverDescription, PopoverTitle, PopoverTrigger,
@@ -90,52 +90,9 @@ export function AppShell({ children, version }: { children: ReactNode; version: 
   if (pathname.startsWith("/examples/")) return <>{children}</>;
 
   return (
-    <DesignAppShell headerLayout="integrated" sidebarLayout={sidebar.layout}>
+    // Auto is integrated on most pages and split while the Moods page sets a mood.
+    <DesignAppShell headerLayout={sidebar.headerLayout} sidebarLayout={sidebar.layout}>
       <DesignSystemPreferenceSync />
-      <AppHeader>
-        <AppHeaderStart>
-          <SidebarTrigger aria-label="Toggle navigation" />
-          <Link href="/" className="flex min-w-0 shrink-0 items-center gap-2 text-brand dark:text-white" aria-label="Conscia Design System home">
-            <BrandIcon aria-hidden="true" className="size-6" />
-            <span className="hidden text-sm font-semibold sm:inline">Conscia</span>
-          </Link>
-          <span className="ds-type-ui hidden border-l pl-3 text-text-supporting lg:inline">Design System</span>
-        </AppHeaderStart>
-        <AppHeaderSearch mobileTrigger={
-          <IconButton variant="ghost" aria-label="Search design system" onClick={() => setCommandOpen(true)}><Search /></IconButton>
-        }>
-          <button type="button" className="ds-type-control flex h-[var(--ds-control-height-sm)] w-full items-center gap-2 rounded-[var(--ds-radius-control)] border border-control-border bg-surface-control px-3 text-left text-text-supporting outline-none transition-colors hover:bg-surface-control-hover focus-visible:ring-[3px] focus-visible:ring-focus/50" onClick={() => setCommandOpen(true)}>
-            <Search className="size-4" aria-hidden="true" />
-            <span className="flex-1">Search design system</span>
-            <ShortcutHint>⌘K</ShortcutHint>
-          </button>
-        </AppHeaderSearch>
-        <AppHeaderActions>
-          <Badge variant="neutral" aria-label={`Design system version ${version}`} className="mr-2 hidden shrink-0 tabular-nums sm:inline-flex">
-            v{version}
-          </Badge>
-          <Popover>
-            <PopoverTrigger render={<Button variant="ghost" size="sm" aria-label={`Appearance: ${appearance}`} />}>
-              <AppearanceIcon aria-hidden="true" /><span className="hidden xl:inline">Appearance</span>
-            </PopoverTrigger>
-            <PopoverContent className="max-w-[calc(100vw-2rem)]">
-              <PopoverTitle>Appearance</PopoverTitle>
-              <PopoverDescription className="mt-1 mb-4">Preview every component in light or dark mode.</PopoverDescription>
-              <AppearanceControl className="[&_legend]:sr-only" />
-            </PopoverContent>
-          </Popover>
-          <Popover>
-            <PopoverTrigger render={<Button variant="ghost" size="sm" aria-label={`Density: ${density}`} />}>
-              <Rows3 aria-hidden="true" /><span className="hidden xl:inline">Density</span>
-            </PopoverTrigger>
-            <PopoverContent className="max-w-[calc(100vw-2rem)]">
-              <PopoverTitle>Density</PopoverTitle>
-              <PopoverDescription className="mt-1 mb-4">Adjust control sizing and spacing across the examples.</PopoverDescription>
-              <DensityControl className="[&_legend]:sr-only" />
-            </PopoverContent>
-          </Popover>
-        </AppHeaderActions>
-      </AppHeader>
       <CommandPalette
         open={commandOpen}
         onOpenChange={setCommandOpen}
@@ -150,6 +107,14 @@ export function AppShell({ children, version }: { children: ReactNode; version: 
         treatment={sidebar.variant === "auto" ? "quiet" : undefined}
         activeStyle={sidebar.activeStyle}
       >
+        {sidebar.headerLayout === "integrated" ? null : (
+          <AppSidebarHeader>
+            <Link href="/" className="flex min-w-0 items-center gap-2 px-1 text-sidebar-primary-text" aria-label="Conscia Design System home">
+              <BrandIcon aria-hidden="true" className="size-6 shrink-0" />
+              <span className="truncate text-sm font-semibold group-data-[sidebar-state=collapsed]/shell:hidden">Conscia <span className="font-normal text-sidebar-metadata-text">Design System</span></span>
+            </Link>
+          </AppSidebarHeader>
+        )}
         <AppSidebarContent className="playground-navigation">
           <SidebarNavigation entries={entries} renderLink={renderNavigationLink} />
         </AppSidebarContent>
@@ -159,7 +124,56 @@ export function AppShell({ children, version }: { children: ReactNode; version: 
           </Button>
         </AppSidebarFooter>
       </AppSidebar>
-      <MainRegion><PageFrame width="full" className="p-0 md:p-0 [--ds-frame-content-inset:var(--ds-surface-padding)]">{children}</PageFrame></MainRegion>
+      <MainRegion>
+        {/* In the split layout the header lines up with the playground's page padding. */}
+        <AppHeader className="[--ds-frame-padding-x:1rem] sm:[--ds-frame-padding-x:1.5rem] xl:[--ds-frame-padding-x:2rem]">
+          <AppHeaderStart>
+            <SidebarTrigger aria-label="Toggle navigation" />
+            <AppHeaderBrand>
+              <Link href="/" className="flex min-w-0 shrink-0 items-center gap-2 text-brand dark:text-white" aria-label="Conscia Design System home">
+                <BrandIcon aria-hidden="true" className="size-6" />
+                <span className="hidden text-sm font-semibold sm:inline">Conscia</span>
+              </Link>
+              <span className="ds-type-ui hidden border-l pl-3 text-text-supporting lg:inline">Design System</span>
+            </AppHeaderBrand>
+          </AppHeaderStart>
+          <AppHeaderSearch mobileTrigger={
+            <IconButton variant="ghost" aria-label="Search design system" onClick={() => setCommandOpen(true)}><Search /></IconButton>
+          }>
+            <button type="button" className="ds-type-control flex h-[var(--ds-control-height-sm)] w-full items-center gap-2 rounded-[var(--ds-radius-control)] border border-control-border bg-surface-control px-3 text-left text-text-supporting outline-none transition-colors hover:bg-surface-control-hover focus-visible:ring-[3px] focus-visible:ring-focus/50" onClick={() => setCommandOpen(true)}>
+              <Search className="size-4" aria-hidden="true" />
+              <span className="flex-1">Search design system</span>
+              <ShortcutHint>⌘K</ShortcutHint>
+            </button>
+          </AppHeaderSearch>
+          <AppHeaderActions>
+            <Badge variant="neutral" aria-label={`Design system version ${version}`} className="mr-2 hidden shrink-0 tabular-nums sm:inline-flex">
+              v{version}
+            </Badge>
+            <Popover>
+              <PopoverTrigger render={<Button variant="ghost" size="sm" aria-label={`Appearance: ${appearance}`} />}>
+                <AppearanceIcon aria-hidden="true" /><span className="hidden xl:inline">Appearance</span>
+              </PopoverTrigger>
+              <PopoverContent className="max-w-[calc(100vw-2rem)]">
+                <PopoverTitle>Appearance</PopoverTitle>
+                <PopoverDescription className="mt-1 mb-4">Preview every component in light or dark mode.</PopoverDescription>
+                <AppearanceControl className="[&_legend]:sr-only" />
+              </PopoverContent>
+            </Popover>
+            <Popover>
+              <PopoverTrigger render={<Button variant="ghost" size="sm" aria-label={`Density: ${density}`} />}>
+                <Rows3 aria-hidden="true" /><span className="hidden xl:inline">Density</span>
+              </PopoverTrigger>
+              <PopoverContent className="max-w-[calc(100vw-2rem)]">
+                <PopoverTitle>Density</PopoverTitle>
+                <PopoverDescription className="mt-1 mb-4">Adjust control sizing and spacing across the examples.</PopoverDescription>
+                <DensityControl className="[&_legend]:sr-only" />
+              </PopoverContent>
+            </Popover>
+          </AppHeaderActions>
+        </AppHeader>
+        <PageFrame width="full" className="p-0 md:p-0 [--ds-frame-content-inset:var(--ds-surface-padding)]">{children}</PageFrame>
+      </MainRegion>
     </DesignAppShell>
   );
 }

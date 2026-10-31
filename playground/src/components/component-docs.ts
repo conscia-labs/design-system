@@ -111,7 +111,9 @@ const guidance: Record<string, ComponentGuidance> = {
     whenToUse: "Use as the shared geometry for authenticated product surfaces with a header, sidebar, main region, and optional inspector.",
     accessibility: "Preserve landmark order, label navigation, and provide a mobile search trigger and named sidebar toggle.",
     options: [
-      { name: "headerLayout", values: "integrated · split", guidance: "Integrated is canonical; split remains available for compatibility." },
+      { name: "headerLayout", values: "integrated · split · auto", guidance: "Integrated runs one header across the top. Split runs the sidebar full height with the brand in AppSidebarHeader. Auto is integrated without a mood and split under balanced or airy." },
+      { name: "AppHeader variant", values: "auto · bar · transparent", guidance: "Auto is a bar in an integrated shell and transparent inside MainRegion of a split one. Transparent headers draw a band once the page scrolls; airy floats it as a pill." },
+      { name: "AppHeaderBrand · AppHeaderTitle", values: "header parts", guidance: "AppHeaderBrand shows only where the sidebar is not on screen. AppHeaderTitle swaps breadcrumbs for the page title once the page heading scrolls under the header." },
       { name: "AppSidebar treatment", values: "omitted (default) · quiet", guidance: "Quiet maps existing sidebar variables to semantic surfaces and selection roles while variant continues to control appearance." },
       { name: "brand chrome", values: "AppSidebar variant=\"brand\" · AppHeader tone=\"brand\"", guidance: "Paints the chrome Conscia burgundy in both appearances, as on conscia.com. Use them together. Controls inside switch to light-on-burgundy; the workspace stays on the neutral canvas." },
     ],

@@ -8,6 +8,11 @@ import {
 import {
   ActivityItem,
   ActivityList,
+  AppHeader,
+  AppHeaderActions,
+  AppHeaderBrand,
+  AppHeaderStart,
+  AppHeaderTitle,
   AppShell,
   AppSidebar,
   AppSidebarContent,
@@ -43,7 +48,6 @@ import {
   Tabs,
   TabsList,
   TabsTrigger,
-  TopBar,
   type SidebarNavigationEntry,
   type SidebarNavigationItem,
   type SidebarNavigationLinkProps,
@@ -52,10 +56,11 @@ import {
 /*
  * A full-screen reference: a split shell whose brand lives in the sidebar
  * header, so the floating sidebar can run the full height of the window.
- * The preview panel switches the header between none, plain, and bar.
+ * The header sits in the content column. The preview panel switches it
+ * between none, transparent (a band appears on scroll), and bar.
  */
 
-type HeaderMode = "none" | "plain" | "bar";
+type HeaderMode = "none" | "transparent" | "bar";
 type Mood = "balanced" | "airy";
 type Layout = "floating" | "flush";
 
@@ -146,6 +151,15 @@ export default function FloatingWorkspacePage() {
     [],
   );
 
+  const activeLabel = navigation.flatMap((entry) => entry.items).find((item) => item.id === active)?.label ?? "Overview";
+  // Shown in the header only while the sidebar is a drawer.
+  const brand = (
+    <AppHeaderBrand>
+      <BrandIcon aria-hidden="true" className="size-6 text-brand dark:text-white" />
+      <span className="text-sm font-semibold">Conscia</span>
+    </AppHeaderBrand>
+  );
+
   const search = (
     <button type="button" className="ds-type-control flex h-[var(--ds-control-height-sm)] w-full max-w-80 items-center gap-2 rounded-[var(--ds-radius-control)] border border-control-border bg-surface-control px-3 text-left text-text-supporting outline-none transition-colors hover:bg-surface-control-hover focus-visible:ring-[3px] focus-visible:ring-focus/50">
       <Search className="size-4" aria-hidden="true" />
@@ -180,21 +194,31 @@ export default function FloatingWorkspacePage() {
 
       <MainRegion>
         {header === "none" ? (
-          // Without a header, a plain bar still carries the drawer trigger on small screens.
-          <TopBar variant="plain" className="lg:hidden">
-            <SidebarTrigger aria-label="Open navigation" />
-          </TopBar>
+          // Without a header, a transparent one still carries the drawer trigger and brand on small screens.
+          <AppHeader variant="transparent" className="lg:hidden">
+            <AppHeaderStart>
+              <SidebarTrigger aria-label="Open navigation" />
+              {brand}
+            </AppHeaderStart>
+          </AppHeader>
         ) : (
-          <TopBar variant={header === "plain" ? "plain" : "bar"}>
-            <div className="flex min-w-0 flex-1 items-center gap-3">
+          <AppHeader variant={header}>
+            <AppHeaderStart>
               <SidebarTrigger aria-label="Toggle navigation" />
-              <div className="hidden min-w-0 flex-1 md:block">{search}</div>
-            </div>
-            <div className="flex shrink-0 items-center gap-1">
+              {brand}
+              <AppHeaderTitle title={activeLabel} className="hidden md:grid">
+                <span>Orchestrate</span>
+                <span aria-hidden="true">/</span>
+                <span className="font-medium text-text-primary">{activeLabel}</span>
+              </AppHeaderTitle>
+            </AppHeaderStart>
+            <AppHeaderActions>
+              <div className="hidden w-72 md:block">{search}</div>
+              <IconButton variant="ghost" aria-label="Search" className="md:hidden"><Search /></IconButton>
               <IconButton variant="ghost" aria-label="Notifications"><Bell /></IconButton>
-              <Avatar className="size-8"><AvatarFallback>KH</AvatarFallback></Avatar>
-            </div>
-          </TopBar>
+              <Avatar className="ml-1 size-8"><AvatarFallback>KH</AvatarFallback></Avatar>
+            </AppHeaderActions>
+          </AppHeader>
         )}
 
         <PageFrame width="wide">
@@ -280,7 +304,7 @@ export default function FloatingWorkspacePage() {
         aria-label="Preview options"
         className="fixed right-[max(1rem,env(safe-area-inset-right))] bottom-[max(1rem,env(safe-area-inset-bottom))] z-40 hidden max-w-[calc(100vw-2rem)] flex-wrap gap-4 rounded-[var(--ds-radius-surface)] border bg-surface-floating p-3 shadow-[var(--ds-shadow-floating)] md:flex"
       >
-        <PreviewOption label="Header" value={header} options={["none", "plain", "bar"] as const} onChange={setHeader} />
+        <PreviewOption label="Header" value={header} options={["none", "transparent", "bar"] as const} onChange={setHeader} />
         <PreviewOption label="Sidebar" value={layout} options={["floating", "flush"] as const} onChange={setLayout} />
         <PreviewOption label="Mood" value={mood} options={["balanced", "airy"] as const} onChange={setMood} />
       </aside>

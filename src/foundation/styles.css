@@ -289,6 +289,18 @@
   --ds-topbar-height: 3.5rem;
   --ds-topbar-padding-x: 0.75rem;
   --ds-topbar-padding-x-wide: 1rem;
+  /*
+   * AppHeader inside MainRegion of a split shell. It is transparent at rest
+   * and draws a band once content scrolls under it. The gutter is how far
+   * the band reaches past the header's content (the default reaches both
+   * edges), the inset its gap from the header's top and bottom; airy uses
+   * both, with the radius, to float a pill. A mood can also set
+   * --ds-app-header-scrolled-background and -shadow.
+   */
+  --ds-app-header-height: var(--ds-topbar-height);
+  --ds-app-header-scrolled-gutter: 100vw;
+  --ds-app-header-scrolled-inset-y: 0px;
+  --ds-app-header-scrolled-radius: 0px;
   --ds-sidebar-width: 16rem;
   /*
    * The desktop sidebar's gap from the window edges and its corner radius.
@@ -810,6 +822,7 @@
   --ds-ease-playful: cubic-bezier(0.3, 1.3, 0.6, 1);
   --ds-app-sidebar-inset: var(--ds-sidebar-float-inset);
   --ds-app-sidebar-radius: var(--ds-sidebar-float-radius);
+  --ds-app-header-height: 4rem;
 }
 
 [data-mood="airy"] {
@@ -851,6 +864,12 @@
   --ds-sidebar-float-radius: 1.375rem;
   --ds-app-sidebar-inset: var(--ds-sidebar-float-inset);
   --ds-app-sidebar-radius: var(--ds-sidebar-float-radius);
+  --ds-app-header-height: 4.5rem;
+  --ds-app-header-scrolled-gutter: 1rem;
+  --ds-app-header-scrolled-inset-y: 0.5rem;
+  --ds-app-header-scrolled-radius: 999px;
+  --ds-app-header-scrolled-background: color-mix(in oklab, var(--surface) 92%, transparent);
+  --ds-app-header-scrolled-shadow: 0 0.5rem 1.5rem -0.5rem rgb(30 7 33 / 18%), 0 0 0 1px rgb(30 7 33 / 4%);
 }
 
 /*
@@ -917,6 +936,100 @@
 }
 
 /*
+ * Header layout. integrated runs AppHeader across the top with the sidebar
+ * below it; split runs the sidebar the full height of the window with the
+ * brand in AppSidebarHeader. AppShell headerLayout="auto" is integrated
+ * without a mood and split under balanced or airy, so one composition
+ * serves both: put AppHeader inside MainRegion, the brand in both
+ * AppSidebarHeader and AppHeaderBrand, and each shows where it belongs.
+ */
+[data-header-layout="auto"] [data-slot="main-region"] {
+  padding-top: var(--ds-topbar-height);
+}
+
+:is([data-mood="balanced"], [data-mood="airy"]) [data-header-layout="auto"] [data-slot="main-region"] {
+  padding-top: 0;
+}
+
+@media (min-width: 64rem) {
+  [data-header-layout="auto"] [data-slot="app-sidebar"] {
+    top: calc(var(--ds-topbar-height) + var(--ds-app-sidebar-inset));
+  }
+
+  :is([data-mood="balanced"], [data-mood="airy"]) [data-header-layout="auto"] [data-slot="app-sidebar"] {
+    top: var(--ds-app-sidebar-inset);
+  }
+
+  /* The integrated header carries the brand, so the sidebar header steps aside. The drawer keeps it. */
+  [data-header-layout="auto"] [data-slot="app-sidebar"] > [data-slot="app-sidebar-header"] {
+    display: none;
+  }
+
+  :is([data-mood="balanced"], [data-mood="airy"]) [data-header-layout="auto"] [data-slot="app-sidebar"] > [data-slot="app-sidebar-header"] {
+    display: flex;
+  }
+
+  /* Beside a full-height sidebar the brand is already on screen. */
+  :is([data-header-layout="split"], :is([data-mood="balanced"], [data-mood="airy"]) [data-header-layout="auto"]) [data-slot="app-header-brand"] {
+    display: none;
+  }
+}
+
+/* Under a mood the sidebar header lines up with the taller header beside it. */
+:is([data-mood="balanced"], [data-mood="airy"]) :is([data-header-layout="split"], [data-header-layout="auto"]) [data-slot="app-sidebar"] > [data-slot="app-sidebar-header"] {
+  min-height: calc(var(--ds-app-header-height) - var(--ds-app-sidebar-inset));
+}
+
+/*
+ * In a split shell, an AppHeader inside MainRegion is sticky in the content
+ * column and lines up with the page frame. Set --ds-frame-padding-x on the
+ * header to line it up with different page padding.
+ */
+:is([data-header-layout="split"], :is([data-mood="balanced"], [data-mood="airy"]) [data-header-layout="auto"]) [data-slot="main-region"] > [data-slot="app-header"] {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  height: var(--ds-app-header-height);
+  min-height: var(--ds-app-header-height);
+  padding-inline: var(--ds-frame-padding-x);
+}
+
+/*
+ * Transparent headers have no fill, border, or blur at rest. Once the
+ * window scrolls, a band fades in behind the controls; it is drawn on
+ * ::before so its insets and radius never move the page.
+ */
+:is([data-header-layout="split"], :is([data-mood="balanced"], [data-mood="airy"]) [data-header-layout="auto"]) [data-slot="main-region"] > [data-slot="app-header"][data-variant="auto"],
+[data-slot="app-header"][data-variant="transparent"] {
+  isolation: isolate;
+  border-bottom-color: transparent;
+  background: transparent;
+  backdrop-filter: none;
+}
+
+:is([data-header-layout="split"], :is([data-mood="balanced"], [data-mood="airy"]) [data-header-layout="auto"]) [data-slot="main-region"] > [data-slot="app-header"][data-variant="auto"]::before,
+[data-slot="app-header"][data-variant="transparent"]::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset-block: var(--ds-app-header-scrolled-inset-y);
+  /* The header's own padding is resolved here, so the band follows a header that resizes it. */
+  inset-inline: max(var(--ds-app-header-scrolled-inset-y), calc(var(--ds-frame-padding-x) - var(--ds-app-header-scrolled-gutter)));
+  border-radius: var(--ds-app-header-scrolled-radius);
+  background: var(--ds-app-header-scrolled-background, color-mix(in oklab, var(--canvas) 88%, transparent));
+  box-shadow: var(--ds-app-header-scrolled-shadow, 0 1px 0 var(--border-subtle));
+  backdrop-filter: blur(14px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease;
+}
+
+:is([data-header-layout="split"], :is([data-mood="balanced"], [data-mood="airy"]) [data-header-layout="auto"]) [data-slot="main-region"] > [data-slot="app-header"][data-variant="auto"][data-scrolled="true"]::before,
+[data-slot="app-header"][data-variant="transparent"][data-scrolled="true"]::before {
+  opacity: 1;
+}
+
+/*
  * Mood surfaces in dark mode keep the dark canvas; the light canvases
  * above would otherwise win on a scoped subtree.
  */
@@ -925,6 +1038,13 @@
 :root[data-appearance="dark"] [data-mood],
 :root[data-appearance="dark"][data-mood] {
   --canvas: #1a171a;
+}
+
+:root.dark [data-mood="airy"],
+:root.dark[data-mood="airy"],
+:root[data-appearance="dark"] [data-mood="airy"],
+:root[data-appearance="dark"][data-mood="airy"] {
+  --ds-app-header-scrolled-shadow: 0 0.5rem 1.5rem -0.5rem rgb(0 0 0 / 50%), 0 0 0 1px rgb(255 255 255 / 8%);
 }
 
 /*

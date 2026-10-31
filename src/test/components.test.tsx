@@ -20,12 +20,15 @@ import {
   AppSidebarContent,
   AppSidebarFooter,
   AppSidebarHeader,
+  MainRegion,
   NavigationGroup,
   NavigationItem,
   NavigationSubItem,
   SidebarSearch,
   SidebarTrigger,
   TopBar,
+  AppHeaderBrand,
+  AppHeaderTitle,
 } from "../patterns/app-shell";
 import { SidebarNavigation } from "../patterns/sidebar-navigation";
 import { AttentionItem, AttentionList } from "../patterns/attention-list";
@@ -399,6 +402,48 @@ describe("shared sidebar", () => {
     expect(container.querySelector('[data-slot="app-header"]')?.className).toContain("fixed");
     expect(container.querySelector('[data-slot="app-sidebar"]')?.className).toContain("group-data-[header-layout=integrated]/shell:top-[calc(var(--ds-topbar-height)+var(--ds-app-sidebar-inset))]");
     expect(screen.getByRole("button", { name: "Mobile search" })).toBeTruthy();
+  });
+
+  it("lets AppHeader follow the shell, mark the scrolled state, and swap in the page title", async () => {
+    const { container } = render(
+      <AppShell headerLayout="auto">
+        <AppSidebar><AppSidebarContent>Navigation</AppSidebarContent></AppSidebar>
+        <MainRegion>
+          <AppHeader>
+            <AppHeaderStart>
+              <AppHeaderBrand>Conscia</AppHeaderBrand>
+              <AppHeaderTitle title="Sources"><a href="#build">Build</a></AppHeaderTitle>
+            </AppHeaderStart>
+          </AppHeader>
+          <h1>Sources</h1>
+        </MainRegion>
+      </AppShell>,
+    );
+    const header = container.querySelector('[data-slot="app-header"]');
+    const title = container.querySelector('[data-slot="app-header-title"]');
+    const heading = screen.getByRole("heading", { name: "Sources" });
+
+    expect(container.querySelector('[data-slot="app-shell"]')?.getAttribute("data-header-layout")).toBe("auto");
+    expect(header?.getAttribute("data-variant")).toBe("auto");
+    expect(container.querySelector('[data-slot="app-header-brand"]')?.textContent).toBe("Conscia");
+
+    vi.spyOn(header!, "getBoundingClientRect").mockReturnValue({ bottom: 64 } as DOMRect);
+    const headingRect = vi.spyOn(heading, "getBoundingClientRect").mockReturnValue({ bottom: 160 } as DOMRect);
+    window.dispatchEvent(new Event("resize"));
+    await waitFor(() => expect(title?.hasAttribute("data-title-visible")).toBe(false));
+    expect(screen.getByRole("link", { name: "Build" })).toBeTruthy();
+
+    headingRect.mockReturnValue({ bottom: 40 } as DOMRect);
+    Object.defineProperty(window, "scrollY", { configurable: true, value: 120 });
+    window.dispatchEvent(new Event("scroll"));
+    await waitFor(() => expect(header?.getAttribute("data-scrolled")).toBe("true"));
+    await waitFor(() => expect(title?.getAttribute("data-title-visible")).toBe("true"));
+    // The breadcrumbs leave the tab order while the title stands in for them.
+    expect(screen.queryByRole("link", { name: "Build" })).toBeNull();
+
+    Object.defineProperty(window, "scrollY", { configurable: true, value: 0 });
+    window.dispatchEvent(new Event("scroll"));
+    await waitFor(() => expect(header?.hasAttribute("data-scrolled")).toBe(false));
   });
 
   it("offers a plain top bar for split shells whose brand lives in the sidebar", () => {

@@ -65,9 +65,11 @@ also restyles the sidebar through three independent options, each following
 the mood while left at `auto`: `AppShell sidebarLayout` (`auto`, `flush`,
 `floating`), `AppSidebar variant` (`auto`, `light`, `dark`, `brand`), and
 `AppSidebar activeStyle` (`auto`, `tint`, `solid`). Set them explicitly when
-an application needs a fixed sidebar. For a full-height floating sidebar, use
-`headerLayout="split"`, put the brand in `AppSidebarHeader`, and use
-`TopBar variant="plain"` or no header (see `docs/shell-navigation.md`).
+an application needs a fixed sidebar. `AppShell headerLayout="auto"` lets the
+header follow the mood as well: integrated without one, split (full-height
+sidebar with the brand in `AppSidebarHeader`, transparent `AppHeader` inside
+`MainRegion`) under balanced or airy. For a split shell in every mood, use
+`headerLayout="split"` (see `docs/shell-navigation.md`).
 
 ## Non-negotiable boundaries
 
@@ -226,6 +228,31 @@ Prefer the integrated global header for new application shells:
     <AppSidebarContent>{navigation}</AppSidebarContent>
   </AppSidebar>
   <MainRegion>{children}</MainRegion>
+</AppShell>
+```
+
+For products that adopt a mood, use `headerLayout="auto"` with the header
+inside `MainRegion` and the brand in both places; each part shows only where
+it belongs:
+
+```tsx
+<AppShell headerLayout="auto">
+  <AppSidebar variant="auto">
+    <AppSidebarHeader>{productIdentity}</AppSidebarHeader>
+    <AppSidebarContent>{navigation}</AppSidebarContent>
+  </AppSidebar>
+  <MainRegion>
+    <AppHeader>
+      <AppHeaderStart>
+        <SidebarTrigger />
+        <AppHeaderBrand>{productMark}</AppHeaderBrand>
+        <AppHeaderTitle title={pageTitle}>{breadcrumbs}</AppHeaderTitle>
+      </AppHeaderStart>
+      <AppHeaderSearch mobileTrigger={searchIconButton}>{globalSearch}</AppHeaderSearch>
+      <AppHeaderActions>{accountActions}</AppHeaderActions>
+    </AppHeader>
+    {children}
+  </MainRegion>
 </AppShell>
 ```
 
