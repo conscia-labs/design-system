@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.7.1 - 2026-10-31
+
+First published release with moods. 1.7.0 was tagged but never published:
+its release validation failed, so the package and playground were not
+deployed. 1.7.1 contains everything in 1.7.0 below; read those notes to
+upgrade from 1.6.
+
+- The release accessibility scan waits for the playground's Moods page and
+  Floating workspace example to apply their mood before it runs. Both pages
+  set `data-mood` after hydration, and the scan could read the sidebar text
+  color before the mood and the background after it. Package code is
+  unchanged from 1.7.0.
+
 ## 1.7.0 - 2026-10-31
 
 Moods: an opt-in, more open look for the same components, plus sidebar
