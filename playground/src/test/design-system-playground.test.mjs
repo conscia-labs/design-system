@@ -814,8 +814,11 @@ test("shared sidebar navigation supports collapsed flyouts without owning routes
   assert.match(playgroundShell, /headerLayout="integrated"/);
   assert.match(playgroundShell, /type: "group"/);
   assert.match(playgroundShell, /label: "Reference examples"/);
-  assert.match(playgroundShell, /<AppSidebar\s+variant="auto"/);
-  assert.match(playgroundShell, /treatment="quiet"/);
+  // The Moods page can change the sidebar props; the default is the quiet auto sidebar.
+  const sidebarOptions = read("../components/sidebar-options.ts");
+  assert.match(playgroundShell, /<AppSidebar\s+variant=\{sidebar\.variant\}/);
+  assert.match(playgroundShell, /treatment=\{sidebar\.variant === "auto" \? "quiet" : undefined\}/);
+  assert.match(sidebarOptions, /defaultSidebarOptions: SidebarOptions = \{ variant: "auto", activeStyle: "auto", layout: "auto" \}/);
 });
 
 test("app shell uses render composition and tracks sidebar overflow affordances", () => {
@@ -910,14 +913,58 @@ test("brand palette roles keep AA contrast in light mode", () => {
   assert.notEqual(lightToken("danger-background"), lightToken("highlight-background"));
 });
 
+test("balanced and airy moods keep text legible on their canvases and tints", () => {
+  const styles = read("../../../src/foundation/styles.css");
+  const preferences = read("../../../src/foundation/preferences.ts");
+  assert.match(preferences, /export type ConsciaMood = "current" \| "balanced" \| "airy";/);
+
+  const textSupporting = "575b69";
+  for (const mood of ["balanced", "airy"]) {
+    const block = styles.match(new RegExp(`\\[data-mood="${mood}"\\] \\{([^}]*)\\}`))?.[1];
+    assert.ok(block, `${mood} mood should define tokens`);
+    const canvas = block.match(/--canvas: #([0-9a-f]{6});/)?.[1];
+    assert.ok(canvas, `${mood} mood should set a light canvas`);
+    assert.ok(contrastRatio(textSupporting, canvas) >= 4.5, `text-supporting on the ${mood} canvas needs 4.5:1`);
+    assert.match(block, /--ds-shadow-raised: none;/);
+  }
+  // Mood canvases are light only; dark mode keeps the dark canvas on scoped subtrees.
+  assert.match(styles, /:root\.dark \[data-mood\],[\s\S]*?--canvas: #1a171a;/);
+  // Uppercase labels and utility borders need selector rules, not just tokens.
+  assert.match(styles, /\[data-slot="eyebrow"\], \[data-slot="table-head"\]\) \{\s*text-transform: none;/);
+
+  // Moods float a burgundy sidebar unless the shell asks for a flush one.
+  const balancedBlock = styles.match(/\[data-mood="balanced"\] \{([^}]*)\}/)[1];
+  const airyBlock = styles.match(/\[data-mood="airy"\] \{([^}]*)\}/)[1];
+  assert.match(balancedBlock, /--ds-app-sidebar-inset: var\(--ds-sidebar-float-inset\);/);
+  assert.match(airyBlock, /--ds-sidebar-float-inset: 0\.75rem;/);
+  assert.match(styles, /\[data-sidebar-layout="floating"\] \{\s*--ds-app-sidebar-inset: var\(--ds-sidebar-float-inset\);/);
+  assert.match(styles, /\[data-sidebar-layout="flush"\] \{\s*--ds-app-sidebar-inset: 0px;\s*--ds-app-sidebar-radius: 0px;/);
+  assert.ok(
+    styles.indexOf('[data-sidebar-layout="flush"] {') > styles.indexOf('[data-mood="airy"] {'),
+    "the flush layout must follow the mood blocks so it wins on the same element",
+  );
+  assert.match(styles, /\[data-sidebar-variant="brand"\],\n:is\(:root\[data-mood="balanced"\][^{]*\[data-sidebar-variant="auto"\] \{\s*--sidebar-canvas: var\(--palette-burgundy\);/);
+  // The balanced fill must not reach airy, whose auto active item is the solid pill.
+  assert.match(styles, /\n\[data-mood="balanced"\] \[data-sidebar-active="auto"\][^{]*\{\s*--sidebar-active-background: rgb\(255 255 255 \/ 14%\);/);
+  // Solid active items invert the sidebar, so they read on every variant.
+  assert.match(styles, /\[data-sidebar-active="solid"\] :is\([^)]*\) \{\s*--sidebar-active-background: var\(--sidebar-primary-text\);\s*--sidebar-active-foreground: var\(--sidebar-canvas\);/);
+  // Burgundy on the white active pill and white on burgundy both clear AA.
+  assert.ok(contrastRatio("1e0721", "ffffff") >= 4.5);
+
+  // Toned metric tiles keep supporting text above AA on every pale tint.
+  for (const tint of ["ffe8e9", "d8eeeb", "d9ddff"]) {
+    assert.ok(contrastRatio(textSupporting, tint) >= 4.5, `text-supporting on #${tint} needs 4.5:1`);
+  }
+});
+
 test("brand chrome and supergraphic stay token-backed", () => {
   const styles = read("../../../src/foundation/styles.css");
-  const chrome = styles.match(/\[data-chrome="brand"\] \{([^}]*)\}/)?.[1];
+  const chrome = styles.match(/\[data-chrome="brand"\],?[^{]*\{([^}]*)\}/)?.[1];
   assert.ok(chrome, "brand chrome scope should exist");
   for (const token of ["--canvas: var(--palette-burgundy);", "--text-primary: #ffffff;", "--focus: #7f8fff;", "--surface-control:"]) {
     assert.ok(chrome.includes(token), `brand chrome should set ${token}`);
   }
-  assert.match(styles, /\[data-sidebar-variant="brand"\] \{[^}]*--sidebar-canvas: var\(--palette-burgundy\);/);
+  assert.match(styles, /\[data-sidebar-variant="brand"\],?[^{]*\{[^}]*--sidebar-canvas: var\(--palette-burgundy\);/);
   const supergraphic = styles.match(/@utility ds-supergraphic \{([\s\S]*?)\n\}/)?.[1];
   assert.ok(supergraphic, "ds-supergraphic utility should exist");
   assert.match(supergraphic, /background-color: var\(--ds-supergraphic-color\);/);

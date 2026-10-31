@@ -1,6 +1,6 @@
 # Conscia Design System
 
-> Agent-oriented index for @conscia-labs/design-system 1.6.1.
+> Agent-oriented index for @conscia-labs/design-system 1.7.0.
 
 - Live playground: https://conscia-labs.github.io/design-system/
 - Agent guide: https://conscia-labs.github.io/design-system/agent-guide.md
@@ -16,6 +16,7 @@ in the application.
 ## Component families
 
 - Preferences and utilities (Foundation): Appearance, density, root preference helpers, and class composition. https://conscia-labs.github.io/design-system/foundation/ Exports: applyConsciaPreferences, appearanceOptions, appearanceStorageKey, cn, densityOptions, densityStorageKey, getConsciaPreferenceBootstrapScript.
+- Moods (Foundation): Balanced and airy presets that open up spacing, corners, and type for overview and onboarding screens. https://conscia-labs.github.io/design-system/moods/ Exports: moodOptions, moodProps.
 - Alert (Primitive): Persistent semantic messages and announcements. https://conscia-labs.github.io/design-system/components/alert/ Exports: Alert, AlertDescription, AlertTitle, alertVariants.
 - Alert dialog (Primitive): Confirmation for consequential actions. https://conscia-labs.github.io/design-system/components/alert-dialog/ Exports: AlertDialog, AlertDialogAction, AlertDialogBody, AlertDialogCancel, AlertDialogClose, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, AlertDialogPortal, AlertDialogTitle, AlertDialogTrigger.
 - Avatar (Primitive): People, identities, and compact groups. https://conscia-labs.github.io/design-system/components/avatar/ Exports: Avatar, AvatarFallback, AvatarImage, AvatarGroup.

@@ -52,6 +52,13 @@ type MetricCardBaseProps = React.ComponentProps<"section"> & {
   trend?: React.ReactNode;
   status?: React.ReactNode;
   emphasis?: "primary" | "supporting";
+  /**
+   * Pale brand fill for headline tiles on overview pages: `highlight` is the
+   * brand peach, `supporting` the pale green, `accent` the pale electric
+   * blue, and `muted` a neutral tint. Toned tiles drop their border. Use at
+   * most one row of them, and keep status in badges and trends.
+   */
+  tone?: "default" | "highlight" | "supporting" | "accent" | "muted";
   loading?: boolean;
   /**
    * Counts a numeric `value` up on first render and between updates. Pass
@@ -74,6 +81,7 @@ function MetricCard({
   trend,
   status,
   emphasis = "supporting",
+  tone = "default",
   loading = false,
   countUp = false,
   visualization,
@@ -87,10 +95,16 @@ function MetricCard({
     <section
       data-slot="metric-card"
       data-emphasis={emphasis}
+      data-tone={tone}
       aria-labelledby={labelId}
       className={cn(
         "flex min-w-0 flex-col overflow-hidden rounded-[var(--ds-radius-surface)] border border-border-default bg-surface text-text-primary shadow-[var(--ds-shadow-raised)]",
         emphasis === "primary" ? "min-h-80 border-t-2 border-t-brand-accent" : "min-h-40",
+        tone !== "default" && "border-transparent shadow-none",
+        tone === "highlight" && "bg-highlight-background",
+        tone === "supporting" && "bg-brand-supporting-background",
+        tone === "accent" && "bg-tint-accent",
+        tone === "muted" && "bg-surface-muted",
         className,
       )}
       {...props}

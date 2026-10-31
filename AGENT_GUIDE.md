@@ -58,6 +58,17 @@ Set shared preferences on the document root:
 Supported appearance values are `light`, `dark`, and `system`. Supported
 density values are `comfortable`, `compact`, and `operational`.
 
+Optional `data-mood` values are `balanced` and `airy` (no attribute is the
+current bordered look). Set a mood on the root or on a subtree that also sets
+`bg-canvas`; `moodProps(mood)` returns the attribute. On the root, a mood
+also restyles the sidebar through three independent options, each following
+the mood while left at `auto`: `AppShell sidebarLayout` (`auto`, `flush`,
+`floating`), `AppSidebar variant` (`auto`, `light`, `dark`, `brand`), and
+`AppSidebar activeStyle` (`auto`, `tint`, `solid`). Set them explicitly when
+an application needs a fixed sidebar. For a full-height floating sidebar, use
+`headerLayout="split"`, put the brand in `AppSidebarHeader`, and use
+`TopBar variant="plain"` or no header (see `docs/shell-navigation.md`).
+
 ## Non-negotiable boundaries
 
 - Do not copy design-system components into the application.
@@ -152,6 +163,11 @@ playground route for each family.
 - Use `ConfirmationDialog` or `AlertDialog` only for consequential decisions.
 - Use `operational` density for information-heavy administration, inventory,
   and workspace surfaces. Keep `comfortable` for general-purpose product UI.
+- Use `data-mood="balanced"` as an app-wide default when a product should feel
+  less boxed in. Use `data-mood="airy"` for overview, onboarding, empty-state,
+  and short settings pages, never for the workbench, logs, or long tables.
+- Use `MetricCard tone` (`highlight`, `supporting`, `accent`, `muted`) for at
+  most one row of headline tiles. Status stays in badges and trends.
 
 ## Composition examples
 
