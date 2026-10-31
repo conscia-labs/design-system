@@ -103,7 +103,13 @@ type AppShellContextValue = {
 
 type AppShellProps = React.ComponentProps<"div"> & {
   defaultSidebarOpen?: boolean;
-  headerLayout?: "split" | "integrated";
+  /**
+   * `integrated` runs one header across the top with the sidebar below it.
+   * `split` runs the sidebar the full height of the window, with the brand
+   * in its header, and puts the header in the content column. `auto` is
+   * integrated without a mood and split under balanced or airy.
+   */
+  headerLayout?: "auto" | "split" | "integrated";
   /**
    * `auto` follows the mood: flush without one, a floating rounded panel
    * under balanced or airy. `flush` and `floating` hold in every mood, so
@@ -825,17 +831,46 @@ type AppHeaderProps = React.ComponentProps<"header"> & {
    * inside it to light-on-burgundy. Pair it with `AppSidebar variant="brand"`.
    */
   tone?: "default" | "brand";
+  /**
+   * `bar` is the bordered, frosted strip. `transparent` sits on the canvas
+   * with no fill or border until content scrolls under it. `auto` is a bar
+   * in an integrated shell and transparent in a split one.
+   */
+  variant?: "auto" | "bar" | "transparent";
 };
 
+function subscribeToWindowScroll(onStoreChange: () => void) {
+  window.addEventListener("scroll", onStoreChange, { passive: true });
+  return () => window.removeEventListener("scroll", onStoreChange);
+}
+
+function useWindowScrolled() {
+  return React.useSyncExternalStore(
+    subscribeToWindowScroll,
+    () => window.scrollY > 0,
+    () => false,
+  );
+}
+
+/*
+ * Inside MainRegion of a split shell the header is sticky in the content
+ * column instead of fixed across the window; styles.css places it and draws
+ * its scrolled band from data-scrolled.
+ */
 function AppHeader({
   className,
   tone = "default",
+  variant = "auto",
   ...props
 }: AppHeaderProps) {
+  const scrolled = useWindowScrolled();
+
   return (
     <header
       data-slot="app-header"
       data-tone={tone}
+      data-variant={variant}
+      data-scrolled={scrolled ? "true" : undefined}
       data-chrome={tone === "brand" ? "brand" : undefined}
       className={cn(
         "fixed inset-x-0 top-0 z-30 flex h-[var(--ds-topbar-height)] min-h-[var(--ds-topbar-height)] items-center gap-2 border-b border-border-subtle bg-canvas/96 px-[var(--ds-topbar-padding-x)] backdrop-blur supports-[backdrop-filter]:bg-canvas/88 md:gap-3 md:px-[var(--ds-topbar-padding-x-wide)]",
@@ -843,6 +878,116 @@ function AppHeader({
       )}
       {...props}
     />
+  );
+}
+
+/**
+ * The brand in the header. It shows in an integrated shell, and in a split
+ * shell only while the sidebar is a drawer, so the brand appears once.
+ */
+function AppHeaderBrand({
+  className,
+  ...props
+}: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="app-header-brand"
+      className={cn("flex min-w-0 shrink-0 items-center gap-2", className)}
+      {...props}
+    />
+  );
+}
+
+function usePageTitleScrolledAway(ref: React.RefObject<HTMLElement | null>, key: unknown) {
+  const [scrolledAway, setScrolledAway] = React.useState(false);
+
+  React.useEffect(() => {
+    const element = ref.current;
+
+    if (!element) {
+      return;
+    }
+
+    let frame = 0;
+    const measure = () => {
+      frame = 0;
+      const region = element.closest('[data-slot="main-region"]') ?? document;
+      const heading = region.querySelector('[data-slot="page-header"] :is(h1, h2), h1');
+      const header = element.closest('[data-slot="app-header"]');
+
+      if (!heading || !header) {
+        setScrolledAway(false);
+        return;
+      }
+
+      setScrolledAway(
+        heading.getBoundingClientRect().bottom <= header.getBoundingClientRect().bottom,
+      );
+    };
+    const schedule = () => {
+      if (!frame) {
+        frame = window.requestAnimationFrame(measure);
+      }
+    };
+
+    measure();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+    };
+  }, [ref, key]);
+
+  return scrolledAway;
+}
+
+type AppHeaderTitleProps = Omit<React.ComponentProps<"div">, "title"> & {
+  /** The page title, shown once the page's own heading scrolls under the header. */
+  title: React.ReactNode;
+};
+
+/**
+ * Shows its children, such as breadcrumbs, while the page heading is in
+ * view, and the page title once the heading scrolls under the header.
+ */
+function AppHeaderTitle({
+  title,
+  children,
+  className,
+  ...props
+}: AppHeaderTitleProps) {
+  const ref = React.useRef<HTMLDivElement | null>(null);
+  const titleVisible = usePageTitleScrolledAway(ref, title);
+
+  return (
+    <div
+      ref={ref}
+      data-slot="app-header-title"
+      data-title-visible={titleVisible ? "true" : undefined}
+      className={cn(
+        "group/header-title grid min-w-0 flex-1 items-center [&>*]:col-start-1 [&>*]:row-start-1",
+        className,
+      )}
+      {...props}
+    >
+      <div
+        inert={titleVisible}
+        aria-hidden={titleVisible || undefined}
+        className="ds-type-ui flex min-w-0 items-center gap-2 text-text-supporting transition-[opacity,translate] duration-200 group-data-[title-visible=true]/header-title:-translate-y-1.5 group-data-[title-visible=true]/header-title:opacity-0"
+      >
+        {children}
+      </div>
+      {/* The page heading already names the page for assistive technology. */}
+      <div
+        aria-hidden="true"
+        className="ds-type-ui pointer-events-none min-w-0 translate-y-1.5 truncate font-semibold text-text-primary opacity-0 transition-[opacity,translate] duration-200 group-data-[title-visible=true]/header-title:translate-y-0 group-data-[title-visible=true]/header-title:opacity-100"
+      >
+        {title}
+      </div>
+    </div>
   );
 }
 
@@ -898,7 +1043,8 @@ type TopBarProps = React.ComponentProps<"header"> & {
   /**
    * `bar` is the bordered, frosted strip. `plain` drops the border and blur
    * so the bar sits on the canvas, for split shells whose brand lives in the
-   * sidebar header, such as beside a floating sidebar.
+   * sidebar header, such as beside a floating sidebar. New split shells can
+   * put AppHeader inside MainRegion instead, which adds the scrolled band.
    */
   variant?: "bar" | "plain";
 };
@@ -995,8 +1141,10 @@ function InspectorRegion({
 export {
   AppHeader,
   AppHeaderActions,
+  AppHeaderBrand,
   AppHeaderSearch,
   AppHeaderStart,
+  AppHeaderTitle,
   AppShell,
   AppSidebar,
   AppSidebarContent,
@@ -1022,6 +1170,7 @@ export {
 export type {
   AppHeaderProps,
   AppHeaderSearchProps,
+  AppHeaderTitleProps,
   AppShellProps,
   NavigationItemProps,
   NavigationSubItemProps,

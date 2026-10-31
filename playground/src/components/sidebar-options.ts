@@ -3,16 +3,17 @@
 import { useSyncExternalStore } from "react";
 
 /*
- * Sidebar props for the playground shell. The Moods page changes them to
+ * Shell and sidebar props for the playground shell. The Moods page changes them to
  * preview each combination, and resets them when it unmounts.
  */
 export type SidebarOptions = {
   variant: "auto" | "light" | "dark" | "brand";
   activeStyle: "auto" | "tint" | "solid";
   layout: "auto" | "flush" | "floating";
+  headerLayout: "auto" | "integrated" | "split";
 };
 
-export const defaultSidebarOptions: SidebarOptions = { variant: "auto", activeStyle: "auto", layout: "auto" };
+export const defaultSidebarOptions: SidebarOptions = { variant: "auto", activeStyle: "auto", layout: "auto", headerLayout: "auto" };
 
 let options = defaultSidebarOptions;
 const listeners = new Set<() => void>();

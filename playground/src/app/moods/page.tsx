@@ -49,9 +49,9 @@ const moodLabels: Record<ConsciaMood, string> = {
 };
 
 const moodNotes: Record<ConsciaMood, string> = {
-  current: "No attribute. Bordered white cards on a grey canvas, uppercase labels. With the sidebar options at Auto, the sidebar stays flush.",
-  balanced: "data-mood=\"balanced\". Borderless cards, rounder corners, pill badges, larger titles and light metric values. The sidebar turns burgundy and floats.",
-  airy: "data-mood=\"airy\". Everything in Balanced, plus pill buttons, filled fields, taller rows, more space between sections and a white pill for the active sidebar item.",
+  current: "No attribute. Bordered white cards on a grey canvas, uppercase labels. With the shell options at Auto, the header runs across the top and the sidebar stays flush below it.",
+  balanced: "data-mood=\"balanced\". Borderless cards, rounder corners, pill badges, larger titles and light metric values. The sidebar turns burgundy, floats, and runs the full height with the brand at its top; the header turns transparent until you scroll.",
+  airy: "data-mood=\"airy\". Everything in Balanced, plus pill buttons, filled fields, taller rows, more space between sections, a white pill for the active sidebar item, and a header that floats as a pill once you scroll.",
 };
 
 const experiences = [
@@ -62,6 +62,7 @@ const experiences = [
 ] as const;
 
 const sidebarControls = [
+  { key: "headerLayout", label: "Header", prop: "AppShell headerLayout", options: ["auto", "integrated", "split"] },
   { key: "layout", label: "Layout", prop: "AppShell sidebarLayout", options: ["auto", "flush", "floating"] },
   { key: "variant", label: "Colour", prop: "AppSidebar variant", options: ["auto", "light", "dark", "brand"] },
   { key: "activeStyle", label: "Active item", prop: "AppSidebar activeStyle", options: ["auto", "tint", "solid"] },
@@ -112,8 +113,8 @@ export default function MoodsPage() {
       <p className="ds-type-ui text-text-supporting" aria-live="polite">{moodNotes[mood]}</p>
 
       <ExampleSection
-        title="Sidebar options"
-        description="Each option follows the mood while it is Auto. Set one explicitly and it holds in every mood, so each application can build its own sidebar."
+        title="Shell options"
+        description="Each option follows the mood while it is Auto. Set one explicitly and it holds in every mood, so each application can build its own shell. Scroll the page to see the header's scrolled state."
       >
         <div className="flex flex-wrap gap-x-8 gap-y-4">
           {sidebarControls.map((control) => (

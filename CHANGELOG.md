@@ -1,5 +1,130 @@
 # Changelog
 
+## 1.7.2 - 2026-10-31
+
+A header that follows the mood. Under balanced or airy, the sidebar can run
+the full height of the window with the brand at its top, and the header
+becomes a transparent row in the content column that holds search,
+notifications, help, and the account menu. Everything is opt-in: products
+that keep their current `headerLayout` render as in 1.7.1, apart from one
+sizing change under "Upgrading from 1.7.1".
+
+### Upgrading from 1.7.1
+
+No code changes are required.
+
+- Under balanced or airy, the `AppSidebarHeader` of a `split` shell is now
+  as tall as the header beside it (`--ds-app-header-height` minus the sidebar
+  inset), so the brand lines up with the header row. Without a mood nothing
+  changes.
+
+### Adopting the mood-following header
+
+1. Set `headerLayout="auto"` on `AppShell`. Without a mood it renders the
+   same as `integrated`, so nothing moves until a mood is set.
+2. Move `AppHeader` inside `MainRegion`, as its first child. In an
+   integrated shell it stays fixed across the window; in a split one it
+   becomes sticky in the content column.
+3. Put the brand in both places: in `AppSidebarHeader`, and wrapped in the
+   new `AppHeaderBrand` inside `AppHeaderStart`. Each shows only where it
+   belongs.
+4. Optionally wrap breadcrumbs in the new `AppHeaderTitle title="…"`.
+
+```tsx
+<AppShell headerLayout="auto">
+  <AppSidebar>
+    <AppSidebarHeader>{/* brand, workspace switcher */}</AppSidebarHeader>
+    <AppSidebarContent>{/* SidebarNavigation */}</AppSidebarContent>
+  </AppSidebar>
+  <MainRegion>
+    <AppHeader>
+      <AppHeaderStart>
+        <SidebarTrigger />
+        <AppHeaderBrand>{/* brand */}</AppHeaderBrand>
+        <AppHeaderTitle title="Sources">{/* breadcrumbs */}</AppHeaderTitle>
+      </AppHeaderStart>
+      <AppHeaderSearch mobileTrigger={/* search icon */}>{/* search */}</AppHeaderSearch>
+      <AppHeaderActions>{/* help, notifications, account */}</AppHeaderActions>
+    </AppHeader>
+    <PageFrame>{/* page */}</PageFrame>
+  </MainRegion>
+</AppShell>
+```
+
+What each part does in each layout:
+
+| Part | Integrated (no mood) | Split (balanced, airy) |
+| --- | --- | --- |
+| `AppHeader` | Fixed across the window, bordered bar | Sticky in the content column, transparent until the page scrolls |
+| `AppSidebarHeader` | Hidden on desktop; shown in the mobile drawer | Top of the full-height sidebar |
+| `AppHeaderBrand` | Shown | Shown only below `lg`, while the sidebar is a drawer |
+| `AppHeaderTitle` | Shows its children | Shows its children, then the page title once the page heading scrolls under the header |
+
+`auto` resolves in CSS from the nearest `data-mood`, so the layout is right on
+first paint and never flashes on hydration. Put the mood on the root so the
+whole shell follows it.
+
+### Scrolled header
+
+A transparent header draws a band once the window scrolls, and
+`AppHeader` sets `data-scrolled="true"` while it does. The mood decides the
+look:
+
+- **Current and balanced:** a frosted band across the content column with a
+  hairline below it.
+- **Airy:** a floating pill, inset from the column edges and the header's top
+  and bottom, with a soft shadow.
+
+The band is drawn behind the controls, so it never moves the page. Inside a
+split shell the header lines up with `--ds-frame-padding-x`; set that variable
+on the header if your pages use different padding:
+
+```tsx
+<AppHeader className="[--ds-frame-padding-x:1.5rem]">
+```
+
+### New API
+
+- `AppShell headerLayout` adds `"auto"` (integrated without a mood, split
+  under balanced or airy). `"split"` stays the default, and `"integrated"`
+  and `"split"` hold in every mood.
+- `AppHeader variant`: `"auto" | "bar" | "transparent"`, rendered as
+  `data-variant`. `auto` (the default) is a bar where integrated and
+  transparent inside `MainRegion` of a split shell. `tone="brand"` still
+  applies to the bar.
+- `AppHeader` sets `data-scrolled="true"` while the window is scrolled.
+- `AppHeader` placed directly inside `MainRegion` of a split shell (`split`,
+  or `auto` under a mood) is sticky, `--ds-app-header-height` tall, and
+  padded by `--ds-frame-padding-x`.
+- `AppHeaderBrand`: the brand in the header, hidden on desktop wherever the
+  sidebar runs full height.
+- `AppHeaderTitle` (`title` prop, plus children): shows its children while
+  the page heading is in view, then the title. The page heading is the first
+  heading in a `PageHeader` inside `MainRegion`, or the first `h1`. Hidden
+  children are made inert, so breadcrumb links leave the tab order.
+- `TopBar` is unchanged. For new split shells, prefer `AppHeader` inside
+  `MainRegion`, which adds the scrolled state.
+
+### New tokens
+
+| Token | Default | Balanced | Airy |
+| --- | --- | --- | --- |
+| `--ds-app-header-height` | `var(--ds-topbar-height)` (3.5rem) | 4rem | 4.5rem |
+| `--ds-app-header-scrolled-gutter` | `100vw` (band reaches both edges) | | 1rem |
+| `--ds-app-header-scrolled-inset-y` | `0px` | | 0.5rem |
+| `--ds-app-header-scrolled-radius` | `0px` | | `999px` |
+| `--ds-app-header-scrolled-background` | unset (canvas at 88%) | | surface at 92% |
+| `--ds-app-header-scrolled-shadow` | unset (hairline) | | soft shadow |
+
+### Playground
+
+- The playground shell uses `headerLayout="auto"`: every page looks as
+  before, and the Moods page switches it to split. The Moods page's
+  "Shell options" now include `AppShell headerLayout`.
+- The Floating workspace example uses `AppHeader` inside `MainRegion` with
+  `AppHeaderBrand` and `AppHeaderTitle`. Its header option is now none,
+  transparent, or bar.
+
 ## 1.7.1 - 2026-10-31
 
 First published release with moods. 1.7.0 was tagged but never published:

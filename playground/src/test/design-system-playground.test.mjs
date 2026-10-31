@@ -811,14 +811,38 @@ test("shared sidebar navigation supports collapsed flyouts without owning routes
   assert.doesNotMatch(navigation, /next\/link/);
   assert.doesNotMatch(navigation, /usePathname/);
   assert.match(playgroundShell, /<SidebarNavigation/);
-  assert.match(playgroundShell, /headerLayout="integrated"/);
+  // The shell follows the mood: integrated by default, split while the Moods page sets one.
+  assert.match(playgroundShell, /headerLayout=\{sidebar\.headerLayout\}/);
+  assert.match(playgroundShell, /<AppHeaderBrand>/);
   assert.match(playgroundShell, /type: "group"/);
   assert.match(playgroundShell, /label: "Reference examples"/);
   // The Moods page can change the sidebar props; the default is the quiet auto sidebar.
   const sidebarOptions = read("../components/sidebar-options.ts");
   assert.match(playgroundShell, /<AppSidebar\s+variant=\{sidebar\.variant\}/);
   assert.match(playgroundShell, /treatment=\{sidebar\.variant === "auto" \? "quiet" : undefined\}/);
-  assert.match(sidebarOptions, /defaultSidebarOptions: SidebarOptions = \{ variant: "auto", activeStyle: "auto", layout: "auto" \}/);
+  assert.match(sidebarOptions, /defaultSidebarOptions: SidebarOptions = \{ variant: "auto", activeStyle: "auto", layout: "auto", headerLayout: "auto" \}/);
+});
+
+test("app header follows the shell: integrated bar, or a transparent sticky header beside a full-height sidebar", () => {
+  const shell = read("../../../src/patterns/app-shell.tsx");
+  const styles = read("../../../src/foundation/styles.css");
+
+  assert.match(shell, /headerLayout\?: "auto" \| "split" \| "integrated"/);
+  assert.match(shell, /variant\?: "auto" \| "bar" \| "transparent"/);
+  assert.match(shell, /data-scrolled=\{scrolled \? "true" : undefined\}/);
+  assert.match(shell, /data-slot="app-header-brand"/);
+  assert.match(shell, /data-slot="app-header-title"/);
+  // Auto resolves in CSS from the mood, so it never flashes the wrong layout on hydration.
+  assert.match(styles, /\[data-header-layout="auto"\] \[data-slot="main-region"\] \{\n  padding-top: var\(--ds-topbar-height\);/);
+  assert.match(styles, /\[data-header-layout="split"\], :is\(\[data-mood="balanced"\], \[data-mood="airy"\]\) \[data-header-layout="auto"\]\) \[data-slot="main-region"\] > \[data-slot="app-header"\] \{\n  position: sticky;/);
+  assert.match(styles, /\[data-slot="app-header"\]\[data-variant="transparent"\]\[data-scrolled="true"\]::before/);
+  assert.match(styles, /--ds-app-header-height: 4\.5rem;/);
+  assert.match(styles, /--ds-app-header-scrolled-radius: 999px;/);
+
+  const example = read("../app/examples/floating-workspace/page.tsx");
+  assert.match(example, /<AppHeader variant=\{header\}>/);
+  assert.match(example, /<AppHeaderTitle title=\{activeLabel\}/);
+  assert.doesNotMatch(example, /<TopBar/);
 });
 
 test("app shell uses render composition and tracks sidebar overflow affordances", () => {

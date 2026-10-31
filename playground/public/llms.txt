@@ -1,6 +1,6 @@
 # Conscia Design System
 
-> Agent-oriented index for @conscia-labs/design-system 1.7.1.
+> Agent-oriented index for @conscia-labs/design-system 1.7.2.
 
 - Live playground: https://conscia-labs.github.io/design-system/
 - Agent guide: https://conscia-labs.github.io/design-system/agent-guide.md
@@ -30,7 +30,7 @@ in the application.
 - Stepper (Primitive): Progress through wizards and multi-step dialogs. https://conscia-labs.github.io/design-system/components/stepper/ Exports: Stepper.
 - Table (Primitive): Semantic tabular anatomy for bounded datasets. https://conscia-labs.github.io/design-system/components/table/ Exports: Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow.
 - Supporting primitives (Primitive): Filters, loading, separators, shortcuts, and toast feedback. https://conscia-labs.github.io/design-system/components/supporting-primitives/ Exports: FilterChip, Separator, ShortcutHint, Skeleton, Spinner, Toast, ToastAction, ToastClose, ToastContent, ToastDescription, ToastProvider, ToastTitle, ToastViewport, useToast.
-- Application shell (Pattern): Integrated and split application chrome with an optional quiet sidebar treatment. https://conscia-labs.github.io/design-system/components/application-shell/ Exports: AppHeader, AppHeaderActions, AppHeaderSearch, AppHeaderStart, AppShell, AppSidebar, AppSidebarContent, AppSidebarFooter, AppSidebarHeader, InspectorRegion, MainRegion, PageBoundary, PageContent, PageFrame, ProductIdentity, SidebarSeparator, SidebarSearch, SidebarTrigger, TopBar, useAppShell.
+- Application shell (Pattern): Integrated, split, and mood-following application chrome with an optional quiet sidebar treatment. https://conscia-labs.github.io/design-system/components/application-shell/ Exports: AppHeader, AppHeaderActions, AppHeaderBrand, AppHeaderSearch, AppHeaderStart, AppHeaderTitle, AppShell, AppSidebar, AppSidebarContent, AppSidebarFooter, AppSidebarHeader, InspectorRegion, MainRegion, PageBoundary, PageContent, PageFrame, ProductIdentity, SidebarSeparator, SidebarSearch, SidebarTrigger, TopBar, useAppShell.
 - Sidebar navigation (Pattern): Static groups, leaf routes, and explicit submenus. https://conscia-labs.github.io/design-system/components/sidebar-navigation/ Exports: NavigationGroup, NavigationItem, NavigationSubItem, NavigationSubList, SidebarNavigation.
 - Page composition (Pattern): Headers, toolbars, detail sections, and back links. https://conscia-labs.github.io/design-system/components/page-composition/ Exports: DetailBackLink, DetailSection, DetailSections, KeyValueItem, KeyValueList, PageHeader, PageToolbar, ResourceSummary.
 - Inventory and tables (Pattern): Responsive data-heavy resource collections. https://conscia-labs.github.io/design-system/components/inventory-and-tables/ Exports: DataTable, EntityTable, InventoryDesktop, InventoryMobile, InventorySurface, PaginationControls, paginationPageSizes.
