@@ -910,6 +910,12 @@
   border-color: transparent;
 }
 
+/* Under a mood the brand header sits flat on the sidebar: no rule, no glow. */
+:is([data-mood="balanced"], [data-mood="airy"]) [data-slot="app-sidebar-header"] {
+  border-bottom-color: transparent;
+  background-image: none;
+}
+
 :is([data-mood="balanced"], [data-mood="airy"]) [data-slot="navigation-group-label"] {
   text-transform: none;
   letter-spacing: 0;
