@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Plus, UserPlus } from "lucide-react";
 import {
   Badge,
@@ -34,22 +34,16 @@ import {
   Tabs,
   TabsList,
   TabsTrigger,
-  moodOptions,
   moodProps,
   type ConsciaMood,
 } from "@conscia-labs/design-system";
 
 import { ExampleSection, PlaygroundPage } from "@/components/page";
+import { playgroundMoodLabels, playgroundMoodOptions, setPlaygroundMood, usePlaygroundMood } from "@/components/playground-mood";
 import { defaultSidebarOptions, setSidebarOptions, useSidebarOptions, type SidebarOptions } from "@/components/sidebar-options";
 
-const moodLabels: Record<ConsciaMood, string> = {
-  current: "Current",
-  balanced: "Balanced",
-  airy: "Airy",
-};
-
 const moodNotes: Record<ConsciaMood, string> = {
-  current: "No attribute. Bordered white cards on a grey canvas, uppercase labels. With the shell options at Auto, the header runs across the top and the sidebar stays flush below it.",
+  current: "No attribute; the package calls it current. Bordered white cards on a grey canvas, uppercase labels. With the shell options at Auto, the header runs across the top and the sidebar stays flush below it.",
   balanced: "data-mood=\"balanced\". Borderless cards, rounder corners, pill badges, larger titles and light metric values. The sidebar turns burgundy, floats, and runs the full height with the brand at its top; the header turns transparent until you scroll.",
   airy: "data-mood=\"airy\". Everything in Balanced, plus pill buttons, filled fields, taller rows, more space between sections, a white pill for the active sidebar item, and a header that floats as a pill once you scroll.",
 };
@@ -77,19 +71,9 @@ function tilesFor(mood: ConsciaMood): Tone[] {
 }
 
 export default function MoodsPage() {
-  const [mood, setMood] = useState<ConsciaMood>("airy");
+  const mood = usePlaygroundMood();
   const sidebar = useSidebarOptions();
   const tones = tilesFor(mood);
-
-  // The mood goes on the root so the whole shell follows it, sidebar included.
-  useEffect(() => {
-    const root = document.documentElement;
-    if (mood === "current") delete root.dataset.mood;
-    else root.dataset.mood = mood;
-    return () => {
-      delete root.dataset.mood;
-    };
-  }, [mood]);
 
   // The sidebar options drive the playground shell's own props.
   useEffect(() => () => setSidebarOptions(defaultSidebarOptions), []);
@@ -97,13 +81,13 @@ export default function MoodsPage() {
   return (
     <PlaygroundPage
       title="Moods"
-      description="Density sets how much fits on a screen; mood sets how open it feels. Switching mood here sets data-mood on the root, so the whole playground follows it, sidebar included. The sidebar options below set the shell's props. Leaving the page resets both."
+      description="Density sets how much fits on a screen; mood sets how open it feels. Airy is the playground default. Switching mood here, or from Mood in the header, sets data-mood on the root and is remembered, so the whole playground follows it, sidebar included. Operational is the bordered look with no mood. The sidebar options below set the shell's props and reset when you leave the page."
       actions={
         <div className="flex flex-wrap items-center gap-2">
-          <Tabs variant="segmented" value={mood} onValueChange={(value) => setMood(value as ConsciaMood)}>
+          <Tabs variant="segmented" value={mood} onValueChange={(value) => setPlaygroundMood(value as ConsciaMood)}>
             <TabsList aria-label="Mood">
-              {moodOptions.map((option) => (
-                <TabsTrigger key={option} value={option}>{moodLabels[option]}</TabsTrigger>
+              {playgroundMoodOptions.map((option) => (
+                <TabsTrigger key={option} value={option}>{playgroundMoodLabels[option]}</TabsTrigger>
               ))}
             </TabsList>
           </Tabs>

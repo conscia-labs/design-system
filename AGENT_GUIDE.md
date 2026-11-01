@@ -238,14 +238,18 @@ it belongs:
 ```tsx
 <AppShell headerLayout="auto">
   <AppSidebar variant="auto">
-    <AppSidebarHeader>{productIdentity}</AppSidebarHeader>
+    <AppSidebarHeader>
+      <BrandLockup product="Beacon" render={<Link href="/" />} />
+    </AppSidebarHeader>
     <AppSidebarContent>{navigation}</AppSidebarContent>
   </AppSidebar>
   <MainRegion>
     <AppHeader>
       <AppHeaderStart>
         <SidebarTrigger />
-        <AppHeaderBrand>{productMark}</AppHeaderBrand>
+        <AppHeaderBrand>
+          <BrandLockup product="Beacon" render={<Link href="/" />} />
+        </AppHeaderBrand>
         <AppHeaderTitle title={pageTitle}>{breadcrumbs}</AppHeaderTitle>
       </AppHeaderStart>
       <AppHeaderSearch mobileTrigger={searchIconButton}>{globalSearch}</AppHeaderSearch>
@@ -255,6 +259,15 @@ it belongs:
   </MainRegion>
 </AppShell>
 ```
+
+Brand every Conscia app with `BrandLockup` rather than a hand-built icon and
+label: the mark, then "Conscia" in semibold and the product name in regular
+weight. Pass `product`, `href` or `render` for the home link, and optionally
+`size` (`sm` 24px, `md` 32px by default, `lg` 36px). Its colors follow the
+sidebar or header it sits in, a collapsed sidebar shows the mark alone and a
+phone header the mark and product name, and its link is named
+"Conscia <product>". It leaves the sidebar header glow alone; remove it in
+the app only if the product calls for that.
 
 Use the optional quiet sidebar treatment for lower-contrast product surfaces.
 It works with `variant="auto" | "light" | "dark"` and keeps appearance and

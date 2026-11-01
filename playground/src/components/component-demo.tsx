@@ -8,7 +8,7 @@ import {
   ActivityItem, ActivityList, Alert, AlertDescription, AlertDialog, AlertDialogAction,
   AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
   AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, AlertTitle, AppearanceControl,
-  AttentionItem, AttentionList, Avatar, AvatarFallback, AvatarGroup, Badge, BrandIcon, Eyebrow,
+  AttentionItem, AttentionList, Avatar, AvatarFallback, AvatarGroup, Badge, BrandIcon, BrandLockup, Eyebrow,
   BrandWordmark, Button, Card, CardContent, CardDescription, CardFooter, CardHeader,
   CardTitle, Checkbox, CodeBlock, Collapsible, CollapsibleContent, CollapsibleTrigger,
   ConsciaButton, DailyVolumeChart, DataPanel, DataPanelContent, DataPanelFooter, DataPanelHeader, DataTable,
@@ -56,7 +56,7 @@ function ComponentDemo({ slug }: { slug: string }) {
     case "badge":
       return <div className={`${surface} flex flex-wrap gap-2`}><Badge variant="accent">Featured</Badge><Badge variant="outline">Draft</Badge><Badge variant="information">Syncing</Badge><Badge variant="success">Available</Badge><Badge variant="warning">Limited</Badge><Badge variant="danger">Unavailable</Badge><Badge variant="neutral">Archived</Badge></div>;
     case "brand":
-      return <div className={`${surface} flex flex-wrap items-center gap-8`}><BrandIcon className="size-12 text-brand dark:text-white" aria-label="Conscia" /><BrandWordmark className="h-9 w-auto text-brand dark:text-white" aria-label="Conscia" /></div>;
+      return <div className="grid gap-4"><div className={`${surface} flex flex-wrap items-center gap-8`}><BrandIcon className="size-12 text-brand dark:text-white" aria-label="Conscia" /><BrandWordmark className="h-9 w-auto text-brand dark:text-white" aria-label="Conscia" /></div><div className={`${surface} grid gap-5`}>{(["sm", "md", "lg"] as const).map((size) => <BrandLockup key={size} product="Beacon" size={size} />)}</div><div className="grid gap-3 md:grid-cols-3">{(["light", "dark", "brand"] as const).map((variant) => <div key={variant} data-sidebar-variant={variant} className="flex h-14 min-w-0 items-center rounded-[var(--ds-radius-surface)] border border-sidebar-border bg-sidebar-header px-3"><BrandLockup product="AI Gateway" size="sm" /></div>)}</div></div>;
     case "button":
       return <div className={`${surface} flex flex-wrap items-center gap-2`}><Button>Primary</Button><Button variant="secondary">Secondary</Button><Button variant="outline">Outline</Button><Button variant="ghost">Ghost</Button><Button variant="destructive">Delete</Button><Button disabled>Save rule</Button><LoadingButton pending pendingLabel="Saving…">Save</LoadingButton><IconButton aria-label="Settings"><Settings /></IconButton></div>;
     case "card":

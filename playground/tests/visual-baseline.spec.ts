@@ -2,6 +2,8 @@ import { expect, test, type Page } from "@playwright/test";
 
 type Appearance = "light" | "dark";
 type Density = "comfortable" | "compact" | "operational";
+/** The playground mood: airy by default, "current" for the Operational look. */
+type Mood = "airy" | "current";
 
 const viewports = [
   { id: "desktop", width: 1440, height: 1100 },
@@ -30,13 +32,15 @@ async function setDeterministicPreferences(
   page: Page,
   appearance: Appearance,
   density: Density,
+  mood: Mood,
 ) {
-  await page.addInitScript(({ appearance: nextAppearance, density: nextDensity }) => {
+  await page.addInitScript(({ appearance: nextAppearance, density: nextDensity, mood: nextMood }) => {
     localStorage.setItem("conscia-appearance", nextAppearance);
     localStorage.setItem("conscia-density", nextDensity);
     localStorage.setItem("conscia-appearance:v1", nextAppearance);
     localStorage.setItem("conscia-density:v1", nextDensity);
-  }, { appearance, density });
+    localStorage.setItem("conscia-playground-mood:v1", nextMood);
+  }, { appearance, density, mood });
   await page.emulateMedia({ colorScheme: appearance });
 }
 
@@ -45,8 +49,9 @@ async function loadRoute(
   route: (typeof routes)[number],
   appearance: Appearance,
   density: Density,
+  mood: Mood = "airy",
 ) {
-  await setDeterministicPreferences(page, appearance, density);
+  await setDeterministicPreferences(page, appearance, density, mood);
   await page.goto(route.path);
   await expect(page.getByRole("heading", { name: route.heading, exact: true })).toBeVisible();
   await page.addStyleTag({
@@ -65,6 +70,11 @@ async function loadRoute(
   });
   await expect(page.locator("html")).toHaveAttribute("data-appearance", appearance);
   await expect(page.locator("html")).toHaveAttribute("data-density", density);
+  if (mood === "current") {
+    await expect(page.locator("html")).not.toHaveAttribute("data-mood", /.*/);
+  } else {
+    await expect(page.locator("html")).toHaveAttribute("data-mood", mood);
+  }
   if (appearance === "dark") {
     await expect(page.locator("html")).toHaveClass(/dark/);
   } else {
@@ -92,6 +102,20 @@ for (const route of routes) {
         });
       }
     }
+  }
+
+  // The Operational look (no mood) on every route, at one appearance and density.
+  for (const viewport of viewports) {
+    test(`visual baseline: ${route.id} / ${viewport.id} / operational mood`, async ({ page }) => {
+      await page.setViewportSize({ width: viewport.width, height: viewport.height });
+      await page.emulateMedia({ reducedMotion: "reduce" });
+      await loadRoute(page, route, "light", "comfortable", "current");
+
+      await expect(page).toHaveScreenshot(
+        `${route.id}-${viewport.id}-light-comfortable-operational-mood.png`,
+        { fullPage: true },
+      );
+    });
   }
 }
 
@@ -245,7 +269,8 @@ test.describe("interaction baseline", () => {
 
   test("integrated header and static sidebar navigation preserve desktop and mobile behavior", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 1100 });
-    await loadRoute(page, routes[0], "light", "comfortable");
+    // The integrated header is the Operational layout; moods split the shell.
+    await loadRoute(page, routes[0], "light", "comfortable", "current");
 
     await expect(page.locator('[data-slot="app-header"]')).toBeVisible();
     const shellGeometry = await page.evaluate(() => {

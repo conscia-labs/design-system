@@ -83,6 +83,8 @@ const checks = [
   ["quiet sidebar treatment", /--sidebar-active-background:var\(--selection-background\)/],
   ["compact metric rows", /grid-template-columns:repeat\(1,minmax\(0,1fr\)\)/],
   ["compact desktop metric columns", /grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/],
+  ["brand lockup mark color", /color:var\(--ds-lockup-mark\)/],
+  ["brand lockup sidebar tokens", /--ds-lockup-mark:var\(--sidebar-mark\)/],
 ];
 
 for (const [name, pattern] of checks) {

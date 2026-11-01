@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "package": "@conscia-labs/design-system",
-  "version": "1.7.3",
+  "version": "1.7.4",
   "guide": "./AGENT_GUIDE.md",
   "playground": "https://conscia-labs.github.io/design-system/",
   "componentFamilies": [
@@ -95,9 +95,10 @@
       "category": "Primitive",
       "family": "Brand",
       "slug": "brand",
-      "description": "Theme-aware Conscia identity marks.",
+      "description": "Theme-aware Conscia identity marks and the product lockup for app chrome.",
       "route": "/components/brand",
       "exports": [
+        "BrandLockup",
         "BrandIcon",
         "BrandWordmark"
       ]

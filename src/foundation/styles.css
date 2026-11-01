@@ -135,6 +135,8 @@
   --text-inverse: #ffffff;
   --text-link: var(--palette-electric-blue-dark);
   --brand: var(--palette-burgundy);
+  /* The Conscia mark: burgundy on light surfaces, white on dark ones and brand chrome. */
+  --brand-mark: var(--brand);
   --brand-foreground: #ffffff;
   --brand-accent: var(--palette-electric-blue);
   --brand-accent-foreground: #ffffff;
@@ -250,6 +252,7 @@
   --sidebar-group-count: color-mix(in oklab, #ffffff 62%, transparent);
   --sidebar-focus-ring: var(--focus);
   --sidebar-glow: color-mix(in oklab, var(--palette-electric-blue) 24%, transparent);
+  --sidebar-mark: var(--sidebar-primary-text);
   /* Faint brand wash for chrome backgrounds (page header, onboarding canvases). Never behind data. */
   --ds-texture-tint: color-mix(in oklab, var(--palette-burgundy) 6%, transparent);
   --ds-texture-mark: color-mix(in oklab, var(--palette-burgundy) 7%, transparent);
@@ -559,6 +562,7 @@
   --text-inverse: #1a171a;
   --text-link: #a9b4ff;
   --brand: var(--palette-burgundy);
+  --brand-mark: #ffffff;
   --brand-foreground: #ffffff;
   --brand-accent: #6b7cff;
   --brand-accent-foreground: #17191c;
@@ -656,6 +660,7 @@
   --sidebar-group-count: color-mix(in oklab, #ffffff 62%, transparent);
   --sidebar-focus-ring: var(--focus);
   --sidebar-glow: color-mix(in oklab, var(--palette-electric-blue) 22%, transparent);
+  --sidebar-mark: var(--sidebar-primary-text);
   --ds-texture-tint: color-mix(in oklab, var(--palette-electric-blue) 9%, transparent);
   --ds-texture-mark: color-mix(in oklab, var(--palette-electric-blue) 11%, transparent);
   --ds-supergraphic-color: color-mix(in oklab, var(--palette-electric-blue) 55%, transparent);
@@ -695,6 +700,8 @@
   --sidebar-group-count: var(--text-supporting);
   --sidebar-focus-ring: var(--focus);
   --sidebar-glow: var(--ds-texture-tint);
+  /* BrandLockup's mark follows the appearance here; dark and brand sidebars use their text color. */
+  --sidebar-mark: var(--brand-mark);
 }
 
 /*
@@ -724,6 +731,7 @@
   --sidebar-group-count: var(--text-supporting);
   --sidebar-focus-ring: var(--focus);
   --sidebar-glow: transparent;
+  --sidebar-mark: var(--brand-mark);
 }
 
 /*
@@ -742,6 +750,7 @@
   --surface-control: rgb(255 255 255 / 8%);
   --surface-control-hover: rgb(255 255 255 / 12%);
   --text-primary: #ffffff;
+  --brand-mark: #ffffff;
   --text-secondary: color-mix(in oklab, #ffffff 86%, transparent);
   --text-supporting: color-mix(in oklab, #ffffff 74%, transparent);
   --text-muted: color-mix(in oklab, #ffffff 66%, transparent);
@@ -781,6 +790,7 @@
   --sidebar-group-count: color-mix(in oklab, #ffffff 64%, transparent);
   --sidebar-focus-ring: #7f8fff;
   --sidebar-glow: color-mix(in oklab, var(--palette-electric-blue) 22%, transparent);
+  --sidebar-mark: var(--sidebar-primary-text);
 }
 
 /*
@@ -914,10 +924,9 @@
   border-color: transparent;
 }
 
-/* Under a mood the brand header sits flat on the sidebar: no rule, no glow. */
+/* Under a mood the brand header sits flat on the sidebar with no rule. The glow stays and fades out before the header ends. */
 :is([data-mood="balanced"], [data-mood="airy"]) [data-slot="app-sidebar-header"] {
   border-bottom-color: transparent;
-  background-image: none;
 }
 
 :is([data-mood="balanced"], [data-mood="airy"]) [data-slot="navigation-group-label"] {
@@ -982,6 +991,63 @@
   /* Beside a full-height sidebar the brand is already on screen. */
   :is([data-header-layout="split"], :is([data-mood="balanced"], [data-mood="airy"]) [data-header-layout="auto"]) [data-slot="app-header-brand"] {
     display: none;
+  }
+}
+
+/*
+ * BrandLockup colors: the header's text roles and --brand-mark, or inside a
+ * sidebar or its drawer, the sidebar's tokens.
+ */
+[data-slot="brand-lockup"] {
+  --ds-lockup-mark: var(--brand-mark);
+  --ds-lockup-name: var(--text-primary);
+  --ds-lockup-product: var(--text-supporting);
+  --ds-lockup-focus: var(--focus);
+}
+
+[data-sidebar-variant] [data-slot="brand-lockup"] {
+  --ds-lockup-mark: var(--sidebar-mark);
+  --ds-lockup-name: var(--sidebar-primary-text);
+  --ds-lockup-product: var(--sidebar-secondary-text);
+  --ds-lockup-focus: var(--sidebar-focus-ring);
+}
+
+/* Visually hidden, still named: the link keeps "Conscia <product>". */
+[data-sidebar-state="collapsed"] [data-slot="app-sidebar"] [data-slot="brand-lockup-text"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* A collapsed sidebar shows the mark alone, centred in the rail. */
+[data-sidebar-state="collapsed"] [data-slot="app-sidebar"] [data-slot="brand-lockup"] {
+  width: 100%;
+  justify-content: center;
+}
+
+[data-sidebar-state="collapsed"] [data-slot="app-sidebar"] [data-slot="brand-lockup-mark"] {
+  max-width: 2rem;
+  max-height: 2rem;
+}
+
+/* A phone header shows the mark and the product name. */
+@media (max-width: 39.99rem) {
+  [data-slot="app-header-brand"] [data-slot="brand-lockup-name"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  [data-slot="app-header-brand"] [data-slot="brand-lockup-product"] {
+    color: var(--ds-lockup-name);
   }
 }
 
@@ -1557,9 +1623,24 @@
     background-image: none;
   }
 
-  /* The sidebar header carries the brand mark; a soft glow sits behind it. */
+  /*
+   * The sidebar header carries the brand mark; a soft glow sits behind it.
+   * The ellipse is as tall as the header and eases to transparent, so the
+   * glow has faded out before the header's bottom edge and never ends in a
+   * visible line.
+   */
   [data-slot="app-sidebar-header"] {
-    background-image: radial-gradient(120% 180% at 0% 0%, var(--sidebar-glow, transparent), transparent 72%);
+    /* Paint once across the border box, so no repeat shows through the transparent mood border. */
+    background-origin: border-box;
+    background-repeat: no-repeat;
+    background-image: radial-gradient(
+      140% 100% at 0% 0%,
+      var(--sidebar-glow, transparent),
+      color-mix(in oklab, var(--sidebar-glow, transparent) 62%, transparent) 30%,
+      color-mix(in oklab, var(--sidebar-glow, transparent) 26%, transparent) 60%,
+      color-mix(in oklab, var(--sidebar-glow, transparent) 7%, transparent) 84%,
+      transparent
+    );
   }
 }
 

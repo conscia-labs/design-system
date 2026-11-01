@@ -1,5 +1,97 @@
 # Changelog
 
+## 1.7.4 - 2026-11-01
+
+Every Conscia app can now brand its shell with one shared **`BrandLockup`**
+instead of a hand-built icon and label, so Beacon, AI Gateway, Atlas and the
+playground show the same lockup. The sidebar header glow now fades out
+smoothly instead of ending in a line, and it is back under the balanced and
+airy moods.
+
+### Upgrading from 1.7.3
+
+The package has no breaking changes. Apps that do nothing look the same,
+apart from the sidebar header glow described under Changed. To adopt the
+lockup:
+
+- **Replace the hand-built brand in both places.** Put the lockup in
+  `AppSidebarHeader` and in `AppHeaderBrand`, with the same props:
+
+  ```tsx
+  <AppSidebarHeader>
+    <BrandLockup product="Beacon" render={<Link href="/" />} />
+  </AppSidebarHeader>
+  …
+  <AppHeaderBrand>
+    <BrandLockup product="Beacon" render={<Link href="/" />} />
+  </AppHeaderBrand>
+  ```
+
+  Use `href="/"` instead of `render` for a plain anchor.
+- **Pick the size you had.** Beacon `md` (the default: 32px mark, 16px text),
+  AI Gateway `lg` (36px, 18px), and smaller chrome `sm` (24px, 14px). The
+  Gateway's two-line lockup, "Conscia" over "AI GATEWAY", becomes one line,
+  "Conscia AI Gateway".
+- **Delete the app's own brand rules.** That means hiding the label in a
+  collapsed sidebar, hiding "Conscia" on phones, centring the mark, and
+  `text-*` colors on the mark or label. The lockup handles all of these
+  itself. Keep `aria-label` off the link: its own text already names it
+  "Conscia <product>".
+- **Decide on the glow.** The sidebar header glow is back under balanced and
+  airy (see Changed). To remove it, add `className="bg-none"` to
+  `AppSidebarHeader`; the glow is in the components layer, so the utility
+  wins. An app that already removes it, such as AI Gateway, needs no change.
+- **Replace visual snapshots** of the sidebar header, the header brand, and
+  the mobile drawer.
+
+### Added
+
+- **`BrandLockup`** (and `BrandLockupProps`): the Conscia mark, then
+  "Conscia" in semibold and the product name in regular weight, on one
+  baseline. Props: `product`, `href` or `render` for the home link (plain text
+  without either), and `size` (`sm` · `md` · `lg`). Colors come from the
+  sidebar tokens inside any sidebar or its drawer, in every variant (light,
+  dark, brand, auto) and mood, and from the header's text roles elsewhere,
+  including brand-tone headers. A collapsed sidebar shows the mark alone,
+  centred; a header narrower than 40rem shows the mark and the product name.
+  The mark is decorative, and the accessible name is "Conscia <product>" in
+  every state, because the hidden words stay in the accessibility tree.
+- **`--brand-mark`**: the Conscia mark's color, burgundy on light surfaces and
+  white in dark mode and brand chrome. For a standalone `BrandIcon` or
+  `BrandWordmark`, `className="text-(--brand-mark) dark:text-(--brand-mark)"`
+  replaces `text-brand dark:text-white` and also turns white in brand chrome.
+- **`--sidebar-mark`**: the mark's color in each sidebar variant. Light and
+  quiet sidebars follow `--brand-mark`; dark and brand sidebars use their
+  primary text color.
+
+### Changed
+
+- **The sidebar header glow fades out inside the header.** In 1.7.3 the glow
+  stopped part-way through its fade at the header's bottom edge, and under a
+  mood it repeated into the transparent 1px border as a bright line. It now
+  eases to fully transparent before the bottom edge, so it blends into the
+  sidebar with no visible boundary, and it is painted once across the border
+  box.
+- **The glow is back under balanced and airy.** 1.7.3 removed both the header
+  rule and the glow under a mood; now only the rule goes. Glow colors are
+  unchanged: electric blue on dark and brand sidebars, the faint burgundy tint
+  on light ones, none on quiet ones.
+
+### Playground
+
+- The brand in the sidebar and header is `BrandLockup`, and the Brand page
+  documents it with sizes, the light, dark and brand sidebars, and its
+  options.
+- **The playground opens in the airy mood.** Mood in the header and the
+  Moods page switch between Airy, Balanced and Operational. Operational is
+  the bordered look with no `data-mood`, which the package calls `current`.
+  The choice is remembered per browser. The package's own default is
+  unchanged: no mood until an app sets one.
+- Visual baselines cover airy across every route, appearance and density,
+  plus Operational on every route at desktop and mobile. Tests of the
+  Operational shell and sidebar, such as the integrated header and the quiet
+  sidebar, pin that mood explicitly.
+
 ## 1.7.3 - 2026-11-01
 
 The design system now ships and renders **Inter**. Until now `--font-sans`

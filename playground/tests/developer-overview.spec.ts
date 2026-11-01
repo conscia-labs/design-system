@@ -54,6 +54,8 @@ test("quiet sidebar keeps its semantic surface and selection roles in both appea
     await page.addInitScript((nextAppearance) => {
       localStorage.setItem("conscia-appearance", nextAppearance);
       localStorage.setItem("conscia-appearance:v1", nextAppearance);
+      // A mood turns the auto sidebar burgundy; the quiet treatment shows in Operational.
+      localStorage.setItem("conscia-playground-mood:v1", "current");
     }, appearance);
     await page.emulateMedia({ colorScheme: appearance });
     await page.goto("/developer-overview");

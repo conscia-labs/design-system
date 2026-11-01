@@ -53,6 +53,8 @@ import {
   type SidebarNavigationLinkProps,
 } from "@conscia-labs/design-system";
 
+import { applyMood, readPlaygroundMood } from "@/components/playground-mood";
+
 /*
  * A full-screen reference: a split shell whose brand lives in the sidebar
  * header, so the floating sidebar can run the full height of the window.
@@ -124,9 +126,7 @@ export default function FloatingWorkspacePage() {
   useEffect(() => {
     const root = document.documentElement;
     root.dataset.mood = mood;
-    return () => {
-      delete root.dataset.mood;
-    };
+    return () => applyMood(readPlaygroundMood());
   }, [mood]);
 
   const entries = useMemo<SidebarNavigationEntry[]>(

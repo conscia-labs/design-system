@@ -3,12 +3,12 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { BarChart3, BookOpen, Boxes, Component, ExternalLink, Gauge, LayoutDashboard, Monitor, Moon, PanelLeft, PanelsLeftBottom, Rows3, Search, Shapes, Sparkles, Sun, Type } from "lucide-react";
+import { BarChart3, BookOpen, Boxes, Blend, Component, ExternalLink, Gauge, LayoutDashboard, Monitor, Moon, PanelLeft, PanelsLeftBottom, Rows3, Search, Shapes, Sparkles, Sun, Type } from "lucide-react";
 
 import {
   AppHeader, AppHeaderActions, AppHeaderBrand, AppHeaderSearch, AppHeaderStart,
   AppShell as DesignAppShell, AppSidebar, AppSidebarContent, AppSidebarFooter, AppSidebarHeader,
-  AppearanceControl, Badge, BrandIcon, Button, CommandPalette,
+  AppearanceControl, Badge, BrandLockup, Button, CommandPalette, Tabs, TabsList, TabsTrigger, type ConsciaMood,
   DensityControl, DesignSystemPreferenceSync, useConsciaPreferences,
   Popover, PopoverContent, PopoverDescription, PopoverTitle, PopoverTrigger,
   IconButton, MainRegion, PageFrame, ShortcutHint, SidebarNavigation, SidebarTrigger,
@@ -16,6 +16,7 @@ import {
 } from "@conscia-labs/design-system";
 
 import { componentDocs } from "@/components/component-docs";
+import { playgroundMoodLabels, playgroundMoodOptions, setPlaygroundMood, usePlaygroundMood } from "@/components/playground-mood";
 import { useSidebarOptions } from "@/components/sidebar-options";
 
 const navEntries = [
@@ -59,6 +60,7 @@ export function AppShell({ children, version }: { children: ReactNode; version: 
   const router = useRouter();
   const [commandOpen, setCommandOpen] = useState(false);
   const { appearance, density } = useConsciaPreferences();
+  const mood = usePlaygroundMood();
   const sidebar = useSidebarOptions();
   const AppearanceIcon = appearance === "dark" ? Moon : appearance === "light" ? Sun : Monitor;
   useEffect(() => {
@@ -90,7 +92,7 @@ export function AppShell({ children, version }: { children: ReactNode; version: 
   if (pathname.startsWith("/examples/")) return <>{children}</>;
 
   return (
-    // Auto is integrated on most pages and split while the Moods page sets a mood.
+    // Auto follows the playground mood: split under airy (the default) and balanced, integrated under Operational.
     <DesignAppShell headerLayout={sidebar.headerLayout} sidebarLayout={sidebar.layout}>
       <DesignSystemPreferenceSync />
       <CommandPalette
@@ -109,10 +111,7 @@ export function AppShell({ children, version }: { children: ReactNode; version: 
       >
         {sidebar.headerLayout === "integrated" ? null : (
           <AppSidebarHeader>
-            <Link href="/" className="flex min-w-0 items-center gap-2 px-1 text-sidebar-primary-text" aria-label="Conscia Design System home">
-              <BrandIcon aria-hidden="true" className="size-6 shrink-0" />
-              <span className="truncate text-sm font-semibold group-data-[sidebar-state=collapsed]/shell:hidden">Conscia <span className="font-normal text-sidebar-metadata-text">Design System</span></span>
-            </Link>
+            <BrandLockup product="Design System" size="sm" render={<Link href="/" />} />
           </AppSidebarHeader>
         )}
         <AppSidebarContent className="playground-navigation">
@@ -130,11 +129,7 @@ export function AppShell({ children, version }: { children: ReactNode; version: 
           <AppHeaderStart>
             <SidebarTrigger aria-label="Toggle navigation" />
             <AppHeaderBrand>
-              <Link href="/" className="flex min-w-0 shrink-0 items-center gap-2 text-brand dark:text-white" aria-label="Conscia Design System home">
-                <BrandIcon aria-hidden="true" className="size-6" />
-                <span className="hidden text-sm font-semibold sm:inline">Conscia</span>
-              </Link>
-              <span className="ds-type-ui hidden border-l pl-3 text-text-supporting lg:inline">Design System</span>
+              <BrandLockup product="Design System" size="sm" render={<Link href="/" />} />
             </AppHeaderBrand>
           </AppHeaderStart>
           <AppHeaderSearch mobileTrigger={
@@ -158,6 +153,22 @@ export function AppShell({ children, version }: { children: ReactNode; version: 
                 <PopoverTitle>Appearance</PopoverTitle>
                 <PopoverDescription className="mt-1 mb-4">Preview every component in light or dark mode.</PopoverDescription>
                 <AppearanceControl className="[&_legend]:sr-only" />
+              </PopoverContent>
+            </Popover>
+            <Popover>
+              <PopoverTrigger render={<Button variant="ghost" size="sm" aria-label={`Mood: ${playgroundMoodLabels[mood]}`} />}>
+                <Blend aria-hidden="true" /><span className="hidden xl:inline">Mood</span>
+              </PopoverTrigger>
+              <PopoverContent className="max-w-[calc(100vw-2rem)]">
+                <PopoverTitle>Mood</PopoverTitle>
+                <PopoverDescription className="mt-1 mb-4">Airy is the default. Operational is the bordered look for dense, working screens.</PopoverDescription>
+                <Tabs variant="segmented" value={mood} onValueChange={(value) => setPlaygroundMood(value as ConsciaMood)}>
+                  <TabsList aria-label="Mood">
+                    {playgroundMoodOptions.map((option) => (
+                      <TabsTrigger key={option} value={option}>{playgroundMoodLabels[option]}</TabsTrigger>
+                    ))}
+                  </TabsList>
+                </Tabs>
               </PopoverContent>
             </Popover>
             <Popover>

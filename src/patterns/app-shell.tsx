@@ -4,6 +4,7 @@ import * as React from "react";
 import { useRender } from "@base-ui/react/use-render";
 import { PanelLeftIcon, Search, X } from "lucide-react";
 
+import { BrandIcon } from "../primitives/brand-icon";
 import { Button, IconButton, type IconButtonProps } from "../primitives/button";
 import { Input } from "../primitives/input";
 import { ShortcutHint } from "../primitives/shortcut-hint";
@@ -470,6 +471,73 @@ function ProductIdentity({
       </div>
     </div>
   );
+}
+
+type BrandLockupProps = Omit<React.ComponentProps<"a">, "children" | "render"> & {
+  /** The product name set after "Conscia", such as "Beacon". */
+  product: string;
+  /** Links the lockup home. Without href or render it is plain text. */
+  href?: string;
+  /** Renders the home link through a router link, such as `<Link href="/" />`. */
+  render?: useRender.ComponentProps<"a">["render"];
+  /** sm is a 24px mark with 14px text, md 32px with 16px, lg 36px with 18px. */
+  size?: "sm" | "md" | "lg";
+};
+
+const brandLockupSizes = {
+  sm: { root: "gap-2 text-sm", mark: "size-6" },
+  md: { root: "gap-2.5 text-base", mark: "size-8" },
+  lg: { root: "gap-3 text-lg", mark: "size-9" },
+} as const;
+
+/**
+ * The Conscia lockup: the mark, then "Conscia" and the product name on one
+ * line. Put it in AppSidebarHeader and AppHeaderBrand. Its colors follow the
+ * sidebar or header around it, and styles.css reduces it to the mark in a
+ * collapsed sidebar and to the mark and product name in a phone header.
+ */
+function BrandLockup({
+  product,
+  href,
+  render,
+  size = "md",
+  className,
+  ...props
+}: BrandLockupProps) {
+  const sizes = brandLockupSizes[size];
+
+  return useRender({
+    defaultTagName: href || render ? "a" : "div",
+    render,
+    props: {
+      "data-slot": "brand-lockup",
+      "data-size": size,
+      href,
+      className: cn(
+        "relative flex min-w-0 shrink-0 items-center rounded-[var(--ds-radius-control)] leading-tight outline-none focus-visible:ring-[3px] focus-visible:ring-(--ds-lockup-focus)/50",
+        sizes.root,
+        className,
+      ),
+      ...props,
+      children: (
+        <>
+          <BrandIcon
+            data-slot="brand-lockup-mark"
+            className={cn(sizes.mark, "text-(--ds-lockup-mark) dark:text-(--ds-lockup-mark)")}
+          />
+          {/* Inline spans share a baseline; the space keeps the accessible name "Conscia <product>". */}
+          <span data-slot="brand-lockup-text" className="min-w-0 truncate">
+            <span data-slot="brand-lockup-name" className="font-semibold text-(--ds-lockup-name)">
+              Conscia
+            </span>{" "}
+            <span data-slot="brand-lockup-product" className="font-normal text-(--ds-lockup-product)">
+              {product}
+            </span>
+          </span>
+        </>
+      ),
+    },
+  });
 }
 
 function SidebarSeparator({
@@ -1150,6 +1218,7 @@ export {
   AppSidebarContent,
   AppSidebarFooter,
   AppSidebarHeader,
+  BrandLockup,
   InspectorRegion,
   MainRegion,
   NavigationGroup,
@@ -1172,6 +1241,7 @@ export type {
   AppHeaderSearchProps,
   AppHeaderTitleProps,
   AppShellProps,
+  BrandLockupProps,
   NavigationItemProps,
   NavigationSubItemProps,
   TopBarProps,
