@@ -323,24 +323,16 @@ tints smaller still.
 
 ### Typeface
 
-The font stack starts with `"Saans"`, the Conscia brand typeface, and falls
-back to the bundled Source Sans 3. Saans is licensed, so the package does not
-ship it. A product with a licence self-hosts the files under the family name
-`Saans`, and every type role picks it up:
-
-```css
-@font-face {
-  font-family: "Saans";
-  src: url("/fonts/SaansVF.woff2") format("woff2-variations");
-  font-weight: 300 900;
-  font-display: swap;
-}
-```
+The package bundles Inter (`@fontsource-variable/inter`, SIL OFL) with the
+weight and optical-size axes, and `--font-sans` starts with `"Inter Variable"`.
+The files are self-hosted from the package, so offline Electron apps render it
+too. Do not add a font CDN or set a literal `font-family`; use
+`var(--font-sans)`.
 
 Use only the three brand weights: regular 380, medium 570 and semibold 670.
 Tailwind's `font-normal`, `font-medium`, `font-semibold` and `font-bold` map to
-them. Saans sets wider than Source Sans 3, so check truncation in tables and
-navigation after enabling it.
+them. Tables, timestamps, metric values, meters and pagination use tabular
+figures; add `tabular-nums` to any other column of numbers that should line up.
 
 ## Accessibility ownership
 

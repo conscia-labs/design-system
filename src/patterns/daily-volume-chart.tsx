@@ -209,9 +209,9 @@ function DailyVolumeChart({
             {days.map((day) => (
               <TableRow key={day.date}>
                 <TableCell>{formatDate(day.date)}</TableCell>
-                <TableCell className="text-right tabular-nums">{formatValue(day.value)}</TableCell>
+                <TableCell className="text-right">{formatValue(day.value)}</TableCell>
                 {showUnsuccessful ? (
-                  <TableCell className="text-right tabular-nums">{formatValue(day.unsuccessful ?? 0)}</TableCell>
+                  <TableCell className="text-right">{formatValue(day.unsuccessful ?? 0)}</TableCell>
                 ) : null}
               </TableRow>
             ))}

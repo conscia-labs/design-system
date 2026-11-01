@@ -125,7 +125,7 @@ export default function DeveloperOverviewPage() {
                   description={request.detail}
                   metadata={<time dateTime={request.dateTime}>{request.time}</time>}
                   status={
-                    <Badge variant="neutral" className="max-w-32 whitespace-normal break-words leading-4">
+                    <Badge variant="neutral" className="max-w-36 whitespace-normal break-words leading-4">
                       {request.outcome}
                     </Badge>
                   }

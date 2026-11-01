@@ -89,6 +89,15 @@ for (const [name, pattern] of checks) {
   assert.match(productionCss, pattern, `Missing packaged ${name} styles`);
 }
 
+// Inter must be bundled from the package, never fetched, so offline apps
+// such as Electron render it.
+assert.match(productionCss, /font-family:"?Inter Variable"?/, "Missing packaged Inter @font-face");
+const fontUrls = [...productionCss.matchAll(/url\(([^)]+\.woff2)\)/g)].map((match) => match[1]);
+assert.ok(fontUrls.some((url) => /inter-latin-opsz-normal/.test(url)), "Inter's latin file must be bundled");
+for (const url of fontUrls) {
+  assert.doesNotMatch(url, /^(https?:)?\/\//, `Font ${url} must be served by the app, not a remote host`);
+}
+
 const installedPackageRoot = join(
   fixtureRoot,
   "node_modules/@conscia-labs/design-system",

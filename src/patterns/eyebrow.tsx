@@ -22,7 +22,7 @@ function Eyebrow({ category, meta, dateTime, className, ...props }: EyebrowProps
       {meta ? (
         <>
           <span aria-hidden="true"> — </span>
-          {dateTime ? <time dateTime={dateTime}>{meta}</time> : <span>{meta}</span>}
+          {dateTime ? <time dateTime={dateTime} className="tabular-nums">{meta}</time> : <span>{meta}</span>}
         </>
       ) : null}
     </p>

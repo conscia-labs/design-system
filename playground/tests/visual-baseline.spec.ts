@@ -239,7 +239,8 @@ test.describe("interaction baseline", () => {
 
     await page.getByRole("button", { name: "Show success toast", exact: true }).click();
     await expect(page.getByText("Catalog synced", { exact: true })).toBeVisible();
-    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    // The swap to mobile rows can overflow for a frame; assert the settled layout.
+    await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   });
 
   test("integrated header and static sidebar navigation preserve desktop and mobile behavior", async ({ page }) => {
@@ -293,7 +294,8 @@ test.describe("interaction baseline", () => {
     await mobileNavigation.getByRole("link", { name: "All components", exact: true }).click();
     await expect(page).toHaveURL(/\/components$/);
     await expect(mobileNavigation).toBeHidden();
-    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    // The swap to mobile rows can overflow for a frame; assert the settled layout.
+    await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   });
 
   test("table catalog filters, sorts, selects, and switches to mobile rows", async ({ page }) => {
@@ -320,6 +322,7 @@ test.describe("interaction baseline", () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await expect(dataTable.locator('[role="list"]')).toBeVisible();
     await expect(dataTable.locator("table")).toBeHidden();
-    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    // The swap to mobile rows can overflow for a frame; assert the settled layout.
+    await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   });
 });

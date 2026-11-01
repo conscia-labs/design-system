@@ -1,6 +1,6 @@
 {
   "name": "@conscia-labs/design-system",
-  "version": "1.7.2",
+  "version": "1.7.3",
   "description": "The shared React component library for building clear, consistent, and accessible Conscia product experiences.",
   "license": "MIT",
   "type": "module",
@@ -113,7 +113,7 @@
   },
   "dependencies": {
     "@base-ui/react": "1.7.0",
-    "@fontsource-variable/source-sans-3": "^5.3.0",
+    "@fontsource-variable/inter": "^5.3.0",
     "@tanstack/react-table": "^8.21.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

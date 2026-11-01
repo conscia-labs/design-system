@@ -1,4 +1,8 @@
-@import "@fontsource-variable/source-sans-3/index.css";
+/*
+ * Inter, self-hosted from the package with the weight and optical-size axes.
+ * No CDN, so offline Electron consumers render it too.
+ */
+@import "@fontsource-variable/inter/opsz.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -254,12 +258,11 @@
   --ds-page-wash-width: 56rem;
   --ds-page-wash-height: 12rem;
   /*
-   * Saans is the Conscia brand typeface. It is licensed, so the package does
-   * not bundle it: products with a licence self-host it under the family
-   * name "Saans" and it takes over. Everyone else gets Source Sans 3.
+   * Inter is bundled, so every machine renders the same face. A locally
+   * installed brand or system font no longer takes over.
    */
-  --font-sans: "Saans", "Source Sans 3 Variable", "Source Sans 3", "Source Sans", "Aptos", "Segoe UI", Arial, sans-serif;
-  /* The brand's three weights. Source Sans 3 Variable renders them too. */
+  --font-sans: "Inter Variable", "Inter", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  /* The brand's three weights. Inter Variable renders them exactly. */
   --ds-font-weight-regular: 380;
   --ds-font-weight-medium: 570;
   --ds-font-weight-semibold: 670;
@@ -335,21 +338,22 @@
   /*
    * Hierarchy comes from weight and tracking as well as size: page and
    * display titles are heavier and tighter, section titles stay at 600 so
-   * the step between them is visible.
+   * the step between them is visible. Tracking is tuned for Inter: its
+   * optical-size axis already tightens display sizes, so it stays modest.
    */
   --ds-title-weight: var(--ds-font-weight-semibold);
-  --ds-title-tracking: -0.0137em;
+  --ds-title-tracking: -0.02em;
   --ds-title-line-height: 1.15;
   --ds-display-weight: var(--ds-font-weight-semibold);
-  --ds-display-tracking: -0.0137em;
+  --ds-display-tracking: -0.022em;
   --ds-display-line-height: 1.05;
   --ds-section-title-weight: var(--ds-font-weight-semibold);
-  --ds-section-title-tracking: -0.0096em;
+  --ds-section-title-tracking: -0.012em;
   --ds-section-title-line-height: 1.25;
   --ds-metric-value: 1.625rem;
   --ds-metric-value-primary: 2.5rem;
   --ds-metric-value-weight: var(--ds-font-weight-medium);
-  --ds-metric-value-tracking: -0.0137em;
+  --ds-metric-value-tracking: -0.02em;
   --ds-ui-text-size: 0.875rem;
   --ds-ui-line-height: 1.25rem;
   --ds-navigation-label-size: 0.875rem;
@@ -478,10 +482,10 @@
   --ds-metadata: 0.75rem;
   --ds-body-line-height: 1.45;
   --ds-title-weight: var(--ds-font-weight-semibold);
-  --ds-title-tracking: -0.0137em;
+  --ds-title-tracking: -0.02em;
   --ds-title-line-height: 1.08;
-  --ds-display-tracking: -0.0137em;
-  --ds-section-title-tracking: -0.0096em;
+  --ds-display-tracking: -0.022em;
+  --ds-section-title-tracking: -0.012em;
   --ds-metric-value: 1.375rem;
   --ds-metric-value-primary: 2rem;
   --ds-section-title-weight: var(--ds-font-weight-semibold);
@@ -499,14 +503,14 @@
   --ds-menu-label-line-height: 0.9375rem;
   --ds-eyebrow-line-height: 0.9375rem;
   --ds-eyebrow-weight: var(--ds-font-weight-medium);
-  --ds-eyebrow-tracking: 0.06em;
+  --ds-eyebrow-tracking: 0.05em;
   --ds-card-title-size: 0.8125rem;
   --ds-card-title-line-height: 1.125rem;
   --ds-card-title-weight: var(--ds-font-weight-semibold);
   --ds-table-head-size: 0.6875rem;
   --ds-table-head-line-height: 0.9375rem;
   --ds-table-head-weight: var(--ds-font-weight-medium);
-  --ds-table-head-tracking: 0.06em;
+  --ds-table-head-tracking: 0.05em;
 }
 
 /*
@@ -803,7 +807,7 @@
   --ds-space-page: 3rem;
   --ds-page-title: 2.375rem;
   --ds-title-weight: var(--ds-font-weight-medium);
-  --ds-title-tracking: -0.02em;
+  --ds-title-tracking: -0.024em;
   --ds-section-title: 1.125rem;
   --ds-section-title-weight: var(--ds-font-weight-medium);
   --ds-card-title-size: 0.9375rem;
@@ -811,7 +815,7 @@
   --ds-metric-value: 2.25rem;
   --ds-metric-value-primary: 3rem;
   --ds-metric-value-weight: var(--ds-font-weight-regular);
-  --ds-metric-value-tracking: -0.025em;
+  --ds-metric-value-tracking: -0.028em;
   --ds-eyebrow-size: 0.8125rem;
   --ds-eyebrow-tracking: 0;
   --ds-table-head-size: 0.8125rem;
@@ -842,7 +846,7 @@
   --ds-field-gap: 1.5rem;
   --ds-page-title: 2.875rem;
   --ds-title-weight: var(--ds-font-weight-medium);
-  --ds-title-tracking: -0.02em;
+  --ds-title-tracking: -0.024em;
   --ds-section-title: 1.3125rem;
   --ds-section-title-weight: var(--ds-font-weight-medium);
   --ds-card-title-size: 1rem;
@@ -850,7 +854,7 @@
   --ds-metric-value: 2.875rem;
   --ds-metric-value-primary: 3.75rem;
   --ds-metric-value-weight: var(--ds-font-weight-regular);
-  --ds-metric-value-tracking: -0.025em;
+  --ds-metric-value-tracking: -0.028em;
   --ds-eyebrow-size: 0.8125rem;
   --ds-eyebrow-tracking: 0;
   --ds-table-head-size: 0.8125rem;
