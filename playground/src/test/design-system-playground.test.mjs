@@ -261,7 +261,9 @@ test("official Conscia colors map to distinct primary, accent, and supporting br
   assert.match(foundation, /Burgundy · primary identity surface/);
   assert.match(foundation, /Electric blue · brand accent/);
   assert.match(foundation, /Green · supporting brand expression/);
-  assert.match(appShell, /text-brand dark:text-white/);
+  // The shell brand is BrandLockup, whose mark is burgundy in light and white in dark.
+  assert.match(appShell, /<BrandLockup /);
+  assert.match(styles, /--brand-mark: var\(--brand\);[\s\S]*:root\.dark,[\s\S]*--brand-mark: #ffffff;/);
   assert.match(overview, /border-t-brand/);
   assert.match(componentDemo, /bg-brand p-3 text-brand-foreground/);
   assert.match(patterns, /bg-brand p-3 text-brand-foreground/);
@@ -357,6 +359,53 @@ test("brand marks use published Conscia geometry and shared exports", () => {
   assert.match(brandWordmark, /dark:text-white/);
   assert.match(foundationPage, /BrandIcon/);
   assert.match(foundationPage, /BrandWordmark/);
+});
+
+test("the playground brand is the shared BrandLockup in the sidebar and the header", () => {
+  const shell = read("../components/app-shell.tsx");
+  const styles = read("../../../src/foundation/styles.css");
+
+  assert.equal(shell.match(/<BrandLockup product="Design System"/g)?.length, 2);
+  assert.doesNotMatch(shell, /BrandIcon/);
+  // Collapsed sidebar: mark only, centred, with the name kept for assistive technology.
+  assert.match(styles, /\[data-sidebar-state="collapsed"\] \[data-slot="app-sidebar"\] \[data-slot="brand-lockup-text"\] \{[^}]*clip-path: inset\(50%\)/);
+  assert.match(styles, /\[data-sidebar-state="collapsed"\] \[data-slot="app-sidebar"\] \[data-slot="brand-lockup"\] \{[^}]*justify-content: center/);
+  // Phone header: mark and product name.
+  assert.match(styles, /@media \(max-width: 39\.99rem\) \{\s*\[data-slot="app-header-brand"\] \[data-slot="brand-lockup-name"\]/);
+  // Colors come from the sidebar tokens inside any sidebar, and --sidebar-mark is set in every variant.
+  assert.match(styles, /\[data-sidebar-variant\] \[data-slot="brand-lockup"\] \{[^}]*--ds-lockup-mark: var\(--sidebar-mark\)/);
+  assert.equal(styles.match(/--sidebar-mark:/g)?.length, 5);
+});
+
+test("the playground opens in the airy mood and keeps Operational as a stored choice", () => {
+  const mood = read("../components/playground-mood-script.ts");
+  const layout = read("../app/layout.tsx");
+  const themeScript = read("../components/theme-script.tsx");
+  const shell = read("../components/app-shell.tsx");
+  const moods = read("../app/moods/page.tsx");
+
+  assert.match(mood, /defaultPlaygroundMood: ConsciaMood = "airy"/);
+  assert.match(mood, /current: "Operational"/);
+  // Painted airy before hydration, then corrected from storage before paint.
+  assert.match(layout, /<html[^>]*data-mood="airy"/);
+  assert.match(themeScript, /playgroundMoodScript/);
+  assert.match(mood, /if\(mood==="current"\)root\.removeAttribute\("data-mood"\)/);
+  // The header and the Moods page share one setting, and leaving the Moods page keeps it.
+  assert.match(shell, /aria-label=\{`Mood: \$\{playgroundMoodLabels\[mood\]\}`\}/);
+  assert.match(moods, /setPlaygroundMood/);
+  assert.doesNotMatch(moods, /delete root\.dataset\.mood/);
+});
+
+test("the sidebar header glow fades out inside the header and stays under moods", () => {
+  const styles = read("../../../src/foundation/styles.css");
+  const glow = styles.match(/\[data-slot="app-sidebar-header"\] \{\s*\/\*[^*]*\*\/\s*background-origin: border-box;\s*background-repeat: no-repeat;\s*background-image: radial-gradient\(([\s\S]*?)\);/);
+
+  assert.ok(glow, "the glow paints once across the border box");
+  assert.match(glow[1], /^\s*140% 100% at 0% 0%/);
+  assert.match(glow[1], /transparent\s*$/);
+  const moodHeader = styles.match(/:is\(\[data-mood="balanced"\], \[data-mood="airy"\]\) \[data-slot="app-sidebar-header"\] \{([^}]*)\}/)[1];
+  assert.match(moodHeader, /border-bottom-color: transparent/);
+  assert.doesNotMatch(moodHeader, /background-image/);
 });
 
 test("field pattern owns help, error, disabled-compatible rhythm", () => {

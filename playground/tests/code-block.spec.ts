@@ -105,6 +105,8 @@ test("narrow CodeBlock keeps tabs, copy feedback, and body scrolling independent
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
+  // The raised selected tab is the Operational look; airy flattens it.
+  await page.addInitScript(() => localStorage.setItem("conscia-playground-mood:v1", "current"));
   await page.addInitScript(() => {
     type ClipboardTestWindow = Window & {
       __codeBlockClipboardFailure?: boolean;

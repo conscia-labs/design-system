@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" data-appearance="system" data-density="comfortable" suppressHydrationWarning>
+    <html lang="en" data-appearance="system" data-density="comfortable" data-mood="airy" suppressHydrationWarning>
       <body>
         <ThemeScript />
         <div className="ds-app-root">

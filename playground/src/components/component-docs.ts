@@ -38,9 +38,15 @@ const guidance: Record<string, ComponentGuidance> = {
     ],
   },
   brand: {
-    whenToUse: "Use the icon where horizontal space is limited and the wordmark when the full Conscia identity should be visible.",
-    accessibility: "Add an accessible name when the mark is a link; otherwise hide decorative marks from assistive technology.",
-    options: [{ name: "mark", values: "BrandIcon · BrandWordmark", guidance: "Both inherit currentColor. Use burgundy on light identity surfaces and white on dark identity surfaces, including brand chrome and brand cards (text-text-primary inside them)." }],
+    whenToUse: "Use BrandLockup for the product brand in AppSidebarHeader and AppHeaderBrand, so every Conscia app shows the same lockup. Use the icon where horizontal space is limited and the wordmark when the full Conscia identity should be visible.",
+    accessibility: "BrandLockup is named \u201cConscia <product>\u201d by its own text, also when only the mark shows; its mark is decorative. Add an accessible name to a standalone mark that is a link; otherwise hide decorative marks from assistive technology.",
+    options: [
+      { name: "product", values: "string, such as \"Beacon\"", guidance: "Set after \u201cConscia\u201d on one line: Conscia in semibold, the product in regular weight, on a shared baseline." },
+      { name: "href · render", values: "omitted · href=\"/\" · render={<Link href=\"/\" />}", guidance: "Links the lockup home. Use render for a router link; without either it is plain text." },
+      { name: "size", values: "sm · md (default) · lg", guidance: "sm is a 24px mark with 14px text, md 32px with 16px, lg 36px with 18px." },
+      { name: "placement", values: "sidebar · collapsed sidebar · header · phone header", guidance: "Colors follow the sidebar tokens in every variant and mood, and the header tokens elsewhere. A collapsed sidebar shows the mark alone, centred; a phone header shows the mark and the product name. It leaves the sidebar header glow alone: an app that wants it gone removes it itself." },
+      { name: "mark", values: "BrandIcon · BrandWordmark", guidance: "Both inherit currentColor. Use burgundy on light identity surfaces and white on dark identity surfaces, including brand chrome and brand cards (text-text-primary inside them)." },
+    ],
   },
   button: {
     whenToUse: "Use buttons for actions. Use link composition for navigation that should retain button styling.",
