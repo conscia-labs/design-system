@@ -1,5 +1,62 @@
 # Changelog
 
+## 1.7.3 - 2026-11-01
+
+The design system now ships and renders **Inter**. Until now `--font-sans`
+started with Saans, which the package never shipped, so most machines fell
+back to Source Sans 3 and a few rendered Saans: the same app looked different
+from one machine to the next, and the type scale was tuned against a face
+nobody reliably saw. Inter (SIL OFL) is bundled with its weight and
+optical-size axes, so the 380 / 570 / 670 weights render exactly and display
+sizes get Inter's tighter display cut automatically.
+
+### Upgrading from 1.7.2
+
+No code changes are required. Text sets wider and its lowercase is taller
+than in Source Sans 3, so the scale reads larger at the same pixel sizes.
+That is intended: the sizes are unchanged. After upgrading:
+
+- **Check fixed widths.** Inter runs about 8–10% wider. Look at anything your
+  app sizes in px or rem around text, such as `max-w-*` on badges, fixed
+  column widths, narrow cards and sidebar extras, for new wrapping or
+  truncation.
+- **Remove literal font overrides.** Replace any `font-family` that names
+  Saans, Source Sans 3 or Inter with `var(--font-sans)`, and drop local font
+  workarounds such as size bumps that compensated for Source Sans 3.
+- **Replace visual snapshots.** Every screenshot changes; review and replace
+  them deliberately.
+- **Saans is no longer picked up.** A machine with Saans installed now
+  renders Inter like every other one.
+
+### Changed
+
+- `--font-sans` is `"Inter Variable", "Inter", system-ui, -apple-system,
+  "Segoe UI", Arial, sans-serif`. `@fontsource-variable/inter` replaces
+  `@fontsource-variable/source-sans-3` as a dependency; the CSS entry points
+  import its `opsz.css` (weight and optical-size axes), with
+  `font-display: swap`.
+- `standalone.css` ships its font files in `dist/fonts/` and requests only
+  those, so a plain `<link>` or an offline Electron app loads Inter with no
+  network access. No CDN is involved anywhere.
+- Tracking retuned for Inter: `--ds-title-tracking` -0.02em,
+  `--ds-display-tracking` -0.022em, `--ds-section-title-tracking` -0.012em
+  and `--ds-metric-value-tracking` -0.02em. Under balanced and airy, titles
+  use -0.024em and metric values -0.028em. Operational uppercase eyebrows and
+  table heads drop from 0.06em to 0.05em, since Inter's capitals are wider.
+  Sizes and line heights are unchanged.
+- Tabular figures: `Table` (every cell), `DateTimeField`, `Eyebrow` dates,
+  `ActivityItem` metadata, `ValueMeter` values and `Pagination` page counts
+  now set `tabular-nums`, as metric values already did. Inter's `cv11`
+  (single-storey a) stays off.
+- Under balanced and airy, the sidebar header drops its bottom border and
+  glow.
+
+### Fixed
+
+- An active `NavigationTab` reveals itself by scrolling its own tab rail
+  sideways instead of calling `scrollIntoView`, which also scrolled the page
+  when the rail sat below the fold on load.
+
 ## 1.7.2 - 2026-10-31
 
 A header that follows the mood. Under balanced or airy, the sidebar can run

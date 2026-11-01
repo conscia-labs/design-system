@@ -100,7 +100,7 @@ function Table({
         scrollable ? "overflow-x-auto overflow-y-hidden overscroll-x-contain" : "overflow-x-clip",
       )}
     >
-      <table data-slot="table" className={cn("w-full caption-top ds-type-ui", className)} {...props} />
+      <table data-slot="table" className={cn("w-full caption-top ds-type-ui tabular-nums", className)} {...props} />
     </div>
   );
 }

@@ -57,7 +57,7 @@ function ActivityItem({
       <div className="min-w-0">
         <div className="ds-type-ui font-medium text-text-primary">{title}</div>
         {description ? <div className="ds-type-ui mt-0.5 text-text-supporting">{description}</div> : null}
-        {metadata ? <div className="ds-type-metadata mt-1 text-text-supporting">{metadata}</div> : null}
+        {metadata ? <div className="ds-type-metadata mt-1 tabular-nums text-text-supporting">{metadata}</div> : null}
       </div>
       {resolvedTrailing ? <div data-slot="activity-item-trailing" className="shrink-0">{resolvedTrailing}</div> : null}
     </div>

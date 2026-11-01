@@ -22,33 +22,25 @@ const typeRoles = [
   { role: "Eyebrow", utility: "ds-type-eyebrow", token: "--ds-eyebrow-size", sample: "WORKSPACE", className: "ds-type-eyebrow" },
 ] as const;
 
-const fontStack = '"Saans", "Source Sans 3 Variable", "Source Sans 3", "Source Sans", "Aptos", "Segoe UI", Arial, sans-serif';
-
-const saansFontFace = `/* Only with a Saans licence. Host the files yourself. */
-@font-face {
-  font-family: "Saans";
-  src: url("/fonts/SaansVF.woff2") format("woff2-variations");
-  font-weight: 300 900;
-  font-display: swap;
-}`;
+const fontStack = '"Inter Variable", "Inter", system-ui, -apple-system, "Segoe UI", Arial, sans-serif';
 
 export default function TypographyPage() {
   return (
     <PlaygroundPage
       title="Typography"
       description="Font loading, semantic type roles, hierarchy, density behavior, and practical usage guidance for Conscia products."
-      actions={<Badge variant="neutral">Saans · Source Sans 3 fallback</Badge>}
+      actions={<Badge variant="neutral">Inter Variable</Badge>}
     >
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1.35fr)_minmax(20rem,0.65fr)]">
-        <ExampleSection title="Primary typeface" description="Saans is the Conscia brand typeface. The package bundles Source Sans 3 as the fallback, because Saans is licensed.">
+        <ExampleSection title="Primary typeface" description="The package bundles Inter and loads it from its own CSS entry points. No CDN, so offline apps render it too.">
           <div className="grid overflow-hidden rounded-[var(--ds-radius-surface)] border bg-surface md:grid-cols-[14rem_minmax(0,1fr)]">
             <div className="flex min-h-56 items-center justify-center border-b bg-surface-muted md:border-r md:border-b-0">
               <span className="text-[7rem] font-semibold leading-none tracking-[-0.06em]" aria-hidden="true">Aa</span>
             </div>
             <div className="flex flex-col justify-center p-6">
-              <h2 className="ds-type-page-title">Saans, with Source Sans 3</h2>
+              <h2 className="ds-type-page-title">Inter</h2>
               <p className="ds-type-body mt-3 max-w-2xl text-text-secondary">
-                The font stack puts Saans first. Products that hold a Saans licence self-host it under the family name &ldquo;Saans&rdquo; and it takes over everywhere. Without it, the bundled Source Sans 3 renders the same three brand weights.
+                Inter is an open-licence (SIL OFL) variable font built for dense interfaces. The bundled files carry the weight and optical-size axes, so the three brand weights render exactly and display sizes get the tighter cut automatically. Every machine renders the same face.
               </p>
               <div className="mt-5 rounded-[var(--ds-radius-control)] bg-surface-muted p-3">
                 <div className="ds-type-eyebrow text-text-supporting">FONT STACK</div>
@@ -136,8 +128,7 @@ export default function TypographyPage() {
       <ExampleSection title="Implementation" description="Import one published CSS entry point, then apply the semantic utility that matches the content role.">
         <CodeBlock snippets={[
           { value: "tsx", label: "React", code: '<h1 className="ds-type-page-title">Provider connections</h1>\n<p className="ds-type-body text-text-secondary">Manage the providers available to this workspace.</p>\n<span className="ds-type-metadata text-text-supporting">Updated 2 minutes ago</span>' },
-          { value: "css", label: "CSS", code: '@import "@conscia-labs/design-system/styles.css";\n\n/* Source Sans 3 and the semantic type tokens are included. */' },
-          { value: "saans", label: "Saans", code: saansFontFace },
+          { value: "css", label: "CSS", code: '@import "@conscia-labs/design-system/styles.css";\n\n/* Inter and the semantic type tokens are included. */' },
         ]} />
       </ExampleSection>
     </PlaygroundPage>

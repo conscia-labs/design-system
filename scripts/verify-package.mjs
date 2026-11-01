@@ -145,6 +145,15 @@ assert.match(tailwindCss, /@import "\.\/foundation\.css"/);
 assert.match(tailwindCss, /@source "\.\/\*\*\/\*\.js"/);
 assert.match(standaloneCss, /\.flex\{/);
 
+// Every font the standalone bundle requests ships inside the package.
+const standaloneFonts = [...standaloneCss.matchAll(/url\(([^)]+\.woff2)\)/g)].map((match) => match[1]);
+assert.ok(standaloneFonts.length > 0, "The standalone stylesheet must bundle Inter.");
+for (const font of standaloneFonts) {
+  assert.match(font, /^\.\/fonts\/inter-/, `Standalone font ${font} must be a packaged file.`);
+  await access(new URL(`../dist/${font.slice(2)}`, import.meta.url));
+}
+assert.doesNotMatch(bundledCss, /Saans|Source Sans|fonts\.googleapis/);
+
 const utilitySource = await readFile("dist/utils/index.js", "utf8");
 assert.doesNotMatch(
   utilitySource,

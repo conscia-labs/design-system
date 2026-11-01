@@ -313,13 +313,19 @@ function NavigationTab({
     [externalRef],
   );
 
+  // Reveal the active tab inside its rail only. scrollIntoView would also
+  // scroll the page when the rail sits below the fold.
   React.useEffect(() => {
-    if (!active) return;
-    internalRef.current?.scrollIntoView({
-      behavior: "auto",
-      block: "nearest",
-      inline: "nearest",
-    });
+    const tab = internalRef.current;
+    const rail = tab?.closest<HTMLElement>('[data-slot="navigation-tabs-list"]');
+    if (!active || !tab || !rail) return;
+    const tabBox = tab.getBoundingClientRect();
+    const railBox = rail.getBoundingClientRect();
+    if (tabBox.left < railBox.left) {
+      rail.scrollLeft -= railBox.left - tabBox.left;
+    } else if (tabBox.right > railBox.right) {
+      rail.scrollLeft += tabBox.right - railBox.right;
+    }
   }, [active]);
 
   return (

@@ -60,3 +60,13 @@ for (const [appearance, density] of [["light", "comfortable"], ["dark", "comfort
     await expect(navigation.getByRole("link", { name: "Business units" })).toBeFocused();
   });
 }
+
+test("an active navigation tab below the fold reveals itself in its rail without scrolling the page", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 600 });
+  await page.goto("/components/tabs", { waitUntil: "networkidle" });
+  await page.evaluate(() => document.fonts.ready);
+  const pillsRail = page.locator('[data-slot="navigation-tabs-list"][data-variant="pills"]').first();
+  await expect(pillsRail).toHaveAttribute("data-scroll-position", /.+/);
+  expect(await pillsRail.evaluate((rail) => rail.getBoundingClientRect().top + window.scrollY > window.innerHeight)).toBe(true);
+  expect(await page.evaluate(() => window.scrollY)).toBe(0);
+});

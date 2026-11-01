@@ -46,7 +46,7 @@ function ValueMeter({
     >
       <div className="flex items-baseline justify-between gap-4 text-sm">
         <span id={labelId} className="font-medium text-text-primary">{label}</span>
-        <span className="text-text-supporting">{resolvedValueLabel}</span>
+        <span className="tabular-nums text-text-supporting">{resolvedValueLabel}</span>
       </div>
       {percentage === null ? null : (
         <div

@@ -65,7 +65,7 @@ function PaginationControls({
           <span key={`ellipsis-${index}`} className="flex size-[var(--ds-control-height-sm)] items-center justify-center text-text-supporting" aria-hidden="true">…</span>
         ) : (
           <IconButton type="button" key={item} variant="ghost" size="sm" className={cn("text-text-supporting", item === currentPage && "bg-selection-background font-semibold text-selection-foreground hover:bg-selection-background hover:text-selection-foreground")} aria-label={`Page ${item}`} aria-current={item === currentPage ? "page" : undefined} onClick={() => onPageChange(item)}>{item}</IconButton>
-        )) : <span className="px-2 text-[var(--ds-metadata)]">Page {currentPage} of {pageCount}</span>}
+        )) : <span className="px-2 text-[var(--ds-metadata)] tabular-nums">Page {currentPage} of {pageCount}</span>}
         <IconButton type="button" variant="outline" size="sm" aria-label="Next page" onClick={onNext ?? (() => onPageChange?.(currentPage + 1))} disabled={currentPage >= pageCount}><ChevronRight /></IconButton>
       </div>
     </div>

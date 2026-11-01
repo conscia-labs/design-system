@@ -108,8 +108,9 @@ test("appearance and density are controlled through root attributes", () => {
   const themeScript = read("../components/theme-script.tsx");
   const styles = read("../../../src/foundation/styles.css");
 
-  assert.match(styles, /@import "@fontsource-variable\/source-sans-3\/index\.css";/);
-  assert.match(styles, /--font-sans: "Saans", "Source Sans 3 Variable"/);
+  assert.match(styles, /@import "@fontsource-variable\/inter\/opsz\.css";/);
+  assert.match(styles, /--font-sans: "Inter Variable", "Inter", system-ui/);
+  assert.doesNotMatch(styles, /Saans|Source Sans/);
   assert.match(preferences, /DesignPreferenceControls/);
   assert.match(sharedControls, /document\.documentElement/);
   assert.match(sharedPreferences, /dataset/);
@@ -160,15 +161,15 @@ test("operational density exposes a token-backed Workspace-like type scale", () 
 
   assert.match(preferences, /ConsciaDensity = "compact" \| "comfortable" \| "operational"/);
   assert.match(styles, /--ds-body: 0\.9375rem;/);
-  // Brand weights (380/570/670) and the brand's heading tracking.
+  // Brand weights (380/570/670) and heading tracking tuned for Inter.
   assert.match(styles, /--ds-font-weight-regular: 380;/);
   assert.match(styles, /--ds-font-weight-medium: 570;/);
   assert.match(styles, /--ds-font-weight-semibold: 670;/);
   assert.match(styles, /--font-weight-semibold: var\(--ds-font-weight-semibold\);/);
   assert.match(styles, /--ds-title-weight: var\(--ds-font-weight-semibold\);/);
-  assert.match(styles, /--ds-title-tracking: -0\.0137em;/);
-  assert.match(styles, /--ds-section-title-tracking: -0\.0096em;/);
-  assert.match(styles, /--ds-display-tracking: -0\.0137em;/);
+  assert.match(styles, /--ds-title-tracking: -0\.02em;/);
+  assert.match(styles, /--ds-section-title-tracking: -0\.012em;/);
+  assert.match(styles, /--ds-display-tracking: -0\.022em;/);
   assert.doesNotMatch(styles, /font-weight: [0-9]{3};/);
   assert.match(styles, /--ds-button-text-size: 0\.875rem;/);
   assert.match(styles, /--ds-body: 0\.8125rem;/);
@@ -191,7 +192,7 @@ test("typography has dedicated role, density, font-loading, and usage documentat
   const shell = read("../components/app-shell.tsx");
 
   assert.match(shell, /id: "\/typography", label: "Typography"/);
-  assert.match(typography, /Source Sans 3 Variable/);
+  assert.match(typography, /Inter Variable/);
   for (const utility of [
     "ds-type-display-title",
     "ds-type-page-title",
@@ -550,7 +551,8 @@ test("tabs separate routed navigation from layered content and mode switching", 
   assert.match(tabs, /hover:bg-surface-muted/);
   assert.match(tabs, /after:bg-selection-indicator/);
   assert.match(tabs, /ResizeObserver/);
-  assert.match(tabs, /scrollIntoView/);
+  assert.match(tabs, /rail\.scrollLeft/);
+  assert.doesNotMatch(tabs, /\.scrollIntoView\(/);
   assert.match(tabs, /data-scroll-position/);
   assert.match(foundation, /--ds-tab-rail-height: 2\.75rem/);
   assert.match(foundation, /--ds-tab-padding-x: 0\.875rem/);
