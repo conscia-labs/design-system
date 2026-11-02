@@ -99,5 +99,5 @@ function MetricCountUp({ value, options = {} }: { value: number; options?: Metri
   );
 }
 
-export { MetricCountUp, formatMetricNumber };
+export { MetricCountUp };
 export type { MetricCountUpOptions };

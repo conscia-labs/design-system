@@ -218,21 +218,6 @@ The repository's `playground` contains the executable documentation site. Run it
 locally with `pnpm dev:playground`; the static site is published to GitHub Pages
 by the version-tag release workflow.
 
-### Tab styles
-
-Underline tabs are quiet by default in 1.2.2: the selected underline remains,
-while the full-width rail is removed. Use `<Tabs variant="divider">` or
-`<NavigationTabsList variant="divider">` to retain the previous divider.
-`<Tabs variant="pills">` offers a softer option for small peer views, and
-`<NavigationTabsList variant="pills">` applies the same treatment to
-route-backed navigation.
-`<Tabs variant="nested">` marks a tab group inside a section or tab panel.
-Segmented controls remain unchanged; compact sizing is supported through
-`size="compact"`.
-
-Compare interactive examples on the [Tabs documentation page](https://conscia-labs.github.io/design-system/components/tabs/).
-
-
 ## License
 
 MIT

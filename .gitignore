@@ -5,6 +5,7 @@ dist/
 coverage/
 test-results/
 *.tsbuildinfo
+.impeccable/critique/
 
 .DS_Store
 *.log

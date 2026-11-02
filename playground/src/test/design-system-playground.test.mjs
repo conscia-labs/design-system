@@ -102,7 +102,6 @@ test("component documentation is registry-driven and gives every family its own 
 });
 
 test("appearance and density are controlled through root attributes", () => {
-  const preferences = read("../components/design-preferences.tsx");
   const sharedControls = read("../../../src/patterns/preference-controls.tsx");
   const sharedPreferences = read("../../../src/foundation/preferences.ts");
   const themeScript = read("../components/theme-script.tsx");
@@ -111,7 +110,7 @@ test("appearance and density are controlled through root attributes", () => {
   assert.match(styles, /@import "@fontsource-variable\/inter\/opsz\.css";/);
   assert.match(styles, /--font-sans: "Inter Variable", "Inter", system-ui/);
   assert.doesNotMatch(styles, /Saans|Source Sans/);
-  assert.match(preferences, /DesignPreferenceControls/);
+  assert.match(sharedControls, /DesignPreferenceControls/);
   assert.match(sharedControls, /document\.documentElement/);
   assert.match(sharedPreferences, /dataset/);
   assert.match(sharedPreferences, /operational/);

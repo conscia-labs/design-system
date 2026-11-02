@@ -69,7 +69,8 @@ an application needs a fixed sidebar. `AppShell headerLayout="auto"` lets the
 header follow the mood as well: integrated without one, split (full-height
 sidebar with the brand in `AppSidebarHeader`, transparent `AppHeader` inside
 `MainRegion`) under balanced or airy. For a split shell in every mood, use
-`headerLayout="split"` (see `docs/shell-navigation.md`).
+`headerLayout="split"` (see the shell and navigation guide at
+<https://conscia-labs.github.io/design-system/shell-navigation/>).
 
 ## Non-negotiable boundaries
 

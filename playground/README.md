@@ -22,8 +22,8 @@ The build also refreshes `public/agent-guide.md`, `public/agent-manifest.json`,
 and `public/llms.txt` from the package guide and component inventory.
 
 Before the first deployment, set the repository's Pages source to **GitHub
-Actions** under **Settings → Pages**. After that, pushes to `main` deploy through
-`.github/workflows/pages.yml`.
+Actions** under **Settings → Pages**. After that, version tags created by
+`pnpm release` deploy through `.github/workflows/publish.yml`.
 
 Reusable primitives, tokens, and patterns belong in the package root `src`
 directory. The `playground` directory contains documentation presentation,
