@@ -147,10 +147,18 @@ cover the complete public surface.
 
 ```text
 @conscia-labs/design-system            Components and public composition
+@conscia-labs/design-system/charts     Recharts-based charts (optional peer: recharts, react-is)
 @conscia-labs/design-system/foundation Semantic tokens and foundation exports
 @conscia-labs/design-system/patterns   Reusable product patterns
 @conscia-labs/design-system/primitives Primitive components and anatomy
 @conscia-labs/design-system/utils       Shared utilities
+```
+
+The charts entry is opt-in. Install its peers only in applications that draw
+charts, and the rest of the package keeps working without them:
+
+```sh
+pnpm add recharts react-is
 ```
 
 The package also exports `tailwind.css`, `standalone.css`, `foundation.css`,

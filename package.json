@@ -29,6 +29,11 @@
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
+    "./charts": {
+      "types": "./dist/charts/index.d.ts",
+      "import": "./dist/charts/index.js",
+      "default": "./dist/charts/index.js"
+    },
     "./foundation": {
       "types": "./dist/foundation/index.d.ts",
       "import": "./dist/foundation/index.js",
@@ -124,10 +129,14 @@
   "peerDependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "tailwindcss": "^4.0.0"
+    "tailwindcss": "^4.0.0",
+    "recharts": "^3.10.0"
   },
   "peerDependenciesMeta": {
     "tailwindcss": {
+      "optional": true
+    },
+    "recharts": {
       "optional": true
     }
   },
@@ -148,6 +157,8 @@
     "publint": "^0.3.22",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "react-is": "19.2.4",
+    "recharts": "^3.10.1",
     "tailwindcss": "^4",
     "tsup": "^8",
     "typescript": "^5",

@@ -3,6 +3,7 @@ import { defineConfig } from "tsup";
 export default defineConfig({
   entry: {
     index: "src/client.ts",
+    "charts/index": "src/charts/client.ts",
     "foundation/index": "src/foundation/index.ts",
     "patterns/index": "src/patterns/client.ts",
     "primitives/index": "src/primitives/client.ts",
@@ -16,6 +17,6 @@ export default defineConfig({
   splitting: true,
   clean: true,
   minify: true,
-  external: ["react", "react-dom", "use-sync-external-store"],
+  external: ["react", "react-dom", "recharts", "use-sync-external-store"],
   noExternal: ["@base-ui/react"],
 });

@@ -101,6 +101,11 @@ Prefer patterns for recurring product workflows:
   `PaginationControls`.
 - Operational dashboards: `MetricCard`, `MetricBand`, `DataPanel`,
   `AttentionList`, and `ActivityList`.
+- Charts, from `@conscia-labs/design-system/charts` (install `recharts` and
+  `react-is`): `TrendLineChart`, `TrendAreaChart`, `CategoryBarChart`,
+  `DonutChart`, and `Sparkline`. Wrap any other Recharts chart in
+  `ChartContainer`. `DailyVolumeChart` stays in the root entry for per-day
+  measures and needs no chart library.
 - States and feedback: `StateView`, `ErrorState`, `LoadingRows`,
   `ConfirmationDialog`, `CommandPalette`, and `FilterBar`.
 - Multi-rail workspaces: the `Workbench*` family.
@@ -146,6 +151,13 @@ playground route for each family.
   `success` token by default so it matches outcome badges and trends nearby;
   pass `successfulTone="accent"` for a measure with no outcome, and
   `successfulTone` / `unsuccessfulTone` to choose other semantic tones.
+- Every chart takes a `config` that maps data keys to a `label` and an
+  optional `color` role. Leave `color` out for plain categories (they take
+  `series-1` to `series-5` in order and never cycle), use `positive` /
+  `negative` only for outcomes, and `other` for a grouped remainder. Never
+  pass raw colour values; in custom marks use `chartColor()` or
+  `var(--series-<key>)`. Always pass a `summary` that states what the plot
+  shows, and keep the data table on.
 - `PageFrame`, `PageHeader`, `PageToolbar`, and `DetailBackLink` share one left
   edge through `--ds-frame-padding-x`. Do not wrap them in extra padding.
 - A `PageHeader` or `PageToolbar` inside a `Card` or `InventorySurface` takes

@@ -28,6 +28,8 @@ import {
   type SidebarNavigationEntry,
 } from "@conscia-labs/design-system";
 
+import { ChartsDemo } from "./charts-demo";
+
 const surface = "rounded-[var(--ds-radius-surface)] border bg-surface p-[var(--ds-surface-padding)]";
 
 const rows = [
@@ -85,6 +87,8 @@ function ComponentDemo({ slug }: { slug: string }) {
       return <InventorySurface><InventoryDesktop><DataTable data={rows} columns={[{ id: "name", header: "Provider", cell: (row) => <strong>{row.name}</strong>, accessor: (row) => row.name, sortable: true }, { id: "status", header: "Status", cell: (row) => <Badge variant={row.status === "Connected" ? "success" : "warning"}>{row.status}</Badge> }, { id: "resources", header: "Resources", cell: (row) => row.resources, accessor: (row) => row.resources, sortable: true }]} getRowId={(row) => row.id} /></InventoryDesktop><InventoryMobile>{rows.map((row) => <div key={row.id} className="flex items-center justify-between p-4"><div><div className="font-medium">{row.name}</div><div className="text-sm text-text-supporting">{row.resources} resources</div></div><Badge variant={row.status === "Connected" ? "success" : "warning"}>{row.status}</Badge></div>)}</InventoryMobile></InventorySurface>;
     case "metrics-and-data-panels":
       return <div className="grid gap-4 lg:grid-cols-2"><div className={`${surface} lg:col-span-2`}><DailyVolumeChart title="Daily requests" summaryLabel="Daily requests" unit="requests" start="2026-09-20" end="2026-10-19" data={dailyVolume} /></div><MetricCard label="Deployment frequency" description="Production deploys per week" value="4.4" unit="/ week" trend={<MetricTrend direction="up" sentiment="positive" value="43%" accessibleLabel="Up 43 percent, positive" />} visualization={<div className="h-full bg-[linear-gradient(135deg,transparent_45%,var(--chart-series-1)_46%,var(--chart-series-1)_49%,transparent_50%)] opacity-70" />} visualizationSummary="Deployment frequency rises across the period." /><DataPanel><DataPanelHeader title="Reliability" status={<Badge variant="success">Healthy</Badge>} /><DataPanelContent><div className="divide-y">{[["Success rate", "99.4%"], ["Mean recovery", "39 min"], ["Availability", "99.98%"]].map(([label, value]) => <div key={label} className="flex justify-between p-4"><span>{label}</span><strong>{value}</strong></div>)}</div></DataPanelContent><DataPanelFooter>Updated 2 minutes ago</DataPanelFooter></DataPanel><ValueMeter label="Monthly budget" value={68} /></div>;
+    case "charts":
+      return <ChartsDemo />;
     case "activity-and-attention":
       return <div className="grid gap-6 lg:grid-cols-2"><AttentionList><AttentionItem tone="danger" title="Job success rate below SLO" description="99.2% against a 99.5% target" /><AttentionItem tone="warning" title="Recovery time increased" description="Up 54% for 13 days" /></AttentionList><ActivityList><ActivityItem leading={<span className="mt-1 block size-2 rounded-full bg-success" />} title="checkout-api" description="Deployed by r.chen" metadata="12 minutes ago" trailing={<code>a3f9b21</code>} layout="compact" /><ActivityItem leading={<span className="mt-1 block size-2 rounded-full bg-danger" />} title="workers" description="Deployment failed" metadata="2 hours ago" trailing={<Badge variant="danger">Failed</Badge>} layout="compact" /></ActivityList></div>;
     case "state-and-feedback":

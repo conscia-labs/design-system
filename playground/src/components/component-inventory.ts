@@ -4,6 +4,8 @@ export type ComponentInventoryEntry = {
   slug: string;
   description: string;
   route: string;
+  /** Package subpath for families outside the root entry. Defaults to the root. */
+  importPath?: string;
   exports: readonly string[];
 };
 
@@ -28,6 +30,7 @@ export const componentInventory = [
   { category: "Pattern", family: "Page composition", slug: "page-composition", description: "Headers, toolbars, detail sections, and back links.", route: "/components/page-composition", exports: ["DetailBackLink", "DetailSection", "DetailSections", "KeyValueItem", "KeyValueList", "PageHeader", "PageToolbar", "ResourceSummary"] },
   { category: "Pattern", family: "Inventory and tables", slug: "inventory-and-tables", description: "Responsive data-heavy resource collections.", route: "/components/inventory-and-tables", exports: ["DataTable", "EntityTable", "InventoryDesktop", "InventoryMobile", "InventorySurface", "PaginationControls", "paginationPageSizes"] },
   { category: "Pattern", family: "Metrics and data panels", slug: "metrics-and-data-panels", description: "Operational summaries, responsive compact metric bands, daily-volume charts, trends, and panel anatomy.", route: "/components/metrics-and-data-panels", exports: ["DailyVolumeChart", "DataPanel", "DataPanelContent", "DataPanelFooter", "DataPanelHeader", "MetricBand", "MetricBandItem", "MetricCard", "MetricTrend", "ValueMeter"] },
+  { category: "Pattern", family: "Charts", slug: "charts", description: "Trend, bar, donut, and sparkline charts built on Recharts and the palette-backed chart tokens, from the optional /charts entry.", route: "/components/charts", importPath: "@conscia-labs/design-system/charts", exports: ["TrendLineChart", "TrendAreaChart", "CategoryBarChart", "DonutChart", "Sparkline", "ChartContainer", "ChartDataTable", "ChartLegend", "ChartTooltipContent", "chartAxisProps", "chartColor", "chartGridProps", "resolveChartConfig", "useChart"] },
   { category: "Pattern", family: "Activity and attention", slug: "activity-and-attention", description: "Link-hosted operational activity and persistent findings.", route: "/components/activity-and-attention", exports: ["ActivityItem", "ActivityList", "AttentionItem", "AttentionList"] },
   { category: "Pattern", family: "State and feedback", slug: "state-and-feedback", description: "Empty, loading, error, confirmation, and command states.", route: "/components/state-and-feedback", exports: ["CommandPalette", "ConfirmationDialog", "ErrorState", "LoadingRows", "StateView"] },
   { category: "Pattern", family: "Filters and preferences", slug: "filters-and-preferences", description: "Applied filters and shared display preferences.", route: "/components/filters-and-preferences", exports: ["AppearanceControl", "DensityControl", "DesignPreferenceControls", "DesignSystemPreferenceScript", "DesignSystemPreferenceSync", "FilterBar", "useConsciaPreferences"] },

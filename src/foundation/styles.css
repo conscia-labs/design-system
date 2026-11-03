@@ -30,6 +30,27 @@
   --palette-grey-300: #e4e5e5;
   --palette-grey-500: #838692;
   --palette-grey-800: #373b4a;
+  /*
+   * Data-visualization steps. Charts need more distinct hues and lightness
+   * steps than the published palette has, so these extend the brand hues
+   * (electric blue, Conscia green, peach rose) with a teal, a leaf green, and
+   * a slate blue. "-bright" steps are the dark-theme counterparts. Chart
+   * tokens reference only palette primitives, never raw values.
+   */
+  --palette-electric-blue-light: #aab4ff;
+  --palette-electric-blue-bright: #7f8fff;
+  --palette-electric-blue-vivid: #6574fc;
+  --palette-electric-blue-deep: #262d55;
+  --palette-green-mid: #2f7471;
+  --palette-teal: #1d9999;
+  --palette-teal-bright: #2ca2a2;
+  --palette-rose: #be2f5a;
+  --palette-rose-bright: #e75669;
+  --palette-leaf: #0a6b1d;
+  --palette-leaf-bright: #218b30;
+  --palette-slate: #44509a;
+  --palette-slate-bright: #6474cf;
+  --palette-warm-grey-500: #8a858a;
 }
 
 @keyframes ds-sidebar-expand {
@@ -216,14 +237,38 @@
    * normal-vision separation, and 3:1 against canvas and surface.
    * Series that mean good or bad use the status or trend tokens instead.
    */
-  --chart-series-1: var(--brand-accent);
-  --chart-series-2: #1d9999;
-  --chart-series-3: #be2f5a;
-  --chart-series-4: #0a6b1d;
-  --chart-series-5: #44509a;
+  --chart-series-1: var(--palette-electric-blue);
+  --chart-series-2: var(--palette-teal);
+  --chart-series-3: var(--palette-rose);
+  --chart-series-4: var(--palette-leaf);
+  --chart-series-5: var(--palette-slate);
+  /* Remaining categories grouped as "Other": a quiet grey, >= 3:1 on canvas, surface, and muted. */
+  --chart-series-other: var(--palette-grey-500);
+  /* Outcome series alias the status roles so a chart matches badges and trends nearby. */
+  --chart-positive: var(--success);
+  --chart-negative: var(--danger);
+  --chart-warning: var(--warning);
+  --chart-information: var(--information);
+  /* Sequential: one electric-blue ramp, step 1 quietest, step 5 strongest. */
+  --chart-sequential-1: var(--palette-electric-blue-pale);
+  --chart-sequential-2: var(--palette-electric-blue-light);
+  --chart-sequential-3: var(--palette-electric-blue-bright);
+  --chart-sequential-4: var(--palette-electric-blue);
+  --chart-sequential-5: var(--palette-electric-blue-dark);
+  /* Diverging: peach rose (below the midpoint) through grey to Conscia green (above). */
+  --chart-diverging-1: var(--palette-peach-darkest);
+  --chart-diverging-2: var(--palette-peach-dark);
+  --chart-diverging-3: var(--palette-grey-300);
+  --chart-diverging-4: var(--palette-green-pale);
+  --chart-diverging-5: var(--palette-green);
   --chart-grid: var(--border-subtle);
   --chart-axis: var(--text-muted);
   --chart-annotation: var(--action-background);
+  --chart-reference: var(--text-supporting);
+  --chart-cursor: var(--border-strong);
+  --chart-tooltip-background: var(--surface-floating);
+  --chart-tooltip-border: var(--border-default);
+  --chart-tooltip-foreground: var(--text-primary);
   /* Area fills fade from the series color to transparent toward the baseline. */
   --chart-area-opacity-start: 0.2;
   --chart-area-opacity-end: 0;
@@ -627,15 +672,37 @@
    * dark band (worst adjacent dE 9.3) and at least 3:1 against canvas,
    * surface, raised, and muted dark surfaces.
    */
-  --chart-series-1: #6574fc;
-  --chart-series-2: #2ca2a2;
-  --chart-series-3: #e75669;
-  --chart-series-4: #218b30;
-  --chart-series-5: #6474cf;
+  --chart-series-1: var(--palette-electric-blue-vivid);
+  --chart-series-2: var(--palette-teal-bright);
+  --chart-series-3: var(--palette-rose-bright);
+  --chart-series-4: var(--palette-leaf-bright);
+  --chart-series-5: var(--palette-slate-bright);
+  --chart-series-other: var(--palette-warm-grey-500);
+  --chart-positive: var(--success);
+  --chart-negative: var(--danger);
+  --chart-warning: var(--warning);
+  --chart-information: var(--information);
+  /* Dark ramps run the other way: the strongest step is the brightest. */
+  --chart-sequential-1: var(--palette-electric-blue-deep);
+  --chart-sequential-2: var(--palette-electric-blue-dark);
+  --chart-sequential-3: var(--palette-electric-blue);
+  --chart-sequential-4: var(--palette-electric-blue-bright);
+  --chart-sequential-5: var(--palette-electric-blue-light);
+  --chart-diverging-1: var(--palette-peach-dark);
+  --chart-diverging-2: var(--palette-peach-darkest);
+  --chart-diverging-3: var(--palette-grey-800);
+  --chart-diverging-4: var(--palette-green-mid);
+  --chart-diverging-5: var(--palette-green-pale);
   --chart-area-opacity-start: 0.3;
+  --chart-area-opacity-end: 0;
   --chart-grid: var(--border-subtle);
   --chart-axis: var(--text-muted);
   --chart-annotation: var(--action-background);
+  --chart-reference: var(--text-supporting);
+  --chart-cursor: var(--border-strong);
+  --chart-tooltip-background: var(--surface-floating);
+  --chart-tooltip-border: var(--border-default);
+  --chart-tooltip-foreground: var(--text-primary);
   --trend-positive: var(--brand-supporting);
   --trend-negative: var(--danger);
   --trend-neutral: var(--text-supporting);
@@ -1275,9 +1342,29 @@
   --color-chart-series-3: var(--chart-series-3);
   --color-chart-series-4: var(--chart-series-4);
   --color-chart-series-5: var(--chart-series-5);
+  --color-chart-series-other: var(--chart-series-other);
+  --color-chart-positive: var(--chart-positive);
+  --color-chart-negative: var(--chart-negative);
+  --color-chart-warning: var(--chart-warning);
+  --color-chart-information: var(--chart-information);
+  --color-chart-sequential-1: var(--chart-sequential-1);
+  --color-chart-sequential-2: var(--chart-sequential-2);
+  --color-chart-sequential-3: var(--chart-sequential-3);
+  --color-chart-sequential-4: var(--chart-sequential-4);
+  --color-chart-sequential-5: var(--chart-sequential-5);
+  --color-chart-diverging-1: var(--chart-diverging-1);
+  --color-chart-diverging-2: var(--chart-diverging-2);
+  --color-chart-diverging-3: var(--chart-diverging-3);
+  --color-chart-diverging-4: var(--chart-diverging-4);
+  --color-chart-diverging-5: var(--chart-diverging-5);
   --color-chart-grid: var(--chart-grid);
   --color-chart-axis: var(--chart-axis);
   --color-chart-annotation: var(--chart-annotation);
+  --color-chart-reference: var(--chart-reference);
+  --color-chart-cursor: var(--chart-cursor);
+  --color-chart-tooltip-background: var(--chart-tooltip-background);
+  --color-chart-tooltip-border: var(--chart-tooltip-border);
+  --color-chart-tooltip-foreground: var(--chart-tooltip-foreground);
   --color-trend-positive: var(--trend-positive);
   --color-trend-negative: var(--trend-negative);
   --color-trend-neutral: var(--trend-neutral);

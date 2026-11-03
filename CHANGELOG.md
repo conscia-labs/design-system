@@ -1,5 +1,59 @@
 # Changelog
 
+## Unreleased
+
+Conscia apps can now draw charts from the design system instead of styling a
+chart library themselves. The new opt-in **`@conscia-labs/design-system/charts`**
+entry is built on Recharts 3 and ships `TrendLineChart`, `TrendAreaChart`,
+`CategoryBarChart`, `DonutChart`, and `Sparkline`, plus `ChartContainer` for
+any other Recharts chart. Every chart colour now comes from the brand palette
+in both themes.
+
+### Upgrading from 1.7.4
+
+The package has no breaking changes, and no chart colour changes. Apps that do
+not import `/charts` need nothing new. To use the charts:
+
+- **Install the peers** next to the package: `pnpm add recharts react-is`.
+- **Import from the charts entry** and describe each series in a `config`:
+
+  ```tsx
+  import { TrendLineChart } from "@conscia-labs/design-system/charts";
+
+  <TrendLineChart
+    title="Response latency"
+    summary="p95 latency stays under the 500 ms target."
+    config={{ p50: { label: "p50" }, p95: { label: "p95" } }}
+    data={weeks}
+    xKey="week"
+    referenceLines={[{ value: 500, label: "Target" }]}
+  />
+  ```
+
+### Added
+
+- The `/charts` entry, with `recharts` and `react-is` as optional peer
+  dependencies. The root, `/patterns`, and `/primitives` entries never import
+  Recharts, and the package check enforces it.
+- `ChartContainer`: caption, token-coloured legend, a plot that screen readers
+  hear as its required `summary`, and an exact-values table. `ChartLegend`,
+  `ChartTooltipContent`, `ChartDataTable`, `chartAxisProps`, `chartGridProps`,
+  `chartColor`, and `resolveChartConfig` support custom Recharts charts.
+- Chart tokens for a grouped remainder (`--chart-series-other`), outcomes
+  (`--chart-positive`, `-negative`, `-warning`, `-information`), a sequential
+  electric-blue ramp and a peach-to-green diverging scale (five steps each),
+  reference and cursor lines, and the tooltip surface, each with a
+  `--color-chart-*` Tailwind mapping.
+- Data-visualization palette primitives (`--palette-teal`, `--palette-rose`,
+  `--palette-leaf`, `--palette-slate`, their `-bright` dark steps, and extra
+  electric-blue and green steps).
+- A Charts page in the playground with every colour role and chart form.
+
+### Changed
+
+- `--chart-series-1` to `-5` now reference palette primitives instead of raw
+  values in both themes. The resolved colours are unchanged.
+
 ## 1.7.4 - 2026-11-01
 
 Every Conscia app can now brand its shell with one shared **`BrandLockup`**
