@@ -7,6 +7,8 @@ const expectedFiles = [
   "bin/conscia-design-system.mjs",
   "dist/index.js",
   "dist/index.d.ts",
+  "dist/charts/index.js",
+  "dist/charts/index.d.ts",
   "dist/foundation/index.js",
   "dist/patterns/index.js",
   "dist/primitives/index.js",
@@ -25,6 +27,32 @@ assert.match(
   /^"use client";/,
   "The component root must be an intentional client-only entry.",
 );
+
+const chartsSource = await readFile("dist/charts/index.js", "utf8");
+assert.match(chartsSource, /^"use client";/, "The charts entry must be client-only.");
+
+// Recharts is an optional peer: only the charts entry may reach it.
+async function staticImportGraph(entry) {
+  const seen = new Set();
+  const pending = [entry];
+  while (pending.length) {
+    const file = pending.pop();
+    if (seen.has(file)) continue;
+    seen.add(file);
+    const source = await readFile(file, "utf8");
+    for (const match of source.matchAll(/(?:from|import)\s*["'](\.{1,2}\/[^"']+\.js)["']/g)) {
+      pending.push(new URL(match[1], new URL(file, `file://${process.cwd()}/`)).pathname.slice(process.cwd().length + 1));
+    }
+  }
+  return seen;
+}
+for (const entry of ["dist/index.js", "dist/patterns/index.js", "dist/primitives/index.js", "dist/foundation/index.js", "dist/utils/index.js"]) {
+  for (const file of await staticImportGraph(entry)) {
+    assert.doesNotMatch(await readFile(file, "utf8"), /["']recharts["']/, `${entry} must not import recharts (via ${file}).`);
+  }
+}
+const chartsGraph = await Promise.all([...(await staticImportGraph("dist/charts/index.js"))].map((file) => readFile(file, "utf8")));
+assert.ok(chartsGraph.some((source) => /["']recharts["']/.test(source)), "The charts entry must import recharts as an external peer.");
 
 async function findJavaScriptFiles(directory) {
   const files = [];
@@ -215,5 +243,11 @@ assert.equal(
   undefined,
   "Base UI prop utilities must remain internal.",
 );
+assert.equal(packageExports.TrendLineChart, undefined, "Charts must stay out of the root entry.");
+
+const chartExports = await import("@conscia-labs/design-system/charts");
+for (const exportName of ["ChartContainer", "TrendLineChart", "TrendAreaChart", "CategoryBarChart", "DonutChart", "Sparkline", "chartColor"]) {
+  assert.equal(typeof chartExports[exportName], "function", `Expected the charts entry to export ${exportName}.`);
+}
 
 console.log("Package artifacts and public imports verified.");

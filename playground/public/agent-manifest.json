@@ -389,6 +389,30 @@
     },
     {
       "category": "Pattern",
+      "family": "Charts",
+      "slug": "charts",
+      "description": "Trend, bar, donut, and sparkline charts built on Recharts and the palette-backed chart tokens, from the optional /charts entry.",
+      "route": "/components/charts",
+      "importPath": "@conscia-labs/design-system/charts",
+      "exports": [
+        "TrendLineChart",
+        "TrendAreaChart",
+        "CategoryBarChart",
+        "DonutChart",
+        "Sparkline",
+        "ChartContainer",
+        "ChartDataTable",
+        "ChartLegend",
+        "ChartTooltipContent",
+        "chartAxisProps",
+        "chartColor",
+        "chartGridProps",
+        "resolveChartConfig",
+        "useChart"
+      ]
+    },
+    {
+      "category": "Pattern",
       "family": "Activity and attention",
       "slug": "activity-and-attention",
       "description": "Link-hosted operational activity and persistent findings.",

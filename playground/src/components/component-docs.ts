@@ -162,6 +162,19 @@ const guidance: Record<string, ComponentGuidance> = {
       { name: "ValueMeter tone", values: "brand (default) · neutral · success · warning · danger", guidance: "Brand fills plain quantities with the blue-to-burgundy blend. Use a status tone only when the level itself means good, at risk, or bad." },
     ],
   },
+  charts: {
+    whenToUse: "Use for trends over time, comparisons across categories, shares of a total, and compact metric trends. Import from @conscia-labs/design-system/charts and install recharts and react-is next to the package. Keep DailyVolumeChart for per-day measures; it has no Recharts dependency.",
+    accessibility: "Every chart needs a summary: plain text that states what the plot shows, which screen readers hear in place of it. The data table disclosure gives exact values to everyone. Legends are hidden from assistive technology, and tooltips are pointer-only, so never put information only in a tooltip.",
+    options: [
+      { name: "config", values: "{ [dataKey]: { label, color? } }", guidance: "One entry per series, in legend order. Series without a colour take series-1 to series-5 in order and never cycle; past the fifth they fall back to other, so group long tails into one Other series." },
+      { name: "color", values: "series-1 … series-5 · other · positive · negative · warning · information · sequential-1 … 5 · diverging-1 … 5", guidance: "Categorical series carry no meaning. Use positive and negative only when a series means good or bad, so it matches status badges nearby. Sequential and diverging steps are for heatmaps and ranges." },
+      { name: "Trend charts", values: "TrendLineChart · TrendAreaChart · xKey · formatX · referenceLines · curve: monotone (default) · linear · step · stacked (area)", guidance: "Use lines to compare series and stacked areas when the total matters. Add a reference line for targets and thresholds." },
+      { name: "CategoryBarChart", values: "layout: grouped (default) · stacked · orientation: vertical (default) · horizontal", guidance: "Use horizontal bars for long category names. Stack outcome segments with positive and negative colours." },
+      { name: "DonutChart", values: "centerValue · centerLabel · legend shares", guidance: "Shares of one total, five slices or fewer. Compare values across categories with CategoryBarChart instead." },
+      { name: "Sparkline", values: "variant: line (default) · area · color · label", guidance: "Put it in MetricCard's visualization slot, which supplies the text alternative. Pass label only when it stands alone." },
+      { name: "custom charts", values: "ChartContainer · ChartTooltipContent · chartAxisProps · chartGridProps · chartColor", guidance: "Wrap any Recharts chart in ChartContainer for the caption, legend, summary, and table. Reference series colours as var(--series-<key>) or chartColor(), never raw colour values." },
+    ],
+  },
   "activity-and-attention": {
     whenToUse: "Use ActivityList for chronological records and AttentionList for persistent operational findings that require review.",
     accessibility: "Use a real anchor in an ActivityItem title for direct navigation; do not make the whole row a link around other controls. Attention tone needs an icon or severity label. These lists are not live alerts unless the application explicitly makes them so.",
@@ -215,7 +228,7 @@ export const componentDocs = componentInventory
     return {
       ...entry,
       ...details,
-      importCode: `import { ${entry.exports.filter((name) => !name.toLowerCase().endsWith("variants") && name !== "useToast" && name !== "useAppShell" && name !== "useConsciaPreferences").slice(0, 5).join(", ")} } from "@conscia-labs/design-system";`,
+      importCode: `import { ${entry.exports.filter((name) => !name.toLowerCase().endsWith("variants") && name !== "useToast" && name !== "useAppShell" && name !== "useConsciaPreferences").slice(0, 5).join(", ")} } from "${"importPath" in entry ? entry.importPath : "@conscia-labs/design-system"}";`,
     };
   });
 

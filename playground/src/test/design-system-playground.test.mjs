@@ -44,6 +44,8 @@ test("playground inventory covers every public runtime export", () => {
     ...runtimeExportsFromIndex("../../../src/primitives/index.ts", "../../../src/primitives"),
     ...runtimeExportsFromIndex("../../../src/patterns/index.ts", "../../../src/patterns"),
     ...runtimeExportsFromIndex("../../../src/foundation/index.ts", "../../../src/foundation"),
+    ...[...read("../../../src/charts/index.ts").matchAll(/^export \{([\s\S]*?)\} from/gm)]
+      .flatMap((match) => match[1].split(",").map((name) => name.trim()).filter(Boolean)),
   ]);
   const missing = [...runtimeExports].filter((name) => !inventory.includes(`"${name}"`));
 
@@ -89,7 +91,7 @@ test("component documentation is registry-driven and gives every family its own 
   const componentEntries = [...inventory.matchAll(/category: "(Primitive|Pattern|Compatibility)", family: "([^"]+)", slug: "([^"]+)"/g)];
   const slugs = componentEntries.map((entry) => entry[3]);
 
-  assert.equal(slugs.length, 24);
+  assert.equal(slugs.length, 25);
   assert.equal(new Set(slugs).size, slugs.length);
   for (const slug of slugs) assert.match(inventory, new RegExp(`route: "/components/${slug}"`));
   assert.match(docs, /if \(!details\) throw new Error/);
@@ -584,6 +586,49 @@ test("expressive layer keeps brand, motion, chart, and texture roles token-backe
   assert.match(styles, /--trend-positive: var\(--brand-supporting\);/);
   assert.match(stateViews, /data-slot="state-view-spot"/);
   assert.match(stateViews, /tone = "danger"/);
+});
+
+test("chart tokens resolve to palette primitives and match across themes", () => {
+  const styles = read("../../../src/foundation/styles.css");
+  const block = (selector) => {
+    const start = styles.indexOf(`${selector} {`);
+    return styles.slice(start, styles.indexOf("\n}", start));
+  };
+  const chartTokens = (source) => new Map([...source.matchAll(/^\s*(--chart-[a-z0-9-]+):\s*([^;]+);/gm)].map((match) => [match[1], match[2]]));
+  const palette = new Map([...block(":root").matchAll(/(--palette-[a-z0-9-]+):\s*(#[0-9a-f]{6});/g)].map((match) => [match[1], match[2].slice(1)]));
+  const light = chartTokens(block(":root,\n[data-appearance-scope=\"light\"]"));
+  const dark = chartTokens(block(":root.dark,\n:root[data-appearance=\"dark\"]"));
+
+  assert.ok(light.size >= 30, "The light theme defines the chart token set.");
+  assert.deepEqual([...dark.keys()].sort(), [...light.keys()].sort(), "Both themes define the same chart tokens.");
+  for (const [theme, tokens] of [["light", light], ["dark", dark]]) {
+    for (const [name, value] of tokens) {
+      assert.doesNotMatch(value, /#|rgb|hsl|oklch/, `${theme} ${name} must not be a raw colour.`);
+      const reference = value.match(/^var\((--palette-[a-z0-9-]+)\)$/)?.[1];
+      if (reference) assert.ok(palette.has(reference), `${theme} ${name} references an undefined palette primitive.`);
+    }
+    for (const series of [1, 2, 3, 4, 5]) {
+      assert.match(tokens.get(`--chart-series-${series}`), /^var\(--palette-/, `${theme} series ${series} comes from the palette.`);
+    }
+    assert.match(tokens.get("--chart-positive"), /var\(--success\)/);
+    assert.match(tokens.get("--chart-negative"), /var\(--danger\)/);
+  }
+
+  const hex = (tokens, name) => palette.get(tokens.get(name).match(/var\((--palette-[a-z0-9-]+)\)/)[1]);
+  for (const [tokens, surfaces] of [[light, ["ffffff", "f3f4f5"]], [dark, ["1a171a", "221e22", "2a262a", "2d2a2e"]]]) {
+    for (const name of ["--chart-series-1", "--chart-series-2", "--chart-series-3", "--chart-series-4", "--chart-series-5", "--chart-series-other"]) {
+      for (const surface of surfaces) {
+        assert.ok(contrastRatio(hex(tokens, name), surface) >= 3, `${name} keeps 3:1 against #${surface}.`);
+      }
+    }
+  }
+  // Sequential steps get strictly stronger: darker on light surfaces, brighter on dark ones.
+  const steps = (tokens) => [1, 2, 3, 4, 5].map((step) => relativeLuminance(hex(tokens, `--chart-sequential-${step}`)));
+  assert.ok(steps(light).every((value, index, all) => index === 0 || value < all[index - 1]));
+  assert.ok(steps(dark).every((value, index, all) => index === 0 || value > all[index - 1]));
+  for (const token of ["series-other", "positive", "sequential-1", "diverging-5", "reference", "cursor", "tooltip-background"]) {
+    assert.match(styles, new RegExp(`--color-chart-${token}: var\\(--chart-${token}\\);`));
+  }
 });
 
 test("tabs separate routed navigation from layered content and mode switching", () => {
