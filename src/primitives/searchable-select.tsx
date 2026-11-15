@@ -99,7 +99,7 @@ function SearchableSelect({
               <X className="size-4" />
             </IconButton>
           ) : null}
-          <Combobox.Trigger aria-label={ariaLabel ?? placeholder} aria-labelledby={ariaLabelledBy} className="absolute right-1 inline-flex size-8 items-center justify-center rounded-sm text-text-supporting outline-none focus-visible:ring-2 focus-visible:ring-focus">
+          <Combobox.Trigger aria-label={ariaLabel ?? placeholder} aria-labelledby={ariaLabelledBy} className="absolute right-1 inline-flex size-8 items-center justify-center rounded-sm text-text-supporting outline-none focus-visible:ring-2 focus-visible:ring-focus-ring">
             <ChevronsUpDown className="size-4" />
           </Combobox.Trigger>
         </Combobox.InputGroup>

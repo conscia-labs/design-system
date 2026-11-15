@@ -12,6 +12,6 @@ const overlayLayers = {
 } as const;
 
 const overlayCloseClasses =
-  "absolute right-3 top-3 inline-flex size-[var(--ds-control-height-sm)] items-center justify-center rounded-xs text-text-supporting opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-focus focus:ring-offset-2 focus:ring-offset-canvas disabled:pointer-events-none [&_svg]:size-4";
+  "absolute right-3 top-3 inline-flex size-[var(--ds-control-height-sm)] items-center justify-center rounded-xs text-text-supporting opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-focus-ring focus:ring-offset-2 focus:ring-offset-canvas disabled:pointer-events-none [&_svg]:size-4";
 
 export { overlayCloseClasses, overlayLayers };

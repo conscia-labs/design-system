@@ -365,7 +365,7 @@ function AppSidebar({
         aria-labelledby={ariaLabelledBy}
         className={cn(
           // --ds-app-sidebar-inset and -radius are 0 by default; a mood floats the sidebar as a rounded panel.
-          "fixed inset-y-[var(--ds-app-sidebar-inset)] z-20 hidden w-[var(--ds-app-sidebar-width)] shrink-0 flex-col rounded-[var(--ds-app-sidebar-radius)] border-sidebar-border bg-sidebar-canvas text-sidebar-primary-text transition-[width] duration-200 ease-linear lg:flex",
+          "fixed inset-y-[var(--ds-app-sidebar-inset)] z-20 hidden w-[var(--ds-app-sidebar-width)] shrink-0 flex-col rounded-[var(--ds-app-sidebar-radius)] border-sidebar-border bg-sidebar-canvas text-sidebar-primary-text transition-[width] duration-[var(--ds-duration-base)] ease-linear lg:flex",
           side === "left" ? "left-[var(--ds-app-sidebar-inset)] border-r" : "right-[var(--ds-app-sidebar-inset)] border-l",
           "group-data-[sidebar-state=collapsed]/shell:w-[var(--ds-app-sidebar-width)]",
           "group-data-[header-layout=integrated]/shell:top-[calc(var(--ds-topbar-height)+var(--ds-app-sidebar-inset))]",
@@ -599,7 +599,7 @@ function NavigationGroup({
 
 function navigationItemClasses(active?: boolean) {
   return cn(
-    "ds-type-navigation flex min-h-[var(--ds-sidebar-item-height-touch)] min-w-0 cursor-pointer items-center gap-2 rounded-[var(--ds-radius-control)] px-2 font-medium text-sidebar-secondary-text outline-none transition-colors duration-150 lg:h-[var(--ds-sidebar-item-height)] lg:min-h-0",
+    "ds-type-navigation flex min-h-[var(--ds-sidebar-item-height-touch)] min-w-0 cursor-pointer items-center gap-2 rounded-[var(--ds-radius-control)] px-2 font-medium text-sidebar-secondary-text outline-none transition-colors duration-[var(--ds-duration-fast)] lg:h-[var(--ds-sidebar-item-height)] lg:min-h-0",
     "hover:bg-sidebar-hover hover:text-sidebar-primary-text",
     "focus-visible:ring-[3px] focus-visible:ring-sidebar-focus-ring",
     "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:cursor-not-allowed aria-disabled:opacity-50",
@@ -691,7 +691,7 @@ const NavigationSubItem = React.forwardRef<HTMLElement, NavigationSubItemProps>(
         "data-slot": "navigation-sub-item",
         "data-active": active ? "true" : undefined,
         className: cn(
-          "ds-type-navigation flex min-h-[var(--ds-sidebar-item-height-touch)] min-w-0 cursor-pointer items-center gap-2 rounded-[var(--ds-radius-control)] px-2 text-sidebar-secondary-text outline-none transition-colors duration-150 lg:h-[calc(var(--ds-sidebar-item-height)-0.25rem)] lg:min-h-0",
+          "ds-type-navigation flex min-h-[var(--ds-sidebar-item-height-touch)] min-w-0 cursor-pointer items-center gap-2 rounded-[var(--ds-radius-control)] px-2 text-sidebar-secondary-text outline-none transition-colors duration-[var(--ds-duration-fast)] lg:h-[calc(var(--ds-sidebar-item-height)-0.25rem)] lg:min-h-0",
           "hover:bg-sidebar-hover hover:text-sidebar-primary-text focus-visible:ring-[3px] focus-visible:ring-sidebar-focus-ring",
           "group-data-[sidebar-state=collapsed]/shell:hidden [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:stroke-[1.75] [&>svg]:text-sidebar-icon",
           active &&
@@ -743,7 +743,7 @@ function SidebarTrigger({
     type: "button" as const,
     variant: "ghost" as const,
     className: cn(
-      "shrink-0 cursor-pointer text-text-supporting hover:bg-surface-muted hover:text-text-primary focus-visible:ring-focus",
+      "shrink-0 cursor-pointer text-text-supporting hover:bg-surface-muted hover:text-text-primary focus-visible:ring-focus-ring",
       className,
     ),
     "aria-label": ariaLabel ?? "Toggle navigation",
@@ -884,7 +884,7 @@ function MainRegion({
     <div
       data-slot="main-region"
       className={cn(
-        "flex min-h-svh min-w-0 w-full flex-1 flex-col transition-[padding] duration-200 ease-linear",
+        "flex min-h-svh min-w-0 w-full flex-1 flex-col transition-[padding] duration-[var(--ds-duration-base)] ease-linear",
         "group-data-[sidebar-side=left]/shell:lg:pl-[calc(var(--ds-app-sidebar-width)+var(--ds-app-sidebar-inset))] group-data-[sidebar-side=right]/shell:lg:pr-[calc(var(--ds-app-sidebar-width)+var(--ds-app-sidebar-inset))]",
         "group-data-[header-layout=integrated]/shell:pt-[var(--ds-topbar-height)]",
         className,
@@ -1045,14 +1045,14 @@ function AppHeaderTitle({
       <div
         inert={titleVisible}
         aria-hidden={titleVisible || undefined}
-        className="ds-type-ui flex min-w-0 items-center gap-2 text-text-supporting transition-[opacity,translate] duration-200 group-data-[title-visible=true]/header-title:-translate-y-1.5 group-data-[title-visible=true]/header-title:opacity-0"
+        className="ds-type-ui flex min-w-0 items-center gap-2 text-text-supporting transition-[opacity,translate] duration-[var(--ds-duration-base)] group-data-[title-visible=true]/header-title:-translate-y-1.5 group-data-[title-visible=true]/header-title:opacity-0"
       >
         {children}
       </div>
       {/* The page heading already names the page for assistive technology. */}
       <div
         aria-hidden="true"
-        className="ds-type-ui pointer-events-none min-w-0 translate-y-1.5 truncate font-semibold text-text-primary opacity-0 transition-[opacity,translate] duration-200 group-data-[title-visible=true]/header-title:translate-y-0 group-data-[title-visible=true]/header-title:opacity-100"
+        className="ds-type-ui pointer-events-none min-w-0 translate-y-1.5 truncate font-semibold text-text-primary opacity-0 transition-[opacity,translate] duration-[var(--ds-duration-base)] group-data-[title-visible=true]/header-title:translate-y-0 group-data-[title-visible=true]/header-title:opacity-100"
       >
         {title}
       </div>

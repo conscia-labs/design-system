@@ -186,7 +186,7 @@ function ToastDescription({ className, ...props }: React.ComponentProps<"p">) {
 }
 
 function ToastAction({ className, ...props }: React.ComponentProps<"button">) {
-  return <BaseToast.Action data-slot="toast-action" className={cn("rounded px-2 py-1 text-xs font-medium text-text-link outline-none hover:bg-surface-muted focus-visible:ring-2 focus-visible:ring-focus", className)} {...props} />;
+  return <BaseToast.Action data-slot="toast-action" className={cn("rounded px-2 py-1 text-xs font-medium text-text-link outline-none hover:bg-surface-muted focus-visible:ring-2 focus-visible:ring-focus-ring", className)} {...props} />;
 }
 
 function ToastClose({ "aria-label": ariaLabel = "Dismiss notification", children, className, ...props }: React.ComponentProps<"button">) {
@@ -194,7 +194,7 @@ function ToastClose({ "aria-label": ariaLabel = "Dismiss notification", children
     <BaseToast.Close
       data-slot="toast-close"
       aria-label={ariaLabel}
-      className={cn("rounded p-1 text-text-supporting outline-none hover:bg-surface-muted hover:text-text-primary focus-visible:ring-2 focus-visible:ring-focus", className)}
+      className={cn("rounded p-1 text-text-supporting outline-none hover:bg-surface-muted hover:text-text-primary focus-visible:ring-2 focus-visible:ring-focus-ring", className)}
       {...props}
     >
       {children ?? <XIcon aria-hidden="true" className="size-4" />}

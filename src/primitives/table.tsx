@@ -96,7 +96,7 @@ function Table({
       aria-label={isOverflowing ? scrollableLabel : undefined}
       tabIndex={isOverflowing ? 0 : undefined}
       className={cn(
-        "relative w-full outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-inset",
+        "relative w-full outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-inset",
         scrollable ? "overflow-x-auto overflow-y-hidden overscroll-x-contain" : "overflow-x-clip",
       )}
     >

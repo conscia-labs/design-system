@@ -35,7 +35,7 @@ function BreadcrumbLink({ className, render, ...props }: BreadcrumbLinkProps) {
     props: mergeProps<"a">({
       "data-slot": "breadcrumb-link",
       className: cn(
-        "truncate rounded-sm outline-none transition-colors hover:text-text-primary focus-visible:ring-[3px] focus-visible:ring-focus/50",
+        "truncate rounded-sm outline-none transition-colors hover:text-text-primary focus-visible:ring-[3px] focus-visible:ring-focus-ring",
         className,
       ),
       ...props,

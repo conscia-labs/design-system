@@ -33,10 +33,10 @@ const tabRailClasses =
   "flex min-w-0 items-stretch overflow-x-auto overscroll-x-contain scroll-px-2 snap-x [scrollbar-width:none] [&::-webkit-scrollbar]:hidden";
 
 const navigationTabClasses =
-  "relative inline-flex h-full shrink-0 snap-start items-center justify-center gap-2 whitespace-nowrap rounded-t-[var(--ds-radius-control)] px-[var(--ds-tab-padding-x)] text-sm font-medium outline-none transition-[background-color,color,box-shadow] duration-150 after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-transparent after:transition-colors hover:bg-surface-muted focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus/60 data-[active=false]:text-text-supporting data-[active=false]:hover:text-text-primary data-[active=true]:bg-selection-background data-[active=true]:font-semibold data-[active=true]:text-selection-foreground data-[active=true]:after:bg-selection-indicator";
+  "relative inline-flex h-full shrink-0 snap-start items-center justify-center gap-2 whitespace-nowrap rounded-t-[var(--ds-radius-control)] px-[var(--ds-tab-padding-x)] text-sm font-medium outline-none transition-[background-color,color,box-shadow] duration-[var(--ds-duration-fast)] after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-transparent after:transition-colors hover:bg-surface-muted focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus-ring data-[active=false]:text-text-supporting data-[active=false]:hover:text-text-primary data-[active=true]:bg-selection-background data-[active=true]:font-semibold data-[active=true]:text-selection-foreground data-[active=true]:after:bg-selection-indicator";
 
 const pillTabClasses =
-  "inline-flex h-full shrink-0 snap-start items-center justify-center gap-2 whitespace-nowrap rounded-full px-[var(--ds-tab-padding-x)] text-sm font-medium text-text-supporting outline-none transition-colors duration-150 hover:bg-surface-muted hover:text-text-primary focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus/60";
+  "inline-flex h-full shrink-0 snap-start items-center justify-center gap-2 whitespace-nowrap rounded-full px-[var(--ds-tab-padding-x)] text-sm font-medium text-text-supporting outline-none transition-colors duration-[var(--ds-duration-fast)] hover:bg-surface-muted hover:text-text-primary focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus-ring";
 
 function assignRef<T>(ref: React.Ref<T> | undefined, value: T | null) {
   if (typeof ref === "function") {
@@ -216,9 +216,9 @@ function TabsTrigger({
             "data-active:bg-selection-background-strong data-active:font-semibold data-active:text-selection-foreground data-active:ring-1 data-active:ring-inset data-active:ring-selection-border/60",
           ),
         resolvedVariant === "nested" &&
-          "relative inline-flex h-full shrink-0 snap-start items-center justify-center gap-1.5 whitespace-nowrap px-0.5 text-sm font-medium text-text-supporting outline-none transition-colors duration-150 after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:rounded-full after:bg-transparent hover:text-text-primary focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus/60 data-active:text-brand-supporting data-active:after:bg-brand-supporting",
+          "relative inline-flex h-full shrink-0 snap-start items-center justify-center gap-1.5 whitespace-nowrap px-0.5 text-sm font-medium text-text-supporting outline-none transition-colors duration-[var(--ds-duration-fast)] after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:rounded-full after:bg-transparent hover:text-text-primary focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus-ring data-active:text-brand-supporting data-active:after:bg-brand-supporting",
         resolvedVariant === "segmented" &&
-          "inline-flex h-full items-center justify-center gap-2 whitespace-nowrap rounded-[calc(var(--ds-radius-control)-2px)] px-3 text-sm font-medium text-text-supporting outline-none transition-[background-color,color,box-shadow] hover:text-text-primary focus-visible:ring-2 focus-visible:ring-focus/60 data-active:bg-surface-track-selected data-active:text-text-primary data-active:shadow-raised data-active:ring-1 data-active:ring-inset data-active:ring-border-subtle",
+          "inline-flex h-full items-center justify-center gap-2 whitespace-nowrap rounded-[calc(var(--ds-radius-control)-2px)] px-3 text-sm font-medium text-text-supporting outline-none transition-[background-color,color,box-shadow] hover:text-text-primary focus-visible:ring-2 focus-visible:ring-focus-ring data-active:bg-surface-track-selected data-active:text-text-primary data-active:shadow-raised data-active:ring-1 data-active:ring-inset data-active:ring-border-subtle",
         className,
       )}
       {...props}
@@ -234,7 +234,7 @@ function TabsContent({
     <BaseTabs.Panel
       data-slot="tabs-content"
       className={cn(
-        "outline-none focus-visible:ring-2 focus-visible:ring-focus/50",
+        "outline-none focus-visible:ring-2 focus-visible:ring-focus-ring",
         className,
       )}
       {...props}

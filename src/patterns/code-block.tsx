@@ -163,7 +163,7 @@ function CodeBlock({
             <pre
               aria-label={`${snippet.label} code example`}
               tabIndex={0}
-              className="max-h-[32rem] overflow-auto p-4 text-sm leading-6 outline-none focus-visible:ring-[3px] focus-visible:ring-inset focus-visible:ring-focus/50"
+              className="max-h-[32rem] overflow-auto p-4 text-sm leading-6 outline-none focus-visible:ring-[3px] focus-visible:ring-inset focus-visible:ring-focus-ring"
             >
               <code>{snippet.code}</code>
             </pre>

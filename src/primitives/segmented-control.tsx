@@ -57,7 +57,7 @@ function SegmentedControlItem({ className, ...props }: React.ComponentProps<type
     <Toggle
       data-slot="segmented-control-item"
       className={cn(
-        "inline-flex h-full min-w-0 items-center justify-center gap-2 whitespace-nowrap rounded-[calc(var(--ds-radius-control)-2px)] px-3 text-sm font-medium text-text-supporting outline-none transition-[background-color,color,box-shadow] hover:text-text-primary focus-visible:ring-2 focus-visible:ring-focus/60 data-disabled:pointer-events-none data-pressed:bg-surface-track-selected data-pressed:text-text-primary data-pressed:shadow-raised data-pressed:ring-1 data-pressed:ring-inset data-pressed:ring-border-subtle group-data-[size=sm]/segmented:px-2 [&_svg]:size-4 [&_svg]:shrink-0",
+        "inline-flex h-full min-w-0 items-center justify-center gap-2 whitespace-nowrap rounded-[calc(var(--ds-radius-control)-2px)] px-3 text-sm font-medium text-text-supporting outline-none transition-[background-color,color,box-shadow] hover:text-text-primary focus-visible:ring-2 focus-visible:ring-focus-ring data-disabled:pointer-events-none data-pressed:bg-surface-track-selected data-pressed:text-text-primary data-pressed:shadow-raised data-pressed:ring-1 data-pressed:ring-inset data-pressed:ring-border-subtle group-data-[size=sm]/segmented:px-2 [&_svg]:size-4 [&_svg]:shrink-0",
         className,
       )}
       {...props}

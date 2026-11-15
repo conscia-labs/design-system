@@ -7,14 +7,14 @@ import { Spinner } from "./spinner";
 import { cn } from "./utils";
 
 const buttonVariants = cva(
-  "ds-type-button inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md transition-[color,background-color,border-color,box-shadow,transform] duration-[var(--ds-duration-fast)] ease-standard active:not-disabled:translate-y-px disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-focus focus-visible:ring-focus/50 focus-visible:ring-[3px] aria-invalid:ring-danger/20 dark:aria-invalid:ring-danger/40 aria-invalid:border-danger",
+  "ds-type-button inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md transition-[color,background-color,border-color,box-shadow,transform] duration-[var(--ds-duration-fast)] ease-standard active:not-disabled:translate-y-px disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-focus focus-visible:ring-focus-ring focus-visible:ring-[3px] aria-invalid:ring-danger/20 dark:aria-invalid:ring-danger/40 aria-invalid:border-danger",
   {
     variants: {
       variant: {
         default:
           "bg-action text-action-foreground shadow-xs hover:bg-action-hover active:bg-action-active disabled:bg-action-background disabled:text-text-supporting disabled:shadow-none disabled:opacity-100",
         destructive:
-          "bg-danger-solid text-white shadow-xs hover:bg-danger-solid/90 focus-visible:ring-danger/20 dark:focus-visible:ring-danger/40",
+          "bg-danger-solid text-danger-solid-foreground shadow-xs hover:bg-danger-solid/90 focus-visible:ring-danger/20 dark:focus-visible:ring-danger/40",
         outline:
           "border border-border-strong bg-surface-control text-text-primary shadow-xs hover:bg-surface-control-hover hover:text-text-primary",
         secondary: "bg-surface-inverse text-text-inverse shadow-xs hover:bg-surface-inverse/80",

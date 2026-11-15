@@ -114,6 +114,18 @@ not import `/charts` need nothing new. To use the charts:
   - `MetricCard` moves its status below the title when the card is narrow.
   - Headings use `text-wrap: balance`, tables use tabular numerals, and
     dialogs, sheets and the command palette size with `dvh`.
+- Accessibility and tokens:
+  - One focus ring colour, the `focus-ring` Tailwind colour (`--focus` at
+    75%), replaces the 45%, 50%, 60% and solid variants. It holds 3:1 in
+    light, dark and brand chrome. Forced-colours mode gets a real outline.
+  - `dark:` utilities now match `data-appearance="dark"` as well as `.dark`.
+  - Brand chrome sets `--text-link`, `--action-hover` and `--action-active`,
+    so links on burgundy are readable.
+  - Dark `--action-hover` is darker, so white text on it holds 4.5:1.
+  - New tokens: `--ds-radius-pill`, `--scrim`, `--danger-solid` and
+    `--danger-solid-foreground`. Raw `999px`, `bg-black/50`, `text-white`,
+    `duration-150` and `duration-200` now use tokens; the two durations move
+    to 120ms and 180ms.
 
 ### Fixed
 

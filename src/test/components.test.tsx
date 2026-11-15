@@ -91,7 +91,7 @@ describe("Button", () => {
 
   it("keeps every variant on an explicit semantic foreground", () => {
     expect(buttonVariants({ variant: "default" })).toContain("text-action-foreground");
-    expect(buttonVariants({ variant: "destructive" })).toContain("text-white");
+    expect(buttonVariants({ variant: "destructive" })).toContain("text-danger-solid-foreground");
     expect(buttonVariants({ variant: "destructive" })).toContain("bg-danger-solid");
     expect(buttonVariants({ variant: "outline" })).toContain("text-text-primary");
     expect(buttonVariants({ variant: "secondary" })).toContain("text-text-inverse");
@@ -791,7 +791,7 @@ describe("shared sidebar", () => {
     expect(topbar?.className).toContain("px-[var(--ds-topbar-padding-x)]");
     expect(trigger.className).toContain("text-text-supporting");
     expect(trigger.className).toContain("hover:bg-surface-muted");
-    expect(trigger.className).toContain("focus-visible:ring-focus");
+    expect(trigger.className).toContain("focus-visible:ring-focus-ring");
     expect(
       container
         .querySelector('[data-slot="app-sidebar-header"]')

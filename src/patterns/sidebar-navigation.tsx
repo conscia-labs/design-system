@@ -374,7 +374,7 @@ function SidebarNavigation({
                       {entry.label}
                     </span>
                     <NavigationMetadata badge={entry.badge} count={entry.count} />
-                    <ChevronRight className="ml-auto transition-transform duration-150 ease-out group-data-[sidebar-state=collapsed]/shell:hidden group-data-[open]/collapsible:rotate-90" />
+                    <ChevronRight className="ml-auto transition-transform duration-[var(--ds-duration-fast)] ease-out group-data-[sidebar-state=collapsed]/shell:hidden group-data-[open]/collapsible:rotate-90" />
                   </NavigationItem>
                 }
               />

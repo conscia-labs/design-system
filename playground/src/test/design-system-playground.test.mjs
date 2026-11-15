@@ -938,7 +938,7 @@ test("app header follows the shell: integrated bar, or a transparent sticky head
   assert.match(styles, /\[data-header-layout="split"\], :is\(\[data-mood="balanced"\], \[data-mood="airy"\]\) \[data-header-layout="auto"\]\) \[data-slot="main-region"\] > \[data-slot="app-header"\] \{\n  position: sticky;/);
   assert.match(styles, /\[data-slot="app-header"\]\[data-variant="transparent"\]\[data-scrolled="true"\]::before/);
   assert.match(styles, /--ds-app-header-height: 4\.5rem;/);
-  assert.match(styles, /--ds-app-header-scrolled-radius: 999px;/);
+  assert.match(styles, /--ds-app-header-scrolled-radius: var\(--ds-radius-pill\);/);
 
   const example = read("../app/examples/floating-workspace/page.tsx");
   assert.match(example, /<AppHeader variant=\{header\}>/);

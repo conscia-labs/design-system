@@ -214,7 +214,7 @@ function DataTable<TData>({
                         <button
                           type="button"
                           data-slot="data-table-sort"
-                          className="ds-type-table-head -ml-2 inline-flex h-[var(--ds-control-height-sm)] items-center gap-1.5 whitespace-nowrap rounded-md px-2 uppercase text-text-supporting outline-none transition-[color,background-color] duration-[var(--ds-duration-fast)] hover:bg-surface-muted hover:text-text-primary focus-visible:ring-[3px] focus-visible:ring-focus/50 [&_svg]:shrink-0"
+                          className="ds-type-table-head -ml-2 inline-flex h-[var(--ds-control-height-sm)] items-center gap-1.5 whitespace-nowrap rounded-md px-2 uppercase text-text-supporting outline-none transition-[color,background-color] duration-[var(--ds-duration-fast)] hover:bg-surface-muted hover:text-text-primary focus-visible:ring-[3px] focus-visible:ring-focus-ring [&_svg]:shrink-0"
                           onClick={header.column.getToggleSortingHandler()}
                           aria-label={`Sort by ${meta?.label ?? header.column.id}`}
                         >
@@ -241,7 +241,7 @@ function DataTable<TData>({
                   interactive={rowClickable}
                   tabIndex={rowClickable ? 0 : undefined}
                   aria-label={rowClickable ? getRowLabel?.(row.original) ?? row.id : undefined}
-                  className={cn(rowClickable && "outline-none focus-visible:ring-[3px] focus-visible:ring-focus/45")}
+                  className={cn(rowClickable && "outline-none focus-visible:ring-[3px] focus-visible:ring-focus-ring")}
                   onClick={() => {
                     if (rowClickable) onRowClick?.(row.original);
                   }}

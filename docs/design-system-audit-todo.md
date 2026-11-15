@@ -34,6 +34,15 @@ holds the new components and the Field work.
 - [x] One case for sortable and plain table headers.
 - [x] `text-wrap: balance`, tabular numerals in tables, `dvh` for overlays.
 
+### Accessibility and tokens
+
+- [x] One focus ring colour at 3:1, plus a forced-colours outline.
+- [x] `dark:` utilities match `data-appearance="dark"`.
+- [x] Brand chrome link and action hover tokens.
+- [x] Darker dark-mode `--action-hover`.
+- [x] `--ds-radius-pill`, `--scrim`, `--danger-solid-foreground`; raw
+      durations onto the duration tokens.
+
 ### Components
 
 - [x] RadioGroup
@@ -62,20 +71,15 @@ changed there.
 
 ### 2. Accessibility and tokens
 
-- [ ] Focus rings: one recipe, solid enough to pass 3:1, plus a
-      `forced-colors` rule.
-- [ ] Dark mode selector: make `dark:` utilities match
-      `data-appearance="dark"` as well as `.dark`.
-- [ ] Brand chrome: re-point `--text-link`, track, and hover tokens (link text
-      on burgundy is about 2.4:1).
-- [ ] Dark `--action-hover` under white text is about 4:1; darken it.
-- [ ] One radius system: derive `--radius` from `--ds-radius-*` (or the
-      reverse) and add `--ds-radius-pill`.
-- [ ] Raw values onto scales: shell z-index 10/20/30, about 18 raw durations,
-      `bg-black/50` scrims (add a scrim token), `text-white` on destructive
-      buttons.
-- [ ] Remove dead tokens: `--sidebar-active-indicator`, `--text-disabled`,
-      `--ds-space-inline`, `brand-secondary-*`, `brand-emphasis-*`.
+Done, except:
+
+- [ ] One radius system: `--radius` and `--ds-radius-surface` differ in the
+      balanced and airy moods, so deriving one from the other changes how
+      those moods look. Needs a design decision. `--ds-radius-pill` exists.
+- [ ] Shell z-index 10/20/30 is still raw.
+- [ ] Dead tokens (`--sidebar-active-indicator`, `--text-disabled`,
+      `--ds-space-inline`, `brand-secondary-*`, `brand-emphasis-*`) are
+      public, so removing them is a 2.0 change.
 
 ### 3. Naming (aliases now, removals at 2.0)
 

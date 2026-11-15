@@ -31,7 +31,7 @@ function Switch({
       data-size={size}
       data-labeled={labeled ? "true" : undefined}
       className={cn(
-        "peer group/switch inline-flex shrink-0 items-center border border-transparent shadow-none transition-colors outline-none focus-visible:border-focus focus-visible:ring-[3px] focus-visible:ring-focus/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger aria-invalid:ring-danger/20 dark:aria-invalid:ring-danger/40",
+        "peer group/switch inline-flex shrink-0 items-center border border-transparent shadow-none transition-colors outline-none focus-visible:border-focus focus-visible:ring-[3px] focus-visible:ring-focus-ring disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger aria-invalid:ring-danger/20 dark:aria-invalid:ring-danger/40",
         labeled
           ? "relative rounded-[0.625rem] p-0.5 data-[size=default]:h-6 data-[size=default]:w-[5.5rem] data-[size=default]:[--switch-thumb-travel:4.25rem] data-[size=sm]:h-5 data-[size=sm]:w-[5.5rem] data-[size=sm]:[--switch-thumb-travel:4.5rem] data-checked:bg-action data-unchecked:bg-control-indicator"
           : "rounded-full data-[size=default]:h-[1.15rem] data-[size=default]:w-8 data-[size=sm]:h-3.5 data-[size=sm]:w-6 data-checked:bg-action data-unchecked:bg-control-indicator",
