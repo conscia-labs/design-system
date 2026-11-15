@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.8.0 - 2026-11-15
 
 Conscia apps can now draw charts from the design system instead of styling a
 chart library themselves. The new opt-in **`@conscia-labs/design-system/charts`**
@@ -9,16 +9,31 @@ entry is built on Recharts 3 and ships `TrendLineChart`, `TrendAreaChart`,
 any other Recharts chart. Every chart colour now comes from the brand palette
 in both themes.
 
-Forms and navigation gain seven primitives: **`RadioGroup`**,
-**`SegmentedControl`**, **`NumberField`**, **`InputGroup`**, **`Accordion`**,
-**`Breadcrumb`**, and **`Progress`**. `Field` now connects its label,
-description, and error to the control inside it, so forms no longer need
-hand-written ids, `aria-describedby`, or `aria-invalid`.
+The package also gains the components apps were building by hand. Forms get
+**`RadioGroup`**, **`SegmentedControl`**, **`NumberField`**, **`InputGroup`**,
+**`MultiSelect`**, **`DatePicker`**, **`DateRangePicker`**, **`Slider`**,
+**`TagInput`**, and **`FileUpload`**. Navigation and overlays get
+**`Accordion`**, **`Breadcrumb`**, **`Progress`**, **`ContextMenu`**,
+**`HoverCard`**, **`ScrollArea`**, and **`Timeline`**. `Field` now connects its
+label, description, and error to the control inside it, so forms no longer
+need hand-written ids, `aria-describedby`, or `aria-invalid`. `DataTable`
+keeps its own selection and pagination, and shows loading and error rows.
 
 ### Upgrading from 1.7.4
 
-The package has no breaking changes, and no chart colour changes. Apps that do
-not import `/charts` need nothing new. To use the charts:
+No export is removed or renamed, and no chart colour changes. Existing
+screens do look different, so expect to replace visual snapshots:
+
+- **Fields and outline buttons have darker borders**, badges are slightly
+  smaller, and fields follow the `compact` and `operational` densities. The
+  full list is under Changed and Fixed.
+- **`ValueMeter` is now `role="meter"`.** Update tests that query it as a
+  progressbar.
+- **`react-day-picker` is a new dependency**, installed with the package.
+- **Old names still work.** `destructive`, `error`, `small`, `large` and
+  `compact` remain as aliases until 2.0; see Naming under Changed.
+
+Apps that do not import `/charts` need nothing new. To use the charts:
 
 - **Install the peers** next to the package: `pnpm add recharts react-is`.
 - **Import from the charts entry** and describe each series in a `config`:
@@ -54,13 +69,6 @@ not import `/charts` need nothing new. To use the charts:
   `--palette-leaf`, `--palette-slate`, their `-bright` dark steps, and extra
   electric-blue and green steps).
 - A Charts page in the playground with every colour role and chart form.
-
-### Changed
-
-- `--chart-series-1` to `-5` now reference palette primitives instead of raw
-  values in both themes. The resolved colours are unchanged.
-
-### Added
 
 - `Slider` for a number or a range, `TagInput` for free-text tags, and
   `FileUpload`, a drop zone around a native file input.
@@ -119,6 +127,8 @@ not import `/charts` need nothing new. To use the charts:
 
 ### Changed
 
+- `--chart-series-1` to `-5` now reference palette primitives instead of raw
+  values in both themes. The resolved colours are unchanged.
 - `Field`, `FieldLabel`, `FieldDescription`, and `FieldError` connect to the
   control inside the same `Field` automatically, and `<Field invalid>` marks
   that control invalid. Existing code with explicit `id` and `htmlFor` keeps
@@ -134,7 +144,6 @@ not import `/charts` need nothing new. To use the charts:
 - `Collapsible` and `Disclosure` panels now animate their height open and
   closed, like the sidebar sections. Reduced-motion settings turn it off.
 - `AppearanceControl` and `DensityControl` are built on `SegmentedControl`.
-
 - Visual polish, which changes how existing screens look:
   - Field borders are darker (`--control-border`), about 3:1 against the
     surface in light and dark. Airy fields stay borderless fills.
