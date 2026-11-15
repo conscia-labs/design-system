@@ -3,6 +3,7 @@ import { ResponsiveContainer } from "recharts";
 import type { TooltipContentProps } from "recharts";
 
 import { Disclosure } from "../primitives/disclosure";
+import { Skeleton } from "../primitives/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../primitives/table";
 import { cn } from "../primitives/utils";
 import { resolveChartConfig } from "./chart-config";
@@ -70,6 +71,11 @@ type ChartContainerProps = Omit<React.ComponentProps<"figure">, "children" | "ti
   tableLabel?: React.ReactNode;
   tableCount?: React.ReactNode;
   formatValue?: ChartValueFormatter;
+  /** Shows a placeholder the size of the plot while data loads. */
+  loading?: boolean;
+  /** Shows `emptyMessage` in place of the plot. The chart components set it when `data` is empty. */
+  empty?: boolean;
+  emptyMessage?: React.ReactNode;
   /** A single Recharts chart element, sized to the plot. */
   children: React.ReactElement;
 };
@@ -91,6 +97,9 @@ function ChartContainer({
   tableLabel = "View data",
   tableCount,
   formatValue = defaultFormatValue,
+  loading = false,
+  empty = false,
+  emptyMessage = "No data for this period.",
   className,
   style,
   children,
@@ -118,12 +127,22 @@ function ChartContainer({
           ) : null}
         </figcaption>
         {showLegend ? <ChartLegend values={legendValues} /> : null}
-        <div role="img" aria-label={summary} data-slot="chart-plot" className="min-w-0" style={{ height }}>
-          <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 320, height }}>
-            {children}
-          </ResponsiveContainer>
-        </div>
-        {table ? (
+        {loading ? (
+          <div data-slot="chart-plot" data-state="loading" aria-busy="true" style={{ height }}>
+            <Skeleton className="size-full" />
+          </div>
+        ) : empty ? (
+          <div data-slot="chart-plot" data-state="empty" className="ds-type-ui flex items-center justify-center rounded-[var(--ds-radius-control)] border border-dashed border-border-default text-text-supporting" style={{ height }}>
+            {emptyMessage}
+          </div>
+        ) : (
+          <div role="img" aria-label={summary} data-slot="chart-plot" className="min-w-0" style={{ height }}>
+            <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 320, height }}>
+              {children}
+            </ResponsiveContainer>
+          </div>
+        )}
+        {table && !loading && !empty ? (
           <Disclosure summary={tableLabel} count={tableCount}>
             {table}
           </Disclosure>

@@ -2,9 +2,10 @@
 
 import * as React from "react";
 import { Toast as BaseToast, type ToastObject } from "@base-ui/react/toast";
-import { XIcon } from "lucide-react";
+import { CheckCircle2, CircleAlert, CircleX, Info, XIcon } from "lucide-react";
 
 import { overlayLayers } from "./overlay-layers";
+import { Spinner } from "./spinner";
 import { cn } from "./utils";
 
 /** `danger` is the preferred name; `error` stays as an alias until 2.0. */
@@ -161,9 +162,12 @@ function Toast({
     >
       {children ?? (
         <ToastContent>
-          <div className="min-w-0">
-            <ToastTitle />
-            <ToastDescription />
+          <div className="flex min-w-0 gap-2.5">
+            <ToastIcon type={toast.type === "loading" ? "loading" : variant} />
+            <div className="min-w-0">
+              <ToastTitle />
+              <ToastDescription />
+            </div>
           </div>
           <div className="flex items-start gap-1">
             <ToastAction />
@@ -173,6 +177,14 @@ function Toast({
       )}
     </BaseToast.Root>
   );
+}
+
+const toastIcons = { success: CheckCircle2, error: CircleX, warning: CircleAlert, information: Info } as const;
+
+function ToastIcon({ type }: { type: string }) {
+  if (type === "loading") return <Spinner className="mt-0.5" />;
+  const Icon = toastIcons[type as keyof typeof toastIcons];
+  return Icon ? <Icon data-slot="toast-icon" aria-hidden="true" className="mt-0.5 size-4 shrink-0" /> : null;
 }
 
 function ToastContent({ className, ...props }: React.ComponentProps<"div">) {

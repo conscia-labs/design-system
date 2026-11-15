@@ -66,6 +66,7 @@ function CategoryBarChart({
         <ChartDataTable data={data} labelKey={categoryKey} labelHeading={categoryLabel} formatLabel={formatLabel} />
       ) : undefined}
       tableCount={data.length}
+      empty={data.length === 0}
       {...container}
     >
       <BarChart

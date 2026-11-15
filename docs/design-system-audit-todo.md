@@ -120,8 +120,8 @@ Aliases are in. Left for 2.0 or later:
 
 High priority:
 
-- [ ] DatePicker and date range
-- [ ] Multi-select Combobox
+- [x] DatePicker and date range
+- [x] Multi-select Combobox
 
 Medium priority:
 
@@ -136,12 +136,12 @@ Medium priority:
 
 Small additions:
 
-- [ ] Avatar `size` and status dot
-- [ ] Badge dot / icon
-- [ ] Toast icons and loading variant
+- [x] Avatar `size` and status dot
+- [x] Badge dot / icon
+- [x] Toast icons and loading variant
 - [ ] Animated tab indicator
-- [ ] Sheet sizes
-- [ ] Chart loading / empty states
+- [x] Sheet sizes
+- [x] Chart loading / empty states
 - [ ] Timeline
 
 ### 6. Bugs left open from the audit

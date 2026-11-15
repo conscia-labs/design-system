@@ -80,6 +80,7 @@ function DonutChart({
         </Table>
       ) : undefined}
       tableCount={data.length}
+      empty={data.length === 0}
       {...container}
     >
       <PieChart accessibilityLayer={false}>

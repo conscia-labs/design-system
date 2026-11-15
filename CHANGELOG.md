@@ -76,6 +76,21 @@ not import `/charts` need nothing new. To use the charts:
   links.
 - `Progress` for a running task, with an indeterminate state when `value` is
   omitted. `ValueMeter` stays the choice for static measurements.
+- `MultiSelect` for several choices from a searchable list, shown as
+  removable chips inside the field. It takes the same options as
+  `SearchableSelect` and submits each value under `name`.
+- `DatePicker` and `DateRangePicker`, a field that opens a calendar, plus the
+  `Calendar` they share. `name` submits `yyyy-mm-dd`; a range submits
+  `<name>-from` and `<name>-to`. This adds `react-day-picker` as a dependency.
+- `Avatar` takes `size` (`sm`, `default`, `lg`) and a `status` dot with an
+  optional `statusLabel`.
+- `Badge` takes `dot` and `icon`.
+- Toasts show an icon for success, danger, warning and information, and a
+  spinner while a `toast.promise` is loading.
+- `SheetContent` takes `size` (`sm`, `default`, `lg`, `full`) for left and
+  right sheets.
+- Charts take `loading` and `emptyMessage`, and show the empty message when
+  `data` is empty.
 - `Button` accepts `pending` and `pendingLabel`. Without a `pendingLabel` the
   spinner covers the label and the button keeps its width. `LoadingButton`
   still works and is now `Button` with a default "Working…" label.

@@ -139,7 +139,10 @@
       "description": "Self-wiring fields, inputs with addons, number entry, selection, radio and segmented choices, and boolean controls.",
       "route": "/components/form-controls",
       "exports": [
+        "Calendar",
         "Checkbox",
+        "DatePicker",
+        "DateRangePicker",
         "Field",
         "FieldDescription",
         "FieldError",
@@ -153,6 +156,7 @@
         "InputGroupInput",
         "Label",
         "LabeledSwitch",
+        "MultiSelect",
         "NumberField",
         "RadioGroup",
         "RadioGroupItem",

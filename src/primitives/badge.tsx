@@ -47,9 +47,23 @@ function Badge({
   className,
   variant,
   shape,
+  dot = false,
+  icon,
+  children,
   ...props
-}: React.ComponentProps<"span"> & VariantProps<typeof badgeVariants>) {
-  return <span data-slot="badge" data-shape={shape ?? "rounded"} className={cn(badgeVariants({ variant, shape, className }))} {...props} />;
+}: React.ComponentProps<"span"> & VariantProps<typeof badgeVariants> & {
+  /** A leading dot in the badge's own colour, for status at a glance. */
+  dot?: boolean;
+  /** A leading icon, sized to the text. */
+  icon?: React.ReactNode;
+}) {
+  return (
+    <span data-slot="badge" data-shape={shape ?? "rounded"} className={cn(badgeVariants({ variant, shape }), (dot || icon) && "gap-1 [&_svg]:size-3 [&_svg]:shrink-0", className)} {...props}>
+      {dot ? <span data-slot="badge-dot" aria-hidden="true" className="size-1.5 shrink-0 rounded-full bg-current" /> : null}
+      {icon}
+      {children}
+    </span>
+  );
 }
 
 export { Badge, badgeVariants };

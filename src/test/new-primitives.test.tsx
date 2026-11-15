@@ -3,16 +3,22 @@ import userEvent from "@testing-library/user-event";
 import { renderToString } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 
+import { Avatar, AvatarFallback } from "../primitives/avatar";
+import { Badge } from "../primitives/badge";
+import { Sheet, SheetContent, SheetTitle } from "../primitives/sheet";
+import { ChartContainer } from "../charts/chart-container";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../primitives/accordion";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage } from "../primitives/breadcrumb";
 import { DetailBackLink } from "../patterns/detail-back-link";
 import { MetricCountUp } from "../patterns/metric-count-up";
 import { StateView } from "../patterns/state-views";
 import { Button, buttonVariants } from "../primitives/button";
+import { DatePicker, DateRangePicker } from "../primitives/date-picker";
 import { Field, FieldDescription, FieldError, FieldLabel } from "../primitives/field";
 import { Label } from "../primitives/label";
 import { Input } from "../primitives/input";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../primitives/input-group";
+import { MultiSelect } from "../primitives/multi-select";
 import { NumberField } from "../primitives/number-field";
 import { Progress } from "../primitives/progress";
 import { RadioGroup, RadioGroupItem } from "../primitives/radio-group";
@@ -225,5 +231,91 @@ describe("naming aliases and link rendering", () => {
     const html = renderToString(<MetricCountUp value={42} />);
     expect(html).toMatch(/aria-hidden="true">0</);
     expect(html).toMatch(/sr-only">42</);
+  });
+});
+
+describe("MultiSelect", () => {
+  const options = [{ value: "a", label: "Alpha" }, { value: "b", label: "Beta" }, { value: "c", label: "Gamma" }];
+
+  it("adds a choice from the list and removes one from its chip", async () => {
+    const user = userEvent.setup();
+    const onValueChange = vi.fn();
+    render(<Field><FieldLabel>Providers</FieldLabel><MultiSelect defaultValue={["a"]} options={options} onValueChange={onValueChange} /></Field>);
+
+    const input = screen.getByLabelText("Providers");
+    await user.click(input);
+    await user.type(input, "Bet");
+    await user.click(await screen.findByRole("option", { name: "Beta" }));
+    expect(onValueChange).toHaveBeenLastCalledWith(["a", "b"]);
+
+    await user.click(screen.getByRole("button", { name: "Remove Alpha" }));
+    expect(onValueChange).toHaveBeenLastCalledWith(["b"]);
+  });
+
+  it("submits every selected value under its name", () => {
+    const { container } = render(<form><MultiSelect name="providers" defaultValue={["a", "c"]} options={options} aria-label="Providers" /></form>);
+    expect(new FormData(container.querySelector("form")!).getAll("providers")).toEqual(["a", "c"]);
+  });
+});
+
+describe("DatePicker", () => {
+  it("picks a day from the calendar, shows it, and submits it as yyyy-mm-dd", async () => {
+    const user = userEvent.setup();
+    const onValueChange = vi.fn();
+    const { container } = render(<form><DatePicker name="renewal" aria-label="Renewal" defaultValue={new Date(2026, 10, 10)} onValueChange={onValueChange} /></form>);
+
+    const trigger = screen.getByRole("button", { name: "Renewal" });
+    expect(trigger.textContent).toContain("Nov 10, 2026");
+    await user.click(trigger);
+    await user.click(await screen.findByRole("button", { name: /November 20th, 2026/ }));
+
+    expect(onValueChange.mock.calls[0]?.[0]).toEqual(new Date(2026, 10, 20));
+    expect(new FormData(container.querySelector("form")!).get("renewal")).toBe("2026-11-20");
+    expect(trigger.textContent).toContain("Nov 20, 2026");
+  });
+
+  it("disables days outside min and max", async () => {
+    const user = userEvent.setup();
+    render(<DatePicker aria-label="Renewal" defaultValue={new Date(2026, 10, 10)} min={new Date(2026, 10, 5)} />);
+    await user.click(screen.getByRole("button", { name: "Renewal" }));
+    expect((await screen.findByRole("button", { name: /November 4th, 2026/ })).hasAttribute("disabled")).toBe(true);
+  });
+
+  it("shows and submits both ends of a range", () => {
+    const { container } = render(<form><DateRangePicker name="period" aria-label="Period" defaultValue={{ from: new Date(2026, 10, 2), to: new Date(2026, 10, 15) }} /></form>);
+    expect(screen.getByRole("button", { name: "Period" }).textContent).toContain("Nov 2, 2026 – Nov 15, 2026");
+    const data = new FormData(container.querySelector("form")!);
+    expect([data.get("period-from"), data.get("period-to")]).toEqual(["2026-11-02", "2026-11-15"]);
+  });
+});
+
+describe("small additions", () => {
+  it("Avatar takes a size and an announced status dot", () => {
+    const { container } = render(<Avatar size="lg" status="online" statusLabel="Online"><AvatarFallback>KH</AvatarFallback></Avatar>);
+    expect(container.querySelector('[data-slot="avatar"]')?.getAttribute("data-size")).toBe("lg");
+    expect(container.querySelector('[data-slot="avatar-status"]')?.textContent).toBe("Online");
+  });
+
+  it("Badge renders a decorative dot before its label", () => {
+    render(<Badge variant="success" dot>Healthy</Badge>);
+    const badge = screen.getByText("Healthy");
+    expect(badge.firstElementChild?.getAttribute("data-slot")).toBe("badge-dot");
+    expect(badge.textContent).toBe("Healthy");
+  });
+
+  it("SheetContent sizes a side sheet", async () => {
+    render(<Sheet defaultOpen><SheetContent size="lg"><SheetTitle>Details</SheetTitle></SheetContent></Sheet>);
+    expect((await screen.findByRole("dialog")).className).toContain("max-w-2xl");
+  });
+
+  it("ChartContainer swaps the plot for loading and empty states", () => {
+    const chart = (state: object) => (
+      <ChartContainer title="Requests" summary="Requests per day" config={{ requests: { label: "Requests" } }} {...state}><svg /></ChartContainer>
+    );
+    const { container, rerender } = render(chart({ loading: true }));
+    expect(container.querySelector('[data-slot="chart-plot"]')?.getAttribute("aria-busy")).toBe("true");
+    rerender(chart({ empty: true }));
+    expect(screen.getByText("No data for this period.")).toBeTruthy();
+    expect(screen.queryByRole("img")).toBeNull();
   });
 });
