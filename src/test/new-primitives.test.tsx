@@ -366,6 +366,17 @@ describe("Remaining audit components", () => {
     expect((screen.getByRole("slider", { name: "Maximum" }) as HTMLInputElement).value).toBe("800");
   });
 
+  it("Slider and Progress are named by their label in server HTML, before hydration", () => {
+    const view = document.createElement("div");
+    view.innerHTML = renderToString(<><Slider label="Traffic share" defaultValue={40} /><Progress label="Importing" value={64} /></>);
+    const sliderLabel = view.querySelector('[data-slot="slider-label"]')?.id;
+    const progressLabel = view.querySelector('[data-slot="progress-label"]')?.id;
+    expect(sliderLabel).toBeTruthy();
+    expect(progressLabel).toBeTruthy();
+    expect(view.querySelector('input[type="range"]')?.getAttribute("aria-labelledby")).toBe(sliderLabel);
+    expect(view.querySelector('[role="progressbar"]')?.getAttribute("aria-labelledby")).toBe(progressLabel);
+  });
+
   it("TagInput adds, dedupes, removes and submits tags, and is named by Field", async () => {
     const user = userEvent.setup();
     const onValueChange = vi.fn();
