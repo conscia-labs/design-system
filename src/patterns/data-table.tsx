@@ -16,6 +16,7 @@ import {
 import { ArrowDown, ArrowUp, ChevronsUpDown } from "lucide-react";
 
 import { Checkbox } from "../primitives/checkbox";
+import { Skeleton } from "../primitives/skeleton";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "../primitives/table";
 import { cn } from "../primitives/utils";
 import { PaginationControls } from "./pagination";
@@ -26,7 +27,15 @@ type DataTableColumn<TData> = {
   cell: (item: TData) => React.ReactNode;
   accessor?: (item: TData) => string | number | null | undefined;
   sortable?: boolean;
+  /** Leaves the column out without removing it from the definition. */
+  hidden?: boolean;
   className?: string;
+};
+
+/** Passed to `mobileRow` so a card can show and change its row's selection. */
+type DataTableRowContext = {
+  selected: boolean;
+  toggleSelected: (selected?: boolean) => void;
 };
 
 type DataTableProps<TData> = {
@@ -37,19 +46,28 @@ type DataTableProps<TData> = {
   onRowClick?: (item: TData) => void;
   isRowClickable?: (item: TData) => boolean;
   rowActions?: (item: TData) => React.ReactNode;
+  /** Omit to let the table keep the selection; `onSelectionChange` or `selectable` turns selection on. */
   selectedIds?: Set<string>;
   onSelectionChange?: (selectedIds: Set<string>) => void;
+  selectable?: boolean;
   sorting?: SortingState;
   onSortingChange?: (sorting: SortingState) => void;
   manualSorting?: boolean;
   pagination?: PaginationState;
   onPaginationChange?: (pagination: PaginationState) => void;
+  /** Paginates without controlled state: the table keeps the page itself. */
+  defaultPagination?: PaginationState;
   manualPagination?: boolean;
   pageCount?: number;
   rowCount?: number;
   pageSizeOptions?: number[];
   totalLabel?: React.ReactNode;
-  mobileRow?: (item: TData) => React.ReactNode;
+  mobileRow?: (item: TData, context: DataTableRowContext) => React.ReactNode;
+  /** Shows placeholder rows under the header while data loads. */
+  loading?: boolean;
+  loadingRows?: number;
+  /** Shown in the table body in place of rows, for example an `ErrorState`. */
+  error?: React.ReactNode;
   /** Names the table for assistive technology. Hidden unless `showCaption` is set. */
   caption?: React.ReactNode;
   /** Shows `caption` as visible text above the table. */
@@ -68,31 +86,42 @@ function DataTable<TData>({
   rowActions,
   selectedIds,
   onSelectionChange,
+  selectable = Boolean(onSelectionChange),
   sorting,
   onSortingChange,
   manualSorting = false,
-  pagination,
+  pagination: controlledPagination,
   onPaginationChange,
+  defaultPagination,
   manualPagination = false,
   pageCount,
   rowCount,
   pageSizeOptions,
   totalLabel,
   mobileRow,
+  loading = false,
+  loadingRows = 5,
+  error,
   caption,
   showCaption = false,
   empty,
   className,
 }: DataTableProps<TData>) {
+  // Selection and pagination work without controlled props; the table then keeps the state itself.
+  const [internalSelectedIds, setInternalSelectedIds] = React.useState<Set<string>>(() => new Set());
+  const resolvedSelectedIds = selectedIds ?? internalSelectedIds;
+  const [internalPagination, setInternalPagination] = React.useState(defaultPagination);
+  const pagination = controlledPagination ?? internalPagination;
+
   const rowSelection = React.useMemo<RowSelectionState>(() => {
     const selection: RowSelectionState = {};
-    selectedIds?.forEach((id) => { selection[id] = true; });
+    resolvedSelectedIds.forEach((id) => { selection[id] = true; });
     return selection;
-  }, [selectedIds]);
+  }, [resolvedSelectedIds]);
 
   const tableColumns = React.useMemo<ColumnDef<TData>[]>(() => {
     const result: ColumnDef<TData>[] = [];
-    if (onSelectionChange) {
+    if (selectable) {
       result.push({
         id: "select",
         enableSorting: false,
@@ -115,7 +144,7 @@ function DataTable<TData>({
         meta: { className: "w-10" },
       });
     }
-    result.push(...columns.map((column): ColumnDef<TData> => ({
+    result.push(...columns.filter((column) => !column.hidden).map((column): ColumnDef<TData> => ({
       id: column.id,
       ...(column.accessor ? { accessorFn: column.accessor } : {}),
       enableSorting: column.sortable ?? false,
@@ -140,7 +169,7 @@ function DataTable<TData>({
       });
     }
     return result;
-  }, [columns, getRowLabel, onSelectionChange, rowActions]);
+  }, [columns, getRowLabel, selectable, rowActions]);
 
   // Sorting works without a controlled `sorting` prop; the table then keeps the state itself.
   const [internalSorting, setInternalSorting] = React.useState<SortingState>([]);
@@ -153,11 +182,12 @@ function DataTable<TData>({
     columns: tableColumns,
     getRowId: (row) => getRowId(row),
     state: { rowSelection, sorting: resolvedSorting, ...(pagination ? { pagination } : {}) },
-    enableRowSelection: Boolean(onSelectionChange),
+    enableRowSelection: selectable,
     onRowSelectionChange: (updater) => {
-      if (!onSelectionChange) return;
       const next = typeof updater === "function" ? updater(rowSelection) : updater;
-      onSelectionChange(new Set(Object.keys(next).filter((id) => next[id])));
+      const nextIds = new Set(Object.keys(next).filter((id) => next[id]));
+      if (!selectedIds) setInternalSelectedIds(nextIds);
+      onSelectionChange?.(nextIds);
     },
     onSortingChange: (updater) => {
       const next = typeof updater === "function" ? updater(resolvedSorting) : updater;
@@ -165,8 +195,10 @@ function DataTable<TData>({
       onSortingChange?.(next);
     },
     onPaginationChange: (updater) => {
-      if (!onPaginationChange || !pagination) return;
-      onPaginationChange(typeof updater === "function" ? updater(pagination) : updater);
+      if (!pagination) return;
+      const next = typeof updater === "function" ? updater(pagination) : updater;
+      if (!controlledPagination) setInternalPagination(next);
+      onPaginationChange?.(next);
     },
     manualSorting,
     manualPagination,
@@ -177,10 +209,11 @@ function DataTable<TData>({
     getPaginationRowModel: pagination && !manualPagination ? getPaginationRowModel() : undefined,
   });
 
-  if (!data.length && empty) return <>{empty}</>;
+  if (!data.length && empty && !loading && !error) return <>{empty}</>;
 
-  const visibleRows = table.getRowModel().rows;
-  const showPagination = Boolean(pagination && onPaginationChange);
+  const visibleRows = loading || error ? [] : table.getRowModel().rows;
+  const showPagination = Boolean(pagination && (onPaginationChange || !controlledPagination));
+  const columnCount = table.getVisibleLeafColumns().length;
 
   return (
     <div data-slot="data-table" className={cn("bg-canvas in-data-[slot=card]:bg-transparent in-data-[slot=inventory-surface]:bg-transparent", className)}>
@@ -228,7 +261,18 @@ function DataTable<TData>({
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
+          <TableBody aria-busy={loading || undefined}>
+            {loading
+              ? Array.from({ length: loadingRows }, (_, rowIndex) => (
+                  <TableRow key={rowIndex} data-slot="data-table-loading-row">
+                    {Array.from({ length: columnCount }, (_, cellIndex) => (
+                      <TableCell key={cellIndex}><Skeleton className="h-3 w-full max-w-32" /></TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              : error
+                ? <TableRow><TableCell colSpan={columnCount} className="whitespace-normal">{error}</TableCell></TableRow>
+                : null}
             {visibleRows.map((row) => {
               const rowClickable = Boolean(
                 onRowClick && (isRowClickable?.(row.original) ?? true),
@@ -265,7 +309,12 @@ function DataTable<TData>({
       </div>
       {mobileRow ? (
         <div className="divide-y divide-border-subtle md:hidden" role="list">
-          {visibleRows.map((row) => <div key={row.id} role="listitem">{mobileRow(row.original)}</div>)}
+          {loading ? <div role="listitem" aria-busy="true" className="grid gap-2 p-4"><Skeleton className="h-3 w-40" /><Skeleton className="h-3 w-24" /></div> : error ? <div role="listitem">{error}</div> : null}
+          {visibleRows.map((row) => (
+            <div key={row.id} role="listitem">
+              {mobileRow(row.original, { selected: row.getIsSelected(), toggleSelected: (selected) => row.toggleSelected(selected) })}
+            </div>
+          ))}
         </div>
       ) : null}
       {showPagination ? (
@@ -285,4 +334,4 @@ function DataTable<TData>({
 }
 
 export { DataTable };
-export type { DataTableColumn, DataTableProps, PaginationState, SortingState };
+export type { DataTableColumn, DataTableProps, DataTableRowContext, PaginationState, SortingState };

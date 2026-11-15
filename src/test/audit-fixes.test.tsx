@@ -88,4 +88,38 @@ describe("audit regressions", () => {
     await waitFor(() => expect(onError).toHaveBeenCalledOnce());
     expect(screen.getByRole("alertdialog")).toBeTruthy();
   });
+
+  it("keeps selection and pagination itself when they are not controlled", async () => {
+    const user = userEvent.setup();
+    const onSelectionChange = vi.fn();
+    render(
+      <DataTable
+        data={rows}
+        columns={[{ id: "name", header: "Name", cell: (item) => item.name }, { id: "id", header: "Id", hidden: true, cell: (item) => item.id }]}
+        getRowId={(item) => item.id}
+        onSelectionChange={onSelectionChange}
+        defaultPagination={{ pageIndex: 0, pageSize: 1 }}
+      />,
+    );
+    expect(screen.getAllByRole("columnheader")).toHaveLength(2);
+    expect(screen.getAllByRole("cell").map((cell) => cell.textContent)).toEqual(["", "Beta"]);
+
+    await user.click(screen.getByRole("checkbox", { name: "Select 1" }));
+    expect(onSelectionChange).toHaveBeenLastCalledWith(new Set(["1"]));
+    expect(screen.getByRole("checkbox", { name: "Select 1" }).getAttribute("aria-checked")).toBe("true");
+
+    await user.click(screen.getByRole("button", { name: /next/i }));
+    expect(screen.getAllByRole("cell").map((cell) => cell.textContent)).toEqual(["", "Alpha"]);
+  });
+
+  it("shows loading rows and an error in the DataTable body, under the header", () => {
+    const props = { data: rows, columns: [{ id: "name", header: "Name", cell: (item: (typeof rows)[number]) => item.name }], getRowId: (item: (typeof rows)[number]) => item.id };
+    const { container, rerender } = render(<DataTable {...props} loading loadingRows={3} />);
+    expect(screen.getByRole("columnheader", { name: "Name" })).toBeTruthy();
+    expect(container.querySelectorAll('[data-slot="data-table-loading-row"]')).toHaveLength(3);
+    expect(screen.queryByText("Beta")).toBeNull();
+
+    rerender(<DataTable {...props} error="Could not load models." />);
+    expect(screen.getByRole("cell", { name: "Could not load models." })).toBeTruthy();
+  });
 });

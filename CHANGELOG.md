@@ -91,6 +91,11 @@ not import `/charts` need nothing new. To use the charts:
   right sheets.
 - Charts take `loading` and `emptyMessage`, and show the empty message when
   `data` is empty.
+- `DataTable` keeps selection and pagination itself when `selectedIds` or
+  `pagination` are omitted (`selectable`, `defaultPagination`). It shows
+  `loading` placeholder rows and an `error` node in the body under the
+  header, hides columns marked `hidden`, and passes `{ selected,
+  toggleSelected }` to `mobileRow`.
 - `Button` accepts `pending` and `pendingLabel`. Without a `pendingLabel` the
   spinner covers the label and the button keeps its width. `LoadingButton`
   still works and is now `Button` with a default "Working…" label.
@@ -151,6 +156,8 @@ not import `/charts` need nothing new. To use the charts:
   - `NavigationTab` and `DetailBackLink` take `render` for router links.
   - `PageHeader`'s `action` and `actionNode`, and `SheetContent`'s `side`,
     are marked deprecated. Set `side` on `Sheet`.
+  - `EntityTable`, `InventoryDesktop` and `InventoryMobile` are deprecated in
+    favour of `DataTable` (with `mobileRow`). They still work.
 
 ### Fixed
 

@@ -102,10 +102,12 @@ Aliases are in. Left for 2.0 or later:
 
 ### 4. Larger refactors
 
-- [ ] DataTable as the only table: fold in `EntityTable` and
-      `InventoryDesktop/Mobile`; add uncontrolled pagination and selection,
-      `loading` / `error` / `empty` states in the body, sticky header, column
-      visibility, and row context for `mobileRow`.
+- [x] DataTable as the only table: uncontrolled pagination and selection,
+      `loading` / `error` in the body, column visibility, row context for
+      `mobileRow`. `EntityTable` and `InventoryDesktop/Mobile` are deprecated.
+- [ ] DataTable sticky header: the table scrolls horizontally inside its own
+      container, so a sticky header needs a fixed-height variant first.
+- [ ] DataTable `empty` still replaces the whole table rather than the body.
 - [ ] One surface and one heading block: build `DataPanel`,
       `InventorySurface`, `DetailSection`, and `ResourceSummary` on `Card`;
       extract a shared heading with a `headingLevel` prop.
