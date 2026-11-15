@@ -109,8 +109,9 @@ function MetricCard({
       )}
       {...props}
     >
-      <div className="flex items-start justify-between gap-4 px-[var(--ds-surface-padding)] pt-[var(--ds-surface-padding)]">
-        <div className="min-w-0">
+      {/* The status drops below a title that would otherwise be squeezed into a narrow column. */}
+      <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2 px-[var(--ds-surface-padding)] pt-[var(--ds-surface-padding)]">
+        <div className="min-w-0 flex-1 basis-40">
           <h2 id={labelId} className="ds-type-card-title">{label}</h2>
           {description ? <p className="ds-type-metadata mt-0.5 text-text-supporting">{description}</p> : null}
         </div>

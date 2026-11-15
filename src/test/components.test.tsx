@@ -92,7 +92,7 @@ describe("Button", () => {
   it("keeps every variant on an explicit semantic foreground", () => {
     expect(buttonVariants({ variant: "default" })).toContain("text-action-foreground");
     expect(buttonVariants({ variant: "destructive" })).toContain("text-white");
-    expect(buttonVariants({ variant: "destructive" })).toContain("dark:text-danger-foreground");
+    expect(buttonVariants({ variant: "destructive" })).toContain("bg-danger-solid");
     expect(buttonVariants({ variant: "outline" })).toContain("text-text-primary");
     expect(buttonVariants({ variant: "secondary" })).toContain("text-text-inverse");
     expect(buttonVariants({ variant: "ghost" })).toContain("text-text-primary");

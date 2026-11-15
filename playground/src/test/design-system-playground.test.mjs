@@ -1055,7 +1055,7 @@ test("balanced and airy moods keep text legible on their canvases and tints", ()
   // Mood canvases are light only; dark mode keeps the dark canvas on scoped subtrees.
   assert.match(styles, /:root\.dark \[data-mood\],[\s\S]*?--canvas: #1a171a;/);
   // Uppercase labels and utility borders need selector rules, not just tokens.
-  assert.match(styles, /\[data-slot="eyebrow"\], \[data-slot="table-head"\]\) \{\s*text-transform: none;/);
+  assert.match(styles, /\[data-slot="eyebrow"\], \[data-slot="table-head"\], \[data-slot="table-head"\] button\) \{\s*text-transform: none;/);
 
   // Moods float a burgundy sidebar unless the shell asks for a flush one.
   const balancedBlock = styles.match(/\[data-mood="balanced"\] \{([^}]*)\}/)[1];

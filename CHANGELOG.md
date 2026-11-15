@@ -98,6 +98,23 @@ not import `/charts` need nothing new. To use the charts:
   closed, like the sidebar sections. Reduced-motion settings turn it off.
 - `AppearanceControl` and `DensityControl` are built on `SegmentedControl`.
 
+- Visual polish, which changes how existing screens look:
+  - Field borders are darker (`--control-border`), about 3:1 against the
+    surface in light and dark. Airy fields stay borderless fills.
+  - Outline buttons use `--border-strong`, so they read as buttons beside a
+    disabled primary button.
+  - Destructive buttons are a solid red in dark mode too, through the new
+    `--danger-solid` token.
+  - `FieldError` text uses `--danger` instead of `--danger-foreground`.
+  - Elevated cards sit on `--surface-floating`, so they differ from default
+    and muted cards in dark mode.
+  - In the airy mood, `FilterBar` and `AttentionItem` take the surface radius
+    instead of a full pill.
+  - Sortable table headers follow the mood's case, as plain headers do.
+  - `MetricCard` moves its status below the title when the card is narrow.
+  - Headings use `text-wrap: balance`, tables use tabular numerals, and
+    dialogs, sheets and the command palette size with `dvh`.
+
 ### Fixed
 
 - Inputs, selects, searchable selects, and date-time fields now follow the

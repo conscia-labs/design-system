@@ -27,7 +27,7 @@ function Sheet({ side = "right", swipeDirection, ...props }: SheetProps) {
 function SheetTrigger({ ...props }: React.ComponentProps<typeof Drawer.Trigger>) { return <Drawer.Trigger data-slot="sheet-trigger" {...props} />; }
 function SheetPortal({ ...props }: React.ComponentProps<typeof Drawer.Portal>) { return <Drawer.Portal data-slot="sheet-portal" {...props} />; }
 function SheetClose({ ...props }: React.ComponentProps<typeof Drawer.Close>) { return <Drawer.Close data-slot="sheet-close" {...props} />; }
-const sideClasses: Record<SheetSide, string> = { top: "inset-x-0 top-0 max-h-[90vh] border-b", right: "right-0 top-0 h-full max-w-md border-l sm:max-w-lg", bottom: "inset-x-0 bottom-0 max-h-[90vh] border-t", left: "left-0 top-0 h-full max-w-md border-r sm:max-w-lg" };
+const sideClasses: Record<SheetSide, string> = { top: "inset-x-0 top-0 max-h-[90dvh] border-b", right: "right-0 top-0 h-full max-w-md border-l sm:max-w-lg", bottom: "inset-x-0 bottom-0 max-h-[90dvh] border-t", left: "left-0 top-0 h-full max-w-md border-r sm:max-w-lg" };
 function SheetOverlay({ className, ...props }: React.ComponentProps<typeof Drawer.Backdrop>) { return <Drawer.Backdrop data-slot="sheet-overlay" className={cn("fixed inset-0", overlayLayers.modal, "bg-black/50", className)} {...props} />; }
 function SheetContent({ className, children, side: sideProp, closeLabel = "Close", ...props }: React.ComponentProps<typeof Drawer.Popup> & { side?: SheetSide; closeLabel?: string }) {
   const contextSide = React.useContext(SheetSideContext);

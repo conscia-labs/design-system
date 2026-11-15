@@ -194,7 +194,7 @@
   --selection-border: #aab4ff;
   --selection-indicator: var(--palette-electric-blue);
   --selection-foreground: #1f2547;
-  --control-border: #dfe0e3;
+  --control-border: #878b94;
   --focus: var(--palette-electric-blue);
   --border-subtle: var(--palette-grey-300);
   --border-default: #d4d6da;
@@ -216,6 +216,8 @@
    * which belongs to the highlight role.
    */
   --danger: #c03a1c;
+  /* Fill for destructive buttons; the same in dark, where --danger is a text colour. */
+  --danger-solid: #c03a1c;
   --danger-background: #fdebe4;
   --danger-border: #f5b39f;
   --danger-foreground: #852313;
@@ -641,7 +643,7 @@
   --selection-border: #4f5ab0;
   --selection-indicator: #7f8fff;
   --selection-foreground: #edf0fb;
-  --control-border: rgb(255 255 255 / 12%);
+  --control-border: rgb(255 255 255 / 36%);
   --focus: #7f8fff;
   --border-subtle: rgb(255 255 255 / 7%);
   --border-default: rgb(255 255 255 / 11%);
@@ -833,7 +835,7 @@
   --border-subtle: rgb(255 255 255 / 9%);
   --border-default: rgb(255 255 255 / 14%);
   --border-strong: rgb(255 255 255 / 22%);
-  --control-border: rgb(255 255 255 / 14%);
+  --control-border: rgb(255 255 255 / 36%);
   --focus: #7f8fff;
   --neutral-background: rgb(255 255 255 / 8%);
   --neutral-border: rgb(255 255 255 / 16%);
@@ -1217,7 +1219,7 @@
   padding-inline: 0.625rem;
 }
 
-:is([data-mood="balanced"], [data-mood="airy"]) :is([data-slot="eyebrow"], [data-slot="table-head"]) {
+:is([data-mood="balanced"], [data-mood="airy"]) :is([data-slot="eyebrow"], [data-slot="table-head"], [data-slot="table-head"] button) {
   text-transform: none;
 }
 
@@ -1344,6 +1346,7 @@
   --color-warning-border: var(--warning-border);
   --color-warning-foreground: var(--warning-foreground);
   --color-danger: var(--danger);
+  --color-danger-solid: var(--danger-solid);
   --color-danger-background: var(--danger-background);
   --color-danger-border: var(--danger-border);
   --color-danger-foreground: var(--danger-foreground);
@@ -1861,7 +1864,7 @@
   }
 
   body {
-    min-height: 100vh;
+    min-height: 100dvh;
     background: var(--canvas);
     color: var(--text-primary);
     font-family: var(--font-sans);
@@ -1879,6 +1882,11 @@
     /* Bare headings take the section step; page titles opt in via ds-type-page-title. */
     font-weight: var(--ds-section-title-weight);
     letter-spacing: var(--ds-section-title-tracking);
+    text-wrap: balance;
+  }
+
+  table {
+    font-variant-numeric: tabular-nums;
   }
 
   button,

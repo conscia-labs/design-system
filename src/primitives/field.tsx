@@ -79,7 +79,7 @@ function FieldError({
     <Component
       {...(insideField ? { match } : {})}
       data-slot="field-error"
-      className={cn("ds-type-metadata mt-[var(--ds-field-message-gap)] font-medium text-danger-foreground", className)}
+      className={cn("ds-type-metadata mt-[var(--ds-field-message-gap)] font-medium text-danger", className)}
       {...(props as object)}
     />
   );

@@ -22,6 +22,18 @@ holds the new components and the Field work.
 - [x] **Uncontrolled sorting in DataTable** (part of "DataTable as the only
       table").
 
+### Visual polish
+
+- [x] Pill radius capped on the filter bar and attention items.
+- [x] Outline buttons distinguishable from disabled ones.
+- [x] Red error text; solid destructive button in dark mode.
+- [x] Elevated cards differ from default and muted in dark mode.
+- [x] Field borders at about 3:1.
+- [x] Delivery metrics: padded hero chart with an axis; status wraps below
+      narrow metric titles.
+- [x] One case for sortable and plain table headers.
+- [x] `text-wrap: balance`, tabular numerals in tables, `dvh` for overlays.
+
 ### Components
 
 - [x] RadioGroup
@@ -39,21 +51,14 @@ tokens, then naming, then larger refactors, then new components.
 
 ### 1. Visual polish
 
-- [ ] Airy pills on multi-line containers: cap pill radius to single-line
-      controls; give the filter bar and attention items the surface radius.
-- [ ] Floating top bar: add a blurred or solid fill once scrolled.
-- [ ] Outline vs disabled buttons in airy light: make them distinguishable.
-- [ ] Error text colour: red instead of dark maroon; fix the near-white dark
-      value.
-- [ ] Dark destructive button: raise its emphasis above the outline button.
-- [ ] Dark elevation: lighter surface steps so default, muted, and elevated
-      cards differ.
-- [ ] Field boundaries: raise control border contrast towards 3:1.
-- [ ] Delivery metrics: pad the hero chart and add an axis; stop metric card
-      titles wrapping to three lines beside the badge.
-- [ ] Table headers: one case for sortable and plain headers ("Actions").
-- [ ] Cheap wins: `text-wrap: balance` on headings, tabular numerals in the
-      base layer, `dvh` instead of `vh` for dialogs.
+Done, except:
+
+- [ ] Airy fields are still borderless fills, so they do not meet 3:1 at rest.
+- [ ] The delivery metrics hero chart has an x axis only, drawn by hand in
+      the playground page.
+
+The floating top bar already had a blurred fill once scrolled; nothing
+changed there.
 
 ### 2. Accessibility and tokens
 

@@ -10,7 +10,7 @@ const cardVariants = cva(
       variant: {
         default: "bg-surface shadow-[var(--ds-shadow-raised)]",
         muted: "bg-surface-muted shadow-none",
-        elevated: "border-transparent bg-surface-raised shadow-[var(--ds-shadow-floating)]",
+        elevated: "border-transparent bg-surface-floating shadow-[var(--ds-shadow-floating)]",
       },
       /**
        * Lifts on hover and keyboard focus. Use for cards that are themselves a
