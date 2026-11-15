@@ -12,6 +12,7 @@ import {
   type ConsciaAppearance,
   type ConsciaDensity,
 } from "../foundation/preferences";
+import { SegmentedControl, SegmentedControlItem } from "../primitives/segmented-control";
 import { cn } from "../primitives/utils";
 
 const APPEARANCE_KEY = appearanceStorageKey;
@@ -127,7 +128,7 @@ function AppearanceControl({ className }: { className?: string }) {
   const { appearance } = useConsciaPreferences();
 
   return (
-    <SegmentedControl
+    <PreferenceSegments
       className={className}
       label="Appearance"
       value={appearance}
@@ -141,7 +142,7 @@ function DensityControl({ className }: { className?: string }) {
   const { density } = useConsciaPreferences();
 
   return (
-    <SegmentedControl
+    <PreferenceSegments
       className={className}
       label="Density"
       value={density}
@@ -160,7 +161,7 @@ function DesignPreferenceControls({ className }: { className?: string }) {
   );
 }
 
-function SegmentedControl({
+function PreferenceSegments({
   className,
   label,
   value,
@@ -178,20 +179,21 @@ function SegmentedControl({
       <legend className="text-[length:var(--ds-metadata)] font-medium text-text-supporting">
         {label}
       </legend>
-      <div className="grid w-full grid-cols-3 rounded-[var(--ds-radius-control)] bg-surface-muted p-1">
+      <SegmentedControl
+        aria-label={label}
+        size="sm"
+        value={value}
+        onValueChange={onChange}
+        className="grid w-full"
+        style={{ gridTemplateColumns: `repeat(${values.length}, minmax(0, 1fr))` }}
+      >
         {values.map((item) => (
-          <button
-            key={item}
-            type="button"
-            aria-pressed={value === item}
-            suppressHydrationWarning
-            onClick={() => onChange(item)}
-            className="min-w-0 h-7 rounded-[calc(var(--ds-radius-control)-2px)] px-1.5 text-[length:var(--ds-metadata)] font-medium capitalize text-text-supporting outline-none transition-colors hover:text-text-primary focus-visible:ring-[3px] focus-visible:ring-focus/50 aria-pressed:bg-canvas aria-pressed:text-text-primary aria-pressed:shadow-xs"
-          >
+          // The stored preference is only known in the browser, so the pressed state can differ from the server's.
+          <SegmentedControlItem key={item} value={item} suppressHydrationWarning className="px-1.5 text-[length:var(--ds-metadata)] capitalize">
             {item}
-          </button>
+          </SegmentedControlItem>
         ))}
-      </div>
+      </SegmentedControl>
     </fieldset>
   );
 }

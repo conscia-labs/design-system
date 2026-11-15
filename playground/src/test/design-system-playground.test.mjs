@@ -411,9 +411,11 @@ test("the sidebar header glow fades out inside the header and stays under moods"
 
 test("field pattern owns help, error, disabled-compatible rhythm", () => {
   const field = read("../../../src/primitives/field.tsx");
-  const input = read("../../../src/primitives/input.tsx");
-  const select = read("../../../src/primitives/select.tsx");
-  const textarea = read("../../../src/primitives/textarea.tsx");
+  // Input takes its frame from the shared field shell.
+  const input = `${read("../../../src/primitives/input.tsx")}\n${read("../../../src/primitives/field-control.ts")}`;
+  const shell = read("../../../src/primitives/field-control.ts");
+  const select = `${read("../../../src/primitives/select.tsx")}\n${shell}`;
+  const textarea = `${read("../../../src/primitives/textarea.tsx")}\n${shell}`;
   const foundation = read("../../../src/foundation/styles.css");
   const primitives = read("../app/primitives/page.tsx");
 
@@ -695,7 +697,8 @@ test("Base UI state markers replace compatibility state markers", () => {
 
   assert.doesNotMatch(collapsible, /data-state/);
   assert.match(collapsible, /BaseCollapsible\.Trigger data-slot="collapsible-trigger"/);
-  assert.match(styles, /\[data-slot="sidebar-collapsible-content"\]\[data-open\]/);
+  // Sidebar, Collapsible and Disclosure panels share one open/close animation.
+  assert.match(styles, /\[data-slot="sidebar-collapsible-content"\], \[data-slot="collapsible-content"\], \[data-slot="disclosure-content"\]\)\[data-open\]/);
   assert.match(styles, /var\(--collapsible-panel-height\)/);
 });
 

@@ -1,13 +1,24 @@
-import * as React from "react";
+"use client";
 
+import * as React from "react";
+import { Field as BaseField } from "@base-ui/react/field";
+
+import { fieldControlClasses } from "./field-control";
 import { cn } from "./utils";
 
+// The shared field shell, grown into a multi-line block.
+const textareaClasses = cn(fieldControlClasses, "block h-auto min-h-28 py-3");
+
 function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
+  // An explicit id means the label is wired by hand; see Input.
+  if (props.id !== undefined) return <textarea data-slot="textarea" className={cn(textareaClasses, className)} {...props} />;
+
   return (
-    <textarea
+    <BaseField.Control
       data-slot="textarea"
-      className={cn("ds-type-control min-h-28 w-full rounded-[var(--ds-field-control-radius)] border border-control-border bg-surface-control px-[var(--ds-field-control-padding-x)] py-3 outline-none transition-colors placeholder:text-text-supporting focus-visible:border-focus focus-visible:ring-[3px] focus-visible:ring-focus/50 aria-invalid:border-danger aria-invalid:ring-danger/20 dark:aria-invalid:ring-danger/40 disabled:cursor-not-allowed disabled:opacity-50", className)}
-      {...props}
+      render={<textarea />}
+      className={cn(textareaClasses, className)}
+      {...(props as React.ComponentProps<typeof BaseField.Control>)}
     />
   );
 }

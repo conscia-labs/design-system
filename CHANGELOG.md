@@ -9,6 +9,12 @@ entry is built on Recharts 3 and ships `TrendLineChart`, `TrendAreaChart`,
 any other Recharts chart. Every chart colour now comes from the brand palette
 in both themes.
 
+Forms and navigation gain seven primitives: **`RadioGroup`**,
+**`SegmentedControl`**, **`NumberField`**, **`InputGroup`**, **`Accordion`**,
+**`Breadcrumb`**, and **`Progress`**. `Field` now connects its label,
+description, and error to the control inside it, so forms no longer need
+hand-written ids, `aria-describedby`, or `aria-invalid`.
+
 ### Upgrading from 1.7.4
 
 The package has no breaking changes, and no chart colour changes. Apps that do
@@ -53,6 +59,44 @@ not import `/charts` need nothing new. To use the charts:
 
 - `--chart-series-1` to `-5` now reference palette primitives instead of raw
   values in both themes. The resolved colours are unchanged.
+
+### Added
+
+- `RadioGroup` and `RadioGroupItem` for one choice from a short visible list.
+- `SegmentedControl` and `SegmentedControlItem` for switching the view or mode
+  of the same content. One segment is always selected.
+- `NumberField`, a number input with step buttons, `min`/`max` clamping, and
+  locale formatting.
+- `InputGroup`, `InputGroupAddon`, and `InputGroupInput` for a prefix or suffix
+  inside the field frame, such as a unit or URL scheme.
+- `Accordion`, `AccordionItem`, `AccordionTrigger`, and `AccordionContent`,
+  with an animated panel. Pass `multiple` to allow several open sections.
+- `Breadcrumb`, `BreadcrumbItem`, `BreadcrumbLink`, and `BreadcrumbPage`.
+  Separators are added for you; `BreadcrumbLink` takes `render` for router
+  links.
+- `Progress` for a running task, with an indeterminate state when `value` is
+  omitted. `ValueMeter` stays the choice for static measurements.
+- `Button` accepts `pending` and `pendingLabel`. Without a `pendingLabel` the
+  spinner covers the label and the button keeps its width. `LoadingButton`
+  still works and is now `Button` with a default "Working…" label.
+
+### Changed
+
+- `Field`, `FieldLabel`, `FieldDescription`, and `FieldError` connect to the
+  control inside the same `Field` automatically, and `<Field invalid>` marks
+  that control invalid. Existing code with explicit `id` and `htmlFor` keeps
+  working: an `Input`, `Textarea`, or `InputGroupInput` given an `id` is
+  treated as wired by hand, so `Field` neither connects it nor marks it
+  invalid. `Input` and `Textarea` are now client components so they can
+  register with `Field`.
+- `Input`, `Textarea`, `SelectTrigger`, `SearchableSelect`, `DateTimeField`,
+  `InputGroup`, and `NumberField` share one field frame, so their size, focus,
+  and invalid styling cannot drift apart.
+- `Label` connects to the control inside a `Field` the same way `FieldLabel`
+  does. Both still work as plain labels outside a `Field`.
+- `Collapsible` and `Disclosure` panels now animate their height open and
+  closed, like the sidebar sections. Reduced-motion settings turn it off.
+- `AppearanceControl` and `DensityControl` are built on `SegmentedControl`.
 
 ### Fixed
 

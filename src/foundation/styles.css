@@ -56,11 +56,13 @@
 @keyframes ds-sidebar-expand {
   from {
     height: 0;
+    overflow: hidden;
     opacity: 0;
   }
 
   to {
     height: var(--collapsible-panel-height);
+    overflow: hidden;
     opacity: 1;
   }
 }
@@ -68,20 +70,22 @@
 @keyframes ds-sidebar-collapse {
   from {
     height: var(--collapsible-panel-height);
+    overflow: hidden;
     opacity: 1;
   }
 
   to {
     height: 0;
+    overflow: hidden;
     opacity: 0;
   }
 }
 
-[data-slot="sidebar-collapsible-content"][data-open] {
+:is([data-slot="sidebar-collapsible-content"], [data-slot="collapsible-content"], [data-slot="disclosure-content"])[data-open] {
   animation: ds-sidebar-expand 180ms cubic-bezier(0.2, 0, 0, 1);
 }
 
-[data-slot="sidebar-collapsible-content"][data-closed] {
+:is([data-slot="sidebar-collapsible-content"], [data-slot="collapsible-content"], [data-slot="disclosure-content"])[data-closed] {
   animation: ds-sidebar-collapse 150ms cubic-bezier(0.4, 0, 1, 1);
 }
 
@@ -114,7 +118,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-slot="sidebar-collapsible-content"] {
+  :is([data-slot="sidebar-collapsible-content"], [data-slot="collapsible-content"], [data-slot="disclosure-content"]) {
     animation: none !important;
   }
 
@@ -1244,20 +1248,20 @@
 }
 
 /* Airy fields are tinted fills with no border until focus. */
-[data-mood="airy"] :is([data-slot="input"], [data-slot="textarea"], [data-slot="select-trigger"], [data-slot="searchable-select-input"], [data-slot="date-time-field"]) {
+[data-mood="airy"] :is([data-slot="input"], [data-slot="textarea"], [data-slot="select-trigger"], [data-slot="searchable-select-input"], [data-slot="date-time-field"], [data-slot="input-group"], [data-slot="number-field-group"]) {
   border-color: transparent;
   background-color: color-mix(in oklab, var(--surface-muted) 70%, var(--surface));
 }
 
 [data-mood="airy"] :is([data-slot="input"], [data-slot="textarea"], [data-slot="select-trigger"], [data-slot="searchable-select-input"]):focus-visible,
-[data-mood="airy"] [data-slot="date-time-field"]:focus-within {
+[data-mood="airy"] :is([data-slot="date-time-field"], [data-slot="input-group"], [data-slot="number-field-group"]):focus-within {
   border-color: var(--focus);
   background-color: var(--surface);
 }
 
 /* The borderless fill must not hide an invalid field. */
 [data-mood="airy"] :is([data-slot="input"], [data-slot="textarea"], [data-slot="select-trigger"], [data-slot="searchable-select-input"])[aria-invalid="true"],
-[data-mood="airy"] [data-slot="date-time-field"]:has(input[aria-invalid="true"]) {
+[data-mood="airy"] :is([data-slot="date-time-field"], [data-slot="input-group"], [data-slot="number-field-group"]):has(input[aria-invalid="true"]) {
   border-color: var(--danger);
 }
 
@@ -1738,6 +1742,16 @@
       color-mix(in oklab, var(--sidebar-glow, transparent) 7%, transparent) 84%,
       transparent
     );
+  }
+}
+
+@keyframes ds-progress-indeterminate {
+  from {
+    translate: -100% 0;
+  }
+
+  to {
+    translate: 250% 0;
   }
 }
 

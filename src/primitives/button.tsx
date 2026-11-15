@@ -3,6 +3,7 @@ import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
 
+import { Spinner } from "./spinner";
 import { cn } from "./utils";
 
 const buttonVariants = cva(
@@ -38,6 +39,10 @@ type ButtonProps = React.ComponentProps<"button">
   & VariantProps<typeof buttonVariants>
   & {
     render?: useRender.ComponentProps<"button">["render"];
+    /** Shows a spinner, sets `aria-busy` and blocks clicks while the action runs. */
+    pending?: boolean;
+    /** Replaces the label while pending. Without it, a spinner covers the label and the button keeps its width. */
+    pendingLabel?: React.ReactNode;
   };
 
 function Button({
@@ -46,14 +51,48 @@ function Button({
   size,
   render,
   type,
+  pending = false,
+  pendingLabel,
+  disabled,
+  children,
   ...props
 }: ButtonProps) {
-  const classNames = buttonVariants({ variant, size, className });
+  const classNames = buttonVariants({
+    variant,
+    size,
+    className: cn(
+      pending && "relative disabled:opacity-100",
+      // A pending primary action keeps its filled style rather than the disabled one.
+      pending &&
+        (variant ?? "default") === "default" &&
+        "aria-busy:disabled:bg-action aria-busy:disabled:text-action-foreground aria-busy:disabled:shadow-xs",
+      className,
+    ),
+  });
   const defaultProps = {
     "data-slot": "button",
     className: classNames,
     ...(render ? {} : { type: type ?? "button" }),
     ...props,
+    disabled: disabled || pending,
+    "aria-busy": pending || undefined,
+    children: !pending ? (
+      children
+    ) : pendingLabel !== undefined ? (
+      <>
+        <Spinner aria-hidden="true" size="sm" />
+        {pendingLabel}
+      </>
+    ) : (
+      // No pending label: the label keeps its space (and its accessible name)
+      // under the spinner, so the button does not change width.
+      <>
+        <span className="absolute inset-0 grid place-items-center">
+          <Spinner aria-hidden="true" size="sm" />
+        </span>
+        <span className="inline-flex items-center justify-center gap-[inherit] opacity-0">{children}</span>
+      </>
+    ),
   } as React.ComponentProps<"button">;
 
   return useRender({

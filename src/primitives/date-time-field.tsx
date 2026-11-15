@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { fieldGroupClasses, fieldGroupInputClasses } from "./field-control";
 import { cn } from "./utils";
 
 type DateTimeFieldProps = Omit<React.ComponentProps<"input">, "type"> & {
@@ -62,10 +63,8 @@ function DateTimeField({
     <div
       data-slot="date-time-field"
       className={cn(
-        "flex h-[var(--ds-field-control-height)] w-full min-w-0 items-stretch overflow-hidden tabular-nums rounded-[var(--ds-field-control-radius)] border border-control-border bg-surface-control transition-colors",
-        "focus-within:border-focus focus-within:ring-[3px] focus-within:ring-focus/50",
-        "has-[input:disabled]:cursor-not-allowed has-[input:disabled]:opacity-50",
-        "has-[input[aria-invalid=true]]:border-danger has-[input[aria-invalid=true]]:ring-danger/20 dark:has-[input[aria-invalid=true]]:ring-danger/40",
+        fieldGroupClasses,
+        "tabular-nums",
         className,
       )}
     >
@@ -76,7 +75,7 @@ function DateTimeField({
         data-slot="date-time-field-input"
         aria-describedby={cn(ariaDescribedBy, zoneId)}
         className={cn(
-          "ds-type-control min-w-0 flex-1 bg-transparent px-[var(--ds-field-control-padding-x)] text-text-primary outline-none disabled:cursor-not-allowed",
+          fieldGroupInputClasses,
           inputClassName,
         )}
       />
