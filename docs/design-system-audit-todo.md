@@ -128,24 +128,25 @@ High priority:
 
 Medium priority:
 
-- [ ] Slider
-- [ ] Checkbox and radio menu items
-- [ ] ContextMenu
-- [ ] HoverCard
-- [ ] Banner or dismissible Alert
-- [ ] FileUpload
-- [ ] TagInput
-- [ ] ScrollArea
+- [x] Slider
+- [x] Checkbox and radio menu items
+- [x] ContextMenu
+- [x] HoverCard
+- [x] Dismissible Alert (`dismissible` on `Alert`; no separate Banner)
+- [x] FileUpload (no per-file remove, progress or `accept` check on drop)
+- [x] TagInput
+- [x] ScrollArea
 
 Small additions:
 
 - [x] Avatar `size` and status dot
 - [x] Badge dot / icon
 - [x] Toast icons and loading variant
-- [ ] Animated tab indicator
+- [x] Animated tab indicator (underline, divider and nested `Tabs`; pills,
+      segmented and `NavigationTabs` switch without sliding)
 - [x] Sheet sizes
 - [x] Chart loading / empty states
-- [ ] Timeline
+- [x] Timeline
 
 ### 6. Bugs left open from the audit
 

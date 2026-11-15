@@ -62,6 +62,16 @@ not import `/charts` need nothing new. To use the charts:
 
 ### Added
 
+- `Slider` for a number or a range, `TagInput` for free-text tags, and
+  `FileUpload`, a drop zone around a native file input.
+- `ContextMenu`, `HoverCard` and `ScrollArea`.
+- `DropdownMenuCheckboxItem`, `DropdownMenuRadioGroup` and
+  `DropdownMenuRadioItem`.
+- `dismissible`, `onDismiss` and `dismissLabel` on `Alert`.
+- `Timeline` and `TimelineItem` for events in order.
+- Underline, divider and nested `Tabs` slide one indicator between tabs
+  instead of redrawing an underline per tab. The indicator appears after
+  hydration.
 - `RadioGroup` and `RadioGroupItem` for one choice from a short visible list.
 - `SegmentedControl` and `SegmentedControlItem` for switching the view or mode
   of the same content. One segment is always selected.

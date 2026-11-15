@@ -136,7 +136,7 @@
       "category": "Primitive",
       "family": "Form controls",
       "slug": "form-controls",
-      "description": "Self-wiring fields, inputs with addons, number entry, selection, radio and segmented choices, and boolean controls.",
+      "description": "Self-wiring fields, inputs with addons, number entry, selection, tags, sliders, file upload, radio and segmented choices, and boolean controls.",
       "route": "/components/form-controls",
       "exports": [
         "Calendar",
@@ -148,6 +148,7 @@
         "FieldError",
         "FieldGroup",
         "FieldLabel",
+        "FileUpload",
         "DateTimeField",
         "FormSelect",
         "Input",
@@ -173,7 +174,9 @@
         "SelectSeparator",
         "SelectTrigger",
         "SelectValue",
+        "Slider",
         "Switch",
+        "TagInput",
         "Textarea"
       ]
     },
@@ -205,9 +208,18 @@
       "category": "Primitive",
       "family": "Menus and overlays",
       "slug": "menus-and-overlays",
-      "description": "Dialogs, sheets, menus, popovers, and tooltips.",
+      "description": "Dialogs, sheets, menus, context menus, popovers, hover cards, and tooltips.",
       "route": "/components/menus-and-overlays",
       "exports": [
+        "ContextMenu",
+        "ContextMenuContent",
+        "ContextMenuTrigger",
+        "DropdownMenuCheckboxItem",
+        "DropdownMenuRadioGroup",
+        "DropdownMenuRadioItem",
+        "HoverCard",
+        "HoverCardContent",
+        "HoverCardTrigger",
         "Dialog",
         "DialogBody",
         "DialogClose",
@@ -287,9 +299,10 @@
       "category": "Primitive",
       "family": "Supporting primitives",
       "slug": "supporting-primitives",
-      "description": "Breadcrumbs, task progress, filters, loading, separators, shortcuts, and toast feedback.",
+      "description": "Breadcrumbs, task progress, filters, loading, scroll areas, separators, shortcuts, and toast feedback.",
       "route": "/components/supporting-primitives",
       "exports": [
+        "ScrollArea",
         "Breadcrumb",
         "BreadcrumbItem",
         "BreadcrumbLink",
@@ -436,13 +449,15 @@
       "category": "Pattern",
       "family": "Activity and attention",
       "slug": "activity-and-attention",
-      "description": "Link-hosted operational activity and persistent findings.",
+      "description": "Link-hosted operational activity, ordered timelines, and persistent findings.",
       "route": "/components/activity-and-attention",
       "exports": [
         "ActivityItem",
         "ActivityList",
         "AttentionItem",
-        "AttentionList"
+        "AttentionList",
+        "Timeline",
+        "TimelineItem"
       ]
     },
     {

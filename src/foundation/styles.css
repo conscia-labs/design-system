@@ -1257,20 +1257,20 @@
 }
 
 /* Airy fields are tinted fills with no border until focus. */
-[data-mood="airy"] :is([data-slot="input"], [data-slot="textarea"], [data-slot="select-trigger"], [data-slot="date-picker"], [data-slot="searchable-select-input"], [data-slot="date-time-field"], [data-slot="input-group"], [data-slot="number-field-group"], [data-slot="multi-select"]) {
+[data-mood="airy"] :is([data-slot="input"], [data-slot="textarea"], [data-slot="select-trigger"], [data-slot="date-picker"], [data-slot="searchable-select-input"], [data-slot="date-time-field"], [data-slot="input-group"], [data-slot="number-field-group"], [data-slot="multi-select"], [data-slot="tag-input"]) {
   border-color: transparent;
   background-color: color-mix(in oklab, var(--surface-muted) 70%, var(--surface));
 }
 
 [data-mood="airy"] :is([data-slot="input"], [data-slot="textarea"], [data-slot="select-trigger"], [data-slot="date-picker"], [data-slot="searchable-select-input"]):focus-visible,
-[data-mood="airy"] :is([data-slot="date-time-field"], [data-slot="input-group"], [data-slot="number-field-group"], [data-slot="multi-select"]):focus-within {
+[data-mood="airy"] :is([data-slot="date-time-field"], [data-slot="input-group"], [data-slot="number-field-group"], [data-slot="multi-select"], [data-slot="tag-input"]):focus-within {
   border-color: var(--focus);
   background-color: var(--surface);
 }
 
 /* The borderless fill must not hide an invalid field. */
 [data-mood="airy"] :is([data-slot="input"], [data-slot="textarea"], [data-slot="select-trigger"], [data-slot="date-picker"], [data-slot="searchable-select-input"])[aria-invalid="true"],
-[data-mood="airy"] :is([data-slot="date-time-field"], [data-slot="input-group"], [data-slot="number-field-group"], [data-slot="multi-select"]):has(input[aria-invalid="true"]) {
+[data-mood="airy"] :is([data-slot="date-time-field"], [data-slot="input-group"], [data-slot="number-field-group"], [data-slot="multi-select"], [data-slot="tag-input"]):has(input[aria-invalid="true"]) {
   border-color: var(--danger);
 }
 

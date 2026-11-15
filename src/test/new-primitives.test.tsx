@@ -3,7 +3,16 @@ import userEvent from "@testing-library/user-event";
 import { renderToString } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 
+import { Alert, AlertTitle } from "../primitives/alert";
 import { Avatar, AvatarFallback } from "../primitives/avatar";
+import { ContextMenu, ContextMenuContent, ContextMenuTrigger, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from "../primitives/dropdown-menu";
+import { FileUpload } from "../primitives/file-upload";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "../primitives/hover-card";
+import { ScrollArea } from "../primitives/scroll-area";
+import { Slider } from "../primitives/slider";
+import { Tabs, TabsList, TabsTrigger } from "../primitives/tabs";
+import { TagInput } from "../primitives/tag-input";
+import { Timeline, TimelineItem } from "../patterns/timeline";
 import { Badge } from "../primitives/badge";
 import { Sheet, SheetContent, SheetTitle } from "../primitives/sheet";
 import { ChartContainer } from "../charts/chart-container";
@@ -346,5 +355,102 @@ describe("refactors", () => {
     await user.click(screen.getByRole("button"));
     expect(onSidebarOpenChange).toHaveBeenCalledWith(true);
     expect(container.querySelector("[data-sidebar-state]")?.getAttribute("data-sidebar-state")).toBe("collapsed");
+  });
+});
+
+describe("Remaining audit components", () => {
+  it("Slider names its thumbs and renders one per range value", () => {
+    render(<><Slider label="Traffic share" defaultValue={40} /><Slider aria-label="Latency" defaultValue={[200, 800]} max={1000} thumbLabels={["Minimum", "Maximum"]} /></>);
+    expect((screen.getByRole("slider", { name: "Traffic share" }) as HTMLInputElement).value).toBe("40");
+    expect((screen.getByRole("slider", { name: "Minimum" }) as HTMLInputElement).value).toBe("200");
+    expect((screen.getByRole("slider", { name: "Maximum" }) as HTMLInputElement).value).toBe("800");
+  });
+
+  it("TagInput adds, dedupes, removes and submits tags, and is named by Field", async () => {
+    const user = userEvent.setup();
+    const onValueChange = vi.fn();
+    const { container } = render(<form><Field><FieldLabel>Labels</FieldLabel><TagInput name="labels" defaultValue={["prod"]} onValueChange={onValueChange} /></Field></form>);
+    const input = screen.getByLabelText("Labels");
+    await user.type(input, "eu-west{Enter}prod,");
+    expect(onValueChange).toHaveBeenLastCalledWith(["prod", "eu-west"]);
+    expect(new FormData(container.querySelector("form")!).getAll("labels")).toEqual(["prod", "eu-west"]);
+    await user.click(screen.getByRole("button", { name: "Remove prod" }));
+    await user.type(input, "{Backspace}");
+    expect(onValueChange).toHaveBeenLastCalledWith([]);
+  });
+
+  it("FileUpload reports chosen files and is named by its label", async () => {
+    const user = userEvent.setup();
+    const onFilesChange = vi.fn();
+    render(<FileUpload label="Upload pricing" onFilesChange={onFilesChange} />);
+    const file = new File(["a,b"], "pricing.csv", { type: "text/csv" });
+    await user.upload(screen.getByLabelText(/Upload pricing/), file);
+    expect(onFilesChange).toHaveBeenCalledWith([file]);
+    expect(screen.getByText("pricing.csv")).toBeTruthy();
+  });
+
+  it("a dismissible Alert removes itself and reports it", async () => {
+    const user = userEvent.setup();
+    const onDismiss = vi.fn();
+    render(<Alert dismissible onDismiss={onDismiss}><AlertTitle>Export ready</AlertTitle></Alert>);
+    await user.click(screen.getByRole("button", { name: "Dismiss" }));
+    expect(onDismiss).toHaveBeenCalledOnce();
+    expect(screen.queryByText("Export ready")).toBeNull();
+  });
+
+  it("menu checkbox items stay open and radio items report the choice", async () => {
+    const user = userEvent.setup();
+    const onValueChange = vi.fn();
+    render(
+      <DropdownMenu>
+        <DropdownMenuTrigger>View</DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuCheckboxItem>Region</DropdownMenuCheckboxItem>
+          <DropdownMenuRadioGroup defaultValue="name" onValueChange={onValueChange}>
+            <DropdownMenuRadioItem value="name">Name</DropdownMenuRadioItem>
+            <DropdownMenuRadioItem value="updated">Updated</DropdownMenuRadioItem>
+          </DropdownMenuRadioGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>,
+    );
+    await user.click(screen.getByRole("button", { name: "View" }));
+    const region = await screen.findByRole("menuitemcheckbox", { name: "Region" });
+    await user.click(region);
+    expect(region.getAttribute("aria-checked")).toBe("true");
+    await user.click(screen.getByRole("menuitemradio", { name: "Updated" }));
+    expect(onValueChange.mock.calls[0]?.[0]).toBe("updated");
+  });
+
+  it("ContextMenu opens on right-click with DropdownMenu items", async () => {
+    const user = userEvent.setup();
+    render(<ContextMenu><ContextMenuTrigger>Row</ContextMenuTrigger><ContextMenuContent><DropdownMenuItem>Rename</DropdownMenuItem></ContextMenuContent></ContextMenu>);
+    await user.pointer({ keys: "[MouseRight]", target: screen.getByText("Row") });
+    expect(await screen.findByRole("menuitem", { name: "Rename" })).toBeTruthy();
+  });
+
+  it("HoverCard trigger is a link, and ScrollArea and Timeline render their content", () => {
+    render(
+      <>
+        <HoverCard><HoverCardTrigger href="/team">Platform team</HoverCardTrigger><HoverCardContent>Owners</HoverCardContent></HoverCard>
+        <ScrollArea className="h-10" aria-label="Requests"><p>Scrollable</p></ScrollArea>
+        <Timeline><TimelineItem title="Started" time="12:28" /><TimelineItem tone="success" title="Succeeded" /></Timeline>
+      </>,
+    );
+    expect(screen.getByRole("link", { name: "Platform team" }).getAttribute("href")).toBe("/team");
+    expect(screen.getByText("Scrollable").closest('[data-slot="scroll-area"]')).toBeTruthy();
+    expect(screen.getByRole("region", { name: "Requests" }).getAttribute("data-slot")).toBe("scroll-area-viewport");
+    expect(screen.getAllByRole("listitem").map((item) => item.getAttribute("data-tone"))).toEqual(["neutral", "success"]);
+  });
+
+  it("underline tabs get a sliding indicator and segmented tabs do not", () => {
+    const { container } = render(
+      <>
+        <Tabs defaultValue="a"><TabsList><TabsTrigger value="a">A</TabsTrigger></TabsList></Tabs>
+        <Tabs defaultValue="a" variant="segmented"><TabsList><TabsTrigger value="a">A</TabsTrigger></TabsList></Tabs>
+      </>,
+    );
+    const lists = container.querySelectorAll('[data-slot="tabs-list"]');
+    expect(lists[0]?.className).toContain("relative");
+    expect(lists[1]?.className).not.toContain("relative");
   });
 });

@@ -1,7 +1,8 @@
 "use client";
 import * as React from "react";
+import { ContextMenu as BaseContextMenu } from "@base-ui/react/context-menu";
 import { Menu } from "@base-ui/react/menu";
-import { ChevronRight } from "lucide-react";
+import { Check, ChevronRight } from "lucide-react";
 import { overlayLayers } from "./overlay-layers";
 import { cn } from "./utils";
 
@@ -16,4 +17,15 @@ function DropdownMenuItem({ className, inset, variant = "default", ...props }: R
 function DropdownMenuLinkItem({ className, ...props }: React.ComponentProps<typeof Menu.LinkItem>) { return <Menu.LinkItem data-slot="dropdown-menu-link-item" className={cn("ds-type-menu-item data-highlighted:bg-surface-muted flex items-center rounded-sm px-2 py-1.5 outline-hidden", className)} {...props} />; }
 function DropdownMenuLabel({ className, inset, ...props }: React.ComponentProps<"div"> & { inset?: boolean }) { return <div role="presentation" data-slot="dropdown-menu-label" data-inset={inset} className={cn("ds-type-menu-label px-2 py-1.5 font-medium data-[inset=true]:pl-8", className)} {...props} />; }
 function DropdownMenuSeparator({ className, ...props }: React.ComponentProps<typeof Menu.Separator>) { return <Menu.Separator data-slot="dropdown-menu-separator" className={cn("-mx-1 my-1 h-px bg-border-default", className)} {...props} />; }
-export { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuLinkItem, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger };
+const checkableItemClasses = "ds-type-menu-item data-highlighted:bg-surface-muted relative flex cursor-default select-none items-center gap-2 rounded-sm py-1.5 pl-8 pr-2 outline-hidden transition-colors data-disabled:pointer-events-none data-disabled:opacity-50";
+const itemIndicatorClasses = "absolute left-2 flex size-4 items-center justify-center";
+/** A menu item that toggles a setting. The menu stays open so several can be changed. */
+function DropdownMenuCheckboxItem({ className, children, closeOnClick = false, ...props }: React.ComponentProps<typeof Menu.CheckboxItem>) { return <Menu.CheckboxItem data-slot="dropdown-menu-checkbox-item" closeOnClick={closeOnClick} className={cn(checkableItemClasses, className)} {...props}><span className={itemIndicatorClasses}><Menu.CheckboxItemIndicator><Check className="size-4" /></Menu.CheckboxItemIndicator></span>{children}</Menu.CheckboxItem>; }
+function DropdownMenuRadioGroup({ ...props }: React.ComponentProps<typeof Menu.RadioGroup>) { return <Menu.RadioGroup data-slot="dropdown-menu-radio-group" {...props} />; }
+/** One choice in a DropdownMenuRadioGroup. */
+function DropdownMenuRadioItem({ className, children, ...props }: React.ComponentProps<typeof Menu.RadioItem>) { return <Menu.RadioItem data-slot="dropdown-menu-radio-item" className={cn(checkableItemClasses, className)} {...props}><span className={itemIndicatorClasses}><Menu.RadioItemIndicator><span className="block size-2 rounded-full bg-current" /></Menu.RadioItemIndicator></span>{children}</Menu.RadioItem>; }
+/** A menu opened by right-click or long press on its trigger area. Fill ContextMenuContent with the DropdownMenu item parts, and offer the same actions somewhere visible too. */
+function ContextMenu({ ...props }: React.ComponentProps<typeof BaseContextMenu.Root>) { return <BaseContextMenu.Root data-slot="context-menu" {...props} />; }
+function ContextMenuTrigger({ ...props }: React.ComponentProps<typeof BaseContextMenu.Trigger>) { return <BaseContextMenu.Trigger data-slot="context-menu-trigger" {...props} />; }
+function ContextMenuContent({ className, ...props }: React.ComponentProps<typeof Menu.Popup>) { return <Menu.Portal><Menu.Positioner data-slot="context-menu-positioner" className={overlayLayers.popup}><Menu.Popup data-slot="context-menu-content" className={cn("max-h-[var(--available-height)] min-w-40 overflow-x-hidden overflow-y-auto rounded-md border bg-surface-floating p-1 text-text-primary shadow-[var(--ds-shadow-floating)] outline-none", className)} {...props} /></Menu.Positioner></Menu.Portal>; }
+export { ContextMenu, ContextMenuContent, ContextMenuTrigger, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuLinkItem, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger };

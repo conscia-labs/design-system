@@ -104,6 +104,7 @@ function TabsList({
   const resolvedSize = requestedSize === "sm" ? "compact" : requestedSize;
   const [scrollPosition, scrollRailRef, updateScrollPosition] =
     useHorizontalScrollRail<HTMLDivElement>(externalRef);
+  const slidingIndicator = resolvedVariant === "underline" || resolvedVariant === "divider" || resolvedVariant === "nested";
 
   return (
     <BaseTabs.List
@@ -121,6 +122,7 @@ function TabsList({
       className={cn(
         "text-text-supporting",
         resolvedVariant !== "segmented" && tabRailClasses,
+        slidingIndicator && "relative",
         resolvedVariant === "divider" && "border-b border-border-subtle",
         resolvedVariant === "pills" && "gap-1",
         resolvedVariant === "nested" && "gap-5 border-b border-border-subtle",
@@ -139,6 +141,16 @@ function TabsList({
       >
         {children}
       </TabsListVisualContext.Provider>
+      {/* One bar that slides between tabs. It appears after hydration; the active tab's own colour marks it until then. */}
+      {slidingIndicator ? (
+        <BaseTabs.Indicator
+          data-slot="tabs-indicator"
+          className={cn(
+            "absolute bottom-0 left-0 h-0.5 w-[var(--active-tab-width)] translate-x-[var(--active-tab-left)] transition-[translate,width] duration-[var(--ds-duration-base)] ease-standard motion-reduce:transition-none",
+            resolvedVariant === "nested" ? "rounded-full bg-brand-supporting" : "bg-selection-indicator",
+          )}
+        />
+      ) : null}
     </BaseTabs.List>
   );
 }
@@ -166,7 +178,7 @@ function TabsTrigger({
         (resolvedVariant === "underline" || resolvedVariant === "divider") &&
           cn(
             navigationTabClasses,
-            "data-active:bg-selection-background data-active:font-semibold data-active:text-selection-foreground data-active:after:bg-selection-indicator",
+            "data-active:bg-selection-background data-active:font-semibold data-active:text-selection-foreground",
           ),
         resolvedVariant === "pills" &&
           cn(
@@ -174,7 +186,7 @@ function TabsTrigger({
             "data-active:bg-selection-background-strong data-active:font-semibold data-active:text-selection-foreground data-active:ring-1 data-active:ring-inset data-active:ring-selection-border/60",
           ),
         resolvedVariant === "nested" &&
-          "relative inline-flex h-full shrink-0 snap-start items-center justify-center gap-1.5 whitespace-nowrap px-0.5 text-sm font-medium text-text-supporting outline-none transition-colors duration-[var(--ds-duration-fast)] after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:rounded-full after:bg-transparent hover:text-text-primary focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus-ring data-active:text-brand-supporting data-active:after:bg-brand-supporting",
+          "relative inline-flex h-full shrink-0 snap-start items-center justify-center gap-1.5 whitespace-nowrap px-0.5 text-sm font-medium text-text-supporting outline-none transition-colors duration-[var(--ds-duration-fast)] hover:text-text-primary focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus-ring data-active:text-brand-supporting",
         resolvedVariant === "segmented" &&
           "inline-flex h-full items-center justify-center gap-2 whitespace-nowrap rounded-[calc(var(--ds-radius-control)-2px)] px-3 text-sm font-medium text-text-supporting outline-none transition-[background-color,color,box-shadow] hover:text-text-primary focus-visible:ring-2 focus-visible:ring-focus-ring data-active:bg-surface-track-selected data-active:text-text-primary data-active:shadow-raised data-active:ring-1 data-active:ring-inset data-active:ring-border-subtle",
         className,

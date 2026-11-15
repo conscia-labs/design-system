@@ -1,6 +1,8 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
+import { X } from "lucide-react";
 
+import { IconButton } from "./button";
 import { cn } from "./utils";
 
 type AlertContextValue = {
@@ -35,12 +37,20 @@ const alertVariants = cva(
   },
 );
 
-type AlertProps = React.ComponentProps<"div"> & VariantProps<typeof alertVariants>;
+type AlertProps = React.ComponentProps<"div"> & VariantProps<typeof alertVariants> & {
+  /** Adds a close button. The alert removes itself; use `onDismiss` to remember the choice. */
+  dismissible?: boolean;
+  onDismiss?: () => void;
+  dismissLabel?: string;
+};
 
 function Alert({
   children,
   className,
   variant,
+  dismissible = false,
+  onDismiss,
+  dismissLabel = "Dismiss",
   role = "group",
   "aria-labelledby": ariaLabelledby,
   "aria-describedby": ariaDescribedby,
@@ -53,6 +63,9 @@ function Alert({
   const [registeredDescriptionId, setRegisteredDescriptionId] = React.useState<string>();
   const registerTitle = React.useCallback((id: string) => setRegisteredTitleId(id), []);
   const registerDescription = React.useCallback((id: string) => setRegisteredDescriptionId(id), []);
+  const [dismissed, setDismissed] = React.useState(false);
+
+  if (dismissed) return null;
 
   return (
     <AlertContext.Provider value={{ titleId, descriptionId, hasTitle: Boolean(registeredTitleId), hasDescription: Boolean(registeredDescriptionId), registerTitle, registerDescription }}>
@@ -61,10 +74,25 @@ function Alert({
         role={role}
         aria-labelledby={ariaLabelledby ?? registeredTitleId}
         aria-describedby={ariaDescribedby ?? registeredDescriptionId}
-        className={cn(alertVariants({ variant }), className)}
+        className={cn(alertVariants({ variant }), dismissible && "pr-12", className)}
         {...props}
       >
         {children}
+        {dismissible ? (
+          <IconButton
+            type="button"
+            size="sm"
+            variant="ghost"
+            aria-label={dismissLabel}
+            className="absolute right-2 top-2 text-current"
+            onClick={() => {
+              setDismissed(true);
+              onDismiss?.();
+            }}
+          >
+            <X />
+          </IconButton>
+        ) : null}
       </div>
     </AlertContext.Provider>
   );
