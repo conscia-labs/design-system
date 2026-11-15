@@ -43,6 +43,14 @@ holds the new components and the Field work.
 - [x] `--ds-radius-pill`, `--scrim`, `--danger-solid-foreground`; raw
       durations onto the duration tokens.
 
+### Naming and bugs
+
+- [x] `danger`, `sm` and `lg` aliases; `render` on NavigationTab and
+      DetailBackLink; deprecated PageHeader `action` / `actionNode`.
+- [x] `MetricCountUp` flash, tooltip arrow side, SheetContent `side`
+      (deprecated in favour of `Sheet side`).
+- [x] Playwright `net::ERR_ABORTED` flake: navigation is retried once.
+
 ### Components
 
 - [x] RadioGroup
@@ -81,18 +89,16 @@ Done, except:
       `--ds-space-inline`, `brand-secondary-*`, `brand-emphasis-*`) are
       public, so removing them is a 2.0 change.
 
-### 3. Naming (aliases now, removals at 2.0)
+### 3. Naming
 
-- [ ] Tone names: standardise on `danger`; alias `destructive` (Button, menu
-      item), `error` (Toast), and Badge's duplicate pairs.
-- [ ] Size names: standardise on `sm | default | lg`; alias Dialog's
-      `small | large` and the `compact` variants.
-- [ ] Prop names: `actions`, `description`, `title` everywhere; retire
-      PageHeader's `action` / `actionNode`.
-- [ ] Link rendering: `render` on `NavigationTab`, `DetailBackLink`, and
-      `PageHeader`'s back link, as Button and BreadcrumbLink have.
-- [ ] Code style: format the one-line files (`select`, `dialog`,
-      `alert-dialog`, `popover`, `dropdown-menu`, `tooltip`).
+Aliases are in. Left for 2.0 or later:
+
+- [ ] Remove the old names (`destructive`, `error`, `small`, `large`,
+      `compact`, PageHeader's `action` / `actionNode`, SheetContent's `side`).
+- [ ] Badge still has `danger` and `destructive` as separate variants.
+- [ ] Format the one-line files (`select`, `dialog`, `alert-dialog`,
+      `popover`, `dropdown-menu`, `tooltip`). The repo has no formatter, so
+      this needs one added first.
 
 ### 4. Larger refactors
 
@@ -140,15 +146,9 @@ Small additions:
 
 ### 6. Bugs left open from the audit
 
-- [ ] `MetricCountUp` shows the final value, drops to 0, then counts up.
-- [ ] `SheetContent` `side` moves the panel but not the slide or swipe
-      direction.
 - [ ] Sidebar open state and side are corrected after mount (layout shift).
-- [ ] Tooltip arrow has no per-side offset.
-- [ ] The Playwright accessibility test sometimes fails with
-      `net::ERR_ABORTED` on `page.goto` when the dev server reloads mid-run;
-      it passes on a re-run. Consider running the suite against a production
-      build.
 - [ ] With a `pendingLabel`, a pending button can still change width. Fixing
       it means rendering both labels, which the existing LoadingButton test
       forbids.
+- [ ] Tooltip arrow offsets for `left`, `right` and `bottom` follow the same
+      rule as `top` but only `top` was checked in a browser.

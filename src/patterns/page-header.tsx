@@ -14,16 +14,14 @@ type PageHeaderProps = React.ComponentProps<"header"> & {
    */
   texture?: boolean;
   /**
-   * Temporary compatibility prop for migrated Admin UI pages.
-   * New implementations should pass an explicit actions node.
+   * @deprecated Pass an `actions` node. Removed in 2.0.
    */
   action?: {
     label: string;
     href: string;
   };
   /**
-   * Temporary compatibility prop for migrated Admin UI pages.
-   * New implementations should use actions.
+   * @deprecated Use `actions`. Removed in 2.0.
    */
   actionNode?: React.ReactNode;
 };

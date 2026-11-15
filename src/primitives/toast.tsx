@@ -7,7 +7,8 @@ import { XIcon } from "lucide-react";
 import { overlayLayers } from "./overlay-layers";
 import { cn } from "./utils";
 
-type ToastVariant = "default" | "error" | "information" | "success" | "warning";
+/** `danger` is the preferred name; `error` stays as an alias until 2.0. */
+type ToastVariant = "default" | "danger" | "error" | "information" | "success" | "warning";
 type ToastPriority = "high" | "low";
 
 type ToastActionOptions = {
@@ -50,7 +51,8 @@ type ToastViewportProps = React.ComponentProps<"div"> & {
 type ToastRecord = ToastObject<ToastData>;
 
 function toBaseToastOptions(options: ToastOptions | ToastUpdateOptions) {
-  const { action, variant, ...rest } = options;
+  const { action, variant: requested, ...rest } = options;
+  const variant = requested === "danger" ? "error" : requested;
   return {
     ...rest,
     ...(variant !== undefined ? { type: variant, data: { variant } } : {}),

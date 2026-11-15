@@ -29,7 +29,9 @@ function SheetPortal({ ...props }: React.ComponentProps<typeof Drawer.Portal>) {
 function SheetClose({ ...props }: React.ComponentProps<typeof Drawer.Close>) { return <Drawer.Close data-slot="sheet-close" {...props} />; }
 const sideClasses: Record<SheetSide, string> = { top: "inset-x-0 top-0 max-h-[90dvh] border-b", right: "right-0 top-0 h-full max-w-md border-l sm:max-w-lg", bottom: "inset-x-0 bottom-0 max-h-[90dvh] border-t", left: "left-0 top-0 h-full max-w-md border-r sm:max-w-lg" };
 function SheetOverlay({ className, ...props }: React.ComponentProps<typeof Drawer.Backdrop>) { return <Drawer.Backdrop data-slot="sheet-overlay" className={cn("fixed inset-0", overlayLayers.modal, "bg-scrim", className)} {...props} />; }
-function SheetContent({ className, children, side: sideProp, closeLabel = "Close", ...props }: React.ComponentProps<typeof Drawer.Popup> & { side?: SheetSide; closeLabel?: string }) {
+function SheetContent({ className, children, side: sideProp, closeLabel = "Close", ...props }: React.ComponentProps<typeof Drawer.Popup> & {
+  /** @deprecated Set `side` on `Sheet`, which also sets the slide and swipe direction. Removed in 2.0. */
+  side?: SheetSide; closeLabel?: string }) {
   const contextSide = React.useContext(SheetSideContext);
   const side = sideProp ?? contextSide;
   return <SheetPortal><SheetOverlay /><Drawer.Viewport className={cn("fixed inset-0 pointer-events-none", overlayLayers.modal)}><Drawer.Popup data-slot="sheet-content" className={cn("pointer-events-auto absolute flex w-full flex-col gap-6 bg-canvas p-6 text-text-primary shadow-[var(--ds-shadow-overlay)] outline-none", sideClasses[side], className)} {...props}>{children}<Drawer.Close data-slot="sheet-close" className={overlayCloseClasses}><XIcon aria-hidden="true" /><span className="sr-only">{closeLabel}</span></Drawer.Close></Drawer.Popup></Drawer.Viewport></SheetPortal>;

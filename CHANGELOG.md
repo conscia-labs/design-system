@@ -126,9 +126,22 @@ not import `/charts` need nothing new. To use the charts:
     `--danger-solid-foreground`. Raw `999px`, `bg-black/50`, `text-white`,
     `duration-150` and `duration-200` now use tokens; the two durations move
     to 120ms and 180ms.
+- Naming, with the old names kept as aliases until 2.0:
+  - `danger` is the tone name: `Button variant="danger"`,
+    `DropdownMenuItem variant="danger"` and toast `variant: "danger"` join
+    `destructive` and `error`.
+  - `sm` and `lg` are the size names: `DialogContent size="sm" | "lg"`, and
+    `size="sm"` on `Tabs` and `StateView`, join `small`, `large` and
+    `compact`.
+  - `NavigationTab` and `DetailBackLink` take `render` for router links.
+  - `PageHeader`'s `action` and `actionNode`, and `SheetContent`'s `side`,
+    are marked deprecated. Set `side` on `Sheet`.
 
 ### Fixed
 
+- `MetricCountUp` no longer shows the final value, drops to 0, and counts up.
+  The visible digits start at 0; the screen-reader value is always final.
+- The tooltip arrow sits on the correct edge for every `side`.
 - Inputs, selects, searchable selects, and date-time fields now follow the
   `compact` and `operational` densities, so they are the same height as a
   default button beside them. Before this, fields stayed at 44px while buttons

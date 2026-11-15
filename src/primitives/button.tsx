@@ -15,6 +15,9 @@ const buttonVariants = cva(
           "bg-action text-action-foreground shadow-xs hover:bg-action-hover active:bg-action-active disabled:bg-action-background disabled:text-text-supporting disabled:shadow-none disabled:opacity-100",
         destructive:
           "bg-danger-solid text-danger-solid-foreground shadow-xs hover:bg-danger-solid/90 focus-visible:ring-danger/20 dark:focus-visible:ring-danger/40",
+        /** The preferred name; `destructive` stays as an alias until 2.0. */
+        danger:
+          "bg-danger-solid text-danger-solid-foreground shadow-xs hover:bg-danger-solid/90 focus-visible:ring-danger/20 dark:focus-visible:ring-danger/40",
         outline:
           "border border-border-strong bg-surface-control text-text-primary shadow-xs hover:bg-surface-control-hover hover:text-text-primary",
         secondary: "bg-surface-inverse text-text-inverse shadow-xs hover:bg-surface-inverse/80",

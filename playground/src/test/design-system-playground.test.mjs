@@ -644,7 +644,7 @@ test("tabs separate routed navigation from layered content and mode switching", 
   assert.match(tabs, /underline/);
   assert.match(tabs, /segmented/);
   assert.match(tabs, /NavigationTabs/);
-  assert.match(tabs, /aria-current=\{active \? "page" : undefined\}/);
+  assert.match(tabs, /"aria-current": active \? "page" : undefined/);
   assert.match(tabs, /px-\[var\(--ds-tab-padding-x\)\]/);
   assert.match(tabs, /hover:bg-surface-muted/);
   assert.match(tabs, /after:bg-selection-indicator/);

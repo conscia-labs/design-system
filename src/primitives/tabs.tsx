@@ -2,6 +2,8 @@
 
 import * as React from "react";
 import { Tabs as BaseTabs } from "@base-ui/react/tabs";
+import { mergeProps } from "@base-ui/react/merge-props";
+import { useRender } from "@base-ui/react/use-render";
 
 import { cn } from "./utils";
 
@@ -10,7 +12,8 @@ import { cn } from "./utils";
  * text rail that stays visually subordinate to page-level tabs.
  */
 type TabsVariant = "underline" | "divider" | "pills" | "segmented" | "nested";
-type TabsSize = "default" | "compact";
+/** `sm` is the preferred name; `compact` stays as an alias until 2.0. */
+type TabsSize = "default" | "sm" | "compact";
 type NavigationTabsVariant = Extract<TabsVariant, "underline" | "divider" | "pills">;
 type ScrollPosition = "none" | "start" | "middle" | "end";
 
@@ -143,7 +146,8 @@ function TabsList({
 }) {
   const rootVisuals = React.useContext(TabsRootVisualContext);
   const resolvedVariant = variant ?? rootVisuals.variant;
-  const resolvedSize = size ?? rootVisuals.size;
+  const requestedSize = size ?? rootVisuals.size;
+  const resolvedSize = requestedSize === "sm" ? "compact" : requestedSize;
   const [scrollPosition, scrollRailRef, updateScrollPosition] =
     useHorizontalScrollRail<HTMLDivElement>(externalRef);
 
@@ -298,11 +302,13 @@ function NavigationTab({
   className,
   active = false,
   ref: externalRef,
+  render,
   ...props
 }: React.ComponentProps<"a"> & {
   active?: boolean;
+  /** Render a router link instead of an anchor, for example `render={<Link href="/usage" />}`. */
+  render?: useRender.ComponentProps<"a">["render"];
 }) {
-  const Comp = "a";
   const variant = React.useContext(NavigationTabsListVisualContext);
   const internalRef = React.useRef<HTMLAnchorElement | null>(null);
   const ref = React.useCallback(
@@ -328,15 +334,17 @@ function NavigationTab({
     }
   }, [active]);
 
-  return (
-    <Comp
-      {...props}
-      data-slot="navigation-tab"
-      data-variant={variant}
-      data-active={active ? "true" : "false"}
-      aria-current={active ? "page" : undefined}
-      ref={ref}
-      className={cn(
+  return useRender({
+    defaultTagName: "a",
+    render,
+    ref,
+    props: mergeProps<"a">({
+      ...props,
+      "data-slot": "navigation-tab",
+      "data-variant": variant,
+      "data-active": active ? "true" : "false",
+      "aria-current": active ? "page" : undefined,
+      className: cn(
         variant === "pills"
           ? cn(
               pillTabClasses,
@@ -344,9 +352,9 @@ function NavigationTab({
             )
           : navigationTabClasses,
         className,
-      )}
-    />
-  );
+      ),
+    } as React.ComponentProps<"a">, {}),
+  });
 }
 
 export {

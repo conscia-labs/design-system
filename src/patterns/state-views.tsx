@@ -11,7 +11,7 @@ type StateViewProps = React.ComponentProps<"div"> & {
    * `compact` suits empty states inside a section, panel, or tab; `default`
    * suits a state that replaces a page's primary content.
    */
-  size?: "default" | "compact";
+  size?: "default" | "sm" | "compact";
   /** Adds a bottom divider, for a state that replaces rows inside a table body. */
   divider?: boolean;
   /**
@@ -33,12 +33,12 @@ function StateView({
   className,
   ...props
 }: StateViewProps) {
-  const compact = size === "compact";
+  const compact = size === "compact" || size === "sm";
 
   return (
     <div
       data-slot="state-view"
-      data-size={size}
+      data-size={compact ? "compact" : size}
       className={cn(
         "flex flex-col items-center justify-center text-center",
         compact ? "gap-2 px-4 py-8" : "min-h-72 gap-3 px-6 py-12",
@@ -51,7 +51,7 @@ function StateView({
         <div
           data-slot="state-view-spot"
           data-tone={tone}
-          data-size={size}
+          data-size={compact ? "compact" : size}
           aria-hidden="true"
           className={cn(compact ? "size-9 [&_svg]:size-4" : "my-[1.125rem] size-14 [&_svg]:size-6")}
         >

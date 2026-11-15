@@ -5,7 +5,10 @@ import { describe, expect, it, vi } from "vitest";
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../primitives/accordion";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage } from "../primitives/breadcrumb";
-import { Button } from "../primitives/button";
+import { DetailBackLink } from "../patterns/detail-back-link";
+import { MetricCountUp } from "../patterns/metric-count-up";
+import { StateView } from "../patterns/state-views";
+import { Button, buttonVariants } from "../primitives/button";
 import { Field, FieldDescription, FieldError, FieldLabel } from "../primitives/field";
 import { Label } from "../primitives/label";
 import { Input } from "../primitives/input";
@@ -14,6 +17,7 @@ import { NumberField } from "../primitives/number-field";
 import { Progress } from "../primitives/progress";
 import { RadioGroup, RadioGroupItem } from "../primitives/radio-group";
 import { SegmentedControl, SegmentedControlItem } from "../primitives/segmented-control";
+import { NavigationTab } from "../primitives/tabs";
 import { Textarea } from "../primitives/textarea";
 
 describe("Field wiring", () => {
@@ -193,5 +197,33 @@ describe("new primitives", () => {
     const button = screen.getByRole("button", { name: "Save" });
     expect(button.querySelector('[data-slot="spinner"]')).toBeTruthy();
     expect(button.textContent).toBe("Save");
+  });
+});
+
+describe("naming aliases and link rendering", () => {
+  it("accepts danger on Button and sm/lg sizes alongside the old names", () => {
+    expect(buttonVariants({ variant: "danger" })).toBe(buttonVariants({ variant: "destructive" }));
+    const { container } = render(<StateView size="sm" title="Nothing here" />);
+    expect(container.querySelector('[data-slot="state-view"]')?.getAttribute("data-size")).toBe("compact");
+  });
+
+  it("renders NavigationTab and DetailBackLink through a custom link", () => {
+    render(
+      <>
+        <NavigationTab active render={<a data-router="tab" href="/usage" />}>Usage</NavigationTab>
+        <DetailBackLink label="Models" render={<a data-router="back" href="/models" />} />
+      </>,
+    );
+    const tab = screen.getByRole("link", { name: "Usage" });
+    expect(tab.getAttribute("data-router")).toBe("tab");
+    expect(tab.getAttribute("aria-current")).toBe("page");
+    expect(tab.getAttribute("data-slot")).toBe("navigation-tab");
+    expect(screen.getByRole("link", { name: "Models" }).getAttribute("data-router")).toBe("back");
+  });
+
+  it("MetricCountUp starts its digits at 0 and always exposes the final value", () => {
+    const html = renderToString(<MetricCountUp value={42} />);
+    expect(html).toMatch(/aria-hidden="true">0</);
+    expect(html).toMatch(/sr-only">42</);
   });
 });
