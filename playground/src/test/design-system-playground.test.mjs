@@ -3,6 +3,10 @@ import { readFileSync } from "node:fs";
 import { test } from "node:test";
 
 const read = (path) => readFileSync(new URL(path, import.meta.url), "utf8");
+// The shell is split across files; contracts read them as one source.
+const readAppShell = () => ["app-shell", "app-shell-state", "app-shell-sidebar", "app-shell-navigation", "app-shell-header", "app-shell-frame"]
+  .map((file) => read(`../../../src/patterns/${file}.tsx`))
+  .join("\n");
 
 function relativeLuminance(hex) {
   const channels = hex.match(/.{2}/g).map((channel) => Number.parseInt(channel, 16) / 255);
@@ -546,8 +550,9 @@ test("elevation scale routes resting, anchored, and modal layers through tokens"
     assert.match(styles, new RegExp(`--shadow-${tier}: var\\(--ds-shadow-${tier}\\);`));
   }
   assert.match(card, /default: "bg-surface shadow-\[var\(--ds-shadow-raised\)\]"/);
-  for (const file of ["dialog", "alert-dialog", "sheet"]) {
-    const source = read(`../../../src/primitives/${file}.tsx`);
+  // Dialog and AlertDialog take their popup classes from overlay-layers.
+  for (const file of ["overlay-layers.ts", "sheet.tsx"]) {
+    const source = read(`../../../src/primitives/${file}`);
     assert.match(source, /shadow-\[var\(--ds-shadow-overlay\)\]/);
     assert.doesNotMatch(source, /shadow-lg/);
   }
@@ -648,7 +653,8 @@ test("tabs separate routed navigation from layered content and mode switching", 
   assert.match(tabs, /px-\[var\(--ds-tab-padding-x\)\]/);
   assert.match(tabs, /hover:bg-surface-muted/);
   assert.match(tabs, /after:bg-selection-indicator/);
-  assert.match(tabs, /ResizeObserver/);
+  assert.match(tabs, /useScrollPosition/);
+  assert.match(read("../../../src/primitives/use-scroll-position.ts"), /ResizeObserver/);
   assert.match(tabs, /rail\.scrollLeft/);
   assert.doesNotMatch(tabs, /\.scrollIntoView\(/);
   assert.match(tabs, /data-scroll-position/);
@@ -810,7 +816,7 @@ test("shared code and value patterns remain domain agnostic", () => {
 });
 
 test("shared shell patterns expose structure without gateway-specific behavior", () => {
-  const shell = read("../../../src/patterns/app-shell.tsx");
+  const shell = readAppShell();
   const styles = read("../../../src/foundation/styles.css");
 
   for (const exportName of [
@@ -850,7 +856,7 @@ test("shared shell patterns expose structure without gateway-specific behavior",
 
 test("sidebar semantics resolve through shared light and dark roles", () => {
   const styles = read("../../../src/foundation/styles.css");
-  const shell = read("../../../src/patterns/app-shell.tsx");
+  const shell = readAppShell();
   const navigation = read("../../../src/patterns/sidebar-navigation.tsx");
 
   for (const token of [
@@ -925,7 +931,7 @@ test("shared sidebar navigation supports collapsed flyouts without owning routes
 });
 
 test("app header follows the shell: integrated bar, or a transparent sticky header beside a full-height sidebar", () => {
-  const shell = read("../../../src/patterns/app-shell.tsx");
+  const shell = readAppShell();
   const styles = read("../../../src/foundation/styles.css");
 
   assert.match(shell, /headerLayout\?: "auto" \| "split" \| "integrated"/);
@@ -947,7 +953,7 @@ test("app header follows the shell: integrated bar, or a transparent sticky head
 });
 
 test("app shell uses render composition and tracks sidebar overflow affordances", () => {
-  const shell = read("../../../src/patterns/app-shell.tsx");
+  const shell = readAppShell();
   const styles = read("../../../src/foundation/styles.css");
 
   assert.match(shell, /useRender/);

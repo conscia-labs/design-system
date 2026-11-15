@@ -10,6 +10,9 @@ import { ChartContainer } from "../charts/chart-container";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../primitives/accordion";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage } from "../primitives/breadcrumb";
 import { DetailBackLink } from "../patterns/detail-back-link";
+import { AppShell, SidebarTrigger } from "../patterns/app-shell";
+import { DataPanelHeader } from "../patterns/data-panel";
+import { MetricCard } from "../patterns/metric-card";
 import { MetricCountUp } from "../patterns/metric-count-up";
 import { StateView } from "../patterns/state-views";
 import { Button, buttonVariants } from "../primitives/button";
@@ -317,5 +320,31 @@ describe("small additions", () => {
     rerender(chart({ empty: true }));
     expect(screen.getByText("No data for this period.")).toBeTruthy();
     expect(screen.queryByRole("img")).toBeNull();
+  });
+});
+
+describe("refactors", () => {
+  it("lets a surface title take its place in the page outline", () => {
+    render(<><DataPanelHeader title="Deployments" headingLevel={3} /><MetricCard label="Requests" value={12} headingLevel={4} /></>);
+    expect(screen.getByRole("heading", { level: 3, name: "Deployments" })).toBeTruthy();
+    expect(screen.getByRole("heading", { level: 4, name: "Requests" })).toBeTruthy();
+  });
+
+  it("MetricCard marks a null value as unavailable and still renders 0 for an omitted one", () => {
+    const { rerender } = render(<MetricCard label="Requests" value={null} unit="rps" />);
+    expect(screen.getByLabelText("Unavailable")).toBeTruthy();
+    expect(screen.queryByText("rps")).toBeNull();
+    rerender(<MetricCard label="Requests" />);
+    expect(screen.getByText("0")).toBeTruthy();
+  });
+
+  it("AppShell follows a controlled sidebarOpen and reports toggles without persisting", async () => {
+    const user = userEvent.setup();
+    const onSidebarOpenChange = vi.fn();
+    const { container } = render(<AppShell sidebarOpen={false} onSidebarOpenChange={onSidebarOpenChange}><SidebarTrigger /></AppShell>);
+    expect(container.querySelector("[data-sidebar-state]")?.getAttribute("data-sidebar-state")).toBe("collapsed");
+    await user.click(screen.getByRole("button"));
+    expect(onSidebarOpenChange).toHaveBeenCalledWith(true);
+    expect(container.querySelector("[data-sidebar-state]")?.getAttribute("data-sidebar-state")).toBe("collapsed");
   });
 });

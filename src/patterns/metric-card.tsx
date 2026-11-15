@@ -2,6 +2,7 @@ import * as React from "react";
 import { ArrowDown, ArrowUp, Minus } from "lucide-react";
 
 import { Skeleton } from "../primitives/skeleton";
+import { MetricBandEmptyValue } from "./metric-empty-value";
 import { cn } from "../primitives/utils";
 import { MetricCountUp, type MetricCountUpOptions } from "./metric-count-up";
 
@@ -48,6 +49,12 @@ type MetricCardBaseProps = React.ComponentProps<"section"> & {
   label: React.ReactNode;
   description?: React.ReactNode;
   value?: React.ReactNode;
+  /**
+   * Shown in a quiet style when `value` is `null`, such as "Not reported".
+   * Defaults to an em dash announced as "Unavailable". An omitted value still
+   * renders 0.
+   */
+  emptyValue?: React.ReactNode;
   unit?: React.ReactNode;
   trend?: React.ReactNode;
   status?: React.ReactNode;
@@ -60,6 +67,8 @@ type MetricCardBaseProps = React.ComponentProps<"section"> & {
    */
   tone?: "default" | "highlight" | "supporting" | "accent" | "muted";
   loading?: boolean;
+  /** Heading element for the title, so the surface fits the page outline. Defaults to 2. */
+  headingLevel?: 2 | 3 | 4;
   /**
    * Counts a numeric `value` up on first render and between updates. Pass
    * options to format the number. Ignored when `value` is not a number.
@@ -77,12 +86,14 @@ function MetricCard({
   label,
   description,
   value,
+  emptyValue,
   unit,
   trend,
   status,
   emphasis = "supporting",
   tone = "default",
   loading = false,
+  headingLevel = 2,
   countUp = false,
   visualization,
   visualizationSummary,
@@ -90,6 +101,7 @@ function MetricCard({
   ...props
 }: MetricCardProps) {
   const labelId = React.useId();
+  const Heading = `h${headingLevel}` as const;
 
   return (
     <section
@@ -112,7 +124,7 @@ function MetricCard({
       {/* The status drops below a title that would otherwise be squeezed into a narrow column. */}
       <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2 px-[var(--ds-surface-padding)] pt-[var(--ds-surface-padding)]">
         <div className="min-w-0 flex-1 basis-40">
-          <h2 id={labelId} className="ds-type-card-title">{label}</h2>
+          <Heading id={labelId} className="ds-type-card-title">{label}</Heading>
           {description ? <p className="ds-type-metadata mt-0.5 text-text-supporting">{description}</p> : null}
         </div>
         {status ? <div className="shrink-0">{status}</div> : null}
@@ -126,10 +138,10 @@ function MetricCard({
               {countUp && typeof value === "number" ? (
                 <MetricCountUp value={value} options={countUp === true ? undefined : countUp} />
               ) : (
-                value ?? 0
+                value === null ? <MetricBandEmptyValue>{emptyValue}</MetricBandEmptyValue> : value ?? 0
               )}
             </span>
-            {unit ? <span className="ds-type-ui text-text-supporting">{unit}</span> : null}
+            {unit && value !== null ? <span className="ds-type-ui text-text-supporting">{unit}</span> : null}
           </>
         )}
         {trend ? <div className="ml-1">{trend}</div> : null}

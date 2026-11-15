@@ -96,6 +96,13 @@ not import `/charts` need nothing new. To use the charts:
   `loading` placeholder rows and an `error` node in the body under the
   header, hides columns marked `hidden`, and passes `{ selected,
   toggleSelected }` to `mobileRow`.
+- `DataPanelHeader`, `MetricCard`, `StateView`, `DetailSection` and
+  `ResourceSummary` take `headingLevel` (2, 3 or 4) so their title fits the
+  page outline. The default stays `h2`.
+- `AppShell` takes `sidebarOpen` and `onSidebarOpenChange` to control the
+  desktop sidebar. A controlled shell does not persist the state.
+- `MetricCard` takes `emptyValue` and shows a missing-value dash for
+  `value={null}`, as `MetricBandItem` does. An omitted value still shows 0.
 - `Button` accepts `pending` and `pendingLabel`. Without a `pendingLabel` the
   spinner covers the label and the button keeps its width. `LoadingButton`
   still works and is now `Button` with a default "Working…" label.
@@ -146,6 +153,10 @@ not import `/charts` need nothing new. To use the charts:
     `--danger-solid-foreground`. Raw `999px`, `bg-black/50`, `text-white`,
     `duration-150` and `duration-200` now use tokens; the two durations move
     to 120ms and 180ms.
+- Internal only, with no change to exports or rendering: `app-shell.tsx` is
+  split into state, sidebar, navigation, header and frame files; Dialog and
+  AlertDialog share their modal classes; Table and Tabs share one
+  scroll-position hook.
 - Naming, with the old names kept as aliases until 2.0:
   - `danger` is the tone name: `Button variant="danger"`,
     `DropdownMenuItem variant="danger"` and toast `variant: "danger"` join

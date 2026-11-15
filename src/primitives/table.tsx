@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { useScrollPosition } from "./use-scroll-position";
 import { cn } from "./utils";
 
 type TableProps = React.ComponentProps<"table"> & {
@@ -15,8 +16,6 @@ type TableProps = React.ComponentProps<"table"> & {
   scrollableLabel?: string;
 };
 
-type TableScrollPosition = "none" | "start" | "middle" | "end";
-
 function Table({
   className,
   scrollable = true,
@@ -24,67 +23,8 @@ function Table({
   ...props
 }: TableProps) {
   const containerRef = React.useRef<HTMLDivElement | null>(null);
-  const [scrollPosition, setScrollPosition] =
-    React.useState<TableScrollPosition>("none");
+  const [scrollPosition] = useScrollPosition(containerRef, scrollable);
   const isOverflowing = scrollPosition !== "none";
-
-  const updateScrollPosition = React.useCallback(() => {
-    const element = containerRef.current;
-    if (!element || !scrollable) {
-      setScrollPosition("none");
-      return;
-    }
-
-    const maximumScroll = element.scrollWidth - element.clientWidth;
-    const nextPosition: TableScrollPosition =
-      maximumScroll <= 1
-        ? "none"
-        : element.scrollLeft <= 1
-          ? "start"
-          : element.scrollLeft >= maximumScroll - 1
-            ? "end"
-            : "middle";
-
-    setScrollPosition((current) =>
-      current === nextPosition ? current : nextPosition,
-    );
-  }, [scrollable]);
-
-  React.useEffect(() => {
-    const element = containerRef.current;
-
-    updateScrollPosition();
-    if (!element || !scrollable) return;
-
-    const resizeObserver =
-      typeof ResizeObserver === "undefined"
-        ? null
-        : new ResizeObserver(updateScrollPosition);
-    resizeObserver?.observe(element);
-
-    const table = element.querySelector("table");
-    if (table) {
-      resizeObserver?.observe(table);
-    }
-
-    const mutationObserver =
-      typeof MutationObserver === "undefined"
-        ? null
-        : new MutationObserver(updateScrollPosition);
-    mutationObserver?.observe(element, {
-      characterData: true,
-      childList: true,
-      subtree: true,
-    });
-
-    element.addEventListener("scroll", updateScrollPosition, { passive: true });
-
-    return () => {
-      resizeObserver?.disconnect();
-      mutationObserver?.disconnect();
-      element.removeEventListener("scroll", updateScrollPosition);
-    };
-  }, [scrollable, updateScrollPosition]);
 
   return (
     <div

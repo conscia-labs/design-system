@@ -12,6 +12,8 @@ type StateViewProps = React.ComponentProps<"div"> & {
    * suits a state that replaces a page's primary content.
    */
   size?: "default" | "sm" | "compact";
+  /** Heading element for the title, so the surface fits the page outline. Defaults to 2. */
+  headingLevel?: 2 | 3 | 4;
   /** Adds a bottom divider, for a state that replaces rows inside a table body. */
   divider?: boolean;
   /**
@@ -28,12 +30,14 @@ function StateView({
   action,
   icon,
   size = "default",
+  headingLevel = 2,
   divider = false,
   tone = "brand",
   className,
   ...props
 }: StateViewProps) {
   const compact = size === "compact" || size === "sm";
+  const Heading = `h${headingLevel}` as const;
 
   return (
     <div
@@ -58,7 +62,7 @@ function StateView({
           {icon}
         </div>
       ) : null}
-      <h2 className={compact ? "ds-type-card-title" : "ds-type-section-title"}>{title}</h2>
+      <Heading className={compact ? "ds-type-card-title" : "ds-type-section-title"}>{title}</Heading>
       {description ? <p className="ds-type-ui max-w-md text-text-supporting">{description}</p> : null}
       {action ? <div className="mt-1">{action}</div> : null}
     </div>

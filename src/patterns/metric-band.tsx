@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { Skeleton } from "../primitives/skeleton";
+import { MetricBandEmptyValue } from "./metric-empty-value";
 import { cn } from "../primitives/utils";
 
 type MetricBandProps = React.ComponentProps<"div"> & {
@@ -61,14 +62,6 @@ type MetricBandItemProps = React.ComponentProps<"div"> & {
    */
   emptyValue?: React.ReactNode;
 };
-
-function MetricBandEmptyValue({ children }: { children?: React.ReactNode }) {
-  return (
-    <span data-slot="metric-band-empty-value" className="ds-type-ui font-medium text-text-muted">
-      {children ?? <span aria-label="Unavailable">—</span>}
-    </span>
-  );
-}
 
 function MetricBandItem({
   label,

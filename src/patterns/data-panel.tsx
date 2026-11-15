@@ -11,14 +11,17 @@ type DataPanelHeaderProps = React.ComponentProps<"header"> & {
   description?: React.ReactNode;
   status?: React.ReactNode;
   actions?: React.ReactNode;
+  /** Heading element for the title, so the surface fits the page outline. Defaults to 2. */
+  headingLevel?: 2 | 3 | 4;
 };
 
-function DataPanelHeader({ title, description, status, actions, className, ...props }: DataPanelHeaderProps) {
+function DataPanelHeader({ title, description, status, actions, headingLevel = 2, className, ...props }: DataPanelHeaderProps) {
+  const Heading = `h${headingLevel}` as const;
   return (
     <header data-slot="data-panel-header" className={cn("flex min-w-0 items-start justify-between gap-4 border-b border-border-subtle px-[var(--ds-surface-padding)] py-3", className)} {...props}>
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-2">
-          <h2 className="ds-type-card-title">{title}</h2>
+          <Heading className="ds-type-card-title">{title}</Heading>
           {status}
         </div>
         {description ? <p className="ds-type-metadata mt-0.5 text-text-supporting">{description}</p> : null}

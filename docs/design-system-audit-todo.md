@@ -108,14 +108,15 @@ Aliases are in. Left for 2.0 or later:
 - [ ] DataTable sticky header: the table scrolls horizontally inside its own
       container, so a sticky header needs a fixed-height variant first.
 - [ ] DataTable `empty` still replaces the whole table rather than the body.
-- [ ] One surface and one heading block: build `DataPanel`,
-      `InventorySurface`, `DetailSection`, and `ResourceSummary` on `Card`;
-      extract a shared heading with a `headingLevel` prop.
-- [ ] One `MetricValue` shared by `MetricCard`, `MetricBandItem`, and
-      `ValueMeter` (empty value, loading height, count-up).
-- [ ] Split `app-shell.tsx` into sidebar state, sidebar, navigation, header,
-      and page frame; add a controlled `sidebarOpen`.
-- [ ] Shared overlay classes for Dialog and AlertDialog; one scroll-position
+- [x] `headingLevel` on DataPanelHeader, MetricCard, StateView,
+      DetailSection and ResourceSummary.
+- [ ] Building `DataPanel`, `DetailSection` and `ResourceSummary` on `Card`
+      was not done: they differ from Card in element, border, shadow and CSS
+      hooks, so it would change how they look for no consumer benefit.
+- [x] MetricCard and MetricBandItem share the missing-value treatment.
+      `ValueMeter` and count-up were left alone; they share no code with it.
+- [x] `app-shell.tsx` split into five files; controlled `sidebarOpen`.
+- [x] Shared modal classes for Dialog and AlertDialog; one scroll-position
       hook for Table and Tabs.
 
 ### 5. New components

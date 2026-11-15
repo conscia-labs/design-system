@@ -5,6 +5,7 @@ import { Tabs as BaseTabs } from "@base-ui/react/tabs";
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 
+import { useScrollPosition } from "./use-scroll-position";
 import { cn } from "./utils";
 
 /**
@@ -15,7 +16,6 @@ type TabsVariant = "underline" | "divider" | "pills" | "segmented" | "nested";
 /** `sm` is the preferred name; `compact` stays as an alias until 2.0. */
 type TabsSize = "default" | "sm" | "compact";
 type NavigationTabsVariant = Extract<TabsVariant, "underline" | "divider" | "pills">;
-type ScrollPosition = "none" | "start" | "middle" | "end";
 
 type TabsVisualContextValue = {
   variant: TabsVariant;
@@ -51,26 +51,7 @@ function assignRef<T>(ref: React.Ref<T> | undefined, value: T | null) {
 
 function useHorizontalScrollRail<T extends HTMLElement>(externalRef?: React.Ref<T>) {
   const internalRef = React.useRef<T | null>(null);
-  const [scrollPosition, setScrollPosition] = React.useState<ScrollPosition>("none");
-
-  const updateScrollPosition = React.useCallback(() => {
-    const element = internalRef.current;
-    if (!element) return;
-
-    const maximumScroll = element.scrollWidth - element.clientWidth;
-    const nextPosition: ScrollPosition =
-      maximumScroll <= 1
-        ? "none"
-        : element.scrollLeft <= 1
-          ? "start"
-          : element.scrollLeft >= maximumScroll - 1
-            ? "end"
-            : "middle";
-
-    setScrollPosition((current) =>
-      current === nextPosition ? current : nextPosition,
-    );
-  }, []);
+  const [scrollPosition, updateScrollPosition] = useScrollPosition(internalRef);
 
   const ref = React.useCallback(
     (node: T | null) => {
@@ -79,33 +60,6 @@ function useHorizontalScrollRail<T extends HTMLElement>(externalRef?: React.Ref<
     },
     [externalRef],
   );
-
-  React.useEffect(() => {
-    updateScrollPosition();
-    const element = internalRef.current;
-    if (!element) return;
-
-    const resizeObserver =
-      typeof ResizeObserver === "undefined"
-        ? null
-        : new ResizeObserver(updateScrollPosition);
-    resizeObserver?.observe(element);
-
-    const mutationObserver =
-      typeof MutationObserver === "undefined"
-        ? null
-        : new MutationObserver(updateScrollPosition);
-    mutationObserver?.observe(element, {
-      characterData: true,
-      childList: true,
-      subtree: true,
-    });
-
-    return () => {
-      resizeObserver?.disconnect();
-      mutationObserver?.disconnect();
-    };
-  }, [updateScrollPosition]);
 
   return [scrollPosition, ref, updateScrollPosition] as const;
 }
