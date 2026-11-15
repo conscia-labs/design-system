@@ -85,6 +85,7 @@ function SearchableSelect({
       >
         <Combobox.InputGroup className="relative flex items-center">
           <Combobox.Input
+            data-slot="searchable-select-input"
             ref={inputRef} id={id} aria-label={ariaLabel} aria-labelledby={ariaLabelledBy}
             aria-describedby={ariaDescribedBy} aria-invalid={ariaInvalid} placeholder={searchPlaceholder}
             className={cn(

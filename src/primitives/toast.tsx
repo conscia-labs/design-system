@@ -78,25 +78,26 @@ function ToastProvider({ children, limit = 3, timeout = 5000 }: ToastProviderPro
 }
 
 function useToast() {
-  const manager = BaseToast.useToastManager<ToastData>();
+  // The manager object changes with every toast; its methods are stable.
+  const { add, close, update, promise: basePromise } = BaseToast.useToastManager<ToastData>();
 
   return React.useMemo(
     () => ({
       add(options: ToastOptions) {
         const variant = options.variant ?? "default";
-        return manager.add({
+        return add({
           ...toBaseToastOptions({ ...options, variant }),
           id: options.id,
         });
       },
       close(id?: string) {
-        manager.close(id);
+        close(id);
       },
       update(id: string, options: ToastUpdateOptions) {
-        manager.update(id, toBaseToastOptions(options));
+        update(id, toBaseToastOptions(options));
       },
       promise<Value>(promise: Promise<Value>, options: ToastPromiseOptions<Value>) {
-        return manager.promise(promise, {
+        return basePromise(promise, {
           loading: toBasePromiseOption(options.loading),
           success: (result) => {
             const next = typeof options.success === "function" ? options.success(result) : options.success;
@@ -109,7 +110,7 @@ function useToast() {
         });
       },
     }),
-    [manager],
+    [add, close, update, basePromise],
   );
 }
 

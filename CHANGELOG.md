@@ -54,6 +54,37 @@ not import `/charts` need nothing new. To use the charts:
 - `--chart-series-1` to `-5` now reference palette primitives instead of raw
   values in both themes. The resolved colours are unchanged.
 
+### Fixed
+
+- Inputs, selects, searchable selects, and date-time fields now follow the
+  `compact` and `operational` densities, so they are the same height as a
+  default button beside them. Before this, fields stayed at 44px while buttons
+  dropped to 32px (compact) or 36px (operational). Touch screens still get the
+  44px minimum, and the `airy` mood still sets 48px fields.
+- `Badge`, pagination labels, and the preference legend now render at the
+  metadata size. The size class was being read as a colour and dropped, so
+  they rendered at body size. **Badges get slightly smaller.**
+- `FormSelect` with a `name` now submits the selected value. An option with an
+  empty value used to submit an internal placeholder string.
+- Invalid fields keep their red border under the `airy` mood, and
+  `SearchableSelect` now follows the airy field style. `SelectTrigger`,
+  `FormSelect` (`aria-invalid`, `aria-describedby`), and `Switch` gained
+  invalid styling.
+- A sortable `DataTable` column now sorts without a controlled `sorting` prop.
+  Space or Enter on a checkbox or link inside a clickable row no longer
+  triggers the row.
+- `ConfirmationDialog` stays open until `onConfirm` settles, so the pending
+  label shows and a failed confirmation can be retried.
+- A sidebar section that contains the active page can now be collapsed.
+- `useToast()` returns a stable object, so it is safe in effect dependencies.
+- `AvatarGroup` sizes its overflow chip; `Avatar` shows an image that finished
+  loading before hydration; disabled tabs look disabled; long dropdown menus
+  scroll; `PopoverContent` accepts `side`, `align`, and `sideOffset` (default
+  4px); `CodeBlock` resets "Copied" after two seconds; Cmd/Ctrl+B no longer
+  toggles the sidebar from a rich-text editor.
+- `ValueMeter` uses `role="meter"` instead of `role="progressbar"`. Update
+  tests that query it by role.
+
 ## 1.7.4 - 2026-11-01
 
 Every Conscia app can now brand its shell with one shared **`BrandLockup`**

@@ -41,6 +41,7 @@ function AvatarGroup({
       {overflowCount > 0 ? (
         <span
           data-slot="avatar-group-overflow"
+          data-size={size}
           className="relative z-0 inline-flex shrink-0 items-center justify-center rounded-full border-2 border-canvas bg-surface-muted font-medium text-text-supporting data-[size=default]:-ml-2 data-[size=default]:size-8 data-[size=default]:text-xs data-[size=lg]:-ml-2.5 data-[size=lg]:size-10 data-[size=lg]:text-sm data-[size=sm]:-ml-1.5 data-[size=sm]:size-6 data-[size=sm]:text-[0.625rem]"
           aria-label={`${overflowCount} more ${overflowCount === 1 ? "avatar" : "avatars"}`}
           title={`${overflowCount} more ${overflowCount === 1 ? "avatar" : "avatars"}`}

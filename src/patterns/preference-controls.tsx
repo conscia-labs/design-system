@@ -175,7 +175,7 @@ function SegmentedControl({
 }) {
   return (
     <fieldset className={cn("flex flex-col gap-2", className)}>
-      <legend className="text-[var(--ds-metadata)] font-medium text-text-supporting">
+      <legend className="text-[length:var(--ds-metadata)] font-medium text-text-supporting">
         {label}
       </legend>
       <div className="grid w-full grid-cols-3 rounded-[var(--ds-radius-control)] bg-surface-muted p-1">
@@ -186,7 +186,7 @@ function SegmentedControl({
             aria-pressed={value === item}
             suppressHydrationWarning
             onClick={() => onChange(item)}
-            className="min-w-0 h-7 rounded-[calc(var(--ds-radius-control)-2px)] px-1.5 text-[var(--ds-metadata)] font-medium capitalize text-text-supporting outline-none transition-colors hover:text-text-primary focus-visible:ring-[3px] focus-visible:ring-focus/50 aria-pressed:bg-canvas aria-pressed:text-text-primary aria-pressed:shadow-xs"
+            className="min-w-0 h-7 rounded-[calc(var(--ds-radius-control)-2px)] px-1.5 text-[length:var(--ds-metadata)] font-medium capitalize text-text-supporting outline-none transition-colors hover:text-text-primary focus-visible:ring-[3px] focus-visible:ring-focus/50 aria-pressed:bg-canvas aria-pressed:text-text-primary aria-pressed:shadow-xs"
           >
             {item}
           </button>

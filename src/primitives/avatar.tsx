@@ -48,13 +48,18 @@ function AvatarImage({
   className,
   onError,
   onLoad,
+  ref,
   src,
   ...props
 }: AvatarImageProps) {
   const { status, setStatus } = useAvatarContext();
+  const imageRef = React.useRef<HTMLImageElement | null>(null);
 
   useAvatarEffect(() => {
-    setStatus(src ? "loading" : "error");
+    const image = imageRef.current;
+    // An image that loaded before hydration never fires onLoad.
+    const alreadyLoaded = Boolean(src && image?.complete && image.naturalWidth > 0);
+    setStatus(alreadyLoaded ? "loaded" : src ? "loading" : "error");
   }, [src, setStatus]);
 
   return (
@@ -62,6 +67,11 @@ function AvatarImage({
     // eslint-disable-next-line @next/next/no-img-element
     <img
       data-slot="avatar-image"
+      ref={(node) => {
+        imageRef.current = node;
+        if (typeof ref === "function") ref(node);
+        else if (ref) ref.current = node;
+      }}
       className={cn("aspect-square size-full", status === "loaded" ? "" : "hidden", className)}
       alt={alt}
       src={src}

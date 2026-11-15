@@ -95,6 +95,12 @@ function CodeBlock({
     };
   }, [snippets]);
 
+  React.useEffect(() => {
+    if (copiedValue === null) return;
+    const timeout = window.setTimeout(() => setCopiedValue(null), 2000);
+    return () => window.clearTimeout(timeout);
+  }, [copiedValue]);
+
   if (!activeSnippet) return null;
 
   return (

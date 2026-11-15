@@ -142,13 +142,17 @@ function DataTable<TData>({
     return result;
   }, [columns, getRowLabel, onSelectionChange, rowActions]);
 
+  // Sorting works without a controlled `sorting` prop; the table then keeps the state itself.
+  const [internalSorting, setInternalSorting] = React.useState<SortingState>([]);
+  const resolvedSorting = sorting ?? internalSorting;
+
   // TanStack Table intentionally returns a mutable table instance; React Compiler skips this hook.
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
     columns: tableColumns,
     getRowId: (row) => getRowId(row),
-    state: { rowSelection, ...(sorting ? { sorting } : {}), ...(pagination ? { pagination } : {}) },
+    state: { rowSelection, sorting: resolvedSorting, ...(pagination ? { pagination } : {}) },
     enableRowSelection: Boolean(onSelectionChange),
     onRowSelectionChange: (updater) => {
       if (!onSelectionChange) return;
@@ -156,8 +160,9 @@ function DataTable<TData>({
       onSelectionChange(new Set(Object.keys(next).filter((id) => next[id])));
     },
     onSortingChange: (updater) => {
-      if (!onSortingChange) return;
-      onSortingChange(typeof updater === "function" ? updater(sorting ?? []) : updater);
+      const next = typeof updater === "function" ? updater(resolvedSorting) : updater;
+      if (!sorting) setInternalSorting(next);
+      onSortingChange?.(next);
     },
     onPaginationChange: (updater) => {
       if (!onPaginationChange || !pagination) return;
@@ -241,6 +246,8 @@ function DataTable<TData>({
                     if (rowClickable) onRowClick?.(row.original);
                   }}
                   onKeyDown={(event) => {
+                    // Keys pressed on a checkbox, link or menu inside the row belong to that control.
+                    if (event.target !== event.currentTarget) return;
                     if (!rowClickable || (event.key !== "Enter" && event.key !== " ")) return;
                     event.preventDefault();
                     onRowClick?.(row.original);

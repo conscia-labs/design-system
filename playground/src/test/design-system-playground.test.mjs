@@ -421,6 +421,9 @@ test("field pattern owns help, error, disabled-compatible rhythm", () => {
   assert.match(field, /FieldError/);
   assert.match(field, /--ds-field-gap/);
   assert.match(foundation, /--ds-field-control-height: 2\.75rem/);
+  for (const density of ["compact", "operational"]) {
+    assert.match(foundation, new RegExp(`\\[data-density="${density}"\\] \\{[^}]*--ds-field-control-height: var\\(--ds-control-height\\);`));
+  }
   assert.match(input, /--ds-field-control-height/);
   assert.match(input, /bg-surface-control/);
   assert.match(input, /ds-type-control/);
@@ -799,7 +802,7 @@ test("shared code and value patterns remain domain agnostic", () => {
   assert.match(codeBlock, /overflow-x-auto overscroll-x-contain/);
   assert.match(codeBlock, /selectorLabel/);
   assert.match(codeBlock, /role="status"/);
-  assert.match(valueMeter, /role="progressbar"/);
+  assert.match(valueMeter, /role="meter"/);
   assert.doesNotMatch(`${codeBlock}\n${valueMeter}`, /Gateway|API key|AI Model|Conscia/);
 });
 

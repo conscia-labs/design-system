@@ -204,7 +204,7 @@ function TabsTrigger({
       data-variant={resolvedVariant}
       data-size={resolvedSize}
       className={cn(
-        "disabled:pointer-events-none disabled:opacity-50",
+        "disabled:pointer-events-none disabled:opacity-50 data-disabled:pointer-events-none data-disabled:opacity-50",
         (resolvedVariant === "underline" || resolvedVariant === "divider") &&
           cn(
             navigationTabClasses,

@@ -239,7 +239,8 @@ function AppShell({
     const onKeyDown = (event: KeyboardEvent) => {
       if (
         event.key.toLowerCase() === SIDEBAR_KEYBOARD_SHORTCUT &&
-        (event.metaKey || event.ctrlKey)
+        (event.metaKey || event.ctrlKey) &&
+        !(event.target instanceof Element && event.target.closest('[contenteditable]:not([contenteditable="false"])'))
       ) {
         event.preventDefault();
         toggleSidebar();

@@ -283,7 +283,7 @@ function SidebarNavigation({
         const defaultOpen = entry.type === "submenu" ? entry.defaultOpen : false;
         const legacyActive = entry.type === undefined ? entry.active : false;
         const sectionOpen =
-          (openSections[entry.id] ?? defaultOpen) || activeChild || legacyActive;
+          openSections[entry.id] ?? (defaultOpen || activeChild || legacyActive);
 
         if (sidebarState === "collapsed" && !isMobile) {
           return (

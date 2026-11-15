@@ -173,7 +173,7 @@ describe("ValueMeter", () => {
         maximum={100}
       />,
     );
-    const meter = screen.getByRole("progressbar", {
+    const meter = screen.getByRole("meter", {
       name: "Deployment health",
     });
 
