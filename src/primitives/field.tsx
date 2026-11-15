@@ -1,17 +1,28 @@
-import * as React from "react";
+"use client";
 
+import * as React from "react";
+import { Field as BaseField } from "@base-ui/react/field";
+
+import { InsideFieldContext } from "./field-context";
 import { cn } from "./utils";
 
+/**
+ * Connects a control to its label, description and error: no ids,
+ * `aria-describedby` or `aria-invalid` to write by hand. Pass `invalid` when
+ * the value is wrong; the control inside is then marked invalid.
+ */
 function Field({
   className,
   ...props
-}: React.ComponentProps<"div">) {
+}: React.ComponentProps<typeof BaseField.Root>) {
   return (
-    <div
+    <InsideFieldContext.Provider value>
+    <BaseField.Root
       data-slot="field"
       className={cn("grid gap-[var(--ds-field-label-gap)] [&>[data-slot=field-description]]:mt-[calc(var(--ds-field-message-gap)-var(--ds-field-label-gap))] [&>[data-slot=field-error]]:mt-[calc(var(--ds-field-message-gap)-var(--ds-field-label-gap))]", className)}
       {...props}
     />
+    </InsideFieldContext.Provider>
   );
 }
 
@@ -32,11 +43,12 @@ function FieldLabel({
   className,
   ...props
 }: React.ComponentProps<"label">) {
+  const Component = React.useContext(InsideFieldContext) ? BaseField.Label : "label";
   return (
-    <label
+    <Component
       data-slot="field-label"
       className={cn("ds-type-label text-text-primary", className)}
-      {...props}
+      {...(props as object)}
     />
   );
 }
@@ -45,24 +57,30 @@ function FieldDescription({
   className,
   ...props
 }: React.ComponentProps<"p">) {
+  const Component = React.useContext(InsideFieldContext) ? BaseField.Description : "p";
   return (
-    <p
+    <Component
       data-slot="field-description"
       className={cn("ds-type-metadata mt-[var(--ds-field-message-gap)] text-text-supporting", className)}
-      {...props}
+      {...(props as object)}
     />
   );
 }
 
+/** Shown whenever it is rendered; render it only while there is an error to report. */
 function FieldError({
   className,
+  match = true,
   ...props
-}: React.ComponentProps<"p">) {
+}: React.ComponentProps<"p"> & { match?: React.ComponentProps<typeof BaseField.Error>["match"] }) {
+  const insideField = React.useContext(InsideFieldContext);
+  const Component = insideField ? BaseField.Error : "p";
   return (
-    <p
+    <Component
+      {...(insideField ? { match } : {})}
       data-slot="field-error"
-      className={cn("ds-type-metadata mt-[var(--ds-field-message-gap)] font-medium text-danger-foreground", className)}
-      {...props}
+      className={cn("ds-type-metadata mt-[var(--ds-field-message-gap)] font-medium text-danger", className)}
+      {...(props as object)}
     />
   );
 }

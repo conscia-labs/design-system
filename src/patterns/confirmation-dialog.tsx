@@ -3,7 +3,7 @@
 import * as React from "react";
 
 import { Button } from "../primitives/button";
-import { AlertDialog, AlertDialogAction, AlertDialogBody, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../primitives/alert-dialog";
+import { AlertDialog, AlertDialogBody, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../primitives/alert-dialog";
 
 type ConfirmationDialogProps = {
   trigger: React.ReactElement;
@@ -51,9 +51,10 @@ function ConfirmationDialog({ trigger, title, description, children, confirmLabe
         <AlertDialogBody>{children}</AlertDialogBody>
         <AlertDialogFooter>
           <AlertDialogCancel render={<Button type="button" variant="outline" disabled={isPending} />}>{cancelLabel}</AlertDialogCancel>
-          <AlertDialogAction render={<Button type="button" variant={confirmVariant} disabled={isPending} onClick={confirm} />}>
+          {/* A plain button: AlertDialogAction would close the dialog before onConfirm settles. */}
+          <Button type="button" data-slot="alert-dialog-action" variant={confirmVariant} disabled={isPending} onClick={confirm}>
             {isPending ? "Working..." : confirmLabel}
-          </AlertDialogAction>
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

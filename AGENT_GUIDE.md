@@ -113,8 +113,10 @@ Prefer patterns for recurring product workflows:
 ### Primitives
 
 Use primitives for application-specific compositions: `Button`, `Card`,
-`Field`, `Input`, `Select`, `SearchableSelect`, `Dialog`, `Sheet`, `Popover`,
-`Tabs`, `Table`, `Badge`, `Alert`, `Toast`, and related anatomy exports.
+`Field`, `Input`, `InputGroup`, `NumberField`, `Select`, `SearchableSelect`,
+`RadioGroup`, `SegmentedControl`, `Dialog`, `Sheet`, `Popover`, `Tabs`,
+`Accordion`, `Breadcrumb`, `Progress`, `Table`, `Badge`, `Alert`, `Toast`, and
+related anatomy exports.
 
 Consult `agent-manifest.json` for the complete public runtime inventory and the
 playground route for each family.
@@ -173,8 +175,12 @@ playground route for each family.
   such as "Never" rather than a display-size word.
 - Use `Select` for a short, familiar list. Use `SearchableSelect` for longer
   lists that users need to filter.
-- Use `LoadingButton` for asynchronous actions so layout, disabled state, and
-  `aria-busy` remain consistent.
+- Pass `pending` to `Button` (or use `LoadingButton`) for asynchronous actions
+  so layout, disabled state, and `aria-busy` remain consistent.
+- Use `RadioGroup` for one choice from a short visible list, `SegmentedControl`
+  to switch the view or mode of the same content, and `Tabs` when each option
+  owns a panel.
+- Use `Progress` for a running task and `ValueMeter` for a static measurement.
 - Use `ConfirmationDialog` or `AlertDialog` only for consequential decisions.
 - Use `operational` density for information-heavy administration, inventory,
   and workspace surfaces. Keep `comfortable` for general-purpose product UI.
@@ -193,15 +199,18 @@ import {
   Button,
   Field,
   FieldDescription,
+  FieldError,
   FieldLabel,
   Input,
 } from "@conscia-labs/design-system";
 
+// Field connects the label, description, and error to the control: no ids.
 <form className="grid gap-5">
-  <Field>
-    <FieldLabel htmlFor="connection-name">Name</FieldLabel>
-    <Input id="connection-name" name="name" />
+  <Field invalid={Boolean(nameError)}>
+    <FieldLabel>Name</FieldLabel>
+    <Input name="name" />
     <FieldDescription>Use a name operators will recognize.</FieldDescription>
+    {nameError ? <FieldError>{nameError}</FieldError> : null}
   </Field>
   <Button type="submit">Create connection</Button>
 </form>;

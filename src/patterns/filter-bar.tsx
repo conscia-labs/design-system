@@ -19,7 +19,7 @@ function FilterBar({
     <div
       data-slot="filter-bar"
       className={cn(
-        "flex min-w-0 flex-wrap items-center gap-2 rounded-[var(--ds-radius-control)] border border-border-subtle bg-surface-muted/60 px-2 py-1.5",
+        "flex min-w-0 flex-wrap items-center gap-2 rounded-[min(var(--ds-radius-control),var(--ds-radius-surface))] border border-border-subtle bg-surface-muted/60 px-2 py-1.5",
         className,
       )}
       role="group"

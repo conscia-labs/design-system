@@ -2,12 +2,14 @@
 
 import * as React from "react";
 import { Toast as BaseToast, type ToastObject } from "@base-ui/react/toast";
-import { XIcon } from "lucide-react";
+import { CheckCircle2, CircleAlert, CircleX, Info, XIcon } from "lucide-react";
 
 import { overlayLayers } from "./overlay-layers";
+import { Spinner } from "./spinner";
 import { cn } from "./utils";
 
-type ToastVariant = "default" | "error" | "information" | "success" | "warning";
+/** `danger` is the preferred name; `error` stays as an alias until 2.0. */
+type ToastVariant = "default" | "danger" | "error" | "information" | "success" | "warning";
 type ToastPriority = "high" | "low";
 
 type ToastActionOptions = {
@@ -50,7 +52,8 @@ type ToastViewportProps = React.ComponentProps<"div"> & {
 type ToastRecord = ToastObject<ToastData>;
 
 function toBaseToastOptions(options: ToastOptions | ToastUpdateOptions) {
-  const { action, variant, ...rest } = options;
+  const { action, variant: requested, ...rest } = options;
+  const variant = requested === "danger" ? "error" : requested;
   return {
     ...rest,
     ...(variant !== undefined ? { type: variant, data: { variant } } : {}),
@@ -78,25 +81,26 @@ function ToastProvider({ children, limit = 3, timeout = 5000 }: ToastProviderPro
 }
 
 function useToast() {
-  const manager = BaseToast.useToastManager<ToastData>();
+  // The manager object changes with every toast; its methods are stable.
+  const { add, close, update, promise: basePromise } = BaseToast.useToastManager<ToastData>();
 
   return React.useMemo(
     () => ({
       add(options: ToastOptions) {
         const variant = options.variant ?? "default";
-        return manager.add({
+        return add({
           ...toBaseToastOptions({ ...options, variant }),
           id: options.id,
         });
       },
       close(id?: string) {
-        manager.close(id);
+        close(id);
       },
       update(id: string, options: ToastUpdateOptions) {
-        manager.update(id, toBaseToastOptions(options));
+        update(id, toBaseToastOptions(options));
       },
       promise<Value>(promise: Promise<Value>, options: ToastPromiseOptions<Value>) {
-        return manager.promise(promise, {
+        return basePromise(promise, {
           loading: toBasePromiseOption(options.loading),
           success: (result) => {
             const next = typeof options.success === "function" ? options.success(result) : options.success;
@@ -109,7 +113,7 @@ function useToast() {
         });
       },
     }),
-    [manager],
+    [add, close, update, basePromise],
   );
 }
 
@@ -158,9 +162,12 @@ function Toast({
     >
       {children ?? (
         <ToastContent>
-          <div className="min-w-0">
-            <ToastTitle />
-            <ToastDescription />
+          <div className="flex min-w-0 gap-2.5">
+            <ToastIcon type={toast.type === "loading" ? "loading" : variant} />
+            <div className="min-w-0">
+              <ToastTitle />
+              <ToastDescription />
+            </div>
           </div>
           <div className="flex items-start gap-1">
             <ToastAction />
@@ -170,6 +177,14 @@ function Toast({
       )}
     </BaseToast.Root>
   );
+}
+
+const toastIcons = { success: CheckCircle2, error: CircleX, warning: CircleAlert, information: Info } as const;
+
+function ToastIcon({ type }: { type: string }) {
+  if (type === "loading") return <Spinner className="mt-0.5" />;
+  const Icon = toastIcons[type as keyof typeof toastIcons];
+  return Icon ? <Icon data-slot="toast-icon" aria-hidden="true" className="mt-0.5 size-4 shrink-0" /> : null;
 }
 
 function ToastContent({ className, ...props }: React.ComponentProps<"div">) {
@@ -185,7 +200,7 @@ function ToastDescription({ className, ...props }: React.ComponentProps<"p">) {
 }
 
 function ToastAction({ className, ...props }: React.ComponentProps<"button">) {
-  return <BaseToast.Action data-slot="toast-action" className={cn("rounded px-2 py-1 text-xs font-medium text-text-link outline-none hover:bg-surface-muted focus-visible:ring-2 focus-visible:ring-focus", className)} {...props} />;
+  return <BaseToast.Action data-slot="toast-action" className={cn("rounded px-2 py-1 text-xs font-medium text-text-link outline-none hover:bg-surface-muted focus-visible:ring-2 focus-visible:ring-focus-ring", className)} {...props} />;
 }
 
 function ToastClose({ "aria-label": ariaLabel = "Dismiss notification", children, className, ...props }: React.ComponentProps<"button">) {
@@ -193,7 +208,7 @@ function ToastClose({ "aria-label": ariaLabel = "Dismiss notification", children
     <BaseToast.Close
       data-slot="toast-close"
       aria-label={ariaLabel}
-      className={cn("rounded p-1 text-text-supporting outline-none hover:bg-surface-muted hover:text-text-primary focus-visible:ring-2 focus-visible:ring-focus", className)}
+      className={cn("rounded p-1 text-text-supporting outline-none hover:bg-surface-muted hover:text-text-primary focus-visible:ring-2 focus-visible:ring-focus-ring", className)}
       {...props}
     >
       {children ?? <XIcon aria-hidden="true" className="size-4" />}

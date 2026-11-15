@@ -14,16 +14,14 @@ type PageHeaderProps = React.ComponentProps<"header"> & {
    */
   texture?: boolean;
   /**
-   * Temporary compatibility prop for migrated Admin UI pages.
-   * New implementations should pass an explicit actions node.
+   * @deprecated Pass an `actions` node. Removed in 2.0.
    */
   action?: {
     label: string;
     href: string;
   };
   /**
-   * Temporary compatibility prop for migrated Admin UI pages.
-   * New implementations should use actions.
+   * @deprecated Use `actions`. Removed in 2.0.
    */
   actionNode?: React.ReactNode;
 };
@@ -45,7 +43,7 @@ function PageHeader({
     actionNode ??
     (action ? (
       <a
-        className="ds-type-button inline-flex h-[var(--ds-control-height)] items-center justify-center gap-2 whitespace-nowrap rounded-md bg-action px-3 py-2 text-action-foreground shadow-xs outline-none transition-colors hover:bg-action-hover focus-visible:border-focus focus-visible:ring-3 focus-visible:ring-focus/50"
+        className="ds-type-button inline-flex h-[var(--ds-control-height)] items-center justify-center gap-2 whitespace-nowrap rounded-md bg-action px-3 py-2 text-action-foreground shadow-xs outline-none transition-colors hover:bg-action-hover focus-visible:border-focus focus-visible:ring-3 focus-visible:ring-focus-ring"
         href={action.href}
       >
         {action.label}

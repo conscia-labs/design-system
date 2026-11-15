@@ -49,7 +49,7 @@ export function ComponentCatalog() {
               </CardHeader>
               <div className="divide-y divide-border-subtle border-t border-border-subtle">
                 {group.entries.map((doc) => (
-                  <Link key={doc.slug} href={doc.route} className="group flex min-w-0 items-center gap-4 px-[var(--ds-surface-padding)] py-4 outline-none transition-colors hover:bg-surface-muted focus-visible:bg-surface-muted focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus">
+                  <Link key={doc.slug} href={doc.route} className="group flex min-w-0 items-center gap-4 px-[var(--ds-surface-padding)] py-4 outline-none transition-colors hover:bg-surface-muted focus-visible:bg-surface-muted focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus-ring">
                     <div className="min-w-0 flex-1">
                       <h3 className="ds-type-ui font-semibold">{doc.family}</h3>
                       <p className="ds-type-metadata mt-1 text-text-supporting">{doc.description}</p>

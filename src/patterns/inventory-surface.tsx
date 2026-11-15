@@ -13,10 +13,12 @@ function InventorySurface({ className, ...props }: React.ComponentProps<typeof C
   );
 }
 
+/** @deprecated Use `DataTable` with `mobileRow`, which switches between the table and cards itself. Removed in 2.0. */
 function InventoryDesktop({ className, ...props }: React.ComponentProps<"div">) {
   return <div data-slot="inventory-desktop" className={cn("hidden lg:block", className)} {...props} />;
 }
 
+/** @deprecated Use `DataTable` with `mobileRow`, which switches between the table and cards itself. Removed in 2.0. */
 function InventoryMobile({ className, ...props }: React.ComponentProps<"div">) {
   return <div data-slot="inventory-mobile" className={cn("divide-y divide-border-subtle lg:hidden", className)} {...props} />;
 }

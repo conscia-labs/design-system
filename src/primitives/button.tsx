@@ -3,19 +3,23 @@ import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
 
+import { Spinner } from "./spinner";
 import { cn } from "./utils";
 
 const buttonVariants = cva(
-  "ds-type-button inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md transition-[color,background-color,border-color,box-shadow,transform] duration-[var(--ds-duration-fast)] ease-standard active:not-disabled:translate-y-px disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-focus focus-visible:ring-focus/50 focus-visible:ring-[3px] aria-invalid:ring-danger/20 dark:aria-invalid:ring-danger/40 aria-invalid:border-danger",
+  "ds-type-button inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md transition-[color,background-color,border-color,box-shadow,transform] duration-[var(--ds-duration-fast)] ease-standard active:not-disabled:translate-y-px disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-focus focus-visible:ring-focus-ring focus-visible:ring-[3px] aria-invalid:ring-danger/20 dark:aria-invalid:ring-danger/40 aria-invalid:border-danger",
   {
     variants: {
       variant: {
         default:
           "bg-action text-action-foreground shadow-xs hover:bg-action-hover active:bg-action-active disabled:bg-action-background disabled:text-text-supporting disabled:shadow-none disabled:opacity-100",
         destructive:
-          "bg-danger text-white shadow-xs hover:bg-danger/90 focus-visible:ring-danger/20 dark:bg-danger-background dark:text-danger-foreground dark:hover:bg-danger-border dark:focus-visible:ring-danger/40",
+          "bg-danger-solid text-danger-solid-foreground shadow-xs hover:bg-danger-solid/90 focus-visible:ring-danger/20 dark:focus-visible:ring-danger/40",
+        /** The preferred name; `destructive` stays as an alias until 2.0. */
+        danger:
+          "bg-danger-solid text-danger-solid-foreground shadow-xs hover:bg-danger-solid/90 focus-visible:ring-danger/20 dark:focus-visible:ring-danger/40",
         outline:
-          "border border-border-default bg-surface-control text-text-primary shadow-xs hover:bg-surface-control-hover hover:text-text-primary",
+          "border border-border-strong bg-surface-control text-text-primary shadow-xs hover:bg-surface-control-hover hover:text-text-primary",
         secondary: "bg-surface-inverse text-text-inverse shadow-xs hover:bg-surface-inverse/80",
         ghost: "text-text-primary hover:bg-surface-muted hover:text-text-primary",
         link: "text-text-link underline-offset-4 hover:underline active:not-disabled:translate-y-0"
@@ -38,6 +42,10 @@ type ButtonProps = React.ComponentProps<"button">
   & VariantProps<typeof buttonVariants>
   & {
     render?: useRender.ComponentProps<"button">["render"];
+    /** Shows a spinner, sets `aria-busy` and blocks clicks while the action runs. */
+    pending?: boolean;
+    /** Replaces the label while pending. Without it, a spinner covers the label and the button keeps its width. */
+    pendingLabel?: React.ReactNode;
   };
 
 function Button({
@@ -46,14 +54,48 @@ function Button({
   size,
   render,
   type,
+  pending = false,
+  pendingLabel,
+  disabled,
+  children,
   ...props
 }: ButtonProps) {
-  const classNames = buttonVariants({ variant, size, className });
+  const classNames = buttonVariants({
+    variant,
+    size,
+    className: cn(
+      pending && "relative disabled:opacity-100",
+      // A pending primary action keeps its filled style rather than the disabled one.
+      pending &&
+        (variant ?? "default") === "default" &&
+        "aria-busy:disabled:bg-action aria-busy:disabled:text-action-foreground aria-busy:disabled:shadow-xs",
+      className,
+    ),
+  });
   const defaultProps = {
     "data-slot": "button",
     className: classNames,
     ...(render ? {} : { type: type ?? "button" }),
     ...props,
+    disabled: disabled || pending,
+    "aria-busy": pending || undefined,
+    children: !pending ? (
+      children
+    ) : pendingLabel !== undefined ? (
+      <>
+        <Spinner aria-hidden="true" size="sm" />
+        {pendingLabel}
+      </>
+    ) : (
+      // No pending label: the label keeps its space (and its accessible name)
+      // under the spinner, so the button does not change width.
+      <>
+        <span className="absolute inset-0 grid place-items-center">
+          <Spinner aria-hidden="true" size="sm" />
+        </span>
+        <span className="inline-flex items-center justify-center gap-[inherit] opacity-0">{children}</span>
+      </>
+    ),
   } as React.ComponentProps<"button">;
 
   return useRender({

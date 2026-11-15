@@ -46,7 +46,14 @@ export default function DeliveryMetricsPage() {
           unit="/ week"
           status={<Badge variant="information">Healthy</Badge>}
           trend={<MetricTrend direction="up" sentiment="positive" value="43%" accessibleLabel="Up 43 percent, a positive change" />}
-          visualization={<TrendChart tone="primary" />}
+          visualization={
+            <div className="flex h-full flex-col px-[var(--ds-surface-padding)] pb-[var(--ds-surface-padding)]">
+              <TrendChart tone="primary" />
+              <div aria-hidden="true" className="ds-type-metadata flex justify-between border-t border-border-default pt-2 text-text-supporting">
+                <span>May 19</span><span>Jun 18</span><span>Jul 18</span><span>Aug 17</span>
+              </div>
+            </div>
+          }
           visualizationSummary="Deployment frequency trends upward across the period with one short regression near the beginning of July."
         />
         <MetricCard
@@ -131,7 +138,7 @@ function TrendChart({ tone, compact = false }: { tone: "primary" | "success"; co
     ? "M0 34 L12 28 L23 31 L34 18 L46 21 L58 13 L70 24 L82 19 L94 30 L106 25 L118 36 L130 29 L142 38 L154 34 L166 43 L178 39 L190 45 L202 42 L214 48 L226 44 L240 50"
     : "M0 92 L16 72 L30 102 L47 61 L63 110 L80 69 L97 84 L114 43 L132 132 L149 111 L166 85 L183 122 L201 59 L218 72 L235 49 L252 83 L270 55 L287 64 L304 34 L321 89 L338 52 L355 29 L372 47 L389 22 L406 60 L423 35 L440 42 L457 18 L474 38 L491 27 L508 14 L525 40 L542 24 L560 51";
   return (
-    <svg aria-hidden="true" viewBox={compact ? "0 0 240 56" : "0 0 560 150"} preserveAspectRatio="none" className={compact ? "h-20 w-full" : "h-full min-h-44 w-full"}>
+    <svg aria-hidden="true" viewBox={compact ? "0 0 240 56" : "0 0 560 150"} preserveAspectRatio="none" className={compact ? "h-20 w-full" : "min-h-44 w-full flex-1"}>
       <defs>
         <linearGradient id={gradientId} x1="0" x2="0" y1="0" y2="1">
           <stop offset="0%" stopColor={stroke} stopOpacity="var(--chart-area-opacity-start)" />

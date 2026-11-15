@@ -188,7 +188,7 @@ export default function TablesPage() {
                     return next;
                   })}
                 />
-                <button type="button" className="min-w-0 flex-1 text-left outline-none focus-visible:ring-[3px] focus-visible:ring-focus/50" onClick={() => setOpenedRow(connection.name)}>
+                <button type="button" className="min-w-0 flex-1 text-left outline-none focus-visible:ring-[3px] focus-visible:ring-focus-ring" onClick={() => setOpenedRow(connection.name)}>
                   <span className="block font-medium text-text-primary">{connection.name}</span>
                   <span className="ds-type-metadata mt-0.5 block text-text-supporting">{connection.provider} · {connection.resources} resources</span>
                   <span className="ds-type-metadata mt-2 block text-text-supporting">Checked {connection.updated}</span>

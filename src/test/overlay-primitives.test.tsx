@@ -98,7 +98,7 @@ describe("nested overlay behavior", () => {
     );
 
     expect(document.querySelector('[data-slot="alert-dialog-content"]')?.className).toContain(
-      "max-h-[min(42rem,calc(100vh-2rem))]",
+      "max-h-[min(42rem,calc(100dvh-2rem))]",
     );
     expect(document.querySelector('[data-slot="alert-dialog-body"]')?.className).toContain(
       "overflow-y-auto",

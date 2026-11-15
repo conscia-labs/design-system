@@ -16,7 +16,10 @@ const guidance: Record<string, ComponentGuidance> = {
   alert: {
     whenToUse: "Use for persistent information that belongs in the page flow and should remain visible until its context changes.",
     accessibility: "Choose a semantic tone, provide a concise title, and reserve live-region behavior for messages that appear after user action.",
-    options: [{ name: "variant", values: "information · success · warning · danger · neutral", guidance: "Match the meaning of the message, not its visual prominence." }],
+    options: [
+      { name: "variant", values: "information · success · warning · danger · neutral", guidance: "Match the meaning of the message, not its visual prominence." },
+      { name: "dismissible", values: "false (default) · true", guidance: "Adds a close button and removes the alert when pressed. Use onDismiss to remember the choice, and never make a danger alert the user must act on dismissible." },
+    ],
   },
   "alert-dialog": {
     whenToUse: "Use when a consequential action requires an explicit decision before it can continue.",
@@ -54,7 +57,8 @@ const guidance: Record<string, ComponentGuidance> = {
     options: [
       { name: "variant", values: "default · secondary · outline · ghost · link · destructive", guidance: "Use one primary action per local decision area." },
       { name: "size", values: "sm · default · lg · icon", guidance: "Match the surrounding density; use IconButton for icon-only actions." },
-      { name: "disabled", values: "readable primary", guidance: "A disabled primary button keeps a tinted action surface with readable text; a pending LoadingButton keeps its filled style." },
+      { name: "disabled", values: "readable primary", guidance: "A disabled primary button keeps a tinted action surface with readable text; a pending button keeps its filled style." },
+      { name: "pending", values: "pending · pendingLabel", guidance: "Shows a spinner, sets aria-busy, and blocks clicks while the action runs. LoadingButton is the same with a default \u201cWorking\u2026\u201d label." },
     ],
   },
   card: {
@@ -68,15 +72,20 @@ const guidance: Record<string, ComponentGuidance> = {
   },
   "form-controls": {
     whenToUse: "Use the Field anatomy to keep labels, descriptions, errors, and controls in a consistent reading order.",
-    accessibility: "Every control needs a visible label or equivalent accessible name. Connect errors and help text to the relevant control.",
+    accessibility: "Every control needs a visible label or equivalent accessible name. Inside Field, the label, description, and error are connected to the control for you; pass invalid on Field to mark the control invalid.",
     options: [
-      { name: "control", values: "Input · Textarea · Select · SearchableSelect · DateTimeField · Checkbox · Switch", guidance: "Choose from the type and number of values users must provide. Use DateTimeField instead of a native datetime-local input so the time zone is stated." },
+      { name: "control", values: "Input · InputGroup · NumberField · Textarea · Select · SearchableSelect · MultiSelect · DatePicker · DateRangePicker · DateTimeField · RadioGroup · SegmentedControl · Checkbox · Switch", guidance: "Choose from the type and number of values users must provide. Use DateTimeField instead of a native datetime-local input so the time zone is stated. Use DatePicker for a day and DateRangePicker for a period; DateTimeField when the time matters. Use MultiSelect for several choices from a searchable list. Use RadioGroup for one choice from a short visible list, and SegmentedControl to switch the view or mode of the same content." },
+      { name: "Field wiring", values: "automatic · explicit id", guidance: "FieldLabel, FieldDescription, and FieldError connect to the control inside the same Field without ids. An explicit id and htmlFor still work." },
+      { name: "InputGroup", values: "prefix · suffix", guidance: "Put a unit, icon, or URL scheme in InputGroupAddon beside InputGroupInput so the addon shares the field frame." },
       { name: "FormSelect empty value", values: "placeholder · nothing", guidance: "An empty value with no matching option is no selection: the placeholder shows, or nothing. Do not add a disabled prompt option." },
+      { name: "TagInput", values: "free text", guidance: "Enter or a comma adds the typed tag and Backspace removes the last one. Use MultiSelect when the values come from a known list." },
+      { name: "Slider", values: "number · [min, max]", guidance: "An array value makes a range with one thumb per number; name the thumbs with thumbLabels. Use NumberField when the exact number matters more than its position in the range." },
+      { name: "FileUpload", values: "single · multiple", guidance: "A drop zone around a native file input, so files submit with the form under name. Put accepted types and the size limit in description." },
       { name: "state", values: "default · disabled · invalid · required", guidance: "Expose state through native attributes as well as styling." },
     ],
   },
   disclosure: {
-    whenToUse: "Use Disclosure for optional detail behind a summary row, Tabs for layered content, and NavigationTabs for routed peer pages. Use Collapsible only when you need a custom trigger.",
+    whenToUse: "Use Disclosure for optional detail behind a summary row, Accordion for a stack of sections that expand in place, Tabs for layered content, and NavigationTabs for routed peer pages. Use Collapsible only when you need a custom trigger.",
     accessibility: "Triggers must remain keyboard reachable and expose expanded or selected state. Tab panels need clear labels.",
     options: [
       { name: "pattern", values: "underline (default) · divider · pills · segmented · nested", guidance: "Underline keeps the rail quiet; divider adds structural separation; pills suit small peer views; segmented is for mode switching. NavigationTabs also supports underline, divider, and pills; use NavigationTabsList variant=\"pills\" for pill-styled routed pages." },
@@ -87,7 +96,12 @@ const guidance: Record<string, ComponentGuidance> = {
   "menus-and-overlays": {
     whenToUse: "Use menus for action lists, popovers for lightweight supporting content, dialogs for focused tasks, and sheets for edge-aligned workflows.",
     accessibility: "Use a titled dialog or sheet, restore focus on close, and ensure every trigger has an accessible name.",
-    options: [{ name: "surface", values: "dropdown · popover · tooltip · dialog · sheet", guidance: "Choose the least disruptive overlay that supports the task." }],
+    options: [
+      { name: "surface", values: "dropdown · context menu · popover · hover card · tooltip · dialog · sheet", guidance: "Choose the least disruptive overlay that supports the task." },
+      { name: "menu items", values: "DropdownMenuItem · DropdownMenuCheckboxItem · DropdownMenuRadioItem", guidance: "Checkbox items toggle a setting and keep the menu open. Wrap radio items in DropdownMenuRadioGroup for one choice." },
+      { name: "ContextMenu", values: "right-click · long press", guidance: "Fill ContextMenuContent with the DropdownMenu item parts. Context menus are hard to discover, so offer the same actions in a visible menu too." },
+      { name: "HoverCard", values: "link preview", guidance: "Shows on hover and focus of a link. Touch and screen-reader users do not get it, so it must only repeat what the linked page shows." },
+    ],
   },
   table: {
     whenToUse: "Use for a bounded dataset where users need to compare values across columns.",
@@ -109,9 +123,13 @@ const guidance: Record<string, ComponentGuidance> = {
     ],
   },
   "supporting-primitives": {
-    whenToUse: "Use these focused helpers for progress, loading placeholders, applied filters, keyboard hints, separators, and transient feedback.",
-    accessibility: "Loading feedback needs a textual status. Toasts must be dismissible and should not be the only record of a critical outcome.",
-    options: [{ name: "feedback", values: "Skeleton · Spinner · Toast · FilterChip · ShortcutHint", guidance: "Select the helper that matches the duration and importance of the state." }],
+    whenToUse: "Use these focused helpers for breadcrumbs, task progress, loading placeholders, applied filters, keyboard hints, separators, and transient feedback.",
+    accessibility: "Loading feedback needs a textual status. Progress needs a label or aria-label. Toasts must be dismissible and should not be the only record of a critical outcome.",
+    options: [
+      { name: "feedback", values: "Progress · Skeleton · Spinner · Toast · FilterChip · ShortcutHint", guidance: "Select the helper that matches the duration and importance of the state. Progress is for a running task; omit value while the amount is unknown. Use ValueMeter for a static measurement." },
+      { name: "ScrollArea", values: "vertical · horizontal", guidance: "A scroll region with thin overlay scrollbars. Give it a height through className and an aria-label so keyboard users know what they are scrolling." },
+      { name: "Breadcrumb", values: "BreadcrumbLink · BreadcrumbPage", guidance: "Separators are added between items. End the trail with BreadcrumbPage, and pass render to BreadcrumbLink for a router link." },
+    ],
   },
   "application-shell": {
     whenToUse: "Use as the shared geometry for authenticated product surfaces with a header, sidebar, main region, and optional inspector.",
@@ -181,6 +199,7 @@ const guidance: Record<string, ComponentGuidance> = {
     options: [
       { name: "ActivityItem content", values: "React-node title · description · metadata · trailing/status", guidance: "Use an anchor in title for direct destinations, metadata for timestamps, description for optional counts, and trailing/status for the outcome badge." },
       { name: "layout", values: "default · compact", guidance: "Compact activity rows suit dense operational panels." },
+      { name: "Timeline", values: "neutral · information · success · warning · danger", guidance: "Use Timeline when the order of events is the point, such as a deployment or an incident. Tone colours the marker; the title must still say what happened." },
     ],
   },
   "state-and-feedback": {

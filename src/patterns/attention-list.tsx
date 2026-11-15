@@ -31,7 +31,7 @@ function AttentionItem({ title, description, metadata, action, tone = "neutral",
   const Icon = tone === "danger" ? CircleX : tone === "warning" ? CircleAlert : tone === "success" ? CheckCircle2 : Info;
 
   return (
-    <li data-slot="attention-item" data-tone={tone} className={cn("grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3 rounded-[var(--ds-radius-control)] border px-3 py-2.5", toneClasses[tone], className)} {...props}>
+    <li data-slot="attention-item" data-tone={tone} className={cn("grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3 rounded-[min(var(--ds-radius-control),var(--ds-radius-surface))] border px-3 py-2.5", toneClasses[tone], className)} {...props}>
       <span className="mt-0.5 [&>svg]:size-4" aria-hidden="true">{icon ?? <Icon />}</span>
       <div className="min-w-0">
         <span className="sr-only">{severityLabel}: </span>

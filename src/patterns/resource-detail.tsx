@@ -9,6 +9,8 @@ type ResourceSummaryProps = React.ComponentProps<"section"> & {
   status?: React.ReactNode;
   metadata?: React.ReactNode;
   actions?: React.ReactNode;
+  /** Heading element for the title, so the surface fits the page outline. Defaults to 2. */
+  headingLevel?: 2 | 3 | 4;
 };
 
 function ResourceSummary({
@@ -18,10 +20,12 @@ function ResourceSummary({
   status,
   metadata,
   actions,
+  headingLevel = 2,
   className,
   children,
   ...props
 }: ResourceSummaryProps) {
+  const Heading = `h${headingLevel}` as const;
   return (
     <section
       data-slot="resource-summary"
@@ -39,9 +43,9 @@ function ResourceSummary({
           {title || status ? (
             <div className="flex min-w-0 flex-wrap items-center gap-2">
               {title ? (
-                <h2 className="ds-type-section-title truncate">
+                <Heading className="ds-type-section-title truncate">
                   {title}
-                </h2>
+                </Heading>
               ) : null}
               {status}
             </div>
@@ -86,6 +90,8 @@ type DetailSectionProps = React.ComponentProps<"section"> & {
   title: React.ReactNode;
   description?: React.ReactNode;
   actions?: React.ReactNode;
+  /** Heading element for the title, so the surface fits the page outline. Defaults to 2. */
+  headingLevel?: 2 | 3 | 4;
 };
 
 function DetailSection({
@@ -93,10 +99,12 @@ function DetailSection({
   title,
   description,
   actions,
+  headingLevel = 2,
   className,
   children,
   ...props
 }: DetailSectionProps) {
+  const Heading = `h${headingLevel}` as const;
   return (
     <section
       data-slot="detail-section"
@@ -110,9 +118,9 @@ function DetailSection({
     >
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
-          <h2 className="ds-type-section-title">
+          <Heading className="ds-type-section-title">
             {title}
-          </h2>
+          </Heading>
           {description ? (
             <p className="ds-type-ui mt-1 max-w-3xl text-text-supporting">
               {description}

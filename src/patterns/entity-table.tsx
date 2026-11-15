@@ -25,6 +25,7 @@ type EntityTableProps<T> = {
   className?: string;
 };
 
+/** @deprecated Use `DataTable`: pass `data` instead of `items` and `id` instead of `key` on columns. Removed in 2.0. */
 function EntityTable<T>({
   items,
   columns,

@@ -39,6 +39,8 @@ type FormSelectProps = {
   onValueChange?: (value: string) => void;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
   "aria-label"?: string;
+  "aria-describedby"?: string;
+  "aria-invalid"?: React.AriaAttributes["aria-invalid"];
 };
 
 const emptyValue = "__conscia_empty_select_value__";
@@ -71,6 +73,8 @@ function FormSelect({
   onValueChange,
   onClick,
   "aria-label": ariaLabel,
+  "aria-describedby": ariaDescribedBy,
+  "aria-invalid": ariaInvalid,
 }: FormSelectProps) {
   const [internalValue, setInternalValue] = React.useState(defaultValue ?? "");
   const currentValue = value ?? internalValue;
@@ -92,14 +96,13 @@ function FormSelect({
   return (
     <div className={cn("min-w-0", className)} onClick={onClick}>
       <Select
-        name={name}
         value={selectValue}
         required={required}
         disabled={disabled}
         modal={modal}
         onValueChange={handleValueChange}
       >
-        <SelectTrigger id={id} aria-label={ariaLabel} className={triggerClassName}>
+        <SelectTrigger id={id} aria-label={ariaLabel} aria-describedby={ariaDescribedBy} aria-invalid={ariaInvalid} className={triggerClassName}>
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent className={contentClassName}>
@@ -116,6 +119,8 @@ function FormSelect({
           </SelectGroup>
         </SelectContent>
       </Select>
+      {/* Our own field, so the form receives the real value rather than the empty-option sentinel. */}
+      {name ? <input type="hidden" name={name} value={currentValue} disabled={disabled} /> : null}
     </div>
   );
 }

@@ -41,7 +41,8 @@ const easeOutCubic = (progress: number) => 1 - (1 - progress) ** 3;
  * final value instead of capturing a frame mid-count.
  */
 function MetricCountUp({ value, options = {} }: { value: number; options?: MetricCountUpOptions }) {
-  const [displayed, setDisplayed] = React.useState(value);
+  // Starts at 0 so the digits never show the final value and then drop; the sr-only copy always has it.
+  const [displayed, setDisplayed] = React.useState(0);
   const digitsRef = React.useRef<HTMLSpanElement>(null);
   const previous = React.useRef<number | null>(null);
   const durationMs = options.durationMs ?? DEFAULT_DURATION_MS;

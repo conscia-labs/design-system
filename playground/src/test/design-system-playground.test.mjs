@@ -3,6 +3,10 @@ import { readFileSync } from "node:fs";
 import { test } from "node:test";
 
 const read = (path) => readFileSync(new URL(path, import.meta.url), "utf8");
+// The shell is split across files; contracts read them as one source.
+const readAppShell = () => ["app-shell", "app-shell-state", "app-shell-sidebar", "app-shell-navigation", "app-shell-header", "app-shell-frame"]
+  .map((file) => read(`../../../src/patterns/${file}.tsx`))
+  .join("\n");
 
 function relativeLuminance(hex) {
   const channels = hex.match(/.{2}/g).map((channel) => Number.parseInt(channel, 16) / 255);
@@ -411,9 +415,11 @@ test("the sidebar header glow fades out inside the header and stays under moods"
 
 test("field pattern owns help, error, disabled-compatible rhythm", () => {
   const field = read("../../../src/primitives/field.tsx");
-  const input = read("../../../src/primitives/input.tsx");
-  const select = read("../../../src/primitives/select.tsx");
-  const textarea = read("../../../src/primitives/textarea.tsx");
+  // Input takes its frame from the shared field shell.
+  const input = `${read("../../../src/primitives/input.tsx")}\n${read("../../../src/primitives/field-control.ts")}`;
+  const shell = read("../../../src/primitives/field-control.ts");
+  const select = `${read("../../../src/primitives/select.tsx")}\n${shell}`;
+  const textarea = `${read("../../../src/primitives/textarea.tsx")}\n${shell}`;
   const foundation = read("../../../src/foundation/styles.css");
   const primitives = read("../app/primitives/page.tsx");
 
@@ -421,6 +427,9 @@ test("field pattern owns help, error, disabled-compatible rhythm", () => {
   assert.match(field, /FieldError/);
   assert.match(field, /--ds-field-gap/);
   assert.match(foundation, /--ds-field-control-height: 2\.75rem/);
+  for (const density of ["compact", "operational"]) {
+    assert.match(foundation, new RegExp(`\\[data-density="${density}"\\] \\{[^}]*--ds-field-control-height: var\\(--ds-control-height\\);`));
+  }
   assert.match(input, /--ds-field-control-height/);
   assert.match(input, /bg-surface-control/);
   assert.match(input, /ds-type-control/);
@@ -541,8 +550,9 @@ test("elevation scale routes resting, anchored, and modal layers through tokens"
     assert.match(styles, new RegExp(`--shadow-${tier}: var\\(--ds-shadow-${tier}\\);`));
   }
   assert.match(card, /default: "bg-surface shadow-\[var\(--ds-shadow-raised\)\]"/);
-  for (const file of ["dialog", "alert-dialog", "sheet"]) {
-    const source = read(`../../../src/primitives/${file}.tsx`);
+  // Dialog and AlertDialog take their popup classes from overlay-layers.
+  for (const file of ["overlay-layers.ts", "sheet.tsx"]) {
+    const source = read(`../../../src/primitives/${file}`);
     assert.match(source, /shadow-\[var\(--ds-shadow-overlay\)\]/);
     assert.doesNotMatch(source, /shadow-lg/);
   }
@@ -639,11 +649,12 @@ test("tabs separate routed navigation from layered content and mode switching", 
   assert.match(tabs, /underline/);
   assert.match(tabs, /segmented/);
   assert.match(tabs, /NavigationTabs/);
-  assert.match(tabs, /aria-current=\{active \? "page" : undefined\}/);
+  assert.match(tabs, /"aria-current": active \? "page" : undefined/);
   assert.match(tabs, /px-\[var\(--ds-tab-padding-x\)\]/);
   assert.match(tabs, /hover:bg-surface-muted/);
   assert.match(tabs, /after:bg-selection-indicator/);
-  assert.match(tabs, /ResizeObserver/);
+  assert.match(tabs, /useScrollPosition/);
+  assert.match(read("../../../src/primitives/use-scroll-position.ts"), /ResizeObserver/);
   assert.match(tabs, /rail\.scrollLeft/);
   assert.doesNotMatch(tabs, /\.scrollIntoView\(/);
   assert.match(tabs, /data-scroll-position/);
@@ -692,7 +703,8 @@ test("Base UI state markers replace compatibility state markers", () => {
 
   assert.doesNotMatch(collapsible, /data-state/);
   assert.match(collapsible, /BaseCollapsible\.Trigger data-slot="collapsible-trigger"/);
-  assert.match(styles, /\[data-slot="sidebar-collapsible-content"\]\[data-open\]/);
+  // Sidebar, Collapsible and Disclosure panels share one open/close animation.
+  assert.match(styles, /\[data-slot="sidebar-collapsible-content"\], \[data-slot="collapsible-content"\], \[data-slot="disclosure-content"\]\)\[data-open\]/);
   assert.match(styles, /var\(--collapsible-panel-height\)/);
 });
 
@@ -799,12 +811,12 @@ test("shared code and value patterns remain domain agnostic", () => {
   assert.match(codeBlock, /overflow-x-auto overscroll-x-contain/);
   assert.match(codeBlock, /selectorLabel/);
   assert.match(codeBlock, /role="status"/);
-  assert.match(valueMeter, /role="progressbar"/);
+  assert.match(valueMeter, /role="meter"/);
   assert.doesNotMatch(`${codeBlock}\n${valueMeter}`, /Gateway|API key|AI Model|Conscia/);
 });
 
 test("shared shell patterns expose structure without gateway-specific behavior", () => {
-  const shell = read("../../../src/patterns/app-shell.tsx");
+  const shell = readAppShell();
   const styles = read("../../../src/foundation/styles.css");
 
   for (const exportName of [
@@ -844,7 +856,7 @@ test("shared shell patterns expose structure without gateway-specific behavior",
 
 test("sidebar semantics resolve through shared light and dark roles", () => {
   const styles = read("../../../src/foundation/styles.css");
-  const shell = read("../../../src/patterns/app-shell.tsx");
+  const shell = readAppShell();
   const navigation = read("../../../src/patterns/sidebar-navigation.tsx");
 
   for (const token of [
@@ -919,7 +931,7 @@ test("shared sidebar navigation supports collapsed flyouts without owning routes
 });
 
 test("app header follows the shell: integrated bar, or a transparent sticky header beside a full-height sidebar", () => {
-  const shell = read("../../../src/patterns/app-shell.tsx");
+  const shell = readAppShell();
   const styles = read("../../../src/foundation/styles.css");
 
   assert.match(shell, /headerLayout\?: "auto" \| "split" \| "integrated"/);
@@ -932,7 +944,7 @@ test("app header follows the shell: integrated bar, or a transparent sticky head
   assert.match(styles, /\[data-header-layout="split"\], :is\(\[data-mood="balanced"\], \[data-mood="airy"\]\) \[data-header-layout="auto"\]\) \[data-slot="main-region"\] > \[data-slot="app-header"\] \{\n  position: sticky;/);
   assert.match(styles, /\[data-slot="app-header"\]\[data-variant="transparent"\]\[data-scrolled="true"\]::before/);
   assert.match(styles, /--ds-app-header-height: 4\.5rem;/);
-  assert.match(styles, /--ds-app-header-scrolled-radius: 999px;/);
+  assert.match(styles, /--ds-app-header-scrolled-radius: var\(--ds-radius-pill\);/);
 
   const example = read("../app/examples/floating-workspace/page.tsx");
   assert.match(example, /<AppHeader variant=\{header\}>/);
@@ -941,7 +953,7 @@ test("app header follows the shell: integrated bar, or a transparent sticky head
 });
 
 test("app shell uses render composition and tracks sidebar overflow affordances", () => {
-  const shell = read("../../../src/patterns/app-shell.tsx");
+  const shell = readAppShell();
   const styles = read("../../../src/foundation/styles.css");
 
   assert.match(shell, /useRender/);
@@ -1049,7 +1061,7 @@ test("balanced and airy moods keep text legible on their canvases and tints", ()
   // Mood canvases are light only; dark mode keeps the dark canvas on scoped subtrees.
   assert.match(styles, /:root\.dark \[data-mood\],[\s\S]*?--canvas: #1a171a;/);
   // Uppercase labels and utility borders need selector rules, not just tokens.
-  assert.match(styles, /\[data-slot="eyebrow"\], \[data-slot="table-head"\]\) \{\s*text-transform: none;/);
+  assert.match(styles, /\[data-slot="eyebrow"\], \[data-slot="table-head"\], \[data-slot="table-head"\] button\) \{\s*text-transform: none;/);
 
   // Moods float a burgundy sidebar unless the shell asks for a flush one.
   const balancedBlock = styles.match(/\[data-mood="balanced"\] \{([^}]*)\}/)[1];

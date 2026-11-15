@@ -8,6 +8,7 @@ export * from "./eyebrow";
 export * from "./filter-bar";
 export * from "./app-shell";
 export * from "./activity-list";
+export * from "./timeline";
 export * from "./attention-list";
 export * from "./confirmation-dialog";
 export * from "./code-block";

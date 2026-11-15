@@ -46,7 +46,7 @@ describe("NavigationTabs", () => {
     expect(active.className).toContain("rounded-full");
     expect(active.className).toContain("data-[active=true]:bg-selection-background");
     expect(active.className).toContain("data-[active=true]:text-selection-foreground");
-    expect(active.className).toContain("focus-visible:ring-focus/60");
+    expect(active.className).toContain("focus-visible:ring-focus-ring");
     expect(active.className).not.toContain("after:bg-selection-indicator");
 
     expect(inactive.getAttribute("aria-current")).toBeNull();

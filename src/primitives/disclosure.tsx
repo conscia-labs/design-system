@@ -35,13 +35,13 @@ function Disclosure({
       <CollapsibleTrigger
         data-slot="disclosure-summary"
         className={cn(
-          "group/disclosure ds-type-ui -mx-2 flex min-h-[var(--ds-control-height-sm)] w-[calc(100%+1rem)] items-center gap-2 rounded-md px-2 text-left font-medium text-text-primary outline-none transition-colors hover:bg-surface-muted focus-visible:ring-[3px] focus-visible:ring-focus/50 disabled:pointer-events-none disabled:opacity-50",
+          "group/disclosure ds-type-ui -mx-2 flex min-h-[var(--ds-control-height-sm)] w-[calc(100%+1rem)] items-center gap-2 rounded-md px-2 text-left font-medium text-text-primary outline-none transition-colors hover:bg-surface-muted focus-visible:ring-[3px] focus-visible:ring-focus-ring disabled:pointer-events-none disabled:opacity-50",
           summaryClassName,
         )}
       >
         <ChevronRight
           aria-hidden="true"
-          className="size-4 shrink-0 text-text-supporting transition-transform duration-150 group-data-[panel-open]/disclosure:rotate-90 motion-reduce:transition-none"
+          className="size-4 shrink-0 text-text-supporting transition-transform duration-[var(--ds-duration-fast)] group-data-[panel-open]/disclosure:rotate-90 motion-reduce:transition-none"
         />
         <span className="min-w-0 flex-1">{summary}</span>
         {count !== undefined && count !== null ? (

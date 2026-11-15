@@ -2,7 +2,10 @@
 
 import * as React from "react";
 import { Tabs as BaseTabs } from "@base-ui/react/tabs";
+import { mergeProps } from "@base-ui/react/merge-props";
+import { useRender } from "@base-ui/react/use-render";
 
+import { useScrollPosition } from "./use-scroll-position";
 import { cn } from "./utils";
 
 /**
@@ -10,9 +13,9 @@ import { cn } from "./utils";
  * text rail that stays visually subordinate to page-level tabs.
  */
 type TabsVariant = "underline" | "divider" | "pills" | "segmented" | "nested";
-type TabsSize = "default" | "compact";
+/** `sm` is the preferred name; `compact` stays as an alias until 2.0. */
+type TabsSize = "default" | "sm" | "compact";
 type NavigationTabsVariant = Extract<TabsVariant, "underline" | "divider" | "pills">;
-type ScrollPosition = "none" | "start" | "middle" | "end";
 
 type TabsVisualContextValue = {
   variant: TabsVariant;
@@ -33,10 +36,10 @@ const tabRailClasses =
   "flex min-w-0 items-stretch overflow-x-auto overscroll-x-contain scroll-px-2 snap-x [scrollbar-width:none] [&::-webkit-scrollbar]:hidden";
 
 const navigationTabClasses =
-  "relative inline-flex h-full shrink-0 snap-start items-center justify-center gap-2 whitespace-nowrap rounded-t-[var(--ds-radius-control)] px-[var(--ds-tab-padding-x)] text-sm font-medium outline-none transition-[background-color,color,box-shadow] duration-150 after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-transparent after:transition-colors hover:bg-surface-muted focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus/60 data-[active=false]:text-text-supporting data-[active=false]:hover:text-text-primary data-[active=true]:bg-selection-background data-[active=true]:font-semibold data-[active=true]:text-selection-foreground data-[active=true]:after:bg-selection-indicator";
+  "relative inline-flex h-full shrink-0 snap-start items-center justify-center gap-2 whitespace-nowrap rounded-t-[var(--ds-radius-control)] px-[var(--ds-tab-padding-x)] text-sm font-medium outline-none transition-[background-color,color,box-shadow] duration-[var(--ds-duration-fast)] after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-transparent after:transition-colors hover:bg-surface-muted focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus-ring data-[active=false]:text-text-supporting data-[active=false]:hover:text-text-primary data-[active=true]:bg-selection-background data-[active=true]:font-semibold data-[active=true]:text-selection-foreground data-[active=true]:after:bg-selection-indicator";
 
 const pillTabClasses =
-  "inline-flex h-full shrink-0 snap-start items-center justify-center gap-2 whitespace-nowrap rounded-full px-[var(--ds-tab-padding-x)] text-sm font-medium text-text-supporting outline-none transition-colors duration-150 hover:bg-surface-muted hover:text-text-primary focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus/60";
+  "inline-flex h-full shrink-0 snap-start items-center justify-center gap-2 whitespace-nowrap rounded-full px-[var(--ds-tab-padding-x)] text-sm font-medium text-text-supporting outline-none transition-colors duration-[var(--ds-duration-fast)] hover:bg-surface-muted hover:text-text-primary focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus-ring";
 
 function assignRef<T>(ref: React.Ref<T> | undefined, value: T | null) {
   if (typeof ref === "function") {
@@ -48,26 +51,7 @@ function assignRef<T>(ref: React.Ref<T> | undefined, value: T | null) {
 
 function useHorizontalScrollRail<T extends HTMLElement>(externalRef?: React.Ref<T>) {
   const internalRef = React.useRef<T | null>(null);
-  const [scrollPosition, setScrollPosition] = React.useState<ScrollPosition>("none");
-
-  const updateScrollPosition = React.useCallback(() => {
-    const element = internalRef.current;
-    if (!element) return;
-
-    const maximumScroll = element.scrollWidth - element.clientWidth;
-    const nextPosition: ScrollPosition =
-      maximumScroll <= 1
-        ? "none"
-        : element.scrollLeft <= 1
-          ? "start"
-          : element.scrollLeft >= maximumScroll - 1
-            ? "end"
-            : "middle";
-
-    setScrollPosition((current) =>
-      current === nextPosition ? current : nextPosition,
-    );
-  }, []);
+  const [scrollPosition, updateScrollPosition] = useScrollPosition(internalRef);
 
   const ref = React.useCallback(
     (node: T | null) => {
@@ -76,33 +60,6 @@ function useHorizontalScrollRail<T extends HTMLElement>(externalRef?: React.Ref<
     },
     [externalRef],
   );
-
-  React.useEffect(() => {
-    updateScrollPosition();
-    const element = internalRef.current;
-    if (!element) return;
-
-    const resizeObserver =
-      typeof ResizeObserver === "undefined"
-        ? null
-        : new ResizeObserver(updateScrollPosition);
-    resizeObserver?.observe(element);
-
-    const mutationObserver =
-      typeof MutationObserver === "undefined"
-        ? null
-        : new MutationObserver(updateScrollPosition);
-    mutationObserver?.observe(element, {
-      characterData: true,
-      childList: true,
-      subtree: true,
-    });
-
-    return () => {
-      resizeObserver?.disconnect();
-      mutationObserver?.disconnect();
-    };
-  }, [updateScrollPosition]);
 
   return [scrollPosition, ref, updateScrollPosition] as const;
 }
@@ -143,9 +100,11 @@ function TabsList({
 }) {
   const rootVisuals = React.useContext(TabsRootVisualContext);
   const resolvedVariant = variant ?? rootVisuals.variant;
-  const resolvedSize = size ?? rootVisuals.size;
+  const requestedSize = size ?? rootVisuals.size;
+  const resolvedSize = requestedSize === "sm" ? "compact" : requestedSize;
   const [scrollPosition, scrollRailRef, updateScrollPosition] =
     useHorizontalScrollRail<HTMLDivElement>(externalRef);
+  const slidingIndicator = resolvedVariant === "underline" || resolvedVariant === "divider" || resolvedVariant === "nested";
 
   return (
     <BaseTabs.List
@@ -163,6 +122,7 @@ function TabsList({
       className={cn(
         "text-text-supporting",
         resolvedVariant !== "segmented" && tabRailClasses,
+        slidingIndicator && "relative",
         resolvedVariant === "divider" && "border-b border-border-subtle",
         resolvedVariant === "pills" && "gap-1",
         resolvedVariant === "nested" && "gap-5 border-b border-border-subtle",
@@ -181,6 +141,16 @@ function TabsList({
       >
         {children}
       </TabsListVisualContext.Provider>
+      {/* One bar that slides between tabs. It appears after hydration; the active tab's own colour marks it until then. */}
+      {slidingIndicator ? (
+        <BaseTabs.Indicator
+          data-slot="tabs-indicator"
+          className={cn(
+            "absolute bottom-0 left-0 h-0.5 w-[var(--active-tab-width)] translate-x-[var(--active-tab-left)] transition-[translate,width] duration-[var(--ds-duration-base)] ease-standard motion-reduce:transition-none",
+            resolvedVariant === "nested" ? "rounded-full bg-brand-supporting" : "bg-selection-indicator",
+          )}
+        />
+      ) : null}
     </BaseTabs.List>
   );
 }
@@ -204,11 +174,11 @@ function TabsTrigger({
       data-variant={resolvedVariant}
       data-size={resolvedSize}
       className={cn(
-        "disabled:pointer-events-none disabled:opacity-50",
+        "disabled:pointer-events-none disabled:opacity-50 data-disabled:pointer-events-none data-disabled:opacity-50",
         (resolvedVariant === "underline" || resolvedVariant === "divider") &&
           cn(
             navigationTabClasses,
-            "data-active:bg-selection-background data-active:font-semibold data-active:text-selection-foreground data-active:after:bg-selection-indicator",
+            "data-active:bg-selection-background data-active:font-semibold data-active:text-selection-foreground",
           ),
         resolvedVariant === "pills" &&
           cn(
@@ -216,9 +186,9 @@ function TabsTrigger({
             "data-active:bg-selection-background-strong data-active:font-semibold data-active:text-selection-foreground data-active:ring-1 data-active:ring-inset data-active:ring-selection-border/60",
           ),
         resolvedVariant === "nested" &&
-          "relative inline-flex h-full shrink-0 snap-start items-center justify-center gap-1.5 whitespace-nowrap px-0.5 text-sm font-medium text-text-supporting outline-none transition-colors duration-150 after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:rounded-full after:bg-transparent hover:text-text-primary focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus/60 data-active:text-brand-supporting data-active:after:bg-brand-supporting",
+          "relative inline-flex h-full shrink-0 snap-start items-center justify-center gap-1.5 whitespace-nowrap px-0.5 text-sm font-medium text-text-supporting outline-none transition-colors duration-[var(--ds-duration-fast)] hover:text-text-primary focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus-ring data-active:text-brand-supporting",
         resolvedVariant === "segmented" &&
-          "inline-flex h-full items-center justify-center gap-2 whitespace-nowrap rounded-[calc(var(--ds-radius-control)-2px)] px-3 text-sm font-medium text-text-supporting outline-none transition-[background-color,color,box-shadow] hover:text-text-primary focus-visible:ring-2 focus-visible:ring-focus/60 data-active:bg-surface-track-selected data-active:text-text-primary data-active:shadow-raised data-active:ring-1 data-active:ring-inset data-active:ring-border-subtle",
+          "inline-flex h-full items-center justify-center gap-2 whitespace-nowrap rounded-[calc(var(--ds-radius-control)-2px)] px-3 text-sm font-medium text-text-supporting outline-none transition-[background-color,color,box-shadow] hover:text-text-primary focus-visible:ring-2 focus-visible:ring-focus-ring data-active:bg-surface-track-selected data-active:text-text-primary data-active:shadow-raised data-active:ring-1 data-active:ring-inset data-active:ring-border-subtle",
         className,
       )}
       {...props}
@@ -234,7 +204,7 @@ function TabsContent({
     <BaseTabs.Panel
       data-slot="tabs-content"
       className={cn(
-        "outline-none focus-visible:ring-2 focus-visible:ring-focus/50",
+        "outline-none focus-visible:ring-2 focus-visible:ring-focus-ring",
         className,
       )}
       {...props}
@@ -298,11 +268,13 @@ function NavigationTab({
   className,
   active = false,
   ref: externalRef,
+  render,
   ...props
 }: React.ComponentProps<"a"> & {
   active?: boolean;
+  /** Render a router link instead of an anchor, for example `render={<Link href="/usage" />}`. */
+  render?: useRender.ComponentProps<"a">["render"];
 }) {
-  const Comp = "a";
   const variant = React.useContext(NavigationTabsListVisualContext);
   const internalRef = React.useRef<HTMLAnchorElement | null>(null);
   const ref = React.useCallback(
@@ -328,15 +300,17 @@ function NavigationTab({
     }
   }, [active]);
 
-  return (
-    <Comp
-      {...props}
-      data-slot="navigation-tab"
-      data-variant={variant}
-      data-active={active ? "true" : "false"}
-      aria-current={active ? "page" : undefined}
-      ref={ref}
-      className={cn(
+  return useRender({
+    defaultTagName: "a",
+    render,
+    ref,
+    props: mergeProps<"a">({
+      ...props,
+      "data-slot": "navigation-tab",
+      "data-variant": variant,
+      "data-active": active ? "true" : "false",
+      "aria-current": active ? "page" : undefined,
+      className: cn(
         variant === "pills"
           ? cn(
               pillTabClasses,
@@ -344,9 +318,9 @@ function NavigationTab({
             )
           : navigationTabClasses,
         className,
-      )}
-    />
-  );
+      ),
+    } as React.ComponentProps<"a">, {}),
+  });
 }
 
 export {

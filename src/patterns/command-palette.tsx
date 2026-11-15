@@ -145,7 +145,7 @@ function CommandPalette({
               ) : null}
               <Combobox.List
                 aria-label="Commands"
-                className="max-h-[min(24rem,calc(100vh-10rem))] overflow-y-auto p-2 outline-none"
+                className="max-h-[min(24rem,calc(100dvh-10rem))] overflow-y-auto p-2 outline-none"
               >
                 {filteredItems.map((item, index) => (
                     <React.Fragment key={item.id}>

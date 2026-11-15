@@ -69,7 +69,8 @@ async function loadRoute(
     { nextAppearance: appearance, nextDensity: density },
   );
   await page.emulateMedia({ colorScheme: appearance });
-  await page.goto(path, { timeout: 60_000 });
+  // The dev server can reload mid-run and abort a navigation (net::ERR_ABORTED); retry once.
+  await page.goto(path, { timeout: 60_000 }).catch(() => page.goto(path, { timeout: 60_000 }));
   await expect(page.getByRole("heading", { name: heading, exact: true })).toBeVisible();
   if (ready) await expect(page.locator(ready)).toBeAttached();
   await page.addStyleTag({

@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.8.0 - 2026-11-15
 
 Conscia apps can now draw charts from the design system instead of styling a
 chart library themselves. The new opt-in **`@conscia-labs/design-system/charts`**
@@ -9,10 +9,31 @@ entry is built on Recharts 3 and ships `TrendLineChart`, `TrendAreaChart`,
 any other Recharts chart. Every chart colour now comes from the brand palette
 in both themes.
 
+The package also gains the components apps were building by hand. Forms get
+**`RadioGroup`**, **`SegmentedControl`**, **`NumberField`**, **`InputGroup`**,
+**`MultiSelect`**, **`DatePicker`**, **`DateRangePicker`**, **`Slider`**,
+**`TagInput`**, and **`FileUpload`**. Navigation and overlays get
+**`Accordion`**, **`Breadcrumb`**, **`Progress`**, **`ContextMenu`**,
+**`HoverCard`**, **`ScrollArea`**, and **`Timeline`**. `Field` now connects its
+label, description, and error to the control inside it, so forms no longer
+need hand-written ids, `aria-describedby`, or `aria-invalid`. `DataTable`
+keeps its own selection and pagination, and shows loading and error rows.
+
 ### Upgrading from 1.7.4
 
-The package has no breaking changes, and no chart colour changes. Apps that do
-not import `/charts` need nothing new. To use the charts:
+No export is removed or renamed, and no chart colour changes. Existing
+screens do look different, so expect to replace visual snapshots:
+
+- **Fields and outline buttons have darker borders**, badges are slightly
+  smaller, and fields follow the `compact` and `operational` densities. The
+  full list is under Changed and Fixed.
+- **`ValueMeter` is now `role="meter"`.** Update tests that query it as a
+  progressbar.
+- **`react-day-picker` is a new dependency**, installed with the package.
+- **Old names still work.** `destructive`, `error`, `small`, `large` and
+  `compact` remain as aliases until 2.0; see Naming under Changed.
+
+Apps that do not import `/charts` need nothing new. To use the charts:
 
 - **Install the peers** next to the package: `pnpm add recharts react-is`.
 - **Import from the charts entry** and describe each series in a `config`:
@@ -49,10 +70,158 @@ not import `/charts` need nothing new. To use the charts:
   electric-blue and green steps).
 - A Charts page in the playground with every colour role and chart form.
 
+- `Slider` for a number or a range, `TagInput` for free-text tags, and
+  `FileUpload`, a drop zone around a native file input.
+- `ContextMenu`, `HoverCard` and `ScrollArea`.
+- `DropdownMenuCheckboxItem`, `DropdownMenuRadioGroup` and
+  `DropdownMenuRadioItem`.
+- `dismissible`, `onDismiss` and `dismissLabel` on `Alert`.
+- `Timeline` and `TimelineItem` for events in order.
+- Underline, divider and nested `Tabs` slide one indicator between tabs
+  instead of redrawing an underline per tab. The indicator appears after
+  hydration.
+- `RadioGroup` and `RadioGroupItem` for one choice from a short visible list.
+- `SegmentedControl` and `SegmentedControlItem` for switching the view or mode
+  of the same content. One segment is always selected.
+- `NumberField`, a number input with step buttons, `min`/`max` clamping, and
+  locale formatting.
+- `InputGroup`, `InputGroupAddon`, and `InputGroupInput` for a prefix or suffix
+  inside the field frame, such as a unit or URL scheme.
+- `Accordion`, `AccordionItem`, `AccordionTrigger`, and `AccordionContent`,
+  with an animated panel. Pass `multiple` to allow several open sections.
+- `Breadcrumb`, `BreadcrumbItem`, `BreadcrumbLink`, and `BreadcrumbPage`.
+  Separators are added for you; `BreadcrumbLink` takes `render` for router
+  links.
+- `Progress` for a running task, with an indeterminate state when `value` is
+  omitted. `ValueMeter` stays the choice for static measurements.
+- `MultiSelect` for several choices from a searchable list, shown as
+  removable chips inside the field. It takes the same options as
+  `SearchableSelect` and submits each value under `name`.
+- `DatePicker` and `DateRangePicker`, a field that opens a calendar, plus the
+  `Calendar` they share. `name` submits `yyyy-mm-dd`; a range submits
+  `<name>-from` and `<name>-to`. This adds `react-day-picker` as a dependency.
+- `Avatar` takes `size` (`sm`, `default`, `lg`) and a `status` dot with an
+  optional `statusLabel`.
+- `Badge` takes `dot` and `icon`.
+- Toasts show an icon for success, danger, warning and information, and a
+  spinner while a `toast.promise` is loading.
+- `SheetContent` takes `size` (`sm`, `default`, `lg`, `full`) for left and
+  right sheets.
+- Charts take `loading` and `emptyMessage`, and show the empty message when
+  `data` is empty.
+- `DataTable` keeps selection and pagination itself when `selectedIds` or
+  `pagination` are omitted (`selectable`, `defaultPagination`). It shows
+  `loading` placeholder rows and an `error` node in the body under the
+  header, hides columns marked `hidden`, and passes `{ selected,
+  toggleSelected }` to `mobileRow`.
+- `DataPanelHeader`, `MetricCard`, `StateView`, `DetailSection` and
+  `ResourceSummary` take `headingLevel` (2, 3 or 4) so their title fits the
+  page outline. The default stays `h2`.
+- `AppShell` takes `sidebarOpen` and `onSidebarOpenChange` to control the
+  desktop sidebar. A controlled shell does not persist the state.
+- `MetricCard` takes `emptyValue` and shows a missing-value dash for
+  `value={null}`, as `MetricBandItem` does. An omitted value still shows 0.
+- `Button` accepts `pending` and `pendingLabel`. Without a `pendingLabel` the
+  spinner covers the label and the button keeps its width. `LoadingButton`
+  still works and is now `Button` with a default "Working…" label.
+
 ### Changed
 
 - `--chart-series-1` to `-5` now reference palette primitives instead of raw
   values in both themes. The resolved colours are unchanged.
+- `Field`, `FieldLabel`, `FieldDescription`, and `FieldError` connect to the
+  control inside the same `Field` automatically, and `<Field invalid>` marks
+  that control invalid. Existing code with explicit `id` and `htmlFor` keeps
+  working: an `Input`, `Textarea`, or `InputGroupInput` given an `id` is
+  treated as wired by hand, so `Field` neither connects it nor marks it
+  invalid. `Input` and `Textarea` are now client components so they can
+  register with `Field`.
+- `Input`, `Textarea`, `SelectTrigger`, `SearchableSelect`, `DateTimeField`,
+  `InputGroup`, and `NumberField` share one field frame, so their size, focus,
+  and invalid styling cannot drift apart.
+- `Label` connects to the control inside a `Field` the same way `FieldLabel`
+  does. Both still work as plain labels outside a `Field`.
+- `Collapsible` and `Disclosure` panels now animate their height open and
+  closed, like the sidebar sections. Reduced-motion settings turn it off.
+- `AppearanceControl` and `DensityControl` are built on `SegmentedControl`.
+- Visual polish, which changes how existing screens look:
+  - Field borders are darker (`--control-border`), about 3:1 against the
+    surface in light and dark. Airy fields stay borderless fills.
+  - Outline buttons use `--border-strong`, so they read as buttons beside a
+    disabled primary button.
+  - Destructive buttons are a solid red in dark mode too, through the new
+    `--danger-solid` token.
+  - `FieldError` text uses `--danger` instead of `--danger-foreground`.
+  - Elevated cards sit on `--surface-floating`, so they differ from default
+    and muted cards in dark mode.
+  - In the airy mood, `FilterBar` and `AttentionItem` take the surface radius
+    instead of a full pill.
+  - Sortable table headers follow the mood's case, as plain headers do.
+  - `MetricCard` moves its status below the title when the card is narrow.
+  - Headings use `text-wrap: balance`, tables use tabular numerals, and
+    dialogs, sheets and the command palette size with `dvh`.
+- Accessibility and tokens:
+  - One focus ring colour, the `focus-ring` Tailwind colour (`--focus` at
+    75%), replaces the 45%, 50%, 60% and solid variants. It holds 3:1 in
+    light, dark and brand chrome. Forced-colours mode gets a real outline.
+  - `dark:` utilities now match `data-appearance="dark"` as well as `.dark`.
+  - Brand chrome sets `--text-link`, `--action-hover` and `--action-active`,
+    so links on burgundy are readable.
+  - Dark `--action-hover` is darker, so white text on it holds 4.5:1.
+  - New tokens: `--ds-radius-pill`, `--scrim`, `--danger-solid` and
+    `--danger-solid-foreground`. Raw `999px`, `bg-black/50`, `text-white`,
+    `duration-150` and `duration-200` now use tokens; the two durations move
+    to 120ms and 180ms.
+- Internal only, with no change to exports or rendering: `app-shell.tsx` is
+  split into state, sidebar, navigation, header and frame files; Dialog and
+  AlertDialog share their modal classes; Table and Tabs share one
+  scroll-position hook.
+- Naming, with the old names kept as aliases until 2.0:
+  - `danger` is the tone name: `Button variant="danger"`,
+    `DropdownMenuItem variant="danger"` and toast `variant: "danger"` join
+    `destructive` and `error`.
+  - `sm` and `lg` are the size names: `DialogContent size="sm" | "lg"`, and
+    `size="sm"` on `Tabs` and `StateView`, join `small`, `large` and
+    `compact`.
+  - `NavigationTab` and `DetailBackLink` take `render` for router links.
+  - `PageHeader`'s `action` and `actionNode`, and `SheetContent`'s `side`,
+    are marked deprecated. Set `side` on `Sheet`.
+  - `EntityTable`, `InventoryDesktop` and `InventoryMobile` are deprecated in
+    favour of `DataTable` (with `mobileRow`). They still work.
+
+### Fixed
+
+- `MetricCountUp` no longer shows the final value, drops to 0, and counts up.
+  The visible digits start at 0; the screen-reader value is always final.
+- The tooltip arrow sits on the correct edge for every `side`.
+- Inputs, selects, searchable selects, and date-time fields now follow the
+  `compact` and `operational` densities, so they are the same height as a
+  default button beside them. Before this, fields stayed at 44px while buttons
+  dropped to 32px (compact) or 36px (operational). Touch screens still get the
+  44px minimum, and the `airy` mood still sets 48px fields.
+- `Badge`, pagination labels, and the preference legend now render at the
+  metadata size. The size class was being read as a colour and dropped, so
+  they rendered at body size. **Badges get slightly smaller.**
+- `FormSelect` with a `name` now submits the selected value. An option with an
+  empty value used to submit an internal placeholder string.
+- Invalid fields keep their red border under the `airy` mood, and
+  `SearchableSelect` now follows the airy field style. `SelectTrigger`,
+  `FormSelect` (`aria-invalid`, `aria-describedby`), and `Switch` gained
+  invalid styling.
+- A sortable `DataTable` column now sorts without a controlled `sorting` prop.
+  Space or Enter on a checkbox or link inside a clickable row no longer
+  triggers the row.
+- `ConfirmationDialog` stays open until `onConfirm` settles, so the pending
+  label shows and a failed confirmation can be retried.
+- A sidebar section that contains the active page can now be collapsed.
+- `useToast()` returns a stable object, so it is safe in effect dependencies.
+- `AvatarGroup` sizes its overflow chip; `Avatar` shows an image that finished
+  loading before hydration; disabled tabs look disabled; long dropdown menus
+  scroll; `PopoverContent` accepts `side`, `align`, and `sideOffset` (default
+  4px); `CodeBlock` resets "Copied" after two seconds; Cmd/Ctrl+B no longer
+  toggles the sidebar from a rich-text editor.
+- `ValueMeter` uses `role="meter"` instead of `role="progressbar"`. Update
+  tests that query it by role.
 
 ## 1.7.4 - 2026-11-01
 

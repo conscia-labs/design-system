@@ -188,7 +188,7 @@ export default function OverviewPage() {
             <Link
               key={layer.title}
               href={layer.href}
-              className="group rounded-[var(--ds-radius-surface)] border border-border-subtle bg-surface p-5 outline-none transition-colors hover:bg-surface-muted focus-visible:ring-[3px] focus-visible:ring-focus/50"
+              className="group rounded-[var(--ds-radius-surface)] border border-border-subtle bg-surface p-5 outline-none transition-colors hover:bg-surface-muted focus-visible:ring-[3px] focus-visible:ring-focus-ring"
             >
               <h3 className="ds-type-section-title group-hover:text-text-primary">{layer.title}</h3>
               <p className="ds-type-ui mt-2 text-text-supporting">{layer.description}</p>
@@ -237,7 +237,7 @@ export default function OverviewPage() {
                     <Link
                       key={entry.family}
                       href={entry.route}
-                      className="block px-4 py-3 transition-colors hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-focus/50 focus-visible:ring-inset"
+                      className="block px-4 py-3 transition-colors hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-focus-ring focus-visible:ring-inset"
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">

@@ -75,7 +75,7 @@ function useTrendParts({ data, xKey, xLabel = "Period", formatX, referenceLines 
 function TrendLineChart(props: TrendChartProps) {
   const { container, data, curve, series, animate, table, axes, tableCount } = useTrendParts(props);
   return (
-    <ChartContainer data-chart="trend-line" table={table} tableCount={tableCount} {...container}>
+    <ChartContainer data-chart="trend-line" table={table} tableCount={tableCount} empty={data.length === 0} {...container}>
       <LineChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: 0 }} accessibilityLayer={false}>
         {axes}
         {series.map((item) => (
@@ -101,7 +101,7 @@ function TrendAreaChart({ stacked = false, ...props }: TrendAreaChartProps) {
   const { container, data, curve, series, animate, table, axes, tableCount } = useTrendParts(props);
   const gradientId = React.useId().replace(/:/g, "");
   return (
-    <ChartContainer data-chart="trend-area" table={table} tableCount={tableCount} {...container}>
+    <ChartContainer data-chart="trend-area" table={table} tableCount={tableCount} empty={data.length === 0} {...container}>
       <AreaChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: 0 }} accessibilityLayer={false}>
         <defs>
           {series.map((item, index) => (

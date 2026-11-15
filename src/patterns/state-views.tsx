@@ -11,7 +11,9 @@ type StateViewProps = React.ComponentProps<"div"> & {
    * `compact` suits empty states inside a section, panel, or tab; `default`
    * suits a state that replaces a page's primary content.
    */
-  size?: "default" | "compact";
+  size?: "default" | "sm" | "compact";
+  /** Heading element for the title, so the surface fits the page outline. Defaults to 2. */
+  headingLevel?: 2 | 3 | 4;
   /** Adds a bottom divider, for a state that replaces rows inside a table body. */
   divider?: boolean;
   /**
@@ -28,17 +30,19 @@ function StateView({
   action,
   icon,
   size = "default",
+  headingLevel = 2,
   divider = false,
   tone = "brand",
   className,
   ...props
 }: StateViewProps) {
-  const compact = size === "compact";
+  const compact = size === "compact" || size === "sm";
+  const Heading = `h${headingLevel}` as const;
 
   return (
     <div
       data-slot="state-view"
-      data-size={size}
+      data-size={compact ? "compact" : size}
       className={cn(
         "flex flex-col items-center justify-center text-center",
         compact ? "gap-2 px-4 py-8" : "min-h-72 gap-3 px-6 py-12",
@@ -51,14 +55,14 @@ function StateView({
         <div
           data-slot="state-view-spot"
           data-tone={tone}
-          data-size={size}
+          data-size={compact ? "compact" : size}
           aria-hidden="true"
           className={cn(compact ? "size-9 [&_svg]:size-4" : "my-[1.125rem] size-14 [&_svg]:size-6")}
         >
           {icon}
         </div>
       ) : null}
-      <h2 className={compact ? "ds-type-card-title" : "ds-type-section-title"}>{title}</h2>
+      <Heading className={compact ? "ds-type-card-title" : "ds-type-section-title"}>{title}</Heading>
       {description ? <p className="ds-type-ui max-w-md text-text-supporting">{description}</p> : null}
       {action ? <div className="mt-1">{action}</div> : null}
     </div>

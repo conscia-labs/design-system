@@ -4,7 +4,7 @@
  */
 @import "@fontsource-variable/inter/opsz.css";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:is(.dark *, [data-appearance="dark"] *));
 
 :root {
   /*
@@ -56,11 +56,13 @@
 @keyframes ds-sidebar-expand {
   from {
     height: 0;
+    overflow: hidden;
     opacity: 0;
   }
 
   to {
     height: var(--collapsible-panel-height);
+    overflow: hidden;
     opacity: 1;
   }
 }
@@ -68,20 +70,22 @@
 @keyframes ds-sidebar-collapse {
   from {
     height: var(--collapsible-panel-height);
+    overflow: hidden;
     opacity: 1;
   }
 
   to {
     height: 0;
+    overflow: hidden;
     opacity: 0;
   }
 }
 
-[data-slot="sidebar-collapsible-content"][data-open] {
+:is([data-slot="sidebar-collapsible-content"], [data-slot="collapsible-content"], [data-slot="disclosure-content"])[data-open] {
   animation: ds-sidebar-expand 180ms cubic-bezier(0.2, 0, 0, 1);
 }
 
-[data-slot="sidebar-collapsible-content"][data-closed] {
+:is([data-slot="sidebar-collapsible-content"], [data-slot="collapsible-content"], [data-slot="disclosure-content"])[data-closed] {
   animation: ds-sidebar-collapse 150ms cubic-bezier(0.4, 0, 1, 1);
 }
 
@@ -114,7 +118,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-slot="sidebar-collapsible-content"] {
+  :is([data-slot="sidebar-collapsible-content"], [data-slot="collapsible-content"], [data-slot="disclosure-content"]) {
     animation: none !important;
   }
 
@@ -190,7 +194,7 @@
   --selection-border: #aab4ff;
   --selection-indicator: var(--palette-electric-blue);
   --selection-foreground: #1f2547;
-  --control-border: #dfe0e3;
+  --control-border: #878b94;
   --focus: var(--palette-electric-blue);
   --border-subtle: var(--palette-grey-300);
   --border-default: #d4d6da;
@@ -212,6 +216,11 @@
    * which belongs to the highlight role.
    */
   --danger: #c03a1c;
+  /* Fill for destructive buttons; the same in dark, where --danger is a text colour. */
+  --danger-solid: #c03a1c;
+  --danger-solid-foreground: #ffffff;
+  /* Backdrop behind dialogs and sheets. */
+  --scrim: rgb(0 0 0 / 50%);
   --danger-background: #fdebe4;
   --danger-border: #f5b39f;
   --danger-foreground: #852313;
@@ -428,6 +437,7 @@
   --ds-table-head-tracking: 0;
   --ds-radius-control: 0.375rem;
   --ds-radius-surface: 0.5rem;
+  --ds-radius-pill: 999px;
   /*
    * Elevation scale. Each tier pairs a tight contact shadow with a soft
    * ambient one, tinted with the burgundy ink. Raised is for resting
@@ -452,7 +462,7 @@
   /* Overshoot for hover lift and switches. The balanced and airy moods give it a bounce. */
   --ds-ease-playful: cubic-bezier(0.2, 0, 0, 1);
   --ds-skeleton-highlight: rgb(255 255 255 / 75%);
-  --ds-focus-ring: 0 0 0 3px color-mix(in oklab, var(--focus) 26%, transparent);
+  --ds-focus-ring: 0 0 0 3px color-mix(in oklab, var(--focus) 75%, transparent);
   --ds-workbench-global-rail-width: 4.5rem;
   --ds-workbench-secondary-rail-width: 18.375rem;
   --ds-workbench-inspector-width: 19rem;
@@ -476,6 +486,8 @@
   --ds-control-height-sm: 1.75rem;
   --ds-control-height-lg: 2.25rem;
   --ds-control-padding-x: 0.75rem;
+  /* Fields match buttons in dense presets; var() keeps the coarse-pointer 44px floor. */
+  --ds-field-control-height: var(--ds-control-height);
   --ds-topbar-padding-x: 0.625rem;
   --ds-topbar-padding-x-wide: 0.875rem;
   --ds-sidebar-width: 15rem;
@@ -513,6 +525,8 @@
   --ds-control-height-sm: 1.875rem;
   --ds-control-height-lg: 2.5rem;
   --ds-control-padding-x: 0.875rem;
+  /* Fields match buttons in dense presets; var() keeps the coarse-pointer 44px floor. */
+  --ds-field-control-height: var(--ds-control-height);
   --ds-sidebar-item-height: 2rem;
   --ds-sidebar-group-gap: 0.375rem;
   --ds-sidebar-label-gap: 0.25rem;
@@ -625,15 +639,15 @@
   --brand-emphasis-border: var(--selection-border);
   --action: var(--palette-electric-blue);
   --action-foreground: #ffffff;
-  --action-hover: #5a71ff;
-  --action-active: #3f55e6;
+  --action-hover: #3f55e6;
+  --action-active: var(--palette-electric-blue-dark);
   --action-background: #23284a;
   --selection-background: #262a3d;
   --selection-background-strong: #323a5c;
   --selection-border: #4f5ab0;
   --selection-indicator: #7f8fff;
   --selection-foreground: #edf0fb;
-  --control-border: rgb(255 255 255 / 12%);
+  --control-border: rgb(255 255 255 / 36%);
   --focus: #7f8fff;
   --border-subtle: rgb(255 255 255 / 7%);
   --border-default: rgb(255 255 255 / 11%);
@@ -825,8 +839,11 @@
   --border-subtle: rgb(255 255 255 / 9%);
   --border-default: rgb(255 255 255 / 14%);
   --border-strong: rgb(255 255 255 / 22%);
-  --control-border: rgb(255 255 255 / 14%);
+  --control-border: rgb(255 255 255 / 36%);
   --focus: #7f8fff;
+  --text-link: #a9b4ff;
+  --action-hover: #3f55e6;
+  --action-active: var(--palette-electric-blue-dark);
   --neutral-background: rgb(255 255 255 / 8%);
   --neutral-border: rgb(255 255 255 / 16%);
   --neutral-foreground: #ffffff;
@@ -910,7 +927,7 @@
   --canvas: #fcfbfd;
   --radius: 1rem;
   --ds-radius-surface: 1.5rem;
-  --ds-radius-control: 999px;
+  --ds-radius-control: var(--ds-radius-pill);
   --ds-field-control-radius: 1rem;
   --ds-field-control-height: 3rem;
   --ds-field-control-padding-x: 1.125rem;
@@ -948,7 +965,7 @@
   --ds-app-header-height: 4.5rem;
   --ds-app-header-scrolled-gutter: 1rem;
   --ds-app-header-scrolled-inset-y: 0.5rem;
-  --ds-app-header-scrolled-radius: 999px;
+  --ds-app-header-scrolled-radius: var(--ds-radius-pill);
   --ds-app-header-scrolled-background: color-mix(in oklab, var(--surface) 92%, transparent);
   --ds-app-header-scrolled-shadow: 0 0.5rem 1.5rem -0.5rem rgb(30 7 33 / 18%), 0 0 0 1px rgb(30 7 33 / 4%);
 }
@@ -1164,7 +1181,7 @@
   backdrop-filter: blur(14px);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 200ms ease;
+  transition: opacity var(--ds-duration-base) ease;
 }
 
 :is([data-header-layout="split"], :is([data-mood="balanced"], [data-mood="airy"]) [data-header-layout="auto"]) [data-slot="main-region"] > [data-slot="app-header"][data-variant="auto"][data-scrolled="true"]::before,
@@ -1205,11 +1222,11 @@
 }
 
 :is([data-mood="balanced"], [data-mood="airy"]) :is([data-slot="badge"], [data-slot="metric-trend"]) {
-  border-radius: 999px;
+  border-radius: var(--ds-radius-pill);
   padding-inline: 0.625rem;
 }
 
-:is([data-mood="balanced"], [data-mood="airy"]) :is([data-slot="eyebrow"], [data-slot="table-head"]) {
+:is([data-mood="balanced"], [data-mood="airy"]) :is([data-slot="eyebrow"], [data-slot="table-head"], [data-slot="table-head"] button) {
   text-transform: none;
 }
 
@@ -1227,28 +1244,34 @@
 }
 
 [data-mood="airy"] [data-slot="button"] {
-  border-radius: 999px;
+  border-radius: var(--ds-radius-pill);
   padding-inline: var(--ds-control-padding-x);
 }
 
 [data-mood="airy"] [data-slot="eyebrow"] {
   width: fit-content;
   padding: 0.125rem 0.75rem;
-  border-radius: 999px;
+  border-radius: var(--ds-radius-pill);
   background: var(--highlight-background);
   color: var(--highlight-foreground);
 }
 
 /* Airy fields are tinted fills with no border until focus. */
-[data-mood="airy"] :is([data-slot="input"], [data-slot="textarea"], [data-slot="select-trigger"], [data-slot="date-time-field"]) {
+[data-mood="airy"] :is([data-slot="input"], [data-slot="textarea"], [data-slot="select-trigger"], [data-slot="date-picker"], [data-slot="searchable-select-input"], [data-slot="date-time-field"], [data-slot="input-group"], [data-slot="number-field-group"], [data-slot="multi-select"], [data-slot="tag-input"]) {
   border-color: transparent;
   background-color: color-mix(in oklab, var(--surface-muted) 70%, var(--surface));
 }
 
-[data-mood="airy"] :is([data-slot="input"], [data-slot="textarea"], [data-slot="select-trigger"]):focus-visible,
-[data-mood="airy"] [data-slot="date-time-field"]:focus-within {
+[data-mood="airy"] :is([data-slot="input"], [data-slot="textarea"], [data-slot="select-trigger"], [data-slot="date-picker"], [data-slot="searchable-select-input"]):focus-visible,
+[data-mood="airy"] :is([data-slot="date-time-field"], [data-slot="input-group"], [data-slot="number-field-group"], [data-slot="multi-select"], [data-slot="tag-input"]):focus-within {
   border-color: var(--focus);
   background-color: var(--surface);
+}
+
+/* The borderless fill must not hide an invalid field. */
+[data-mood="airy"] :is([data-slot="input"], [data-slot="textarea"], [data-slot="select-trigger"], [data-slot="date-picker"], [data-slot="searchable-select-input"])[aria-invalid="true"],
+[data-mood="airy"] :is([data-slot="date-time-field"], [data-slot="input-group"], [data-slot="number-field-group"], [data-slot="multi-select"], [data-slot="tag-input"]):has(input[aria-invalid="true"]) {
+  border-color: var(--danger);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -1330,6 +1353,11 @@
   --color-warning-border: var(--warning-border);
   --color-warning-foreground: var(--warning-foreground);
   --color-danger: var(--danger);
+  --color-danger-solid: var(--danger-solid);
+  --color-danger-solid-foreground: var(--danger-solid-foreground);
+  --color-scrim: var(--scrim);
+  /* The one focus ring colour: at least 3:1 against surfaces in every theme. */
+  --color-focus-ring: color-mix(in oklab, var(--focus) 75%, transparent);
   --color-danger-background: var(--danger-background);
   --color-danger-border: var(--danger-border);
   --color-danger-foreground: var(--danger-foreground);
@@ -1632,7 +1660,7 @@
     flex-shrink: 0;
     align-items: center;
     justify-content: center;
-    border-radius: 9999px;
+    border-radius: var(--ds-radius-pill);
     color: var(--spot-foreground);
     background: var(--spot-background);
     box-shadow: 0 0 0 1px var(--spot-ring);
@@ -1728,6 +1756,16 @@
       color-mix(in oklab, var(--sidebar-glow, transparent) 7%, transparent) 84%,
       transparent
     );
+  }
+}
+
+@keyframes ds-progress-indeterminate {
+  from {
+    translate: -100% 0;
+  }
+
+  to {
+    translate: 250% 0;
   }
 }
 
@@ -1829,7 +1867,7 @@
 @layer base {
   * {
     border-color: var(--border-default);
-    outline-color: color-mix(in oklab, var(--focus) 50%, transparent);
+    outline-color: color-mix(in oklab, var(--focus) 75%, transparent);
   }
 
   html {
@@ -1837,7 +1875,7 @@
   }
 
   body {
-    min-height: 100vh;
+    min-height: 100dvh;
     background: var(--canvas);
     color: var(--text-primary);
     font-family: var(--font-sans);
@@ -1855,6 +1893,11 @@
     /* Bare headings take the section step; page titles opt in via ds-type-page-title. */
     font-weight: var(--ds-section-title-weight);
     letter-spacing: var(--ds-section-title-tracking);
+    text-wrap: balance;
+  }
+
+  table {
+    font-variant-numeric: tabular-nums;
   }
 
   button,
@@ -2129,7 +2172,7 @@
     height: 1.875rem;
     flex: 0 0 auto;
     place-items: center;
-    border-radius: 999px;
+    border-radius: var(--ds-radius-pill);
     background: var(--brand-supporting-background);
     color: var(--brand-supporting);
     font-size: var(--ds-menu-label-size);
@@ -2307,5 +2350,12 @@
       #000 1.5rem,
       #000 100%
     );
+  }
+}
+
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
   }
 }

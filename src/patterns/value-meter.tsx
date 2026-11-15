@@ -50,7 +50,7 @@ function ValueMeter({
       </div>
       {percentage === null ? null : (
         <div
-          role="progressbar"
+          role="meter"
           aria-labelledby={labelId}
           aria-valuemin={0}
           aria-valuemax={maximum ?? undefined}

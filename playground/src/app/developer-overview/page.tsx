@@ -80,7 +80,7 @@ export default function DeveloperOverviewPage() {
               value={
                 <Link
                   href="/reference-patterns"
-                  className="rounded-sm text-text-link underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+                  className="rounded-sm text-text-link underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring"
                 >
                   6
                 </Link>
@@ -116,7 +116,7 @@ export default function DeveloperOverviewPage() {
                     <Link
                       href={`/requests/${request.id}`}
                       aria-label={`Open diagnostics for ${request.model}`}
-                      className="group inline-flex min-w-0 max-w-full items-start gap-1 rounded-sm text-text-primary outline-none hover:text-text-link focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+                      className="group inline-flex min-w-0 max-w-full items-start gap-1 rounded-sm text-text-primary outline-none hover:text-text-link focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
                     >
                       <span className="min-w-0 break-words">{request.model}</span>
                       <ArrowUpRight aria-hidden="true" className="mt-0.5 size-3.5 shrink-0 text-text-supporting group-hover:text-text-link" />

@@ -5,6 +5,7 @@ import { Combobox } from "@base-ui/react/combobox";
 import { Check, ChevronsUpDown, X } from "lucide-react";
 
 import { IconButton } from "./button";
+import { fieldControlClasses } from "./field-control";
 import { overlayLayers } from "./overlay-layers";
 import { cn } from "./utils";
 
@@ -85,10 +86,11 @@ function SearchableSelect({
       >
         <Combobox.InputGroup className="relative flex items-center">
           <Combobox.Input
+            data-slot="searchable-select-input"
             ref={inputRef} id={id} aria-label={ariaLabel} aria-labelledby={ariaLabelledBy}
             aria-describedby={ariaDescribedBy} aria-invalid={ariaInvalid} placeholder={searchPlaceholder}
             className={cn(
-              "ds-type-control h-[var(--ds-field-control-height)] w-full min-w-0 rounded-[var(--ds-field-control-radius)] border border-control-border bg-surface-control px-[var(--ds-field-control-padding-x)] py-2 outline-none transition-colors selection:bg-action selection:text-action-foreground placeholder:text-text-supporting focus-visible:border-focus focus-visible:ring-[3px] focus-visible:ring-focus/50 aria-invalid:border-danger aria-invalid:ring-danger/20 dark:aria-invalid:ring-danger/40 disabled:cursor-not-allowed disabled:opacity-50",
+              fieldControlClasses,
               clearable && selected ? "pr-20" : "pr-10",
             )}
           />
@@ -97,7 +99,7 @@ function SearchableSelect({
               <X className="size-4" />
             </IconButton>
           ) : null}
-          <Combobox.Trigger aria-label={ariaLabel ?? placeholder} aria-labelledby={ariaLabelledBy} className="absolute right-1 inline-flex size-8 items-center justify-center rounded-sm text-text-supporting outline-none focus-visible:ring-2 focus-visible:ring-focus">
+          <Combobox.Trigger aria-label={ariaLabel ?? placeholder} aria-labelledby={ariaLabelledBy} className="absolute right-1 inline-flex size-8 items-center justify-center rounded-sm text-text-supporting outline-none focus-visible:ring-2 focus-visible:ring-focus-ring">
             <ChevronsUpDown className="size-4" />
           </Combobox.Trigger>
         </Combobox.InputGroup>

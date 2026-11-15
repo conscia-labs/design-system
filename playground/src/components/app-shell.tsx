@@ -135,7 +135,7 @@ export function AppShell({ children, version }: { children: ReactNode; version: 
           <AppHeaderSearch mobileTrigger={
             <IconButton variant="ghost" aria-label="Search design system" onClick={() => setCommandOpen(true)}><Search /></IconButton>
           }>
-            <button type="button" className="ds-type-control flex h-[var(--ds-control-height-sm)] w-full items-center gap-2 rounded-[var(--ds-radius-control)] border border-control-border bg-surface-control px-3 text-left text-text-supporting outline-none transition-colors hover:bg-surface-control-hover focus-visible:ring-[3px] focus-visible:ring-focus/50" onClick={() => setCommandOpen(true)}>
+            <button type="button" className="ds-type-control flex h-[var(--ds-control-height-sm)] w-full items-center gap-2 rounded-[var(--ds-radius-control)] border border-control-border bg-surface-control px-3 text-left text-text-supporting outline-none transition-colors hover:bg-surface-control-hover focus-visible:ring-[3px] focus-visible:ring-focus-ring" onClick={() => setCommandOpen(true)}>
               <Search className="size-4" aria-hidden="true" />
               <span className="flex-1">Search design system</span>
               <ShortcutHint>⌘K</ShortcutHint>
