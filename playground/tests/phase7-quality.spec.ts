@@ -73,6 +73,8 @@ async function loadRoute(
   await page.goto(path, { timeout: 60_000 }).catch(() => page.goto(path, { timeout: 60_000 }));
   await expect(page.getByRole("heading", { name: heading, exact: true })).toBeVisible();
   if (ready) await expect(page.locator(ready)).toBeAttached();
+  // Before hydration some controls have no accessible name or tab stop yet.
+  await expect(page.locator("html[data-hydrated]")).toBeAttached();
   await page.addStyleTag({
     content: "nextjs-portal { display: none !important; }",
   });

@@ -63,6 +63,10 @@ export function AppShell({ children, version }: { children: ReactNode; version: 
   const mood = usePlaygroundMood();
   const sidebar = useSidebarOptions();
   const AppearanceIcon = appearance === "dark" ? Moon : appearance === "light" ? Sun : Monitor;
+  // Tests wait for this: Base UI names some controls only after hydration.
+  useEffect(() => {
+    document.documentElement.dataset.hydrated = "";
+  }, []);
   useEffect(() => {
     const handleSearchShortcut = (event: KeyboardEvent) => {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {

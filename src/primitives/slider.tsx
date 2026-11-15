@@ -15,12 +15,16 @@ type SliderProps = Omit<React.ComponentProps<typeof BaseSlider.Root>, "children"
 };
 
 /** A value, or a range when the value is an array, picked by dragging along a track. */
-function Slider({ label, showValue = false, thumbLabels, className, value, defaultValue, "aria-label": ariaLabel, ...props }: SliderProps) {
+function Slider({ label, showValue = false, thumbLabels, className, value, defaultValue, "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy, id, ...props }: SliderProps) {
+  // Base UI links the label after mount. Its label id is always `<root id>-label`,
+  // so pointing at it here names the thumbs in server HTML too.
+  const generatedId = React.useId();
+  const rootId = id ?? generatedId;
   const initial = value ?? defaultValue;
   const thumbCount = Array.isArray(initial) ? initial.length : 1;
 
   return (
-    <BaseSlider.Root data-slot="slider" value={value} defaultValue={defaultValue} className={cn("grid gap-2", className)} {...props}>
+    <BaseSlider.Root data-slot="slider" id={rootId} aria-labelledby={ariaLabelledBy ?? (label ? `${rootId}-label` : undefined)} value={value} defaultValue={defaultValue} className={cn("grid gap-2", className)} {...props}>
       {label || showValue ? (
         <div className="flex items-baseline justify-between gap-4 text-sm">
           {label ? <BaseSlider.Label data-slot="slider-label" className="font-medium text-text-primary">{label}</BaseSlider.Label> : <span />}

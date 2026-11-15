@@ -19,12 +19,14 @@ type ProgressProps = Omit<React.ComponentProps<typeof BaseProgress.Root>, "child
  * Progress of a running task. For a static measurement such as quota used,
  * use ValueMeter.
  */
-function Progress({ value = null, label, showValue = false, size = "default", className, ...props }: ProgressProps) {
+function Progress({ value = null, label, showValue = false, size = "default", className, "aria-labelledby": ariaLabelledBy, ...props }: ProgressProps) {
+  // Base UI links the label after mount; our own id names the bar in server HTML too.
+  const labelId = React.useId();
   return (
-    <BaseProgress.Root data-slot="progress" value={value} className={cn("grid gap-2", className)} {...props}>
+    <BaseProgress.Root data-slot="progress" aria-labelledby={ariaLabelledBy ?? (label ? labelId : undefined)} value={value} className={cn("grid gap-2", className)} {...props}>
       {label || showValue ? (
         <div className="flex items-baseline justify-between gap-4 text-sm">
-          {label ? <BaseProgress.Label data-slot="progress-label" className="font-medium text-text-primary">{label}</BaseProgress.Label> : <span />}
+          {label ? <BaseProgress.Label id={labelId} data-slot="progress-label" className="font-medium text-text-primary">{label}</BaseProgress.Label> : <span />}
           {showValue ? <BaseProgress.Value data-slot="progress-value" className="tabular-nums text-text-supporting" /> : null}
         </div>
       ) : null}
