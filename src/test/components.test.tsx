@@ -636,7 +636,7 @@ describe("shared sidebar", () => {
 
     expect(groupLabel.closest('[data-slot="navigation-group-label"]')).toBeTruthy();
     expect(groupLabel.closest('[data-slot="navigation-group-label"]')?.className).toContain(
-      "font-semibold",
+      "font-normal",
     );
     expect(groupLabel.closest('[data-slot="navigation-group-label"]')?.className).toContain(
       "tracking-[0.04em]",

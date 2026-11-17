@@ -1481,6 +1481,13 @@
   line-height: var(--ds-section-title-line-height);
 }
 
+/* A title in app chrome, such as a header bar: interface size at medium weight, so it names the view without competing with it. */
+@utility ds-type-header-title {
+  font-size: var(--ds-ui-text-size);
+  font-weight: var(--ds-font-weight-medium);
+  line-height: var(--ds-ui-line-height);
+}
+
 @utility ds-type-metadata {
   font-size: var(--ds-metadata);
   line-height: var(--ds-menu-label-line-height);
