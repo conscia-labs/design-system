@@ -184,6 +184,7 @@ test("operational density exposes a token-backed Workspace-like type scale", () 
   assert.match(styles, /--ds-button-text-size: 0\.8125rem;/);
   assert.match(styles, /@utility ds-type-page-title/);
   assert.match(styles, /@utility ds-type-section-title/);
+  assert.match(styles, /@utility ds-type-header-title/);
   assert.match(styles, /@utility ds-type-control/);
   assert.match(styles, /@utility ds-type-eyebrow/);
   assert.match(styles, /@utility ds-type-metric-value/);
@@ -890,7 +891,7 @@ test("sidebar semantics resolve through shared light and dark roles", () => {
   assert.match(shell, /px-\[var\(--ds-topbar-padding-x\)\]/);
   assert.match(shell, /gap-\[var\(--ds-sidebar-item-gap\)\]/);
   assert.match(shell, /leading-\[var\(--ds-sidebar-group-label-line-height\)\]/);
-  assert.match(shell, /font-semibold uppercase leading-\[var\(--ds-sidebar-group-label-line-height\)\] tracking-\[0\.04em\]/);
+  assert.match(shell, /font-normal uppercase leading-\[var\(--ds-sidebar-group-label-line-height\)\] tracking-\[0\.04em\]/);
   assert.match(navigation, /gap-\[var\(--ds-sidebar-group-gap\)\]/);
   assert.match(shell, /Place this control inside AppHeader or TopBar/);
   assert.match(

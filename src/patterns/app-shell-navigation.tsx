@@ -32,7 +32,7 @@ function NavigationGroup({
         <div
           data-slot="navigation-group-label"
           id={labelId}
-          className="flex min-h-6 items-center gap-2 px-2 pb-0 pt-2 text-[length:var(--ds-sidebar-group-label-size)] font-semibold uppercase leading-[var(--ds-sidebar-group-label-line-height)] tracking-[0.04em] text-sidebar-group-label group-data-[sidebar-state=collapsed]/shell:hidden"
+          className="flex min-h-6 items-center gap-2 px-2 pb-0 pt-2 text-[length:var(--ds-sidebar-group-label-size)] font-normal uppercase leading-[var(--ds-sidebar-group-label-line-height)] tracking-[0.04em] text-sidebar-group-label group-data-[sidebar-state=collapsed]/shell:hidden"
         >
           {label}
           {count !== undefined ? (
@@ -51,14 +51,14 @@ function NavigationGroup({
 
 function navigationItemClasses(active?: boolean) {
   return cn(
-    "ds-type-navigation flex min-h-[var(--ds-sidebar-item-height-touch)] min-w-0 cursor-pointer items-center gap-2 rounded-[var(--ds-radius-control)] px-2 font-medium text-sidebar-secondary-text outline-none transition-colors duration-[var(--ds-duration-fast)] lg:h-[var(--ds-sidebar-item-height)] lg:min-h-0",
+    "ds-type-navigation flex min-h-[var(--ds-sidebar-item-height-touch)] min-w-0 cursor-pointer items-center gap-2 rounded-[var(--ds-radius-control)] px-2 font-normal text-sidebar-group-count outline-none transition-colors duration-[var(--ds-duration-fast)] lg:h-[var(--ds-sidebar-item-height)] lg:min-h-0",
     "hover:bg-sidebar-hover hover:text-sidebar-primary-text",
     "focus-visible:ring-[3px] focus-visible:ring-sidebar-focus-ring",
     "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:cursor-not-allowed aria-disabled:opacity-50",
     "group-data-[sidebar-state=collapsed]/shell:justify-center group-data-[sidebar-state=collapsed]/shell:px-0",
     "[&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:stroke-[1.75] [&>svg]:text-sidebar-icon",
     active &&
-      "bg-sidebar-active-background font-semibold text-sidebar-active-foreground hover:bg-sidebar-active-background hover:text-sidebar-active-foreground [&>svg]:text-sidebar-active-foreground",
+      "bg-sidebar-active-background text-sidebar-active-foreground hover:bg-sidebar-active-background hover:text-sidebar-active-foreground [&>svg]:text-sidebar-active-foreground",
   );
 }
 
@@ -143,11 +143,11 @@ const NavigationSubItem = React.forwardRef<HTMLElement, NavigationSubItemProps>(
         "data-slot": "navigation-sub-item",
         "data-active": active ? "true" : undefined,
         className: cn(
-          "ds-type-navigation flex min-h-[var(--ds-sidebar-item-height-touch)] min-w-0 cursor-pointer items-center gap-2 rounded-[var(--ds-radius-control)] px-2 text-sidebar-secondary-text outline-none transition-colors duration-[var(--ds-duration-fast)] lg:h-[calc(var(--ds-sidebar-item-height)-0.25rem)] lg:min-h-0",
+          "ds-type-navigation flex min-h-[var(--ds-sidebar-item-height-touch)] min-w-0 cursor-pointer items-center gap-2 rounded-[var(--ds-radius-control)] px-2 text-sidebar-group-count outline-none transition-colors duration-[var(--ds-duration-fast)] lg:h-[calc(var(--ds-sidebar-item-height)-0.25rem)] lg:min-h-0",
           "hover:bg-sidebar-hover hover:text-sidebar-primary-text focus-visible:ring-[3px] focus-visible:ring-sidebar-focus-ring",
           "group-data-[sidebar-state=collapsed]/shell:hidden [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:stroke-[1.75] [&>svg]:text-sidebar-icon",
           active &&
-            "bg-sidebar-active-background font-semibold text-sidebar-active-foreground hover:bg-sidebar-active-background hover:text-sidebar-active-foreground [&>svg]:text-sidebar-active-foreground",
+            "bg-sidebar-active-background text-sidebar-active-foreground hover:bg-sidebar-active-background hover:text-sidebar-active-foreground [&>svg]:text-sidebar-active-foreground",
           className,
         ),
         ...props,

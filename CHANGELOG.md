@@ -1,5 +1,42 @@
 # Changelog
 
+## 1.9.0 - 2026-11-17
+
+The sidebar and app header now sit back so the content leads. Next to other
+desktop apps a Conscia shell read large, though its type sizes matched them;
+the difference was brightness and weight in the chrome. Beacon Work tried
+these rules locally first, and they now live here for every app.
+
+### Upgrading from 1.8.0
+
+No export is removed or renamed. Sidebars and the scrolled header title look
+lighter, so expect to replace visual snapshots of the shell. Apps that
+override navigation weights or idle colors to get this look, such as Beacon
+Work's "Quiet chrome" rules, can delete those overrides.
+
+### Added
+
+- **`ds-type-header-title`**: a title for app chrome such as a header bar,
+  at interface size (`--ds-ui-text-size`) and medium weight, so it names the
+  view without competing with the page. Use it in place of
+  `ds-type-section-title` for a title in a bar.
+
+### Changed
+
+- **Idle navigation items use the sidebar's quietest grey.**
+  `NavigationItem`, `NavigationSubItem` and `SidebarSearch`'s trigger take `--sidebar-group-count` until hovered or active, instead of
+  `--sidebar-secondary-text`. Hovered items still turn
+  `--sidebar-primary-text`, and the active item keeps its fill and
+  `--sidebar-active-foreground`. Idle text stays at 5.8:1 or more against
+  the sidebar in every mood, density, appearance and sidebar variant.
+- **Sidebar labels and items use the regular weight.** Navigation group
+  labels drop from semibold to regular and keep their small capitals and
+  tracking. Navigation items and the search trigger drop from medium to
+  regular, and the active item shows by its fill instead of semibold, so
+  selecting an item no longer reflows its label.
+- **`AppHeaderTitle` shows the scrolled-away title in
+  `ds-type-header-title`**: medium instead of semibold.
+
 ## 1.8.0 - 2026-11-15
 
 Conscia apps can now draw charts from the design system instead of styling a

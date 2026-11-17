@@ -179,7 +179,7 @@ function AppHeaderTitle({
       {/* The page heading already names the page for assistive technology. */}
       <div
         aria-hidden="true"
-        className="ds-type-ui pointer-events-none min-w-0 translate-y-1.5 truncate font-semibold text-text-primary opacity-0 transition-[opacity,translate] duration-[var(--ds-duration-base)] group-data-[title-visible=true]/header-title:translate-y-0 group-data-[title-visible=true]/header-title:opacity-100"
+        className="ds-type-header-title pointer-events-none min-w-0 translate-y-1.5 truncate text-text-primary opacity-0 transition-[opacity,translate] duration-[var(--ds-duration-base)] group-data-[title-visible=true]/header-title:translate-y-0 group-data-[title-visible=true]/header-title:opacity-100"
       >
         {title}
       </div>
